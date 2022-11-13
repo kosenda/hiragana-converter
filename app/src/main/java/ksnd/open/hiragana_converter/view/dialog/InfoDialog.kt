@@ -25,7 +25,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import ksnd.hiraganaconverter.view.parts.TitleCard
+import ksnd.open.hiragana_converter.view.parts.TitleCard
 import ksnd.open.hiragana_converter.view.parts.BottomCloseButton
 import ksnd.open.hiragana_converter.BuildConfig
 import ksnd.open.hiragana_converter.R

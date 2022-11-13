@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view.theme
+package ksnd.open.hiragana_converter.view.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

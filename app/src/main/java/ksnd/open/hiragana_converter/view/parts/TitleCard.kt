@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view.parts
+package ksnd.open.hiragana_converter.view.parts
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

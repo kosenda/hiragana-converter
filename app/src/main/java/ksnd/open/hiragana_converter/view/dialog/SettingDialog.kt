@@ -25,7 +25,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import ksnd.open.hiragana_converter.R
 import ksnd.open.hiragana_converter.model.CustomFont
-import ksnd.hiraganaconverter.view.parts.TitleCard
+import ksnd.open.hiragana_converter.view.parts.TitleCard
 import ksnd.open.hiragana_converter.view.parts.BottomCloseButton
 import ksnd.open.hiragana_converter.view.parts.CustomFontRadioButton
 import ksnd.open.hiragana_converter.viewmodel.SettingsViewModel
