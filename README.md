@@ -1,7 +1,7 @@
 # Google Play でリリースしたアプリのコピー版です
 ## アプリ名「ひらがな変換」（ Hiragana Converter ）
 Google Play  
-https://play.google.com/store/apps/details?id=ksnd.hiraganaconverter&hl=ja&gl=JP  
+https://play.google.com/store/apps/details?id=ksnd.hiraganaconverter
 
 ## アプリの説明
 漢字やアルファベットを含む日本語文字列をひらがな／カタカナに変換します。
