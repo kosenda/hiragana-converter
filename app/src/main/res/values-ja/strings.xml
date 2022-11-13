@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">ひらがな変換</string>
+    <string name="api_name">ひらがな化API</string>
+    <string name="goo_url">https://labs.goo.ne.jp/api/jp/hiragana-translation/</string>
+    <string name="conversion_type">タイプ</string>
+    <string name="before_conversion">変換前</string>
+    <string name="after_conversion">変換後</string>
+    <string name="input_hint">入力してください…</string>
+    <string name="output_hint">変換結果はここに表示されます…</string>
+    <string name="close">閉じる</string>
+    <string name="dark_mode">ダークモード</string>
+    <string name="light_mode">ライトモード</string>
+    <string name="auto_mode">自動モード</string>
+    <string name="select_language">言語選択</string>
+    <string name="move_to_browser">ブラウザに遷移します。</string>
+    <string name="conversion">変換</string>
+    <string name="theme_setting">テーマ</string>
+    <string name="language_setting">言語</string>
+    <string name="font_setting">フォント</string>
+
+    <string name="conversion_failed">変換に失敗しました。</string>
+    <string name="request_too_large">文字数が多すぎます。文字数を減らして再度変換してください。</string>
+    <string name="limit_exceeded">本日のAPI提供者様（gooラボ）の利用制限（3000回）に達しました。翌日からは使用いただけます。</string>
+    <string name="limit_local_count">本日の利用制限に達しました（200回）。翌日からは使用いただけます。</string>
+
+    <!-- Font -->
+    <string name="default_font">デフォルト</string>
+    <string name="corporate_logo_rounded_font">コーポレート・ロゴ（ラウンド）</string>
+    <string name="corporate_yawamin_font">コーポレートやわ明</string>
+    <string name="nosutaru_dot_font">ノスタルドット（M+）</string>
+    <string name="biz_udgothic">BIZ UDGothic</string>
+
+    <string-array name="conversion_type">
+        <item>ひらがな</item>
+        <item>カタカナ</item>
+    </string-array>
+
+</resources>

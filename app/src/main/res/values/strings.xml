@@ -1,3 +1,64 @@
 <resources>
-    <string name="app_name">hiragana-converter</string>
+    <string name="app_name">Hiragana Converter</string>
+    <string name="api_name">Japanese Hiragana Conversion API</string>
+    <string name="goo_url">https://labs.goo.ne.jp/api/en/hiragana-translation/</string>
+    <string name="conversion_type">Type</string>
+    <string name="before_conversion">Before</string>
+    <string name="after_conversion">After</string>
+    <string name="input_hint">Enter text…</string>
+    <string name="output_hint">Conversion results are displayed here…</string>
+    <string name="close">CLOSE</string>
+    <string name="dark_mode">Dark mode</string>
+    <string name="light_mode">Light mode</string>
+    <string name="auto_mode">Auto mode</string>
+    <string name="select_language">Select language</string>
+    <string name="move_to_browser">Moves to Browser</string>
+    <string name="conversion">Conversion</string>
+    <string name="theme_setting">Theme</string>
+    <string name="language_setting">Language</string>
+    <string name="font_setting">Font</string>
+
+    <string name="conversion_failed">Conversion failed.</string>
+    <string name="request_too_large">Too many characters. Please reduce the number of characters to be converted.</string>
+    <string name="limit_exceeded">Today\'s usage limit for the API you have provided has been reached, so it is not available for use today.</string>
+    <string name="limit_local_count">The API provided by gooラボ（API provider） has a limit of 3,000 uses per day, so we limit each user to 200 uses per day.</string>
+
+    <!-- Font -->
+    <string name="default_font">Default</string>
+    <string name="corporate_logo_rounded_font">Corporate Logo Rounded</string>
+    <string name="corporate_yawamin_font">Corporate Yawamin</string>
+    <string name="nosutaru_dot_font">Nosutaru Dot M Plus</string>
+    <string name="biz_udgothic">BIZ UDGothic</string>
+
+    <string-array name="conversion_type">
+        <item>ひらがな</item>
+        <item>カタカナ</item>
+    </string-array>
+
+    <!-- 共通 Start ####################################################################### -->
+
+    <string name="review_url" translatable="false">https://play.google.com/store/apps/details?id=ksnd.hiraganaconverter</string>
+    <string name="url_title" translatable="false">URL</string>
+    <string name="google_play" translatable="false">Google Play</string>
+    <string name="version_title" translatable="false">App Version</string>
+    <string name="app_info_title" translatable="false">App Info</string>
+    <string name="app_name_title" translatable="false">App Name</string>
+
+    <string name="developer_name_title" translatable="false">Developer</string>
+    <string name="developer_name" translatable="false">KSND</string>
+
+    <string name="api_info_title" translatable="false">API Info</string>
+    <string name="api_name_title" translatable="false">API Name</string>
+
+    <string-array name="language">
+        <item>en</item>
+        <item>ja</item>
+    </string-array>
+
+    <string-array name="display_language">
+        <item>English</item>
+        <item>日本語</item>
+    </string-array>
+
+    <!-- 共通 End ####################################################################### -->
 </resources>
