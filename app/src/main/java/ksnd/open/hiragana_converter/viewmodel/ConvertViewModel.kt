@@ -17,7 +17,8 @@ import ksnd.open.hiragana_converter.model.ResponseData
 import ksnd.open.hiragana_converter.model.Type
 import ksnd.open.hiragana_converter.model.repository.ConvertRepository
 import retrofit2.Response
-import java.util.*
+import java.util.Locale
+import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel

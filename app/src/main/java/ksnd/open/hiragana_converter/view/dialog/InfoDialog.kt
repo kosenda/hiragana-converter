@@ -1,11 +1,32 @@
 package ksnd.open.hiragana_converter.view.dialog
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -33,7 +54,7 @@ import ksnd.open.hiragana_converter.R
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun InfoDialog(isShowInfoDialog: MutableState<Boolean>) {
-    
+
     Dialog(
         onDismissRequest = { },
         properties = DialogProperties(usePlatformDefaultWidth = false),
@@ -52,14 +73,14 @@ private fun InfoDialogContent(isShowInfoDialog: MutableState<Boolean>) {
     val urlColor = Color(0xFF00D4AA)
     var isShowMovesToAppSiteDialog by remember { mutableStateOf(false) }
     var isShowMovesToApiSiteDialog by remember { mutableStateOf(false) }
-    
+
     Scaffold(
         modifier = Modifier
             .fillMaxHeight(0.95f)
             .fillMaxWidth(0.95f)
             .clip(RoundedCornerShape(16.dp)),
         bottomBar = {
-            BottomCloseButton(onClick = { isShowInfoDialog.value = false } )
+            BottomCloseButton(onClick = { isShowInfoDialog.value = false })
         },
     ) { padding ->
 

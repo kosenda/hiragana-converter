@@ -20,7 +20,7 @@ import ksnd.open.hiragana_converter.model.ThemeNum
 import ksnd.open.hiragana_converter.view.screen.ConverterScreen
 import ksnd.open.hiragana_converter.view.theme.HiraganaConverterTheme
 import java.io.IOException
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
