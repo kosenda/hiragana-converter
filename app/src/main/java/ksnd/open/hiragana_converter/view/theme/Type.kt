@@ -7,7 +7,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import ksnd.open.hiragana_converter.R
-import ksnd.open.hiragana_converter.model.CustomFont
+import ksnd.open.hiragana_converter.view.CustomFont
 
 /**
  * Data Preferencesで管理しているフォントの種類をテーマに反映させるための処理

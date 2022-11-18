@@ -15,8 +15,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import ksnd.open.hiragana_converter.model.PreferenceKeys
-import ksnd.open.hiragana_converter.model.CustomFont
-import ksnd.open.hiragana_converter.model.ThemeNum
 import ksnd.open.hiragana_converter.view.screen.ConverterScreen
 import ksnd.open.hiragana_converter.view.theme.HiraganaConverterTheme
 import java.io.IOException
