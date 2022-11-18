@@ -11,13 +11,13 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "ksnd.open.hiragana_converter"
+        applicationId 'ksnd.open.hiragana_converter'
         minSdk 24
         targetSdk 33
         versionCode 1
-        versionName "1.0"
+        versionName '1.0'
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 
     buildTypes {
@@ -38,7 +38,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerExtensionVersion '1.3.1'
     }
     packagingOptions {
         resources {
@@ -50,17 +50,17 @@ android {
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.9.0'
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.material:material:$compose_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+    implementation 'androidx.compose.ui:ui:1.3.1'
+    implementation 'androidx.compose.material:material:1.3.1'
+    implementation 'androidx.compose.ui:ui-tooling-preview:1.3.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
     implementation 'androidx.activity:activity-compose:1.6.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
-    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:1.3.1"
+    debugImplementation 'androidx.compose.ui:ui-tooling:1.3.1'
+    debugImplementation 'androidx.compose.ui:ui-test-manifest:1.3.1'
 
     // Material you
     implementation 'com.google.android.material:material:1.7.0'
@@ -70,7 +70,7 @@ dependencies {
     implementation 'com.google.accompanist:accompanist-systemuicontroller:0.23.1'
 
     // COIL
-    implementation("io.coil-kt:coil-compose:2.2.2")
+    implementation 'io.coil-kt:coil-compose:2.2.2'
 
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -81,10 +81,10 @@ dependencies {
     implementation "com.squareup.moshi:moshi-kotlin:1.14.0"
 
     // Hilt
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    kapt 'com.google.dagger:hilt-compiler:2.43.2'
+    implementation 'com.google.dagger:hilt-android:2.43.2'
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 
     // dataStore preferences
-    implementation "androidx.datastore:datastore-preferences:1.0.0"
+    implementation 'androidx.datastore:datastore-preferences:1.0.0'
 }
