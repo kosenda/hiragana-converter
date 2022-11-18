@@ -1,4 +1,4 @@
-package ksnd.open.hiragana_converter.model
+package ksnd.open.hiragana_converter.view
 
 /**
  * テーマ切り替え用のthemeNum定義
@@ -7,14 +7,6 @@ enum class ThemeNum(val num: Int) {
     NIGHT(num = 0),
     DAY(num = 1),
     AUTO(num = 2),
-}
-
-/**
- * ひらがな or カタカナ
- */
-enum class Type {
-    HIRAGANA,
-    KATAKANA
 }
 
 /**

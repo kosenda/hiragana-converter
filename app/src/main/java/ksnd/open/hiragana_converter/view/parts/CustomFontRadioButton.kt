@@ -16,7 +16,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import ksnd.open.hiragana_converter.model.CustomFont
+import ksnd.open.hiragana_converter.view.CustomFont
 
 /**
  * 設定画面で使用する選択フォントのラジオボタン

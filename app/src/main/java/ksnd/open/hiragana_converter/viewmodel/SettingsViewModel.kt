@@ -15,8 +15,8 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ksnd.open.hiragana_converter.model.PreferenceKeys
-import ksnd.open.hiragana_converter.model.CustomFont
-import ksnd.open.hiragana_converter.model.ThemeNum
+import ksnd.open.hiragana_converter.view.CustomFont
+import ksnd.open.hiragana_converter.view.ThemeNum
 import java.io.IOException
 import javax.inject.Inject
 
