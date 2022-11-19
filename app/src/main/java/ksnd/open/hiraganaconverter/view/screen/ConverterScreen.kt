@@ -56,7 +56,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ksnd.open.hiraganaconverter.R
-import ksnd.open.hiraganaconverter.model.Type
+import ksnd.open.hiraganaconverter.model.HiraKanaType
 import ksnd.open.hiraganaconverter.view.parts.ConversionTypeSpinnerCard
 import ksnd.open.hiraganaconverter.view.parts.TopBar
 import ksnd.open.hiraganaconverter.viewmodel.ConvertViewModel
@@ -73,7 +73,7 @@ fun ConverterScreen(convertViewModel: ConvertViewModel = hiltViewModel()) {
         systemUiController.setNavigationBarColor(color)
     }
 
-    LaunchedEffect(convertViewModel.selectedTextType.value) {
+    LaunchedEffect(convertViewModel.selectedTextHiraKanaType.value) {
         convertViewModel.previousInputText.value = ""
     }
 
@@ -85,7 +85,7 @@ fun ConverterScreen(convertViewModel: ConvertViewModel = hiltViewModel()) {
      * Preview用に切り離し
      */
     ConverterScreenContent(
-        selectedTextType = convertViewModel.selectedTextType,
+        selectedTextHiraKanaType = convertViewModel.selectedTextHiraKanaType,
         convertOnClick = { convertViewModel.convert(context = context) },
         errorText = convertViewModel.errorText,
         inputText = convertViewModel.inputText,
@@ -96,7 +96,7 @@ fun ConverterScreen(convertViewModel: ConvertViewModel = hiltViewModel()) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ConverterScreenContent(
-    selectedTextType: MutableState<Type>,
+    selectedTextHiraKanaType: MutableState<HiraKanaType>,
     convertOnClick: () -> Unit,
     errorText: MutableState<String>,
     inputText: MutableState<String>,
@@ -132,7 +132,7 @@ private fun ConverterScreenContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(modifier = Modifier.weight(1f)) {
-                    ConversionTypeSpinnerCard(selectedTextType = selectedTextType)
+                    ConversionTypeSpinnerCard(selectedTextHiraKanaType = selectedTextHiraKanaType)
                 }
                 // 変換する際に押すボタン
                 FilledTonalButton(
@@ -326,7 +326,7 @@ private fun ConverterScreenContent(
 @Composable
 private fun PreviewConverterScreenContent() {
     ConverterScreenContent(
-        selectedTextType = mutableStateOf(Type.HIRAGANA),
+        selectedTextHiraKanaType = mutableStateOf(HiraKanaType.HIRAGANA),
         convertOnClick = {},
         errorText = mutableStateOf(stringResource(id = R.string.request_too_large)),
         inputText = mutableStateOf("日本語"),

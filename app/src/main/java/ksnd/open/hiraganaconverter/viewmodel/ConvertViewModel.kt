@@ -13,8 +13,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ksnd.open.hiraganaconverter.BuildConfig
 import ksnd.open.hiraganaconverter.R
+import ksnd.open.hiraganaconverter.model.HiraKanaType
 import ksnd.open.hiraganaconverter.model.ResponseData
-import ksnd.open.hiraganaconverter.model.Type
 import ksnd.open.hiraganaconverter.model.repository.ConvertRepository
 import retrofit2.Response
 import java.util.Calendar
@@ -31,7 +31,7 @@ class ConvertViewModel @Inject constructor(
     val inputText: MutableState<String> = mutableStateOf("")
     val outputText: MutableState<String> = mutableStateOf("")
     val errorText: MutableState<String> = mutableStateOf("")
-    val selectedTextType: MutableState<Type> = mutableStateOf(Type.HIRAGANA)
+    val selectedTextHiraKanaType: MutableState<HiraKanaType> = mutableStateOf(HiraKanaType.HIRAGANA)
     val raw: MutableState<Response<ResponseData>?> = mutableStateOf(null)
 
     fun convert(context: Context) {
@@ -46,7 +46,7 @@ class ConvertViewModel @Inject constructor(
             CoroutineScope(Dispatchers.IO).launch {
                 raw.value = convertRepository.requestConvert(
                     sentence = inputText.value,
-                    type = selectedTextType.value.name.lowercase(Locale.ENGLISH),
+                    type = selectedTextHiraKanaType.value.name.lowercase(Locale.ENGLISH),
                     appId = appId
                 )
                 outputText.value = raw.value?.body()?.converted ?: ""

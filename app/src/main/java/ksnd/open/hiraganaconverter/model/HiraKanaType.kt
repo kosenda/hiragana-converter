@@ -3,7 +3,7 @@ package ksnd.open.hiraganaconverter.model
 /**
  * ひらがな or カタカナ
  */
-enum class Type {
+enum class HiraKanaType {
     HIRAGANA,
     KATAKANA
 }
