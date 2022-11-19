@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "hiragana-converter"
-include ':app'
+include(":app")
