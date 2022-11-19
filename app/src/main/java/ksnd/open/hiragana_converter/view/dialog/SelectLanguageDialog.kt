@@ -32,11 +32,11 @@ import ksnd.open.hiragana_converter.view.parts.LanguageCard
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SelectLanguageDialog(
-    isShowDialog: MutableState<Boolean>,
+    isShowDialog: MutableState<Boolean>
 ) {
     Dialog(
-        onDismissRequest = {  },
-        properties = DialogProperties(usePlatformDefaultWidth = false),
+        onDismissRequest = { },
+        properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
         SelectLanguageDialogContent(isShowDialog)
     }
@@ -45,7 +45,6 @@ fun SelectLanguageDialog(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SelectLanguageDialogContent(isShowDialog: MutableState<Boolean>) {
-
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("DataStore", Application.MODE_PRIVATE)
     val displayLanguageList = stringArrayResource(id = R.array.display_language)
@@ -57,7 +56,7 @@ private fun SelectLanguageDialogContent(isShowDialog: MutableState<Boolean>) {
             .clip(RoundedCornerShape(16.dp)),
         bottomBar = {
             BottomCloseButton(onClick = { isShowDialog.value = false })
-        },
+        }
     ) { padding ->
         Column(
             modifier = Modifier

@@ -17,29 +17,29 @@ import ksnd.open.hiragana_converter.model.ResponseData
 import ksnd.open.hiragana_converter.model.Type
 import ksnd.open.hiragana_converter.model.repository.ConvertRepository
 import retrofit2.Response
-import java.util.Locale
 import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
 class ConvertViewModel @Inject constructor(
     private val convertRepository: ConvertRepository,
-    private val sharedPreferences: SharedPreferences,
-): ViewModel() {
+    private val sharedPreferences: SharedPreferences
+) : ViewModel() {
 
     val previousInputText: MutableState<String> = mutableStateOf("")
-    val inputText:         MutableState<String> = mutableStateOf("")
-    val outputText:        MutableState<String> = mutableStateOf("")
-    val errorText:         MutableState<String> = mutableStateOf("")
-    val selectedTextType:  MutableState<Type> = mutableStateOf(Type.HIRAGANA)
-    val raw:               MutableState<Response<ResponseData>?> =mutableStateOf(null)
+    val inputText: MutableState<String> = mutableStateOf("")
+    val outputText: MutableState<String> = mutableStateOf("")
+    val errorText: MutableState<String> = mutableStateOf("")
+    val selectedTextType: MutableState<Type> = mutableStateOf(Type.HIRAGANA)
+    val raw: MutableState<Response<ResponseData>?> = mutableStateOf(null)
 
     fun convert(context: Context) {
         // 入力値なしまたは前回入力値のままであるときは後続処理を行わない
-        if(inputText.value == "" || previousInputText.value == inputText.value) {
+        if (inputText.value == "" || previousInputText.value == inputText.value) {
             return
         }
-        if(limitIsReached()) {
+        if (limitIsReached()) {
             errorText.value = context.getString(R.string.limit_local_count)
         } else {
             val appId = BuildConfig.apiKey
@@ -55,15 +55,14 @@ class ConvertViewModel @Inject constructor(
         }
     }
 
-
     fun updateErrorText(context: Context) {
         Log.i("raw", raw.value?.raw().toString())
-        when(raw.value?.code()) {
+        when (raw.value?.code()) {
             null -> { errorText.value = "" }
             200 -> { errorText.value = "" }
             413 -> { errorText.value = context.getString(R.string.request_too_large) }
             400 -> {
-                errorText.value = when(raw.value?.message()) {
+                errorText.value = when (raw.value?.message()) {
                     "Rate limit exceeded" -> { context.getString(R.string.limit_exceeded) }
                     else -> { context.getString(R.string.conversion_failed) }
                 }
@@ -87,5 +86,4 @@ class ConvertViewModel @Inject constructor(
         Log.i("last_search_time", now)
         return todayCount > 200
     }
-
 }

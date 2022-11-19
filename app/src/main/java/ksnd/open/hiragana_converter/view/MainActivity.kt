@@ -33,11 +33,12 @@ class MainActivity : ComponentActivity() {
             val themeNum: State<Int> = preferencesDataStore.data
                 .catch { exception ->
                     Log.e("preferencesDataStore", exception.toString())
-                    if(exception is IOException) {
+                    if (exception is IOException) {
                         emit(emptyPreferences())
                     } else {
                         ThemeNum.AUTO.num
-                    } }
+                    }
+                }
                 .map { preferences ->
                     preferences[PreferenceKeys.THEME_NUM] ?: ThemeNum.AUTO.num
                 }
@@ -46,18 +47,19 @@ class MainActivity : ComponentActivity() {
             val customFont: State<String> = preferencesDataStore.data
                 .catch { exception ->
                     Log.e("preferencesDataStore", exception.toString())
-                    if(exception is IOException) {
+                    if (exception is IOException) {
                         emit(emptyPreferences())
                     } else {
                         CustomFont.DEFAULT.name
-                    } }
+                    }
+                }
                 .map { preferences ->
                     preferences[PreferenceKeys.CUSTOM_FONT] ?: CustomFont.DEFAULT.name
                 }
                 .collectAsState(initial = CustomFont.DEFAULT.name)
 
             HiraganaConverterTheme(
-                isDarkTheme = when(themeNum.value) {
+                isDarkTheme = when (themeNum.value) {
                     ThemeNum.NIGHT.num -> true
                     ThemeNum.DAY.num -> false
                     else -> isSystemInDarkTheme()
@@ -70,11 +72,10 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun attachBaseContext(base: Context) {
-
         // 起動時に言語を設定する
         val sharedPreferences = base.getSharedPreferences("DataStore", MODE_PRIVATE)
         val language = sharedPreferences.getString("language", null)
-        if(language != null) {
+        if (language != null) {
             val config = base.resources.configuration
             config.setLocale(Locale(language))
             super.attachBaseContext(base.createConfigurationContext(config))

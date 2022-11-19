@@ -13,9 +13,7 @@ import ksnd.open.hiragana_converter.view.CustomFont
  * Data Preferencesで管理しているフォントの種類をテーマに反映させるための処理
  */
 fun typography(customFont: String): Typography {
-
-    val selectedFont = when(customFont) {
-
+    val selectedFont = when (customFont) {
         // https://logotype.jp/font-corpmaru.html
         CustomFont.CORPORATE_LOGO_ROUNDED.name ->
             FontFamily(Font(R.font.corporate_logo_rounded_bold_ver3))

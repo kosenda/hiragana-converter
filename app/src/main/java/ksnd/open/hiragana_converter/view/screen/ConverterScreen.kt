@@ -19,10 +19,10 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material.Divider
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
@@ -57,13 +57,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ksnd.open.hiragana_converter.R
 import ksnd.open.hiragana_converter.model.Type
-import ksnd.open.hiragana_converter.view.parts.TopBar
 import ksnd.open.hiragana_converter.view.parts.ConversionTypeSpinnerCard
+import ksnd.open.hiragana_converter.view.parts.TopBar
 import ksnd.open.hiragana_converter.viewmodel.ConvertViewModel
 
 @Composable
 fun ConverterScreen(convertViewModel: ConvertViewModel = hiltViewModel()) {
-
     val context = LocalContext.current
 
     // ステータスバーとナビゲーションバーの色を設定する
@@ -88,11 +87,10 @@ fun ConverterScreen(convertViewModel: ConvertViewModel = hiltViewModel()) {
     ConverterScreenContent(
         selectedTextType = convertViewModel.selectedTextType,
         convertOnClick = { convertViewModel.convert(context = context) },
-        errorText  = convertViewModel.errorText,
-        inputText  = convertViewModel.inputText,
+        errorText = convertViewModel.errorText,
+        inputText = convertViewModel.inputText,
         outputText = convertViewModel.outputText
     )
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -100,11 +98,11 @@ fun ConverterScreen(convertViewModel: ConvertViewModel = hiltViewModel()) {
 private fun ConverterScreenContent(
     selectedTextType: MutableState<Type>,
     convertOnClick: () -> Unit,
-    errorText:  MutableState<String>,
-    inputText:  MutableState<String>,
-    outputText: MutableState<String>,
+    errorText: MutableState<String>,
+    inputText: MutableState<String>,
+    outputText: MutableState<String>
 
-    ) {
+) {
     val focusManager = LocalFocusManager.current
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     val context = LocalContext.current
@@ -114,7 +112,7 @@ private fun ConverterScreenContent(
 
     Scaffold(
         topBar = { TopBar(scrollBehavior = scrollBehavior) },
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = MaterialTheme.colorScheme.surface
     ) { padding ->
         Column(
             modifier = Modifier
@@ -130,7 +128,6 @@ private fun ConverterScreenContent(
                     )
                 }
         ) {
-
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -181,7 +178,7 @@ private fun ConverterScreenContent(
                         .padding(all = 16.dp)
                         .clickable { errorText.value = "" },
                     colors = CardDefaults.outlinedCardColors(
-                        containerColor = MaterialTheme.colorScheme.errorContainer,
+                        containerColor = MaterialTheme.colorScheme.errorContainer
                     ),
                     border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.error)
                 ) {
@@ -226,7 +223,7 @@ private fun ConverterScreenContent(
                         Toast
                             .makeText(context, "COPIED.", Toast.LENGTH_SHORT)
                             .show()
-                    },
+                    }
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
@@ -288,7 +285,7 @@ private fun ConverterScreenContent(
                         Toast
                             .makeText(context, "COPIED.", Toast.LENGTH_SHORT)
                             .show()
-                    },
+                    }
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),

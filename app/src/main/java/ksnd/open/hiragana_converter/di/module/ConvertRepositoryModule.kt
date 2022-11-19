@@ -19,7 +19,6 @@ object ConvertRepositoryModule {
     }
 }
 
-
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class ConvertRepositoryBindModule {

@@ -46,28 +46,25 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import ksnd.open.hiragana_converter.view.parts.TitleCard
-import ksnd.open.hiragana_converter.view.parts.BottomCloseButton
 import ksnd.open.hiragana_converter.BuildConfig
 import ksnd.open.hiragana_converter.R
+import ksnd.open.hiragana_converter.view.parts.BottomCloseButton
+import ksnd.open.hiragana_converter.view.parts.TitleCard
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun InfoDialog(isShowInfoDialog: MutableState<Boolean>) {
-
     Dialog(
         onDismissRequest = { },
-        properties = DialogProperties(usePlatformDefaultWidth = false),
+        properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
         InfoDialogContent(isShowInfoDialog)
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun InfoDialogContent(isShowInfoDialog: MutableState<Boolean>) {
-
     val urlHandler = LocalUriHandler.current
     val context = LocalContext.current
     val urlColor = Color(0xFF00D4AA)
@@ -81,7 +78,7 @@ private fun InfoDialogContent(isShowInfoDialog: MutableState<Boolean>) {
             .clip(RoundedCornerShape(16.dp)),
         bottomBar = {
             BottomCloseButton(onClick = { isShowInfoDialog.value = false })
-        },
+        }
     ) { padding ->
 
         if (isShowMovesToAppSiteDialog) {
@@ -113,7 +110,7 @@ private fun InfoDialogContent(isShowInfoDialog: MutableState<Boolean>) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(padding)
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
         ) {
             // アプリの情報
             TitleCard(text = stringResource(id = R.string.app_info_title))
@@ -124,7 +121,7 @@ private fun InfoDialogContent(isShowInfoDialog: MutableState<Boolean>) {
                 colors = CardDefaults.outlinedCardColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 ),
-                border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary),
+                border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
@@ -134,7 +131,7 @@ private fun InfoDialogContent(isShowInfoDialog: MutableState<Boolean>) {
                         modifier = Modifier
                             .padding(all = 16.dp)
                             .size(72.dp)
-                            .clip(CircleShape),
+                            .clip(CircleShape)
                     )
                     Column(
                         modifier = Modifier.padding(vertical = 16.dp)
@@ -181,7 +178,7 @@ private fun InfoDialogContent(isShowInfoDialog: MutableState<Boolean>) {
                 colors = CardDefaults.outlinedCardColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 ),
-                border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary),
+                border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
@@ -191,7 +188,7 @@ private fun InfoDialogContent(isShowInfoDialog: MutableState<Boolean>) {
                         modifier = Modifier
                             .padding(all = 16.dp)
                             .size(72.dp)
-                            .clip(CircleShape),
+                            .clip(CircleShape)
                     )
                     Column(
                         modifier = Modifier.padding(vertical = 16.dp)
@@ -214,7 +211,7 @@ private fun InfoDialogContent(isShowInfoDialog: MutableState<Boolean>) {
                 colors = CardDefaults.outlinedCardColors(
                     containerColor = MaterialTheme.colorScheme.surface
                 ),
-                border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary),
+                border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
             ) {
                 Column(
                     modifier = Modifier
@@ -271,7 +268,7 @@ private fun ItemTitle(text: String, modifier: Modifier = Modifier) {
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.primary,
         modifier = modifier.padding(horizontal = 16.dp),
-        textAlign = TextAlign.Center,
+        textAlign = TextAlign.Center
     )
 }
 
@@ -282,7 +279,7 @@ private fun BodyMedium(text: String, modifier: Modifier = Modifier) {
         style = MaterialTheme.typography.bodyLarge,
         color = MaterialTheme.colorScheme.tertiary,
         modifier = modifier.padding(horizontal = 16.dp),
-        textAlign = TextAlign.Left,
+        textAlign = TextAlign.Left
     )
 }
 
@@ -291,4 +288,3 @@ private fun BodyMedium(text: String, modifier: Modifier = Modifier) {
 private fun PreviewInfoDialogContent() {
     InfoDialogContent(isShowInfoDialog = mutableStateOf(true))
 }
-

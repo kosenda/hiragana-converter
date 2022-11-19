@@ -28,14 +28,13 @@ import ksnd.open.hiragana_converter.view.dialog.SettingDialog
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
-
     val isShowSettingDialog = remember { mutableStateOf(false) }
-    val isShowInfoDialog    = remember { mutableStateOf(false) }
+    val isShowInfoDialog = remember { mutableStateOf(false) }
 
-    if(isShowSettingDialog.value) {
+    if (isShowSettingDialog.value) {
         SettingDialog(isShowDialog = isShowSettingDialog)
     }
-    if(isShowInfoDialog.value) {
+    if (isShowInfoDialog.value) {
         InfoDialog(isShowInfoDialog = isShowInfoDialog)
     }
 
@@ -43,7 +42,7 @@ fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
         title = {},
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.surface,
-            titleContentColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.primary
         ),
         actions = {
             FilledTonalIconButton(

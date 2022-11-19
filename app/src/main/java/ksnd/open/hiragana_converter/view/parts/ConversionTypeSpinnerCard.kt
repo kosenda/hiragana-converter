@@ -36,7 +36,6 @@ import ksnd.open.hiragana_converter.model.Type
 fun ConversionTypeSpinnerCard(
     selectedTextType: MutableState<Type>
 ) {
-
     var expanded by remember { mutableStateOf(false) }
 
     OutlinedCard(
@@ -44,7 +43,7 @@ fun ConversionTypeSpinnerCard(
             .padding(all = 8.dp)
             .clickable { expanded = true },
         colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            containerColor = MaterialTheme.colorScheme.secondaryContainer
         ),
         border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primaryContainer)
     ) {
@@ -58,9 +57,10 @@ fun ConversionTypeSpinnerCard(
             )
             Row {
                 Text(
-                    text = when(selectedTextType.value) {
+                    text = when (selectedTextType.value) {
                         Type.HIRAGANA -> stringArrayResource(id = R.array.conversion_type)[0]
-                        Type.KATAKANA -> stringArrayResource(id = R.array.conversion_type)[1] },
+                        Type.KATAKANA -> stringArrayResource(id = R.array.conversion_type)[1]
+                    },
                     style = MaterialTheme.typography.bodyMedium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -80,9 +80,9 @@ fun ConversionTypeSpinnerCard(
                     conversionTypeArray.forEach {
                         DropdownMenuItem(
                             onClick = {
-                                selectedTextType.value = when(it) {
+                                selectedTextType.value = when (it) {
                                     conversionTypeArray[0] -> Type.HIRAGANA
-                                    else                   -> Type.KATAKANA
+                                    else -> Type.KATAKANA
                                 }
                                 expanded = false
                             },

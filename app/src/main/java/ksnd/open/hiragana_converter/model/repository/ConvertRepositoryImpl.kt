@@ -12,7 +12,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-class  ConvertRepositoryImpl: ConvertRepository {
+class ConvertRepositoryImpl : ConvertRepository {
 
     // JSONからKotlinのクラスに変換するためのライブラリの設定
     private val moshi = Moshi.Builder()
@@ -42,12 +42,12 @@ class  ConvertRepositoryImpl: ConvertRepository {
                 .toString()
             Log.i("json: ", json)
             val body = json.toRequestBody(
-                contentType = "application/json; charset=utf-8".toMediaTypeOrNull())
+                contentType = "application/json; charset=utf-8".toMediaTypeOrNull()
+            )
             convertService.requestConvert(body)
         } catch (e: Exception) {
             Log.e("request_convert", e.toString())
             null
         }
     }
-
 }

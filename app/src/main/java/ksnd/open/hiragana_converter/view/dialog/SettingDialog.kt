@@ -44,9 +44,9 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import ksnd.open.hiragana_converter.R
 import ksnd.open.hiragana_converter.view.CustomFont
-import ksnd.open.hiragana_converter.view.parts.TitleCard
 import ksnd.open.hiragana_converter.view.parts.BottomCloseButton
 import ksnd.open.hiragana_converter.view.parts.CustomFontRadioButton
+import ksnd.open.hiragana_converter.view.parts.TitleCard
 import ksnd.open.hiragana_converter.viewmodel.SettingsViewModel
 
 /**
@@ -59,14 +59,14 @@ import ksnd.open.hiragana_converter.viewmodel.SettingsViewModel
 @Composable
 fun SettingDialog(
     isShowDialog: MutableState<Boolean>,
-    settingsViewModel: SettingsViewModel = hiltViewModel(),
+    settingsViewModel: SettingsViewModel = hiltViewModel()
 ) {
-
     val isShowSelectLanguageDialog = rememberSaveable { mutableStateOf(false) }
     val modeRadio = listOf(
         stringResource(id = R.string.dark_mode),
         stringResource(id = R.string.light_mode),
-        stringResource(id = R.string.auto_mode))
+        stringResource(id = R.string.auto_mode)
+    )
 
     // ラジオボタンの初期化
     LaunchedEffect(true) {
@@ -75,12 +75,12 @@ fun SettingDialog(
     }
 
     Dialog(
-        onDismissRequest = {  },
+        onDismissRequest = { },
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
-        if(isShowSelectLanguageDialog.value) {
+        if (isShowSelectLanguageDialog.value) {
             SelectLanguageDialog(
-                isShowDialog = isShowSelectLanguageDialog,
+                isShowDialog = isShowSelectLanguageDialog
             )
         }
         Scaffold(
@@ -89,8 +89,8 @@ fun SettingDialog(
                 .fillMaxWidth(0.95f)
                 .clip(RoundedCornerShape(16.dp)),
             bottomBar = {
-                BottomCloseButton(onClick = { isShowDialog.value = false } )
-            },
+                BottomCloseButton(onClick = { isShowDialog.value = false })
+            }
         ) {
             Column(
                 modifier = Modifier
@@ -98,7 +98,6 @@ fun SettingDialog(
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
             ) {
-
                 // テーマ設定
                 TitleCard(text = stringResource(id = R.string.theme_setting))
                 OutlinedCard(
@@ -108,7 +107,7 @@ fun SettingDialog(
                     modifier = Modifier.padding(all = 8.dp)
                 ) {
                     Column {
-                        modeRadio.forEachIndexed{ index, buttonText ->
+                        modeRadio.forEachIndexed { index, buttonText ->
                             Row(
                                 modifier = Modifier
                                     .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
@@ -167,7 +166,6 @@ fun SettingDialog(
                             onClick = { isShowSelectLanguageDialog.value = true }
                         )
                 ) {
-
                     Row(
                         modifier = Modifier
                             .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
@@ -187,7 +185,7 @@ fun SettingDialog(
                             text = stringResource(id = R.string.select_language),
                             modifier = Modifier.padding(start = 12.dp),
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.primary,
+                            color = MaterialTheme.colorScheme.primary
                         )
                         Spacer(modifier = Modifier.weight(1f))
                     }
@@ -210,7 +208,8 @@ fun SettingDialog(
                                 isShowDialog.value = false
                             },
                             selected = settingsViewModel.isSelectedFont(
-                                       CustomFont.DEFAULT),
+                                CustomFont.DEFAULT
+                            ),
                             text = stringResource(id = R.string.default_font),
                             fontFamily = FontFamily.Default
                         )
@@ -222,7 +221,8 @@ fun SettingDialog(
                                 isShowDialog.value = false
                             },
                             selected = settingsViewModel.isSelectedFont(
-                                    CustomFont.CORPORATE_LOGO_ROUNDED),
+                                CustomFont.CORPORATE_LOGO_ROUNDED
+                            ),
                             text = stringResource(id = R.string.corporate_logo_rounded_font),
                             fontFamily = FontFamily(Font(R.font.corporate_logo_rounded_bold_ver3))
                         )
@@ -234,7 +234,8 @@ fun SettingDialog(
                                 isShowDialog.value = false
                             },
                             selected = settingsViewModel.isSelectedFont(
-                                    CustomFont.CORPORATE_YAWAMIN),
+                                CustomFont.CORPORATE_YAWAMIN
+                            ),
                             text = stringResource(id = R.string.corporate_yawamin_font),
                             fontFamily = FontFamily(Font(R.font.corporate_yawamin_ver3))
                         )
@@ -246,7 +247,8 @@ fun SettingDialog(
                                 isShowDialog.value = false
                             },
                             selected = settingsViewModel.isSelectedFont(
-                                CustomFont.NOSUTARU_DOT_M_PLUS),
+                                CustomFont.NOSUTARU_DOT_M_PLUS
+                            ),
                             text = stringResource(id = R.string.nosutaru_dot_font),
                             fontFamily = FontFamily(Font(R.font.nosutaru_dotmplush_10_regular))
                         )
@@ -258,7 +260,8 @@ fun SettingDialog(
                                 isShowDialog.value = false
                             },
                             selected = settingsViewModel.isSelectedFont(
-                                    CustomFont.BIZ_UDGOTHIC),
+                                CustomFont.BIZ_UDGOTHIC
+                            ),
                             text = stringResource(id = R.string.biz_udgothic),
                             fontFamily = FontFamily(Font(R.font.bizudgothic_regular))
                         )
@@ -268,4 +271,3 @@ fun SettingDialog(
         }
     }
 }
-

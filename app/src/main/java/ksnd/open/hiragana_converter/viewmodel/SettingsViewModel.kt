@@ -23,10 +23,10 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel@Inject constructor(
     private val preferencesDataStore: DataStore<Preferences>
-): ViewModel() {
+) : ViewModel() {
 
     private val customFont = mutableStateOf(CustomFont.DEFAULT.name)
-    private val themeNum   = mutableStateOf(ThemeNum.AUTO.num)
+    private val themeNum = mutableStateOf(ThemeNum.AUTO.num)
 
     fun updateThemeNum(newThemeNum: Int) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -47,11 +47,12 @@ class SettingsViewModel@Inject constructor(
             val customFontFlow: Flow<Int> = preferencesDataStore.data
                 .catch { exception ->
                     Log.e("preferencesDataStore", exception.toString())
-                    if(exception is IOException) {
+                    if (exception is IOException) {
                         emit(emptyPreferences())
                     } else {
                         ThemeNum.AUTO.num
-                    } }
+                    }
+                }
                 .map { preferences ->
                     preferences[PreferenceKeys.THEME_NUM] ?: ThemeNum.AUTO.num
                 }
@@ -66,13 +67,14 @@ class SettingsViewModel@Inject constructor(
             val customFontFlow: Flow<String> = preferencesDataStore.data
                 .catch { exception ->
                     Log.e("preferencesDataStore", exception.toString())
-                    if(exception is IOException) {
+                    if (exception is IOException) {
                         emit(emptyPreferences())
                     } else {
                         CustomFont.DEFAULT.name
-                    } }
+                    }
+                }
                 .map { preferences ->
-                   preferences[PreferenceKeys.CUSTOM_FONT] ?: CustomFont.DEFAULT.name
+                    preferences[PreferenceKeys.CUSTOM_FONT] ?: CustomFont.DEFAULT.name
                 }
             customFontFlow.collect {
                 customFont.value = it
