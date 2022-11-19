@@ -1,3 +1,5 @@
+val ktlint: Configuration by configurations.creating
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -7,11 +9,11 @@ plugins {
 }
 
 android {
-    namespace = "ksnd.open.hiragana_converter"
+    namespace = "ksnd.open.hiraganaconverter"
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "ksnd.open.hiragana_converter"
+        applicationId = "ksnd.open.hiraganaconverter"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
@@ -87,4 +89,27 @@ dependencies {
 
     // dataStore preferences
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    // ktlint
+    ktlint("com.pinterest:ktlint:0.47.1") {
+        attributes {
+            attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
+        }
+    }
+}
+
+// チェック
+tasks.create<JavaExec>("ktlintCheck") {
+    description = "Check Kotlin code style."
+    classpath = ktlint
+    mainClass.set("com.pinterest.ktlint.Main")
+    args = listOf("src/**/*.kt")
+}
+
+// フォーマット
+tasks.create<JavaExec>("ktlintFormatting") {
+    description = "Fix Kotlin code style deviations."
+    classpath = ktlint
+    mainClass.set("com.pinterest.ktlint.Main")
+    args("-F", "src/**/*.kt")
 }

@@ -24,7 +24,7 @@
     @com.squareup.moshi.ToJson <methods>;
 }
 
--keepnames @kotlin.Metadata class ksnd.open.hiragana_converter.model.**
--keep class ksnd.open.hiragana_converter.model.** { *; }
--keepclassmembers class ksnd.open.hiragana_converter.model.** { *; }
+-keepnames @kotlin.Metadata class ksnd.open.hiraganaconverter.model.**
+-keep class ksnd.open.hiraganaconverter.model.** { *; }
+-keepclassmembers class ksnd.open.hiraganaconverter.model.** { *; }
 
