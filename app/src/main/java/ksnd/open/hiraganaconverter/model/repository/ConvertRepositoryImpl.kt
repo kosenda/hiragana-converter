@@ -4,10 +4,10 @@ import android.util.Log
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import ksnd.open.hiraganaconverter.model.ConvertApiClient
+import ksnd.open.hiraganaconverter.model.RequestData
 import ksnd.open.hiraganaconverter.model.ResponseData
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONObject
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -35,11 +35,12 @@ class ConvertRepositoryImpl : ConvertRepository {
         appId: String
     ): Response<ResponseData>? {
         return try {
-            val json = JSONObject()
-                .put("app_id", appId)
-                .put("sentence", sentence)
-                .put("output_type", type)
-                .toString()
+            val requestData = RequestData(
+                appId = appId,
+                sentence = sentence,
+                outputType = type
+            )
+            val json = moshi.adapter(RequestData::class.java).toJson(requestData)
             Log.i("json: ", json)
             val body = json.toRequestBody(
                 contentType = "application/json; charset=utf-8".toMediaTypeOrNull()
