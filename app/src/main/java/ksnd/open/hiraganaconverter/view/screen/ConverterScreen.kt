@@ -101,7 +101,6 @@ private fun ConverterScreenContent(
     errorText: MutableState<String>,
     inputText: MutableState<String>,
     outputText: MutableState<String>
-
 ) {
     val focusManager = LocalFocusManager.current
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
@@ -132,7 +131,9 @@ private fun ConverterScreenContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(modifier = Modifier.weight(1f)) {
-                    ConversionTypeSpinnerCard(selectedTextHiraKanaType = selectedTextHiraKanaType)
+                    ConversionTypeSpinnerCard(
+                        onSelectedChange = { type -> selectedTextHiraKanaType.value = type }
+                    )
                 }
                 // 変換する際に押すボタン
                 FilledTonalButton(
