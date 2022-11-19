@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "hiragana-converter"
+rootProject.name = "hiraganaconverter"
 include(":app")
