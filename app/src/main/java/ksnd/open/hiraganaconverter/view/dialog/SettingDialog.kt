@@ -25,7 +25,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -58,7 +57,7 @@ import ksnd.open.hiraganaconverter.viewmodel.SettingsViewModel
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun SettingDialog(
-    isShowDialog: MutableState<Boolean>,
+    onCloseClick: () -> Unit,
     settingsViewModel: SettingsViewModel = hiltViewModel()
 ) {
     val isShowSelectLanguageDialog = rememberSaveable { mutableStateOf(false) }
@@ -80,7 +79,7 @@ fun SettingDialog(
     ) {
         if (isShowSelectLanguageDialog.value) {
             SelectLanguageDialog(
-                isShowDialog = isShowSelectLanguageDialog
+                onCloseClick = { isShowSelectLanguageDialog.value = false }
             )
         }
         Scaffold(
@@ -89,7 +88,7 @@ fun SettingDialog(
                 .fillMaxWidth(0.95f)
                 .clip(RoundedCornerShape(16.dp)),
             bottomBar = {
-                BottomCloseButton(onClick = { isShowDialog.value = false })
+                BottomCloseButton(onClick = onCloseClick)
             }
         ) {
             Column(
@@ -205,7 +204,7 @@ fun SettingDialog(
                                 settingsViewModel.updateCustomFont(
                                     newCustomFont = CustomFont.DEFAULT
                                 )
-                                isShowDialog.value = false
+                                onCloseClick()
                             },
                             selected = settingsViewModel.isSelectedFont(
                                 CustomFont.DEFAULT
@@ -218,7 +217,7 @@ fun SettingDialog(
                                 settingsViewModel.updateCustomFont(
                                     newCustomFont = CustomFont.CORPORATE_LOGO_ROUNDED
                                 )
-                                isShowDialog.value = false
+                                onCloseClick()
                             },
                             selected = settingsViewModel.isSelectedFont(
                                 CustomFont.CORPORATE_LOGO_ROUNDED
@@ -231,7 +230,7 @@ fun SettingDialog(
                                 settingsViewModel.updateCustomFont(
                                     newCustomFont = CustomFont.CORPORATE_YAWAMIN
                                 )
-                                isShowDialog.value = false
+                                onCloseClick()
                             },
                             selected = settingsViewModel.isSelectedFont(
                                 CustomFont.CORPORATE_YAWAMIN
@@ -244,7 +243,7 @@ fun SettingDialog(
                                 settingsViewModel.updateCustomFont(
                                     newCustomFont = CustomFont.NOSUTARU_DOT_M_PLUS
                                 )
-                                isShowDialog.value = false
+                                onCloseClick()
                             },
                             selected = settingsViewModel.isSelectedFont(
                                 CustomFont.NOSUTARU_DOT_M_PLUS
@@ -257,7 +256,7 @@ fun SettingDialog(
                                 settingsViewModel.updateCustomFont(
                                     newCustomFont = CustomFont.BIZ_UDGOTHIC
                                 )
-                                isShowDialog.value = false
+                                onCloseClick()
                             },
                             selected = settingsViewModel.isSelectedFont(
                                 CustomFont.BIZ_UDGOTHIC
