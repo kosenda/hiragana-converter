@@ -22,7 +22,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,18 +52,18 @@ import ksnd.open.hiraganaconverter.view.parts.TitleCard
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun InfoDialog(isShowInfoDialog: MutableState<Boolean>) {
+fun InfoDialog(onCloseClick: () -> Unit) {
     Dialog(
         onDismissRequest = { },
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
-        InfoDialogContent(isShowInfoDialog)
+        InfoDialogContent(onCloseClick = onCloseClick)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun InfoDialogContent(isShowInfoDialog: MutableState<Boolean>) {
+private fun InfoDialogContent(onCloseClick: () -> Unit) {
     val urlHandler = LocalUriHandler.current
     val context = LocalContext.current
     val urlColor = Color(0xFF00D4AA)
@@ -77,7 +76,7 @@ private fun InfoDialogContent(isShowInfoDialog: MutableState<Boolean>) {
             .fillMaxWidth(0.95f)
             .clip(RoundedCornerShape(16.dp)),
         bottomBar = {
-            BottomCloseButton(onClick = { isShowInfoDialog.value = false })
+            BottomCloseButton(onClick = onCloseClick)
         }
     ) { padding ->
 
@@ -286,5 +285,5 @@ private fun BodyMedium(text: String, modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun PreviewInfoDialogContent() {
-    InfoDialogContent(isShowInfoDialog = mutableStateOf(true))
+    InfoDialogContent(onCloseClick = {})
 }

@@ -15,10 +15,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
@@ -34,9 +34,10 @@ import ksnd.open.hiraganaconverter.model.HiraKanaType
  */
 @Composable
 fun ConversionTypeSpinnerCard(
-    selectedTextHiraKanaType: MutableState<HiraKanaType>
+    onSelectedChange: (type: HiraKanaType) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
+    var selectedTextType by rememberSaveable { mutableStateOf(HiraKanaType.HIRAGANA) }
 
     OutlinedCard(
         modifier = Modifier
@@ -57,7 +58,7 @@ fun ConversionTypeSpinnerCard(
             )
             Row {
                 Text(
-                    text = when (selectedTextHiraKanaType.value) {
+                    text = when (selectedTextType) {
                         HiraKanaType.HIRAGANA -> stringArrayResource(id = R.array.conversion_type)[0]
                         HiraKanaType.KATAKANA -> stringArrayResource(id = R.array.conversion_type)[1]
                     },
@@ -80,10 +81,12 @@ fun ConversionTypeSpinnerCard(
                     conversionTypeArray.forEach {
                         DropdownMenuItem(
                             onClick = {
-                                selectedTextHiraKanaType.value = when (it) {
+                                val selectHiraKanaType = when (it) {
                                     conversionTypeArray[0] -> HiraKanaType.HIRAGANA
                                     else -> HiraKanaType.KATAKANA
                                 }
+                                onSelectedChange(selectHiraKanaType)
+                                selectedTextType = selectHiraKanaType
                                 expanded = false
                             },
                             text = {
@@ -104,6 +107,5 @@ fun ConversionTypeSpinnerCard(
 @Preview
 @Composable
 private fun PreviewConversionTypeSpinnerCard() {
-    val selectedHiraKanaType = mutableStateOf(HiraKanaType.HIRAGANA)
-    ConversionTypeSpinnerCard(selectedTextHiraKanaType = selectedHiraKanaType)
+    ConversionTypeSpinnerCard(onSelectedChange = {})
 }

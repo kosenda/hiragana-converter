@@ -32,10 +32,14 @@ fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
     val isShowInfoDialog = remember { mutableStateOf(false) }
 
     if (isShowSettingDialog.value) {
-        SettingDialog(isShowDialog = isShowSettingDialog)
+        SettingDialog(
+            onCloseClick = { isShowSettingDialog.value = false }
+        )
     }
     if (isShowInfoDialog.value) {
-        InfoDialog(isShowInfoDialog = isShowInfoDialog)
+        InfoDialog(
+            onCloseClick = { isShowInfoDialog.value = false }
+        )
     }
 
     TopAppBar(

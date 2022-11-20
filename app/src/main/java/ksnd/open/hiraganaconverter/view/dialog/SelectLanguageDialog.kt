@@ -13,8 +13,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -32,19 +30,19 @@ import ksnd.open.hiraganaconverter.view.parts.LanguageCard
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SelectLanguageDialog(
-    isShowDialog: MutableState<Boolean>
+    onCloseClick: () -> Unit
 ) {
     Dialog(
         onDismissRequest = { },
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
-        SelectLanguageDialogContent(isShowDialog)
+        SelectLanguageDialogContent(onCloseClick = onCloseClick)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SelectLanguageDialogContent(isShowDialog: MutableState<Boolean>) {
+private fun SelectLanguageDialogContent(onCloseClick: () -> Unit) {
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("DataStore", Application.MODE_PRIVATE)
     val displayLanguageList = stringArrayResource(id = R.array.display_language)
@@ -55,7 +53,7 @@ private fun SelectLanguageDialogContent(isShowDialog: MutableState<Boolean>) {
             .fillMaxWidth(0.9f)
             .clip(RoundedCornerShape(16.dp)),
         bottomBar = {
-            BottomCloseButton(onClick = { isShowDialog.value = false })
+            BottomCloseButton(onClick = onCloseClick)
         }
     ) { padding ->
         Column(
@@ -81,5 +79,5 @@ private fun SelectLanguageDialogContent(isShowDialog: MutableState<Boolean>) {
 @Preview
 @Composable
 private fun PreviewSelectLanguageDialogContent() {
-    SelectLanguageDialogContent(isShowDialog = mutableStateOf(true))
+    SelectLanguageDialogContent(onCloseClick = {})
 }

@@ -35,9 +35,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -56,69 +54,57 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ksnd.open.hiraganaconverter.R
-import ksnd.open.hiraganaconverter.model.HiraKanaType
 import ksnd.open.hiraganaconverter.view.parts.ConversionTypeSpinnerCard
 import ksnd.open.hiraganaconverter.view.parts.TopBar
 import ksnd.open.hiraganaconverter.viewmodel.ConvertViewModel
+import ksnd.open.hiraganaconverter.viewmodel.ConvertViewModelImpl
+import ksnd.open.hiraganaconverter.viewmodel.PreviewConvertViewModel
 
 @Composable
-fun ConverterScreen(convertViewModel: ConvertViewModel = hiltViewModel()) {
-    val context = LocalContext.current
-
+fun ConverterScreen(convertViewModel: ConvertViewModelImpl = hiltViewModel()) {
     // ステータスバーとナビゲーションバーの色を設定する
     val systemUiController = rememberSystemUiController()
     val color = MaterialTheme.colorScheme.surface
+
     SideEffect {
         systemUiController.setStatusBarColor(color)
         systemUiController.setNavigationBarColor(color)
     }
 
-    LaunchedEffect(convertViewModel.selectedTextHiraKanaType.value) {
-        convertViewModel.previousInputText.value = ""
-    }
-
-    LaunchedEffect(convertViewModel.raw.value?.code(), convertViewModel.raw.value?.message()) {
-        convertViewModel.updateErrorText(context = context)
-    }
-
-    /**
-     * Preview用に切り離し
-     */
+    // Preview用に切り離し
     ConverterScreenContent(
-        selectedTextHiraKanaType = convertViewModel.selectedTextHiraKanaType,
-        convertOnClick = { convertViewModel.convert(context = context) },
-        errorText = convertViewModel.errorText,
-        inputText = convertViewModel.inputText,
-        outputText = convertViewModel.outputText
+        viewModel = convertViewModel
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ConverterScreenContent(
-    selectedTextHiraKanaType: MutableState<HiraKanaType>,
-    convertOnClick: () -> Unit,
-    errorText: MutableState<String>,
-    inputText: MutableState<String>,
-    outputText: MutableState<String>
-
+    viewModel: ConvertViewModel
 ) {
     val focusManager = LocalFocusManager.current
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     val context = LocalContext.current
 
+    LaunchedEffect(viewModel.selectedTextType.value) {
+        viewModel.previousInputText.value = ""
+    }
+    LaunchedEffect(viewModel.raw.value?.code(), viewModel.raw.value?.message()) {
+        viewModel.updateErrorText(context = context)
+    }
+
     val scrollState = rememberScrollState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
-        topBar = { TopBar(scrollBehavior = scrollBehavior) },
+        topBar = { TopBar(scrollBehavior) },
         containerColor = MaterialTheme.colorScheme.surface
     ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
-                .nestedScroll(connection = scrollBehavior.nestedScrollConnection)
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .verticalScroll(scrollState)
                 .pointerInput(Unit) {
                     detectTapGestures(
@@ -132,14 +118,16 @@ private fun ConverterScreenContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Row(modifier = Modifier.weight(1f)) {
-                    ConversionTypeSpinnerCard(selectedTextHiraKanaType = selectedTextHiraKanaType)
+                    ConversionTypeSpinnerCard(
+                        onSelectedChange = { type -> viewModel.selectedTextType.value = type }
+                    )
                 }
                 // 変換する際に押すボタン
                 FilledTonalButton(
                     modifier = Modifier
                         .padding(all = 8.dp)
                         .height(48.dp),
-                    onClick = convertOnClick,
+                    onClick = { viewModel.convert(context = context) },
                     colors = ButtonDefaults.filledTonalButtonColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer
                     )
@@ -171,12 +159,12 @@ private fun ConverterScreenContent(
             }
 
             // エラーに何かある場合のみエラー表示を行う
-            if (errorText.value != "") {
+            if (viewModel.errorText.value != "") {
                 OutlinedCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(all = 16.dp)
-                        .clickable { errorText.value = "" },
+                        .clickable { viewModel.errorText.value = "" },
                     colors = CardDefaults.outlinedCardColors(
                         containerColor = MaterialTheme.colorScheme.errorContainer
                     ),
@@ -193,7 +181,7 @@ private fun ConverterScreenContent(
                             modifier = Modifier.size(36.dp)
                         )
                         Text(
-                            text = errorText.value,
+                            text = viewModel.errorText.value,
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.error,
                             modifier = Modifier.padding(start = 8.dp)
@@ -218,7 +206,7 @@ private fun ConverterScreenContent(
                         .size(48.dp),
                     onClick = {
                         clipboardManager.setText(
-                            AnnotatedString(inputText.value)
+                            AnnotatedString(viewModel.inputText.value)
                         )
                         Toast
                             .makeText(context, "COPIED.", Toast.LENGTH_SHORT)
@@ -235,8 +223,8 @@ private fun ConverterScreenContent(
                 }
             }
             OutlinedTextField(
-                value = inputText.value,
-                onValueChange = { new -> inputText.value = new },
+                value = viewModel.inputText.value,
+                onValueChange = { new -> viewModel.inputText.value = new },
                 keyboardActions = KeyboardActions {
                     focusManager.clearFocus()
                 },
@@ -280,7 +268,7 @@ private fun ConverterScreenContent(
                         .size(48.dp),
                     onClick = {
                         clipboardManager.setText(
-                            AnnotatedString(outputText.value)
+                            AnnotatedString(viewModel.outputText.value)
                         )
                         Toast
                             .makeText(context, "COPIED.", Toast.LENGTH_SHORT)
@@ -298,8 +286,8 @@ private fun ConverterScreenContent(
                 }
             }
             OutlinedTextField(
-                value = outputText.value,
-                onValueChange = { new -> outputText.value = new },
+                value = viewModel.outputText.value,
+                onValueChange = { new -> viewModel.outputText.value = new },
                 keyboardActions = KeyboardActions { focusManager.clearFocus() },
                 textStyle = MaterialTheme.typography.titleMedium,
                 colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -326,10 +314,6 @@ private fun ConverterScreenContent(
 @Composable
 private fun PreviewConverterScreenContent() {
     ConverterScreenContent(
-        selectedTextHiraKanaType = mutableStateOf(HiraKanaType.HIRAGANA),
-        convertOnClick = {},
-        errorText = mutableStateOf(stringResource(id = R.string.request_too_large)),
-        inputText = mutableStateOf("日本語"),
-        outputText = mutableStateOf("にほんご")
+        viewModel = PreviewConvertViewModel()
     )
 }
