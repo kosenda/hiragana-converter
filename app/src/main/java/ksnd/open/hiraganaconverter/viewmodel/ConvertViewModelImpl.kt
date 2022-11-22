@@ -25,6 +25,8 @@ class ConvertViewModelImpl @Inject constructor(
     private val sharedPreferences: SharedPreferences
 ) : ConvertViewModel() {
 
+    private val tag = ConvertViewModelImpl::class.java.simpleName
+
     override val previousInputText: MutableState<String> = mutableStateOf("")
     override val inputText: MutableState<String> = mutableStateOf("")
     override val outputText: MutableState<String> = mutableStateOf("")
@@ -41,12 +43,16 @@ class ConvertViewModelImpl @Inject constructor(
             errorText.value = context.getString(R.string.limit_local_count)
         } else {
             val appId = BuildConfig.apiKey
+            val nullRawErrorText = context.getString(R.string.conversion_failed)
             CoroutineScope(Dispatchers.IO).launch {
                 raw.value = convertRepository.requestConvert(
                     sentence = inputText.value,
                     type = selectedTextType.value.name.lowercase(Locale.ENGLISH),
                     appId = appId
                 )
+                if (raw.value == null) {
+                    errorText.value = nullRawErrorText
+                }
                 outputText.value = raw.value?.body()?.converted ?: ""
                 previousInputText.value = inputText.value
             }
@@ -54,10 +60,10 @@ class ConvertViewModelImpl @Inject constructor(
     }
 
     override fun updateErrorText(context: Context) {
-        Log.i("raw", raw.value?.raw().toString())
+        Log.i(tag, "raw: ${raw.value?.raw()}")
         when (raw.value?.code()) {
             null -> {
-                errorText.value = ""
+                errorText.value = "" // 初期化時しか通らない
             }
             200 -> {
                 errorText.value = ""
@@ -79,6 +85,7 @@ class ConvertViewModelImpl @Inject constructor(
                 errorText.value = context.getString(R.string.conversion_failed)
             }
         }
+        Log.i(tag, "errorText: ${errorText.value}")
     }
 
     /**
@@ -86,6 +93,7 @@ class ConvertViewModelImpl @Inject constructor(
      */
     private fun limitIsReached(): Boolean {
         val lastSearchTime = sharedPreferences.getString("last_search_time", "")
+        Log.i(tag, "last_search_time: $lastSearchTime")
         val now = DateFormat.format("yyyy-MM-dd", Calendar.getInstance()).toString()
         val todayCount = if (lastSearchTime != now) {
             1
@@ -93,9 +101,8 @@ class ConvertViewModelImpl @Inject constructor(
             sharedPreferences.getInt("search_count", 0) + 1
         }
         sharedPreferences.edit().putInt("search_count", todayCount).apply()
-        Log.i("search_count", todayCount.toString())
+        Log.i(tag, "today_search_count: $todayCount")
         sharedPreferences.edit().putString("last_search_time", now).apply()
-        Log.i("last_search_time", now)
         return todayCount > 200
     }
 }

@@ -24,6 +24,8 @@ class SettingsViewModelImpl @Inject constructor(
     private val preferencesDataStore: DataStore<Preferences>
 ) : SettingsViewModel() {
 
+    private val tag = SettingsViewModelImpl::class.java.simpleName
+
     private val _themeNum = mutableStateOf(ThemeNum.AUTO.num)
     override val themeNum: Int = _themeNum.value
     private val _customFont = mutableStateOf(CustomFont.DEFAULT.name)
@@ -47,7 +49,7 @@ class SettingsViewModelImpl @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch {
             val customFontFlow: Flow<Int> = preferencesDataStore.data
                 .catch { exception ->
-                    Log.e("preferencesDataStore", exception.toString())
+                    Log.e(tag, "preferencesDataStore $exception")
                     if (exception is IOException) {
                         emit(emptyPreferences())
                     } else {
@@ -67,7 +69,7 @@ class SettingsViewModelImpl @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch {
             val customFontFlow: Flow<String> = preferencesDataStore.data
                 .catch { exception ->
-                    Log.e("preferencesDataStore", exception.toString())
+                    Log.e(tag, "preferencesDataStore $exception")
                     if (exception is IOException) {
                         emit(emptyPreferences())
                     } else {
