@@ -24,6 +24,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    private val tag = MainActivity::class.java.simpleName
+
     @Inject lateinit var preferencesDataStore: DataStore<Preferences>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +34,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val themeNum: State<Int> = preferencesDataStore.data
                 .catch { exception ->
-                    Log.e("preferencesDataStore", exception.toString())
+                    Log.e(tag, "preferencesDataStore $exception")
                     if (exception is IOException) {
                         emit(emptyPreferences())
                     } else {
@@ -46,7 +48,7 @@ class MainActivity : ComponentActivity() {
 
             val customFont: State<String> = preferencesDataStore.data
                 .catch { exception ->
-                    Log.e("preferencesDataStore", exception.toString())
+                    Log.e(tag, "preferencesDataStore $exception")
                     if (exception is IOException) {
                         emit(emptyPreferences())
                     } else {

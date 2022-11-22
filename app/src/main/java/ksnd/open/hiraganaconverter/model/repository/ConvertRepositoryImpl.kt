@@ -11,8 +11,11 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.io.IOException
 
 class ConvertRepositoryImpl : ConvertRepository {
+
+    private val tag = ConvertRepositoryImpl::class.java.simpleName
 
     // JSONからKotlinのクラスに変換するためのライブラリの設定
     private val moshi = Moshi.Builder()
@@ -34,21 +37,28 @@ class ConvertRepositoryImpl : ConvertRepository {
         type: String,
         appId: String
     ): Response<ResponseData>? {
-        return try {
+        try {
             val requestData = RequestData(
                 appId = appId,
                 sentence = sentence,
                 outputType = type
             )
             val json = moshi.adapter(RequestData::class.java).toJson(requestData)
-            Log.i("json: ", json)
+            Log.i(tag, "json: $json")
             val body = json.toRequestBody(
                 contentType = "application/json; charset=utf-8".toMediaTypeOrNull()
             )
-            convertService.requestConvert(body)
+            val response = convertService.requestConvert(body)
+            if (response.isSuccessful.not()) {
+                Log.w(tag, response.raw().message)
+            }
+            return response
+        } catch (ioe: IOException) {
+            Log.e(tag, "ネットワークエラー: $ioe")
+            return null
         } catch (e: Exception) {
-            Log.e("request_convert", e.toString())
-            null
+            Log.e(tag, e.toString())
+            return null
         }
     }
 }
