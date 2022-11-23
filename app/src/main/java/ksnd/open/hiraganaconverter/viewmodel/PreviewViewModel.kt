@@ -21,8 +21,8 @@ class PreviewConvertViewModel : ConvertViewModel() {
 }
 
 class PreviewSettingViewModel : SettingsViewModel() {
-    override val customFont: String = CustomFont.DEFAULT.name
-    override val themeNum: Int = ThemeNum.AUTO.num
+    override val customFont: MutableState<String> = mutableStateOf(CustomFont.DEFAULT.name)
+    override val themeNum: MutableState<Int> = mutableStateOf(ThemeNum.AUTO.num)
     override fun updateThemeNum(newThemeNum: Int) {}
     override fun updateCustomFont(newCustomFont: CustomFont) {}
     override fun getThemeNum() {}

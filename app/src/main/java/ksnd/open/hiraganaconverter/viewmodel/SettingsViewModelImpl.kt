@@ -26,22 +26,20 @@ class SettingsViewModelImpl @Inject constructor(
 
     private val tag = SettingsViewModelImpl::class.java.simpleName
 
-    private val _themeNum = mutableStateOf(ThemeNum.AUTO.num)
-    override val themeNum: Int = _themeNum.value
-    private val _customFont = mutableStateOf(CustomFont.DEFAULT.name)
-    override val customFont = _customFont.value
+    override val themeNum = mutableStateOf(ThemeNum.AUTO.num)
+    override val customFont = mutableStateOf(CustomFont.DEFAULT.name)
 
     override fun updateThemeNum(newThemeNum: Int) {
         CoroutineScope(Dispatchers.IO).launch {
             preferencesDataStore.edit { it[PreferenceKeys.THEME_NUM] = newThemeNum }
-            _themeNum.value = newThemeNum
+            themeNum.value = newThemeNum
         }
     }
 
     override fun updateCustomFont(newCustomFont: CustomFont) {
         CoroutineScope(Dispatchers.IO).launch {
             preferencesDataStore.edit { it[PreferenceKeys.CUSTOM_FONT] = newCustomFont.name }
-            _customFont.value = newCustomFont.name
+            customFont.value = newCustomFont.name
         }
     }
 
@@ -60,7 +58,7 @@ class SettingsViewModelImpl @Inject constructor(
                     preferences[PreferenceKeys.THEME_NUM] ?: ThemeNum.AUTO.num
                 }
             customFontFlow.collect {
-                _themeNum.value = it
+                themeNum.value = it
             }
         }
     }
@@ -80,16 +78,16 @@ class SettingsViewModelImpl @Inject constructor(
                     preferences[PreferenceKeys.CUSTOM_FONT] ?: CustomFont.DEFAULT.name
                 }
             customFontFlow.collect {
-                _customFont.value = it
+                customFont.value = it
             }
         }
     }
 
     override fun isSelectedThemeNum(index: Int): Boolean {
-        return themeNum == index
+        return themeNum.value == index
     }
 
     override fun isSelectedFont(targetCustomFont: CustomFont): Boolean {
-        return customFont == targetCustomFont.name
+        return customFont.value == targetCustomFont.name
     }
 }
