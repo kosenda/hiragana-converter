@@ -30,7 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
@@ -49,6 +48,7 @@ import ksnd.open.hiraganaconverter.BuildConfig
 import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.view.parts.BottomCloseButton
 import ksnd.open.hiraganaconverter.view.parts.TitleCard
+import ksnd.open.hiraganaconverter.view.theme.urlColor
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -66,7 +66,6 @@ fun InfoDialog(onCloseClick: () -> Unit) {
 private fun InfoDialogContent(onCloseClick: () -> Unit) {
     val urlHandler = LocalUriHandler.current
     val context = LocalContext.current
-    val urlColor = Color(0xFF00D4AA)
     var isShowMovesToAppSiteDialog by remember { mutableStateOf(false) }
     var isShowMovesToApiSiteDialog by remember { mutableStateOf(false) }
 
@@ -112,150 +111,169 @@ private fun InfoDialogContent(onCloseClick: () -> Unit) {
                 .verticalScroll(rememberScrollState())
         ) {
             // アプリの情報
-            TitleCard(text = stringResource(id = R.string.app_info_title))
-            Card(
-                modifier = Modifier
-                    .padding(all = 8.dp)
-                    .fillMaxWidth(),
-                colors = CardDefaults.outlinedCardColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                ),
-                border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Image(
-                        painter = painterResource(id = R.drawable.icon),
-                        contentDescription = "convert",
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier
-                            .padding(all = 16.dp)
-                            .size(72.dp)
-                            .clip(CircleShape)
-                    )
-                    Column(
-                        modifier = Modifier.padding(vertical = 16.dp)
-                    ) {
-                        ItemTitle(
-                            text = stringResource(id = R.string.app_name_title),
-                            modifier = Modifier.padding(bottom = 4.dp)
-                        )
-                        BodyMedium(text = stringResource(id = R.string.app_name))
-
-                        ItemTitle(
-                            text = stringResource(id = R.string.version_title),
-                            modifier = Modifier.padding(bottom = 4.dp, top = 16.dp)
-                        )
-                        BodyMedium(text = BuildConfig.VERSION_NAME)
-
-                        ItemTitle(
-                            text = stringResource(id = R.string.google_play),
-                            modifier = Modifier.padding(bottom = 4.dp, top = 16.dp)
-                        )
-                        Text(
-                            text = stringResource(id = R.string.review_url),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = urlColor,
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .clickable {
-                                    isShowMovesToAppSiteDialog = true
-                                },
-                            textAlign = TextAlign.Center,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            textDecoration = TextDecoration.Underline
-                        )
-                    }
+            AppInfoContent(
+                onURLClick = {
+                    isShowMovesToAppSiteDialog = true
                 }
-            }
-
+            )
             // 開発者情報
-            Card(
-                modifier = Modifier
-                    .padding(all = 8.dp)
-                    .fillMaxWidth(),
-                colors = CardDefaults.outlinedCardColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                ),
-                border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Image(
-                        painter = painterResource(id = R.drawable.google_play_icon),
-                        contentDescription = "convert",
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier
-                            .padding(all = 16.dp)
-                            .size(72.dp)
-                            .clip(CircleShape)
-                    )
-                    Column(
-                        modifier = Modifier.padding(vertical = 16.dp)
-                    ) {
-                        ItemTitle(
-                            text = stringResource(id = R.string.developer_name_title),
-                            modifier = Modifier.padding(bottom = 4.dp)
-                        )
-                        BodyMedium(text = stringResource(id = R.string.developer_name))
-                    }
-                }
-            }
-
+            DeveloperInfoContent()
             // APIの情報
-            TitleCard(text = stringResource(id = R.string.api_info_title))
-            Card(
-                modifier = Modifier
-                    .padding(all = 8.dp)
-                    .fillMaxWidth(),
-                colors = CardDefaults.outlinedCardColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                ),
-                border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
-            ) {
-                Column(
-                    modifier = Modifier
-                        .padding(start = 16.dp)
-                        .fillMaxWidth(),
-                    horizontalAlignment = Alignment.Start
-                ) {
-                    AsyncImage(
-                        ImageRequest.Builder(LocalContext.current)
-                            .data("https://u.xgoo.jp/img/sgoo.png")
-                            .crossfade(true)
-                            .build(),
-                        contentDescription = null
-                    )
+            APIInfoContent(
+                onURLClick = {
+                    isShowMovesToApiSiteDialog = true
                 }
-                Column(
-                    modifier = Modifier.padding(vertical = 16.dp)
-                ) {
-                    ItemTitle(
-                        text = stringResource(id = R.string.api_name_title),
-                        modifier = Modifier.padding(bottom = 4.dp)
-                    )
-                    BodyMedium(text = stringResource(id = R.string.api_name))
-
-                    ItemTitle(
-                        text = stringResource(id = R.string.url_title),
-                        modifier = Modifier.padding(bottom = 4.dp, top = 16.dp)
-                    )
-                    Text(
-                        text = stringResource(id = R.string.goo_url),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = urlColor,
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .clickable {
-                                isShowMovesToApiSiteDialog = true
-                            },
-                        textAlign = TextAlign.Center,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        textDecoration = TextDecoration.Underline
-                    )
-                }
-            }
+            )
+            // 余白
             Spacer(modifier = Modifier.height(40.dp))
+        }
+    }
+}
+
+@Composable
+private fun AppInfoContent(onURLClick: () -> Unit) {
+    TitleCard(text = stringResource(id = R.string.app_info_title))
+    Card(
+        modifier = Modifier
+            .padding(all = 8.dp)
+            .fillMaxWidth(),
+        colors = CardDefaults.outlinedCardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Image(
+                painter = painterResource(id = R.drawable.icon),
+                contentDescription = "convert",
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .padding(all = 16.dp)
+                    .size(72.dp)
+                    .clip(CircleShape)
+            )
+            Column(
+                modifier = Modifier.padding(vertical = 16.dp)
+            ) {
+                ItemTitle(
+                    text = stringResource(id = R.string.app_name_title),
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+                BodyMedium(text = stringResource(id = R.string.app_name))
+
+                ItemTitle(
+                    text = stringResource(id = R.string.version_title),
+                    modifier = Modifier.padding(bottom = 4.dp, top = 16.dp)
+                )
+                BodyMedium(text = BuildConfig.VERSION_NAME)
+
+                ItemTitle(
+                    text = stringResource(id = R.string.google_play),
+                    modifier = Modifier.padding(bottom = 4.dp, top = 16.dp)
+                )
+                Text(
+                    text = stringResource(id = R.string.review_url),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = urlColor,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .clickable(onClick = onURLClick),
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    textDecoration = TextDecoration.Underline
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun DeveloperInfoContent() {
+    // 開発者情報
+    Card(
+        modifier = Modifier
+            .padding(all = 8.dp)
+            .fillMaxWidth(),
+        colors = CardDefaults.outlinedCardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Image(
+                painter = painterResource(id = R.drawable.google_play_icon),
+                contentDescription = "convert",
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .padding(all = 16.dp)
+                    .size(72.dp)
+                    .clip(CircleShape)
+            )
+            Column(
+                modifier = Modifier.padding(vertical = 16.dp)
+            ) {
+                ItemTitle(
+                    text = stringResource(id = R.string.developer_name_title),
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+                BodyMedium(text = stringResource(id = R.string.developer_name))
+            }
+        }
+    }
+}
+
+@Composable
+private fun APIInfoContent(onURLClick: () -> Unit) {
+    TitleCard(text = stringResource(id = R.string.api_info_title))
+    Card(
+        modifier = Modifier
+            .padding(all = 8.dp)
+            .fillMaxWidth(),
+        colors = CardDefaults.outlinedCardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(start = 16.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.Start
+        ) {
+            AsyncImage(
+                ImageRequest.Builder(LocalContext.current)
+                    .data("https://u.xgoo.jp/img/sgoo.png")
+                    .crossfade(true)
+                    .build(),
+                contentDescription = null
+            )
+        }
+        Column(
+            modifier = Modifier.padding(vertical = 16.dp)
+        ) {
+            ItemTitle(
+                text = stringResource(id = R.string.api_name_title),
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+            BodyMedium(text = stringResource(id = R.string.api_name))
+
+            ItemTitle(
+                text = stringResource(id = R.string.url_title),
+                modifier = Modifier.padding(bottom = 4.dp, top = 16.dp)
+            )
+            Text(
+                text = stringResource(id = R.string.goo_url),
+                style = MaterialTheme.typography.bodyLarge,
+                color = urlColor,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .clickable(onClick = onURLClick),
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                textDecoration = TextDecoration.Underline
+            )
         }
     }
 }

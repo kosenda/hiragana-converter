@@ -82,11 +82,6 @@ private fun SettingDialogContent(
     viewModel: SettingsViewModel
 ) {
     val isShowSelectLanguageDialog = rememberSaveable { mutableStateOf(false) }
-    val modeRadio = listOf(
-        stringResource(id = R.string.dark_mode),
-        stringResource(id = R.string.light_mode),
-        stringResource(id = R.string.auto_mode)
-    )
 
     // ラジオボタンの初期化
     LaunchedEffect(true) {
@@ -99,6 +94,7 @@ private fun SettingDialogContent(
             onCloseClick = { isShowSelectLanguageDialog.value = false }
         )
     }
+
     Scaffold(
         modifier = Modifier
             .fillMaxHeight(0.95f)
@@ -115,174 +111,194 @@ private fun SettingDialogContent(
                 .verticalScroll(rememberScrollState())
         ) {
             // テーマ設定
-            TitleCard(text = stringResource(id = R.string.theme_setting))
-            OutlinedCard(
-                colors = CardDefaults.outlinedCardColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer
-                ),
-                modifier = Modifier.padding(all = 8.dp)
-            ) {
-                Column {
-                    modeRadio.forEachIndexed { index, buttonText ->
-                        Row(
-                            modifier = Modifier
-                                .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
-                                .fillMaxWidth()
-                                .height(40.dp)
-                                .clickable { viewModel.updateThemeNum(index) },
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Spacer(modifier = Modifier.width(16.dp))
-                            Image(
-                                painter = when (buttonText) {
-                                    modeRadio[0] -> {
-                                        painterResource(id = R.drawable.ic_baseline_brightness_2_24)
-                                    }
-                                    modeRadio[1] -> {
-                                        painterResource(id = R.drawable.ic_baseline_brightness_low_24)
-                                    }
-                                    else -> {
-                                        painterResource(id = R.drawable.ic_baseline_brightness_auto_24)
-                                    }
-                                },
-                                contentDescription = buttonText,
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
-                                contentScale = ContentScale.Fit,
-                                modifier = Modifier.size(24.dp)
-                            )
-                            Text(
-                                text = buttonText,
-                                modifier = Modifier
-                                    .padding(start = 12.dp)
-                                    .weight(1f),
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                            RadioButton(
-                                selected = viewModel.isSelectedThemeNum(index),
-                                colors = RadioButtonDefaults.colors(),
-                                onClick = {
-                                    viewModel.updateThemeNum(index)
-                                }
-                            )
-                        }
-                    }
-                }
-            }
-
+            SettingThemeContent(
+                onRadioButtonClick = { index -> viewModel.updateThemeNum(index) },
+                isSelectedNum = { index -> viewModel.isSelectedThemeNum(index) }
+            )
             // 言語設定
-            TitleCard(text = stringResource(id = R.string.language_setting))
-            OutlinedCard(
-                colors = CardDefaults.outlinedCardColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer
-                ),
-                modifier = Modifier
-                    .padding(all = 8.dp)
-                    .clickable(
-                        onClick = { isShowSelectLanguageDialog.value = true }
-                    )
-            ) {
+            SettingLanguageContent(
+                onClick = {
+                    isShowSelectLanguageDialog.value = true
+                }
+            )
+            // フォント設定
+            SettingFontContent(
+                updateCustomFont = { customFont -> viewModel.updateCustomFont(customFont) },
+                isSelectedFont = { customFont -> viewModel.isSelectedFont(customFont) },
+                onCloseClick = onCloseClick
+            )
+        }
+    }
+}
+
+@Composable
+private fun SettingThemeContent(
+    onRadioButtonClick: (Int) -> Unit,
+    isSelectedNum: (Int) -> Boolean
+) {
+    val modeRadio = listOf(
+        stringResource(id = R.string.dark_mode),
+        stringResource(id = R.string.light_mode),
+        stringResource(id = R.string.auto_mode)
+    )
+    TitleCard(text = stringResource(id = R.string.theme_setting))
+    OutlinedCard(
+        colors = CardDefaults.outlinedCardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer
+        ),
+        modifier = Modifier.padding(all = 8.dp)
+    ) {
+        Column {
+            modeRadio.forEachIndexed { index, buttonText ->
                 Row(
                     modifier = Modifier
                         .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .height(40.dp)
+                        .clickable(
+                            onClick = {
+                                onRadioButtonClick(index)
+                            }
+                        ),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+                    Spacer(modifier = Modifier.width(16.dp))
                     Image(
-                        painter = painterResource(id = R.drawable.ic_baseline_language_24),
-                        contentDescription = null,
+                        painter = when (buttonText) {
+                            modeRadio[0] -> {
+                                painterResource(id = R.drawable.ic_baseline_brightness_2_24)
+                            }
+                            modeRadio[1] -> {
+                                painterResource(id = R.drawable.ic_baseline_brightness_low_24)
+                            }
+                            else -> {
+                                painterResource(id = R.drawable.ic_baseline_brightness_auto_24)
+                            }
+                        },
+                        contentDescription = buttonText,
                         colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                         contentScale = ContentScale.Fit,
-                        modifier = Modifier
-                            .size(40.dp)
-                            .padding(start = 16.dp)
+                        modifier = Modifier.size(24.dp)
                     )
                     Text(
-                        text = stringResource(id = R.string.select_language),
-                        modifier = Modifier.padding(start = 12.dp),
+                        text = buttonText,
+                        modifier = Modifier
+                            .padding(start = 12.dp)
+                            .weight(1f),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.primary
                     )
-                    Spacer(modifier = Modifier.weight(1f))
+                    RadioButton(
+                        selected = isSelectedNum(index),
+                        colors = RadioButtonDefaults.colors(),
+                        onClick = {
+                            onRadioButtonClick(index)
+                        }
+                    )
                 }
             }
+        }
+    }
+}
 
-            // フォント設定
-            TitleCard(text = stringResource(id = R.string.font_setting))
-            OutlinedCard(
-                colors = CardDefaults.outlinedCardColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer
-                ),
-                modifier = Modifier.padding(all = 8.dp)
-            ) {
-                Column {
-                    CustomFontRadioButton(
-                        onClick = {
-                            viewModel.updateCustomFont(
-                                newCustomFont = CustomFont.DEFAULT
-                            )
-                            onCloseClick()
-                        },
-                        selected = viewModel.isSelectedFont(
-                            CustomFont.DEFAULT
-                        ),
-                        text = stringResource(id = R.string.default_font),
-                        fontFamily = FontFamily.Default
-                    )
-                    CustomFontRadioButton(
-                        onClick = {
-                            viewModel.updateCustomFont(
-                                newCustomFont = CustomFont.CORPORATE_LOGO_ROUNDED
-                            )
-                            onCloseClick()
-                        },
-                        selected = viewModel.isSelectedFont(
-                            CustomFont.CORPORATE_LOGO_ROUNDED
-                        ),
-                        text = stringResource(id = R.string.corporate_logo_rounded_font),
-                        fontFamily = FontFamily(Font(R.font.corporate_logo_rounded_bold_ver3))
-                    )
-                    CustomFontRadioButton(
-                        onClick = {
-                            viewModel.updateCustomFont(
-                                newCustomFont = CustomFont.CORPORATE_YAWAMIN
-                            )
-                            onCloseClick()
-                        },
-                        selected = viewModel.isSelectedFont(
-                            CustomFont.CORPORATE_YAWAMIN
-                        ),
-                        text = stringResource(id = R.string.corporate_yawamin_font),
-                        fontFamily = FontFamily(Font(R.font.corporate_yawamin_ver3))
-                    )
-                    CustomFontRadioButton(
-                        onClick = {
-                            viewModel.updateCustomFont(
-                                newCustomFont = CustomFont.NOSUTARU_DOT_M_PLUS
-                            )
-                            onCloseClick()
-                        },
-                        selected = viewModel.isSelectedFont(
-                            CustomFont.NOSUTARU_DOT_M_PLUS
-                        ),
-                        text = stringResource(id = R.string.nosutaru_dot_font),
-                        fontFamily = FontFamily(Font(R.font.nosutaru_dotmplush_10_regular))
-                    )
-                    CustomFontRadioButton(
-                        onClick = {
-                            viewModel.updateCustomFont(
-                                newCustomFont = CustomFont.BIZ_UDGOTHIC
-                            )
-                            onCloseClick()
-                        },
-                        selected = viewModel.isSelectedFont(
-                            CustomFont.BIZ_UDGOTHIC
-                        ),
-                        text = stringResource(id = R.string.biz_udgothic),
-                        fontFamily = FontFamily(Font(R.font.bizudgothic_regular))
-                    )
-                }
-            }
+@Composable
+private fun SettingLanguageContent(onClick: () -> Unit) {
+    TitleCard(text = stringResource(id = R.string.language_setting))
+    OutlinedCard(
+        colors = CardDefaults.outlinedCardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer
+        ),
+        modifier = Modifier
+            .padding(all = 8.dp)
+            .clickable(
+                onClick = onClick
+            )
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_baseline_language_24),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .size(40.dp)
+                    .padding(start = 16.dp)
+            )
+            Text(
+                text = stringResource(id = R.string.select_language),
+                modifier = Modifier.padding(start = 12.dp),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary
+            )
+            Spacer(modifier = Modifier.weight(1f))
+        }
+    }
+}
+
+@Composable
+private fun SettingFontContent(
+    updateCustomFont: (CustomFont) -> Unit,
+    isSelectedFont: (CustomFont) -> Boolean,
+    onCloseClick: () -> Unit
+) {
+    TitleCard(text = stringResource(id = R.string.font_setting))
+    OutlinedCard(
+        colors = CardDefaults.outlinedCardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer
+        ),
+        modifier = Modifier.padding(all = 8.dp)
+    ) {
+        Column {
+            CustomFontRadioButton(
+                onClick = {
+                    updateCustomFont(CustomFont.DEFAULT)
+                    onCloseClick()
+                },
+                selected = isSelectedFont(CustomFont.DEFAULT),
+                text = stringResource(id = R.string.default_font),
+                fontFamily = FontFamily.Default
+            )
+            CustomFontRadioButton(
+                onClick = {
+                    updateCustomFont(CustomFont.CORPORATE_LOGO_ROUNDED)
+                    onCloseClick()
+                },
+                selected = isSelectedFont(CustomFont.CORPORATE_LOGO_ROUNDED),
+                text = stringResource(id = R.string.corporate_logo_rounded_font),
+                fontFamily = FontFamily(Font(R.font.corporate_logo_rounded_bold_ver3))
+            )
+            CustomFontRadioButton(
+                onClick = {
+                    updateCustomFont(CustomFont.CORPORATE_YAWAMIN)
+                    onCloseClick()
+                },
+                selected = isSelectedFont(CustomFont.CORPORATE_YAWAMIN),
+                text = stringResource(id = R.string.corporate_yawamin_font),
+                fontFamily = FontFamily(Font(R.font.corporate_yawamin_ver3))
+            )
+            CustomFontRadioButton(
+                onClick = {
+                    updateCustomFont(CustomFont.NOSUTARU_DOT_M_PLUS)
+                    onCloseClick()
+                },
+                selected = isSelectedFont(CustomFont.NOSUTARU_DOT_M_PLUS),
+                text = stringResource(id = R.string.nosutaru_dot_font),
+                fontFamily = FontFamily(Font(R.font.nosutaru_dotmplush_10_regular))
+            )
+            CustomFontRadioButton(
+                onClick = {
+                    updateCustomFont(CustomFont.BIZ_UDGOTHIC)
+                    onCloseClick()
+                },
+                selected = isSelectedFont(CustomFont.BIZ_UDGOTHIC),
+                text = stringResource(id = R.string.biz_udgothic),
+                fontFamily = FontFamily(Font(R.font.bizudgothic_regular))
+            )
         }
     }
 }

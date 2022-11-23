@@ -38,6 +38,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
@@ -117,133 +118,39 @@ private fun ConverterScreenContent(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                // 変換タイプ（ひらがな、カタカナ）を選択するスピナー
                 Row(modifier = Modifier.weight(1f)) {
                     ConversionTypeSpinnerCard(
                         onSelectedChange = { type -> viewModel.selectedTextType.value = type }
                     )
                 }
-                // 変換する際に押すボタン
-                FilledTonalButton(
-                    modifier = Modifier
-                        .padding(all = 8.dp)
-                        .height(48.dp),
-                    onClick = { viewModel.convert(context = context) },
-                    colors = ButtonDefaults.filledTonalButtonColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer
-                    )
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .wrapContentWidth()
-                            .fillMaxHeight(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_baseline_compare_arrows_24),
-                            contentDescription = "convert",
-                            colorFilter = ColorFilter.tint(
-                                MaterialTheme.colorScheme.onPrimaryContainer
-                            ),
-                            contentScale = ContentScale.Fit,
-                            modifier = Modifier.size(36.dp)
-                        )
-                        Text(
-                            text = stringResource(id = R.string.conversion),
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            modifier = Modifier.padding(start = 8.dp)
-                        )
+                // 変換するときに押すボタン
+                ConvertButton(
+                    onClick = {
+                        viewModel.convert(context = context)
                     }
-                }
+                )
             }
 
             // エラーに何かある場合のみエラー表示を行う
             if (viewModel.errorText.value != "") {
-                OutlinedCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(all = 16.dp)
-                        .clickable { viewModel.errorText.value = "" },
-                    colors = CardDefaults.outlinedCardColors(
-                        containerColor = MaterialTheme.colorScheme.errorContainer
-                    ),
-                    border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.error)
-                ) {
-                    Row(
-                        modifier = Modifier.padding(all = 16.dp)
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_baseline_error_outline_24),
-                            contentDescription = "convert",
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.error),
-                            contentScale = ContentScale.Fit,
-                            modifier = Modifier.size(36.dp)
-                        )
-                        Text(
-                            text = viewModel.errorText.value,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.error,
-                            modifier = Modifier.padding(start = 8.dp)
-                        )
+                ErrorCard(
+                    errorText = viewModel.errorText.value,
+                    onClick = {
+                        viewModel.errorText.value = ""
                     }
-                }
+                )
             }
 
             // 変換前用
-            Row {
-                Text(
-                    text = "[ ${stringResource(id = R.string.before_conversion)} ]",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier
-                        .padding(all = 16.dp)
-                        .weight(1f),
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                FilledTonalIconButton(
-                    modifier = Modifier
-                        .padding(top = 16.dp, bottom = 16.dp, end = 16.dp)
-                        .size(48.dp),
-                    onClick = {
-                        clipboardManager.setText(
-                            AnnotatedString(viewModel.inputText.value)
-                        )
-                        Toast
-                            .makeText(context, "COPIED.", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
-                        contentDescription = "copy",
-                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier.size(24.dp)
-                    )
+            BeforeTextField(
+                inputText = viewModel.inputText.value,
+                clipboardManager = clipboardManager,
+                focusManager = focusManager,
+                onValueChange = {
+                        new ->
+                    viewModel.inputText.value = new
                 }
-            }
-            OutlinedTextField(
-                value = viewModel.inputText.value,
-                onValueChange = { new -> viewModel.inputText.value = new },
-                keyboardActions = KeyboardActions {
-                    focusManager.clearFocus()
-                },
-                textStyle = MaterialTheme.typography.titleMedium,
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    textColor = MaterialTheme.colorScheme.secondary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.surface,
-                    focusedBorderColor = MaterialTheme.colorScheme.surface
-                ),
-                placeholder = {
-                    Text(
-                        text = stringResource(id = R.string.input_hint),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.secondary
-                    )
-                },
-                modifier = Modifier
-                    .defaultMinSize(minHeight = 120.dp)
-                    .fillMaxWidth()
             )
 
             Divider(
@@ -253,61 +160,216 @@ private fun ConverterScreenContent(
             )
 
             // 変換後用
-            Row {
-                Text(
-                    text = "[ ${stringResource(id = R.string.after_conversion)} ]",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier
-                        .padding(all = 16.dp)
-                        .weight(1f),
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                FilledTonalIconButton(
-                    modifier = Modifier
-                        .padding(top = 16.dp, bottom = 16.dp, end = 16.dp)
-                        .size(48.dp),
-                    onClick = {
-                        clipboardManager.setText(
-                            AnnotatedString(viewModel.outputText.value)
-                        )
-                        Toast
-                            .makeText(context, "COPIED.", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
-                        contentDescription = "copy",
-                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier
-                            .size(24.dp)
-                    )
+            AfterTextField(
+                outputText = viewModel.outputText.value,
+                clipboardManager = clipboardManager,
+                focusManager = focusManager,
+                onValueChange = {
+                        new ->
+                    viewModel.outputText.value = new
                 }
-            }
-            OutlinedTextField(
-                value = viewModel.outputText.value,
-                onValueChange = { new -> viewModel.outputText.value = new },
-                keyboardActions = KeyboardActions { focusManager.clearFocus() },
-                textStyle = MaterialTheme.typography.titleMedium,
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    textColor = MaterialTheme.colorScheme.tertiary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.surface,
-                    focusedBorderColor = MaterialTheme.colorScheme.surface
-                ),
-                placeholder = {
-                    Text(
-                        text = stringResource(id = R.string.output_hint),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.tertiary
-                    )
-                },
-                modifier = Modifier
-                    .defaultMinSize(minHeight = 120.dp)
-                    .fillMaxWidth()
             )
         }
     }
+}
+
+@Composable
+private fun ConvertButton(onClick: () -> Unit) {
+    FilledTonalButton(
+        modifier = Modifier
+            .padding(all = 8.dp)
+            .height(48.dp),
+        onClick = onClick,
+        colors = ButtonDefaults.filledTonalButtonColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .wrapContentWidth()
+                .fillMaxHeight(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_baseline_compare_arrows_24),
+                contentDescription = "convert",
+                colorFilter = ColorFilter.tint(
+                    MaterialTheme.colorScheme.onPrimaryContainer
+                ),
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.size(36.dp)
+            )
+            Text(
+                text = stringResource(id = R.string.conversion),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun ErrorCard(
+    errorText: String,
+    onClick: () -> Unit
+) {
+    OutlinedCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(all = 16.dp)
+            .clickable(onClick = onClick),
+        colors = CardDefaults.outlinedCardColors(
+            containerColor = MaterialTheme.colorScheme.errorContainer
+        ),
+        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.error)
+    ) {
+        Row(
+            modifier = Modifier.padding(all = 16.dp)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_baseline_error_outline_24),
+                contentDescription = "convert",
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.error),
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.size(36.dp)
+            )
+            Text(
+                text = errorText,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun BeforeTextField(
+    inputText: String,
+    clipboardManager: ClipboardManager,
+    focusManager: FocusManager,
+    onValueChange: (String) -> Unit
+) {
+    val context = LocalContext.current
+    Row {
+        Text(
+            text = "[ ${stringResource(id = R.string.before_conversion)} ]",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier
+                .padding(all = 16.dp)
+                .weight(1f),
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        FilledTonalIconButton(
+            modifier = Modifier
+                .padding(top = 16.dp, bottom = 16.dp, end = 16.dp)
+                .size(48.dp),
+            onClick = {
+                clipboardManager.setText(
+                    AnnotatedString(inputText)
+                )
+                Toast
+                    .makeText(context, "COPIED.", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
+                contentDescription = "copy",
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.size(24.dp)
+            )
+        }
+    }
+    OutlinedTextField(
+        value = inputText,
+        onValueChange = onValueChange,
+        keyboardActions = KeyboardActions {
+            focusManager.clearFocus()
+        },
+        textStyle = MaterialTheme.typography.titleMedium,
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            textColor = MaterialTheme.colorScheme.secondary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.surface,
+            focusedBorderColor = MaterialTheme.colorScheme.surface
+        ),
+        placeholder = {
+            Text(
+                text = stringResource(id = R.string.input_hint),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.secondary
+            )
+        },
+        modifier = Modifier
+            .defaultMinSize(minHeight = 120.dp)
+            .fillMaxWidth()
+    )
+}
+
+@Composable
+private fun AfterTextField(
+    outputText: String,
+    clipboardManager: ClipboardManager,
+    focusManager: FocusManager,
+    onValueChange: (String) -> Unit
+) {
+    val context = LocalContext.current
+    Row {
+        Text(
+            text = "[ ${stringResource(id = R.string.after_conversion)} ]",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier
+                .padding(all = 16.dp)
+                .weight(1f),
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        FilledTonalIconButton(
+            modifier = Modifier
+                .padding(top = 16.dp, bottom = 16.dp, end = 16.dp)
+                .size(48.dp),
+            onClick = {
+                clipboardManager.setText(
+                    AnnotatedString(outputText)
+                )
+                Toast
+                    .makeText(context, "COPIED.", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
+                contentDescription = "copy",
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .size(24.dp)
+            )
+        }
+    }
+    OutlinedTextField(
+        value = outputText,
+        onValueChange = onValueChange,
+        keyboardActions = KeyboardActions { focusManager.clearFocus() },
+        textStyle = MaterialTheme.typography.titleMedium,
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            textColor = MaterialTheme.colorScheme.tertiary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.surface,
+            focusedBorderColor = MaterialTheme.colorScheme.surface
+        ),
+        placeholder = {
+            Text(
+                text = stringResource(id = R.string.output_hint),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.tertiary
+            )
+        },
+        modifier = Modifier
+            .defaultMinSize(minHeight = 120.dp)
+            .fillMaxWidth()
+    )
 }
 
 @Preview
