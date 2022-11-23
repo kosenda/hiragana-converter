@@ -15,7 +15,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,8 +28,8 @@ import ksnd.open.hiraganaconverter.view.dialog.SettingDialog
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
-    val isShowSettingDialog = remember { mutableStateOf(false) }
-    val isShowInfoDialog = remember { mutableStateOf(false) }
+    val isShowSettingDialog = rememberSaveable { mutableStateOf(false) }
+    val isShowInfoDialog = rememberSaveable { mutableStateOf(false) }
 
     if (isShowSettingDialog.value) {
         SettingDialog(
