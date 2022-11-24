@@ -5,10 +5,13 @@ import android.text.format.DateFormat
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import ksnd.open.hiraganaconverter.BuildConfig
 import ksnd.open.hiraganaconverter.R
@@ -37,10 +40,22 @@ class ConvertViewModelImpl @Inject constructor(
     override val selectedTextType: MutableState<HiraKanaType> = mutableStateOf(HiraKanaType.HIRAGANA)
     override val raw: MutableState<Response<ResponseData>?> = mutableStateOf(null)
 
-    val lastConvertTimeFlow: Flow<String> = dataStoreRepository.lastConvertTime()
-    val convertCountFlow: Flow<Int> = dataStoreRepository.convertCount()
+    private val oldLastConvertTimeFlow: StateFlow<String> = dataStoreRepository
+        .lastConvertTime()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = ""
+        )
+    private val oldConvertCountFlow: StateFlow<Int> = dataStoreRepository
+        .convertCount()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = 1
+        )
 
-    override fun convert(context: Context, oldLastConvertTime: String, oldConvertCount: Int) {
+    override fun convert(context: Context) {
         // 入力値なしまたは前回入力値のままであるときは後続処理を行わない
         if (inputText.value == "" || previousInputText.value == inputText.value) {
             return
@@ -62,10 +77,7 @@ class ConvertViewModelImpl @Inject constructor(
             }
             outputText.value = raw.value?.body()?.converted ?: ""
             previousInputText.value = inputText.value
-            checkReachedLimit(
-                oldLastConvertTime = oldLastConvertTime,
-                oldConvertCount = oldConvertCount
-            )
+            checkReachedLimit()
         }
     }
 
@@ -101,18 +113,18 @@ class ConvertViewModelImpl @Inject constructor(
     /**
      * 制限回数に達していることを確認する処理
      */
-    private fun checkReachedLimit(oldLastConvertTime: String, oldConvertCount: Int) {
+    private fun checkReachedLimit() {
         val today = DateFormat.format("yyyy-MM-dd", Calendar.getInstance()).toString()
-        Log.i(tag, "old_convert_time: $oldLastConvertTime")
-        Log.i(tag, "old_convert_count: $oldConvertCount")
-        isReachedLimit.value = if (today != oldLastConvertTime) {
+        Log.i(tag, "old_convert_time: ${oldLastConvertTimeFlow.value}")
+        Log.i(tag, "old_convert_count: ${oldConvertCountFlow.value}")
+        isReachedLimit.value = if (today != oldLastConvertTimeFlow.value) {
             dataStoreRepository.updateLastConvertTime(today)
             dataStoreRepository.updateConvertCount(1)
             Log.i(tag, "new_convert_count: 1")
             Log.i(tag, "new_convert_time: $today")
             false
         } else {
-            val newConvertCount = oldConvertCount + 1
+            val newConvertCount = oldConvertCountFlow.value + 1
             Log.i(tag, "new_convert_count: $newConvertCount")
             dataStoreRepository.updateConvertCount(newConvertCount)
             newConvertCount > limitConvertCount

@@ -14,6 +14,6 @@ abstract class ConvertViewModel : ViewModel() {
     abstract val errorText: MutableState<String>
     abstract val selectedTextType: MutableState<HiraKanaType>
     abstract val raw: MutableState<Response<ResponseData>?>
-    abstract fun convert(context: Context, oldLastConvertTime: String, oldConvertCount: Int)
+    abstract fun convert(context: Context)
     abstract fun updateErrorText(context: Context)
 }

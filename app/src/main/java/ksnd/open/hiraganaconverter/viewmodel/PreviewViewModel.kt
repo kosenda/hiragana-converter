@@ -16,7 +16,7 @@ class PreviewConvertViewModel : ConvertViewModel() {
     override val errorText: MutableState<String> = mutableStateOf("エラー表示はこんなかんじ")
     override val selectedTextType: MutableState<HiraKanaType> = mutableStateOf(HiraKanaType.HIRAGANA)
     override val raw: MutableState<Response<ResponseData>?> = mutableStateOf(null)
-    override fun convert(context: Context, oldLastConvertTime: String, oldConvertCount: Int) {}
+    override fun convert(context: Context) {}
     override fun updateErrorText(context: Context) {}
 }
 
