@@ -36,6 +36,8 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
@@ -72,16 +74,30 @@ fun ConverterScreen(convertViewModel: ConvertViewModelImpl = hiltViewModel()) {
         systemUiController.setNavigationBarColor(color)
     }
 
+    val context = LocalContext.current
+    val lastConvertTime: State<String> =
+        convertViewModel.lastConvertTimeFlow.collectAsState(initial = "")
+    val convertCount: State<Int> =
+        convertViewModel.convertCountFlow.collectAsState(initial = 1)
+
     // Preview用に切り離し
     ConverterScreenContent(
-        viewModel = convertViewModel
+        viewModel = convertViewModel,
+        onConvertClick = {
+            convertViewModel.convert(
+                context = context,
+                oldLastConvertTime = lastConvertTime.value,
+                oldConvertCount = convertCount.value
+            )
+        }
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ConverterScreenContent(
-    viewModel: ConvertViewModel
+    viewModel: ConvertViewModel,
+    onConvertClick: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
@@ -125,11 +141,7 @@ private fun ConverterScreenContent(
                     )
                 }
                 // 変換するときに押すボタン
-                ConvertButton(
-                    onClick = {
-                        viewModel.convert(context = context)
-                    }
-                )
+                ConvertButton(onClick = onConvertClick)
             }
 
             // エラーに何かある場合のみエラー表示を行う
@@ -376,6 +388,7 @@ private fun AfterTextField(
 @Composable
 private fun PreviewConverterScreenContent() {
     ConverterScreenContent(
-        viewModel = PreviewConvertViewModel()
+        viewModel = PreviewConvertViewModel(),
+        onConvertClick = {}
     )
 }
