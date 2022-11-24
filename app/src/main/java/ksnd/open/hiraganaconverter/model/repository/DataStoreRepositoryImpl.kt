@@ -53,6 +53,18 @@ class DataStoreRepositoryImpl @Inject constructor(
             }
     }
 
+    override fun updateThemeNum(newThemeNum: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            preferencesDataStore.edit { it[PreferenceKeys.THEME_NUM] = newThemeNum }
+        }
+    }
+
+    override fun updateCustomFont(newCustomFont: CustomFont) {
+        CoroutineScope(Dispatchers.IO).launch {
+            preferencesDataStore.edit { it[PreferenceKeys.CUSTOM_FONT] = newCustomFont.name }
+        }
+    }
+
     override fun lastConvertTime(): Flow<String> {
         return preferencesDataStore.data
             .catch { exception ->
