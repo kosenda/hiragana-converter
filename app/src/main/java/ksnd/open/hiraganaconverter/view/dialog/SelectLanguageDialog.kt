@@ -1,6 +1,5 @@
 package ksnd.open.hiraganaconverter.view.dialog
 
-import android.app.Application
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,34 +16,42 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.hilt.navigation.compose.hiltViewModel
 import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.view.parts.BottomCloseButton
 import ksnd.open.hiraganaconverter.view.parts.LanguageCard
+import ksnd.open.hiraganaconverter.viewmodel.PreviewSelectLanguageViewModel
+import ksnd.open.hiraganaconverter.viewmodel.SelectLanguageViewModel
+import ksnd.open.hiraganaconverter.viewmodel.SelectLanguageViewModelImpl
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SelectLanguageDialog(
-    onCloseClick: () -> Unit
+    onCloseClick: () -> Unit,
+    selectLanguageViewModel: SelectLanguageViewModelImpl = hiltViewModel()
 ) {
     Dialog(
         onDismissRequest = { },
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
-        SelectLanguageDialogContent(onCloseClick = onCloseClick)
+        SelectLanguageDialogContent(
+            onCloseClick = onCloseClick,
+            viewModel = selectLanguageViewModel
+        )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SelectLanguageDialogContent(onCloseClick: () -> Unit) {
-    val context = LocalContext.current
-    val sharedPreferences = context.getSharedPreferences("DataStore", Application.MODE_PRIVATE)
+private fun SelectLanguageDialogContent(
+    onCloseClick: () -> Unit,
+    viewModel: SelectLanguageViewModel
+) {
     val displayLanguageList = stringArrayResource(id = R.array.display_language)
 
     Scaffold(
@@ -66,7 +73,9 @@ private fun SelectLanguageDialogContent(onCloseClick: () -> Unit) {
         ) {
             displayLanguageList.forEachIndexed { index, language ->
                 LanguageCard(
-                    sharedPreferences = sharedPreferences,
+                    onNewLanguageClick = { newLanguage ->
+                        viewModel.updateSelectLanguage(newLanguage)
+                    },
                     index = index,
                     displayLanguage = language
                 )
@@ -79,5 +88,8 @@ private fun SelectLanguageDialogContent(onCloseClick: () -> Unit) {
 @Preview
 @Composable
 private fun PreviewSelectLanguageDialogContent() {
-    SelectLanguageDialogContent(onCloseClick = {})
+    SelectLanguageDialogContent(
+        onCloseClick = {},
+        PreviewSelectLanguageViewModel()
+    )
 }

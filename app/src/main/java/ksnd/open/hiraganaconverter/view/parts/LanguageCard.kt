@@ -1,8 +1,6 @@
 package ksnd.open.hiraganaconverter.view.parts
 
-import android.app.Application
 import android.content.Intent
-import android.content.SharedPreferences
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,7 +29,7 @@ import ksnd.open.hiraganaconverter.view.MainActivity
  */
 @Composable
 fun LanguageCard(
-    sharedPreferences: SharedPreferences,
+    onNewLanguageClick: (String) -> Unit,
     index: Int,
     displayLanguage: String
 ) {
@@ -44,10 +42,7 @@ fun LanguageCard(
             .height(96.dp)
             .clickable {
                 val newLanguage = languageList[index]
-                sharedPreferences
-                    .edit()
-                    .putString("language", newLanguage)
-                    .apply()
+                onNewLanguageClick(newLanguage)
                 val intent = Intent(context, MainActivity::class.java)
                 ContextCompat.startActivity(context, intent, null)
             },
@@ -72,12 +67,10 @@ fun LanguageCard(
 @Preview
 @Composable
 private fun PreviewLanguageCard_Night() {
-    val context = LocalContext.current
-    val sharedPreferences = context.getSharedPreferences("DataStore", Application.MODE_PRIVATE)
     val displayLanguageList = stringArrayResource(id = R.array.display_language)
     Column(Modifier.fillMaxWidth()) {
         LanguageCard(
-            sharedPreferences = sharedPreferences,
+            onNewLanguageClick = {},
             index = 0,
             displayLanguage = displayLanguageList[0]
         )
