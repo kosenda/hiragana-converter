@@ -32,3 +32,7 @@ class PreviewSettingViewModel : SettingsViewModel() {
         return CustomFont.DEFAULT == targetCustomFont
     }
 }
+
+class PreviewSelectLanguageViewModel : SelectLanguageViewModel() {
+    override fun updateSelectLanguage(newLanguage: String) {}
+}
