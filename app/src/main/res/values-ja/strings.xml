@@ -21,7 +21,7 @@
     <string name="conversion_failed">変換に失敗しました。</string>
     <string name="request_too_large">文字数が多すぎます。文字数を減らして再度変換してください。</string>
     <string name="limit_exceeded">本日のAPI提供者様（gooラボ）の利用制限（3000回）に達しました。翌日からは使用いただけます。</string>
-    <string name="limit_local_count">本日の利用制限に達しました（200回）。翌日からは使用いただけます。</string>
+    <string name="limit_local_count">本日の利用制限に達しました（%1$d回）。翌日からは使用いただけます。</string>
 
     <!-- Font -->
     <string name="default_font">デフォルト</string>

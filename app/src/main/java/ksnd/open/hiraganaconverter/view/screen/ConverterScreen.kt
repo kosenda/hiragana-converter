@@ -80,9 +80,7 @@ fun ConverterScreen(convertViewModel: ConvertViewModelImpl = hiltViewModel()) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ConverterScreenContent(
-    viewModel: ConvertViewModel
-) {
+private fun ConverterScreenContent(viewModel: ConvertViewModel) {
     val focusManager = LocalFocusManager.current
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     val context = LocalContext.current

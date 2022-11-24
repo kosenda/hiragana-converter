@@ -1,20 +1,24 @@
 package ksnd.open.hiraganaconverter.viewmodel
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.text.format.DateFormat
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import ksnd.open.hiraganaconverter.BuildConfig
 import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.model.HiraKanaType
 import ksnd.open.hiraganaconverter.model.ResponseData
 import ksnd.open.hiraganaconverter.model.repository.ConvertRepository
+import ksnd.open.hiraganaconverter.model.repository.DataStoreRepository
 import retrofit2.Response
 import java.util.*
 import javax.inject.Inject
@@ -22,10 +26,12 @@ import javax.inject.Inject
 @HiltViewModel
 class ConvertViewModelImpl @Inject constructor(
     private val convertRepository: ConvertRepository,
-    private val sharedPreferences: SharedPreferences
+    private val dataStoreRepository: DataStoreRepository
 ) : ConvertViewModel() {
 
     private val tag = ConvertViewModelImpl::class.java.simpleName
+    private val limitConvertCount = 200
+    private val isReachedLimit = mutableStateOf(false)
 
     override val previousInputText: MutableState<String> = mutableStateOf("")
     override val inputText: MutableState<String> = mutableStateOf("")
@@ -34,28 +40,44 @@ class ConvertViewModelImpl @Inject constructor(
     override val selectedTextType: MutableState<HiraKanaType> = mutableStateOf(HiraKanaType.HIRAGANA)
     override val raw: MutableState<Response<ResponseData>?> = mutableStateOf(null)
 
+    private val oldLastConvertTimeFlow: StateFlow<String> = dataStoreRepository
+        .lastConvertTime()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = ""
+        )
+    private val oldConvertCountFlow: StateFlow<Int> = dataStoreRepository
+        .convertCount()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = 1
+        )
+
     override fun convert(context: Context) {
         // 入力値なしまたは前回入力値のままであるときは後続処理を行わない
         if (inputText.value == "" || previousInputText.value == inputText.value) {
             return
         }
-        if (limitIsReached()) {
-            errorText.value = context.getString(R.string.limit_local_count)
-        } else {
-            val appId = BuildConfig.apiKey
-            val nullRawErrorText = context.getString(R.string.conversion_failed)
-            CoroutineScope(Dispatchers.IO).launch {
-                raw.value = convertRepository.requestConvert(
-                    sentence = inputText.value,
-                    type = selectedTextType.value.name.lowercase(Locale.ENGLISH),
-                    appId = appId
-                )
-                if (raw.value == null) {
-                    errorText.value = nullRawErrorText
-                }
-                outputText.value = raw.value?.body()?.converted ?: ""
-                previousInputText.value = inputText.value
+        if (isReachedLimit.value) {
+            errorText.value = context.getString(R.string.limit_local_count, limitConvertCount)
+            return
+        }
+        val appId = BuildConfig.apiKey
+        val nullRawErrorText = context.getString(R.string.conversion_failed)
+        CoroutineScope(Dispatchers.IO).launch {
+            raw.value = convertRepository.requestConvert(
+                sentence = inputText.value,
+                type = selectedTextType.value.name.lowercase(Locale.ENGLISH),
+                appId = appId
+            )
+            if (raw.value == null) {
+                errorText.value = nullRawErrorText
             }
+            outputText.value = raw.value?.body()?.converted ?: ""
+            previousInputText.value = inputText.value
+            checkReachedLimit()
         }
     }
 
@@ -89,20 +111,23 @@ class ConvertViewModelImpl @Inject constructor(
     }
 
     /**
-     * 制限回数(１日あたり２００回)に達していることを確認する処理
+     * 制限回数に達していることを確認する処理
      */
-    private fun limitIsReached(): Boolean {
-        val lastSearchTime = sharedPreferences.getString("last_search_time", "")
-        Log.i(tag, "last_search_time: $lastSearchTime")
-        val now = DateFormat.format("yyyy-MM-dd", Calendar.getInstance()).toString()
-        val todayCount = if (lastSearchTime != now) {
-            1
+    private fun checkReachedLimit() {
+        val today = DateFormat.format("yyyy-MM-dd", Calendar.getInstance()).toString()
+        Log.i(tag, "old_convert_time: ${oldLastConvertTimeFlow.value}")
+        Log.i(tag, "old_convert_count: ${oldConvertCountFlow.value}")
+        isReachedLimit.value = if (today != oldLastConvertTimeFlow.value) {
+            dataStoreRepository.updateLastConvertTime(today)
+            dataStoreRepository.updateConvertCount(1)
+            Log.i(tag, "new_convert_count: 1")
+            Log.i(tag, "new_convert_time: $today")
+            false
         } else {
-            sharedPreferences.getInt("search_count", 0) + 1
+            val newConvertCount = oldConvertCountFlow.value + 1
+            Log.i(tag, "new_convert_count: $newConvertCount")
+            dataStoreRepository.updateConvertCount(newConvertCount)
+            newConvertCount > limitConvertCount
         }
-        sharedPreferences.edit().putInt("search_count", todayCount).apply()
-        Log.i(tag, "today_search_count: $todayCount")
-        sharedPreferences.edit().putString("last_search_time", now).apply()
-        return todayCount > 200
     }
 }
