@@ -12,8 +12,9 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.io.IOException
+import javax.inject.Inject
 
-class ConvertRepositoryImpl : ConvertRepository {
+class ConvertRepositoryImpl @Inject constructor() : ConvertRepository {
 
     private val tag = ConvertRepositoryImpl::class.java.simpleName
 
