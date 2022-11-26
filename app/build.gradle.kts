@@ -96,6 +96,11 @@ dependencies {
             attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
         }
     }
+
+    // ROOM
+    implementation("androidx.room:room-runtime:2.4.3")
+    annotationProcessor("androidx.room:room-compiler:2.4.3")
+    kapt("androidx.room:room-compiler:2.4.3")
 }
 
 // チェック
