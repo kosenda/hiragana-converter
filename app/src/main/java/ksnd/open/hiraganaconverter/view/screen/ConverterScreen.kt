@@ -145,8 +145,7 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
                 inputText = viewModel.inputText.value,
                 clipboardManager = clipboardManager,
                 focusManager = focusManager,
-                onValueChange = {
-                        new ->
+                onValueChange = { new ->
                     viewModel.inputText.value = new
                 }
             )
@@ -162,8 +161,7 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
                 outputText = viewModel.outputText.value,
                 clipboardManager = clipboardManager,
                 focusManager = focusManager,
-                onValueChange = {
-                        new ->
+                onValueChange = { new ->
                     viewModel.outputText.value = new
                 }
             )
