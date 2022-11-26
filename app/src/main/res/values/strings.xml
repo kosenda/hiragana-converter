@@ -17,6 +17,8 @@
     <string name="theme_setting">Theme</string>
     <string name="language_setting">Language</string>
     <string name="font_setting">Font</string>
+    <string name="delete_all">Delete all</string>
+    <string name="time_zone">default</string>
 
     <string name="conversion_failed">Conversion failed.</string>
     <string name="request_too_large">Too many characters. Please reduce the number of characters to be converted.</string>
