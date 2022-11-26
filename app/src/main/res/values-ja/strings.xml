@@ -17,6 +17,8 @@
     <string name="theme_setting">テーマ</string>
     <string name="language_setting">言語</string>
     <string name="font_setting">フォント</string>
+    <string name="delete_all">すべて削除</string>
+    <string name="time_zone">Asia/Tokyo</string>
 
     <string name="conversion_failed">変換に失敗しました。</string>
     <string name="request_too_large">文字数が多すぎます。文字数を減らして再度変換してください。</string>

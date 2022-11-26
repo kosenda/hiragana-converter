@@ -14,31 +14,42 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import ksnd.open.hiraganaconverter.R
+import ksnd.open.hiraganaconverter.view.dialog.ConvertHistoryDialog
 import ksnd.open.hiraganaconverter.view.dialog.InfoDialog
 import ksnd.open.hiraganaconverter.view.dialog.SettingDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
-    val isShowSettingDialog = rememberSaveable { mutableStateOf(false) }
-    val isShowInfoDialog = rememberSaveable { mutableStateOf(false) }
+    var isShowSettingDialog by rememberSaveable { mutableStateOf(false) }
+    var isShowInfoDialog by rememberSaveable { mutableStateOf(false) }
+    var isShowConvertHistoryDialog by rememberSaveable { mutableStateOf(false) }
 
-    if (isShowSettingDialog.value) {
+    if (isShowSettingDialog) {
         SettingDialog(
-            onCloseClick = { isShowSettingDialog.value = false }
+            onCloseClick = { isShowSettingDialog = false }
         )
     }
-    if (isShowInfoDialog.value) {
+    if (isShowInfoDialog) {
         InfoDialog(
-            onCloseClick = { isShowInfoDialog.value = false }
+            onCloseClick = { isShowInfoDialog = false }
+        )
+    }
+    if (isShowConvertHistoryDialog) {
+        ConvertHistoryDialog(
+            onCloseClick = { isShowConvertHistoryDialog = false }
         )
     }
 
@@ -51,7 +62,7 @@ fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
         actions = {
             FilledTonalIconButton(
                 modifier = Modifier.padding(start = 16.dp, end = 8.dp),
-                onClick = { isShowInfoDialog.value = true }
+                onClick = { isShowInfoDialog = true }
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Info,
@@ -60,11 +71,21 @@ fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
                 )
             }
             FilledTonalIconButton(
-                onClick = { isShowSettingDialog.value = true }
+                modifier = Modifier.padding(end = 8.dp),
+                onClick = { isShowSettingDialog = true }
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Settings,
                     contentDescription = "settings",
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
+            FilledTonalIconButton(
+                onClick = { isShowConvertHistoryDialog = true }
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_baseline_history_24),
+                    contentDescription = "history",
                     tint = MaterialTheme.colorScheme.primary
                 )
             }

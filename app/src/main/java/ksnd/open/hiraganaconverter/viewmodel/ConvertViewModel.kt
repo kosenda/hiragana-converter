@@ -16,4 +16,5 @@ abstract class ConvertViewModel : ViewModel() {
     abstract val raw: MutableState<Response<ResponseData>?>
     abstract fun convert(context: Context)
     abstract fun updateErrorText(context: Context)
+    abstract fun insertConvertHistory(beforeText: String, afterText: String, context: Context)
 }

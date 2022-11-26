@@ -15,8 +15,10 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import ksnd.open.hiraganaconverter.BuildConfig
 import ksnd.open.hiraganaconverter.R
+import ksnd.open.hiraganaconverter.model.ConvertHistoryData
 import ksnd.open.hiraganaconverter.model.HiraKanaType
 import ksnd.open.hiraganaconverter.model.ResponseData
+import ksnd.open.hiraganaconverter.model.repository.ConvertHistoryRepository
 import ksnd.open.hiraganaconverter.model.repository.ConvertRepository
 import ksnd.open.hiraganaconverter.model.repository.DataStoreRepository
 import retrofit2.Response
@@ -26,7 +28,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ConvertViewModelImpl @Inject constructor(
     private val convertRepository: ConvertRepository,
-    private val dataStoreRepository: DataStoreRepository
+    private val dataStoreRepository: DataStoreRepository,
+    private val convertHistoryRepository: ConvertHistoryRepository
 ) : ConvertViewModel() {
 
     private val tag = ConvertViewModelImpl::class.java.simpleName
@@ -37,7 +40,8 @@ class ConvertViewModelImpl @Inject constructor(
     override val inputText: MutableState<String> = mutableStateOf("")
     override val outputText: MutableState<String> = mutableStateOf("")
     override val errorText: MutableState<String> = mutableStateOf("")
-    override val selectedTextType: MutableState<HiraKanaType> = mutableStateOf(HiraKanaType.HIRAGANA)
+    override val selectedTextType: MutableState<HiraKanaType> =
+        mutableStateOf(HiraKanaType.HIRAGANA)
     override val raw: MutableState<Response<ResponseData>?> = mutableStateOf(null)
 
     private val oldLastConvertTimeFlow: StateFlow<String> = dataStoreRepository
@@ -77,6 +81,11 @@ class ConvertViewModelImpl @Inject constructor(
             }
             outputText.value = raw.value?.body()?.converted ?: ""
             previousInputText.value = inputText.value
+            insertConvertHistory(
+                beforeText = inputText.value,
+                afterText = outputText.value,
+                context = context
+            )
             checkReachedLimit()
         }
     }
@@ -128,6 +137,26 @@ class ConvertViewModelImpl @Inject constructor(
             Log.i(tag, "new_convert_count: $newConvertCount")
             dataStoreRepository.updateConvertCount(newConvertCount)
             newConvertCount > limitConvertCount
+        }
+    }
+
+    override fun insertConvertHistory(beforeText: String, afterText: String, context: Context) {
+        val convertHistoryData = ConvertHistoryData(
+            before = beforeText,
+            after = afterText,
+            time = DateFormat.format(
+                "yyyy/MM/dd HH:mm",
+                Calendar.getInstance(
+                    if ("default" == context.getString(R.string.time_zone)) {
+                        TimeZone.getDefault()
+                    } else {
+                        TimeZone.getTimeZone(context.getString(R.string.time_zone))
+                    }
+                )
+            ).toString()
+        )
+        CoroutineScope(Dispatchers.IO).launch {
+            convertHistoryRepository.insertConvertHistory(convertHistoryData)
         }
     }
 }
