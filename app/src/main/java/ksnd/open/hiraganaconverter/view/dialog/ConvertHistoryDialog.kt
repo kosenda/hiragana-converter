@@ -227,7 +227,7 @@ private fun ConvertHistoryCard(
                 Image(
                     imageVector = Icons.Outlined.Close,
                     contentDescription = "delete convert history",
-                    modifier = Modifier
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
                 )
             }
         }
