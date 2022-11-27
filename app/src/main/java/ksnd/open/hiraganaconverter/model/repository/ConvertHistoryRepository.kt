@@ -6,4 +6,5 @@ interface ConvertHistoryRepository {
     fun insertConvertHistory(convertHistoryData: ConvertHistoryData)
     fun getAllConvertHistory(): List<ConvertHistoryData>
     fun deleteAllConvertHistory()
+    fun deleteConvertHistory(id: Long)
 }

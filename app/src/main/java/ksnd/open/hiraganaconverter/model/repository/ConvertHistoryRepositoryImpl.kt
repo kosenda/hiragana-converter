@@ -18,4 +18,8 @@ class ConvertHistoryRepositoryImpl @Inject constructor(
     // ■ DELETE
     override fun deleteAllConvertHistory() =
         convertHistoryDao.deleteAllConvertHistory()
+
+    override fun deleteConvertHistory(id: Long) {
+        convertHistoryDao.deleteConvertHistory(id)
+    }
 }

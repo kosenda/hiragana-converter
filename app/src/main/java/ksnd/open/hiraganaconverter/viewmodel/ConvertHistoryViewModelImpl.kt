@@ -31,4 +31,13 @@ class ConvertHistoryViewModelImpl @Inject constructor(
             convertHistoryRepository.deleteAllConvertHistory()
         }
     }
+
+    override fun deleteConvertHistory(id: Long) {
+        CoroutineScope(Dispatchers.IO).launch {
+            convertHistoryRepository.deleteConvertHistory(id)
+            val newList = convertHistories.value.toMutableList()
+            newList.removeIf { it.id == id }
+            convertHistories.value = newList
+        }
+    }
 }

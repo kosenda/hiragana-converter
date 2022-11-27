@@ -41,24 +41,27 @@ class PreviewSelectLanguageViewModel : SelectLanguageViewModel() {
 }
 
 class PreviewConvertHistoryViewModel(isNoData: Boolean = false) : ConvertHistoryViewModel() {
-    private val fakeData = ConvertHistoryData(
-        id = 0,
-        time = "2022/11/26 21:34",
-        before = "漢字漢字漢字ひらがなひらがなひらがなカタカナカタカナカタカナEnglishEnglishEnglish",
-        after = "ここはつかわれない"
-    )
     override val convertHistories: MutableState<List<ConvertHistoryData>> = mutableStateOf(
         if (isNoData) {
             emptyList()
         } else {
             listOf(
-                fakeData,
-                fakeData,
-                fakeData
+                ConvertHistoryData(
+                    id = 0,
+                    time = "2022/11/26 21:34",
+                    before = "漢字漢字漢字ひらがなひらがなひらがなカタカナカタカナカタカナEnglishEnglishEnglish",
+                    after = "ここはつかわれない"
+                ),
+                ConvertHistoryData(
+                    id = 1,
+                    time = "2022/11/27 11:42",
+                    before = "漢字漢字漢字",
+                    after = "ここはつかわれない"
+                )
             )
         }
     )
-
     override fun getAllConvertHistory() {}
     override fun deleteAllConvertHistory() {}
+    override fun deleteConvertHistory(id: Long) {}
 }

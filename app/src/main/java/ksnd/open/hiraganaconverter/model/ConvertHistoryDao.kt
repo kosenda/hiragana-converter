@@ -18,4 +18,7 @@ interface ConvertHistoryDao {
     // ■ DELETE
     @Query("delete from convert_history")
     fun deleteAllConvertHistory()
+
+    @Query("delete from convert_history where id = :id")
+    fun deleteConvertHistory(id: Long)
 }
