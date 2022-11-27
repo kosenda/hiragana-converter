@@ -81,12 +81,14 @@ class ConvertViewModelImpl @Inject constructor(
             }
             outputText.value = raw.value?.body()?.converted ?: ""
             previousInputText.value = inputText.value
-            insertConvertHistory(
-                beforeText = inputText.value,
-                afterText = outputText.value,
-                context = context
-            )
-            checkReachedLimit()
+            if(outputText.value != "") {
+                insertConvertHistory(
+                    beforeText = inputText.value,
+                    afterText = outputText.value,
+                    context = context
+                )
+                checkReachedLimit()
+            }
         }
     }
 
