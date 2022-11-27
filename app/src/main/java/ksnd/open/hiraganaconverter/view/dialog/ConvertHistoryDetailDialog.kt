@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -153,23 +154,25 @@ private fun BeforeOrAfterText(
             )
         }
     }
-    Text(
-        text = if (isBefore) {
-            historyData.before
-        } else {
-            historyData.after
-        },
-        style = MaterialTheme.typography.titleMedium,
-        color = if (isBefore) {
-            MaterialTheme.colorScheme.secondary
-        } else {
-            MaterialTheme.colorScheme.tertiary
-        },
-        modifier = Modifier
-            .padding(all = 16.dp)
-            .defaultMinSize(minHeight = 120.dp)
-            .fillMaxWidth()
-    )
+    SelectionContainer {
+        Text(
+            text = if (isBefore) {
+                historyData.before
+            } else {
+                historyData.after
+            },
+            style = MaterialTheme.typography.titleMedium,
+            color = if (isBefore) {
+                MaterialTheme.colorScheme.secondary
+            } else {
+                MaterialTheme.colorScheme.tertiary
+            },
+            modifier = Modifier
+                .padding(all = 16.dp)
+                .defaultMinSize(minHeight = 120.dp)
+                .fillMaxWidth()
+        )
+    }
 }
 
 @Preview
