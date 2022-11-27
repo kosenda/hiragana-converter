@@ -19,9 +19,13 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.FilledTonalIconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
@@ -36,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -122,7 +127,9 @@ private fun ConvertHistoryDialogContent(
                         Image(
                             painter = painterResource(id = R.drawable.desert),
                             contentDescription = "no data",
-                            modifier = Modifier.fillMaxWidth().size(144.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .size(144.dp),
                             alignment = Alignment.Center,
                             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
                         )
@@ -148,13 +155,19 @@ private fun ConvertHistoryDialogContent(
                     )
                 }
                 LazyColumn {
-                    items(items = viewModel.convertHistories.value) { history ->
+                    items(
+                        items = viewModel.convertHistories.value,
+                        key = { history -> history.id }
+                    ) { history ->
                         ConvertHistoryCard(
                             beforeText = history.before,
                             time = history.time,
                             onClick = {
                                 isShowDetail = true
                                 showHistoryData = history
+                            },
+                            onCloseClick = {
+                                viewModel.deleteConvertHistory(history.id)
                             }
                         )
                     }
@@ -165,7 +178,12 @@ private fun ConvertHistoryDialogContent(
 }
 
 @Composable
-private fun ConvertHistoryCard(beforeText: String, time: String, onClick: () -> Unit) {
+private fun ConvertHistoryCard(
+    beforeText: String,
+    time: String,
+    onClick: () -> Unit,
+    onCloseClick: () -> Unit
+) {
     OutlinedCard(
         modifier = Modifier
             .padding(top = 4.dp, start = 8.dp, end = 8.dp)
@@ -174,24 +192,42 @@ private fun ConvertHistoryCard(beforeText: String, time: String, onClick: () -> 
             .clickable(onClick = onClick),
         border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.secondary)
     ) {
-        Column(
-            modifier = Modifier.padding(all = 8.dp)
-        ) {
-            Text(
-                text = beforeText,
-                maxLines = 2,
-                minLines = 2,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.primary,
-                overflow = TextOverflow.Ellipsis
-            )
-            Row {
-                Spacer(modifier = Modifier.weight(1f))
+        Row(verticalAlignment = Alignment.Top) {
+            Column(
+                modifier = Modifier
+                    .padding(all = 8.dp)
+                    .weight(1f)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        modifier = Modifier.padding(end = 8.dp),
+                        text = time,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                }
                 Text(
-                    modifier = Modifier.padding(end = 8.dp),
-                    text = time,
+                    text = beforeText,
+                    maxLines = 2,
+                    minLines = 2,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.secondary
+                    color = MaterialTheme.colorScheme.primary,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            FilledTonalIconButton(
+                onClick = onCloseClick,
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = Color.Transparent
+                )
+            ) {
+                Image(
+                    imageVector = Icons.Outlined.Close,
+                    contentDescription = "delete convert history",
+                    modifier = Modifier
                 )
             }
         }
