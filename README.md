@@ -42,6 +42,7 @@ apiKey=<1.で取得したAPIキー>
 
 ## イメージ
 
-![Screenshot_1668350425](https://user-images.githubusercontent.com/60963155/201527568-37677799-e99c-4f0d-8204-f547dbbab0c4.png)
-![Screenshot_1668350443](https://user-images.githubusercontent.com/60963155/201527571-1ca04aab-ecb6-443f-9f0d-2be0f08cc41d.png)
-![Screenshot_1668350453](https://user-images.githubusercontent.com/60963155/201527585-228ad2ca-eb48-4b6d-bfbc-b8ae97be7dd7.png)
+![スライド1](https://user-images.githubusercontent.com/60963155/204125570-59fb7b51-0fff-465a-ad28-4d7290aaf989.PNG)
+![スライド2](https://user-images.githubusercontent.com/60963155/204125574-1505e36c-de19-441b-a969-623a468ff52c.PNG)
+![スライド3](https://user-images.githubusercontent.com/60963155/204125577-f33773ef-3f87-4ad9-a265-3e75f8bb5a69.PNG)
+![スライド4](https://user-images.githubusercontent.com/60963155/204125579-daf59ad4-3019-4e23-9214-aa8e972d936e.PNG)
