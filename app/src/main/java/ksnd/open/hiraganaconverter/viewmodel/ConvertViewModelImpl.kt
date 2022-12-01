@@ -25,6 +25,8 @@ import retrofit2.Response
 import java.util.*
 import javax.inject.Inject
 
+const val LIMIT_CONVERT_COUNT = 200
+
 @HiltViewModel
 class ConvertViewModelImpl @Inject constructor(
     private val convertRepository: ConvertRepository,
@@ -33,7 +35,6 @@ class ConvertViewModelImpl @Inject constructor(
 ) : ConvertViewModel() {
 
     private val tag = ConvertViewModelImpl::class.java.simpleName
-    private val limitConvertCount = 200
     private val isReachedLimit = mutableStateOf(false)
 
     override val previousInputText: MutableState<String> = mutableStateOf("")
@@ -65,7 +66,10 @@ class ConvertViewModelImpl @Inject constructor(
             return
         }
         if (isReachedLimit.value) {
-            errorText.value = context.getString(R.string.limit_local_count, limitConvertCount)
+            errorText.value = context.getString(
+                R.string.limit_local_count,
+                LIMIT_CONVERT_COUNT
+            )
             return
         }
         val appId = BuildConfig.apiKey
@@ -81,7 +85,7 @@ class ConvertViewModelImpl @Inject constructor(
             }
             outputText.value = raw.value?.body()?.converted ?: ""
             previousInputText.value = inputText.value
-            if(outputText.value != "") {
+            if (outputText.value != "") {
                 insertConvertHistory(
                     beforeText = inputText.value,
                     afterText = outputText.value,
@@ -138,7 +142,7 @@ class ConvertViewModelImpl @Inject constructor(
             val newConvertCount = oldConvertCountFlow.value + 1
             Log.i(tag, "new_convert_count: $newConvertCount")
             dataStoreRepository.updateConvertCount(newConvertCount)
-            newConvertCount > limitConvertCount
+            newConvertCount > LIMIT_CONVERT_COUNT
         }
     }
 
