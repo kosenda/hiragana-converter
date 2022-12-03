@@ -3,24 +3,24 @@ package ksnd.open.hiraganaconverter.viewmodel
 import android.content.Context
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import ksnd.open.hiraganaconverter.model.ConvertHistoryData
 import ksnd.open.hiraganaconverter.model.HiraKanaType
-import ksnd.open.hiraganaconverter.model.ResponseData
+import ksnd.open.hiraganaconverter.view.ConvertUiState
 import ksnd.open.hiraganaconverter.view.CustomFont
 import ksnd.open.hiraganaconverter.view.ThemeNum
-import retrofit2.Response
 
 class PreviewConvertViewModel : ConvertViewModel() {
-    override val previousInputText: MutableState<String> = mutableStateOf("")
-    override val inputText: MutableState<String> = mutableStateOf("入力値")
-    override val outputText: MutableState<String> = mutableStateOf("にゅうりょくち")
-    override val errorText: MutableState<String> = mutableStateOf("エラー表示はこんなかんじ")
-    override val selectedTextType: MutableState<HiraKanaType> =
-        mutableStateOf(HiraKanaType.HIRAGANA)
-    override val raw: MutableState<Response<ResponseData>?> = mutableStateOf(null)
+    override val uiState: StateFlow<ConvertUiState> = MutableStateFlow(
+        ConvertUiState(errorText = "失敗")
+    ).asStateFlow()
     override fun convert(context: Context) {}
-    override fun updateErrorText(context: Context) {}
-    override fun insertConvertHistory(beforeText: String, afterText: String, context: Context) {}
+    override fun updateInputText(inputText: String) {}
+    override fun updateOutputText(outputText: String) {}
+    override fun clearErrorText() {}
+    override fun changeHiraKanaType(type: HiraKanaType) {}
 }
 
 class PreviewSettingViewModel : SettingsViewModel() {
@@ -28,8 +28,6 @@ class PreviewSettingViewModel : SettingsViewModel() {
     override val themeNum: MutableState<Int> = mutableStateOf(ThemeNum.AUTO.num)
     override fun updateThemeNum(newThemeNum: Int) {}
     override fun updateCustomFont(newCustomFont: CustomFont) {}
-    override fun getThemeNum() {}
-    override fun getCustomFont() {}
     override fun isSelectedThemeNum(index: Int): Boolean = 0 == index
     override fun isSelectedFont(targetCustomFont: CustomFont): Boolean {
         return CustomFont.DEFAULT == targetCustomFont
@@ -61,7 +59,6 @@ class PreviewConvertHistoryViewModel(isNoData: Boolean = false) : ConvertHistory
             )
         }
     )
-    override fun getAllConvertHistory() {}
     override fun deleteAllConvertHistory() {}
     override fun deleteConvertHistory(id: Long) {}
 }

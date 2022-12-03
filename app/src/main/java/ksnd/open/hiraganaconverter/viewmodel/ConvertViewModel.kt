@@ -1,20 +1,16 @@
 package ksnd.open.hiraganaconverter.viewmodel
 
 import android.content.Context
-import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.StateFlow
 import ksnd.open.hiraganaconverter.model.HiraKanaType
-import ksnd.open.hiraganaconverter.model.ResponseData
-import retrofit2.Response
+import ksnd.open.hiraganaconverter.view.ConvertUiState
 
 abstract class ConvertViewModel : ViewModel() {
-    abstract val previousInputText: MutableState<String>
-    abstract val inputText: MutableState<String>
-    abstract val outputText: MutableState<String>
-    abstract val errorText: MutableState<String>
-    abstract val selectedTextType: MutableState<HiraKanaType>
-    abstract val raw: MutableState<Response<ResponseData>?>
+    abstract val uiState: StateFlow<ConvertUiState>
     abstract fun convert(context: Context)
-    abstract fun updateErrorText(context: Context)
-    abstract fun insertConvertHistory(beforeText: String, afterText: String, context: Context)
+    abstract fun updateInputText(inputText: String)
+    abstract fun updateOutputText(outputText: String)
+    abstract fun clearErrorText()
+    abstract fun changeHiraKanaType(type: HiraKanaType)
 }
