@@ -34,8 +34,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
@@ -84,13 +85,7 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
     val focusManager = LocalFocusManager.current
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     val context = LocalContext.current
-
-    LaunchedEffect(viewModel.selectedTextType.value) {
-        viewModel.previousInputText.value = ""
-    }
-    LaunchedEffect(viewModel.raw.value?.code(), viewModel.raw.value?.message()) {
-        viewModel.updateErrorText(context = context)
-    }
+    val convertUiState by viewModel.uiState.collectAsState()
 
     val scrollState = rememberScrollState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
@@ -119,7 +114,7 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
                 // 変換タイプ（ひらがな、カタカナ）を選択するスピナー
                 Row(modifier = Modifier.weight(1f)) {
                     ConversionTypeSpinnerCard(
-                        onSelectedChange = { type -> viewModel.selectedTextType.value = type }
+                        onSelectedChange = { type -> viewModel.changeHiraKanaType(type) }
                     )
                 }
                 // 変換するときに押すボタン
@@ -131,22 +126,22 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
             }
 
             // エラーに何かある場合のみエラー表示を行う
-            if (viewModel.errorText.value != "") {
+            if (convertUiState.errorText != "") {
                 ErrorCard(
-                    errorText = viewModel.errorText.value,
+                    errorText = convertUiState.errorText,
                     onClick = {
-                        viewModel.errorText.value = ""
+                        viewModel.clearErrorText()
                     }
                 )
             }
 
             // 変換前用
             BeforeTextField(
-                inputText = viewModel.inputText.value,
+                inputText = convertUiState.inputText,
                 clipboardManager = clipboardManager,
                 focusManager = focusManager,
                 onValueChange = { new ->
-                    viewModel.inputText.value = new
+                    viewModel.updateInputText(inputText = new)
                 }
             )
 
@@ -158,11 +153,11 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
 
             // 変換後用
             AfterTextField(
-                outputText = viewModel.outputText.value,
+                outputText = convertUiState.outputText,
                 clipboardManager = clipboardManager,
                 focusManager = focusManager,
                 onValueChange = { new ->
-                    viewModel.outputText.value = new
+                    viewModel.updateOutputText(outputText = new)
                 }
             )
         }
