@@ -6,7 +6,6 @@ import ksnd.open.hiraganaconverter.model.ConvertHistoryData
 
 abstract class ConvertHistoryViewModel : ViewModel() {
     abstract val convertHistories: MutableState<List<ConvertHistoryData>>
-    abstract fun getAllConvertHistory()
     abstract fun deleteAllConvertHistory()
     abstract fun deleteConvertHistory(id: Long)
 }

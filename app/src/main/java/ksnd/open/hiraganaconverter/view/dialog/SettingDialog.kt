@@ -25,7 +25,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -82,12 +81,6 @@ private fun SettingDialogContent(
     viewModel: SettingsViewModel
 ) {
     val isShowSelectLanguageDialog = rememberSaveable { mutableStateOf(false) }
-
-    // ラジオボタンの初期化
-    LaunchedEffect(true) {
-        viewModel.getThemeNum()
-        viewModel.getCustomFont()
-    }
 
     if (isShowSelectLanguageDialog.value) {
         SelectLanguageDialog(

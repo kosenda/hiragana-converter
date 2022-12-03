@@ -35,6 +35,11 @@ class SettingsViewModelImpl @Inject constructor(
             initialValue = ThemeNum.AUTO.num
         )
 
+    init {
+        getThemeNum()
+        getCustomFont()
+    }
+
     override fun updateThemeNum(newThemeNum: Int) {
         themeNum.value = newThemeNum
         dataStoreRepository.updateThemeNum(newThemeNum)
@@ -45,19 +50,19 @@ class SettingsViewModelImpl @Inject constructor(
         dataStoreRepository.updateCustomFont(newCustomFont)
     }
 
-    override fun getThemeNum() {
-        themeNum.value = themeNumFlow.value
-    }
-
-    override fun getCustomFont() {
-        customFont.value = customFontFlow.value
-    }
-
     override fun isSelectedThemeNum(index: Int): Boolean {
         return themeNum.value == index
     }
 
     override fun isSelectedFont(targetCustomFont: CustomFont): Boolean {
         return customFont.value == targetCustomFont.name
+    }
+
+    private fun getThemeNum() {
+        themeNum.value = themeNumFlow.value
+    }
+
+    private fun getCustomFont() {
+        customFont.value = customFontFlow.value
     }
 }

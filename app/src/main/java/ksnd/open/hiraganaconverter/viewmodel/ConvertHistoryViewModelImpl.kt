@@ -15,16 +15,12 @@ class ConvertHistoryViewModelImpl @Inject constructor(
     private val convertHistoryRepository: ConvertHistoryRepository
 ) : ConvertHistoryViewModel() {
 
+    init {
+        getAllConvertHistory()
+    }
+
     override val convertHistories: MutableState<List<ConvertHistoryData>> =
         mutableStateOf(emptyList())
-
-    override fun getAllConvertHistory() {
-        CoroutineScope(Dispatchers.IO).launch {
-            convertHistories.value = convertHistoryRepository
-                .getAllConvertHistory()
-                .sortedByDescending { it.id }
-        }
-    }
 
     override fun deleteAllConvertHistory() {
         CoroutineScope(Dispatchers.IO).launch {
@@ -38,6 +34,14 @@ class ConvertHistoryViewModelImpl @Inject constructor(
             val newList = convertHistories.value.toMutableList()
             newList.removeIf { it.id == id }
             convertHistories.value = newList
+        }
+    }
+
+    private fun getAllConvertHistory() {
+        CoroutineScope(Dispatchers.IO).launch {
+            convertHistories.value = convertHistoryRepository
+                .getAllConvertHistory()
+                .sortedByDescending { it.id }
         }
     }
 }

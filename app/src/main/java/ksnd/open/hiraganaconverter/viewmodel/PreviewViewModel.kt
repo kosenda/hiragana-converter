@@ -28,8 +28,6 @@ class PreviewSettingViewModel : SettingsViewModel() {
     override val themeNum: MutableState<Int> = mutableStateOf(ThemeNum.AUTO.num)
     override fun updateThemeNum(newThemeNum: Int) {}
     override fun updateCustomFont(newCustomFont: CustomFont) {}
-    override fun getThemeNum() {}
-    override fun getCustomFont() {}
     override fun isSelectedThemeNum(index: Int): Boolean = 0 == index
     override fun isSelectedFont(targetCustomFont: CustomFont): Boolean {
         return CustomFont.DEFAULT == targetCustomFont
@@ -61,7 +59,6 @@ class PreviewConvertHistoryViewModel(isNoData: Boolean = false) : ConvertHistory
             )
         }
     )
-    override fun getAllConvertHistory() {}
     override fun deleteAllConvertHistory() {}
     override fun deleteConvertHistory(id: Long) {}
 }
