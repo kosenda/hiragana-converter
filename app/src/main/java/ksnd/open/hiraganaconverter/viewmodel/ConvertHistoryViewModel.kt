@@ -8,4 +8,5 @@ abstract class ConvertHistoryViewModel : ViewModel() {
     abstract val convertHistories: MutableState<List<ConvertHistoryData>>
     abstract fun deleteAllConvertHistory()
     abstract fun deleteConvertHistory(id: Long)
+    abstract fun getAllConvertHistory()
 }
