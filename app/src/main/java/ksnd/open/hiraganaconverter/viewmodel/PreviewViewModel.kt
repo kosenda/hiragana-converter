@@ -61,4 +61,5 @@ class PreviewConvertHistoryViewModel(isNoData: Boolean = false) : ConvertHistory
     )
     override fun deleteAllConvertHistory() {}
     override fun deleteConvertHistory(id: Long) {}
+    override fun getAllConvertHistory() {}
 }

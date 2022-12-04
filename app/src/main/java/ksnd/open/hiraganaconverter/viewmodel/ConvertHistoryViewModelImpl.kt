@@ -15,10 +15,6 @@ class ConvertHistoryViewModelImpl @Inject constructor(
     private val convertHistoryRepository: ConvertHistoryRepository
 ) : ConvertHistoryViewModel() {
 
-    init {
-        getAllConvertHistory()
-    }
-
     override val convertHistories: MutableState<List<ConvertHistoryData>> =
         mutableStateOf(emptyList())
 
@@ -37,7 +33,7 @@ class ConvertHistoryViewModelImpl @Inject constructor(
         }
     }
 
-    private fun getAllConvertHistory() {
+    override fun getAllConvertHistory() {
         CoroutineScope(Dispatchers.IO).launch {
             convertHistories.value = convertHistoryRepository
                 .getAllConvertHistory()
