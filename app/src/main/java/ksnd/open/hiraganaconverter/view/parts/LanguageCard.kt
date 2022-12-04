@@ -1,6 +1,7 @@
 package ksnd.open.hiraganaconverter.view.parts
 
 import android.content.Intent
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,8 +48,9 @@ fun LanguageCard(
                 ContextCompat.startActivity(context, intent, null)
             },
         colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer
-        )
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary)
     ) {
         Box(
             modifier = Modifier.fillMaxSize(1f),
