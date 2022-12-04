@@ -140,7 +140,7 @@ private fun AppInfoContent(onURLClick: () -> Unit) {
         colors = CardDefaults.outlinedCardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
-        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
+        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
@@ -198,7 +198,7 @@ private fun DeveloperInfoContent() {
         colors = CardDefaults.outlinedCardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
-        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
+        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
@@ -233,7 +233,7 @@ private fun APIInfoContent(onURLClick: () -> Unit) {
         colors = CardDefaults.outlinedCardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
-        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primary)
+        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary)
     ) {
         Column(
             modifier = Modifier

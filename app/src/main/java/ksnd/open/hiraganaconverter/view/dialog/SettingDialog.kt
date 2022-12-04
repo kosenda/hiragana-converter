@@ -1,5 +1,6 @@
 package ksnd.open.hiraganaconverter.view.dialog
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -137,9 +138,10 @@ private fun SettingThemeContent(
     TitleCard(text = stringResource(id = R.string.theme_setting))
     OutlinedCard(
         colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer
+            containerColor = MaterialTheme.colorScheme.surface
         ),
-        modifier = Modifier.padding(all = 8.dp)
+        modifier = Modifier.padding(all = 8.dp),
+        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary)
     ) {
         Column {
             modeRadio.forEachIndexed { index, buttonText ->
@@ -199,13 +201,14 @@ private fun SettingLanguageContent(onClick: () -> Unit) {
     TitleCard(text = stringResource(id = R.string.language_setting))
     OutlinedCard(
         colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         modifier = Modifier
             .padding(all = 8.dp)
             .clickable(
                 onClick = onClick
-            )
+            ),
+        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary)
     ) {
         Row(
             modifier = Modifier
@@ -242,9 +245,10 @@ private fun SettingFontContent(
     TitleCard(text = stringResource(id = R.string.font_setting))
     OutlinedCard(
         colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer
+            containerColor = MaterialTheme.colorScheme.surface
         ),
-        modifier = Modifier.padding(all = 8.dp)
+        modifier = Modifier.padding(all = 8.dp),
+        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary)
     ) {
         Column {
             CustomFontRadioButton(

@@ -146,7 +146,7 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
             )
 
             Divider(
-                thickness = 1.dp,
+                thickness = 2.dp,
                 color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 50.dp)
             )
