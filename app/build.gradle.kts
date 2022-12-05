@@ -47,6 +47,15 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+        unitTests.isReturnDefaultValues = true
+        // 以下のjvmArgsを指定しないとカバレッジが取得できないぽい
+        // 参考サイト https://github.com/robolectric/robolectric/issues/5428
+        // noverifyは、全てのバイトコードの検証を無効にするオプションぽい
+        // 参考サイト https://docs.oracle.com/javase/jp/8/docs/technotes/tools/windows/java.html
+        unitTests.all { it.jvmArgs("-noverify") }
+    }
 }
 
 dependencies {
@@ -101,6 +110,10 @@ dependencies {
     implementation("androidx.room:room-runtime:2.4.3")
     annotationProcessor("androidx.room:room-compiler:2.4.3")
     kapt("androidx.room:room-compiler:2.4.3")
+
+    // Robolectric environment
+    testImplementation("androidx.test:core:1.5.0")
+    testImplementation("org.robolectric:robolectric:4.9")
 }
 
 // チェック
