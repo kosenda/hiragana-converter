@@ -41,8 +41,11 @@ apiKey=<1.で取得したAPIキー>
 （例： apiKey=011222333333abcd）
 
 ## イメージ
+|変換画面|設定画面|
+|:-:|:-:|
+|<img width="480" alt="convert_screen" src="https://user-images.githubusercontent.com/60963155/204125570-59fb7b51-0fff-465a-ad28-4d7290aaf989.PNG"/>|<img width="480" alt="setting_dialog" src="https://user-images.githubusercontent.com/60963155/204125574-1505e36c-de19-441b-a969-623a468ff52c.PNG"/>|
 
-![スライド1](https://user-images.githubusercontent.com/60963155/204125570-59fb7b51-0fff-465a-ad28-4d7290aaf989.PNG)
-![スライド2](https://user-images.githubusercontent.com/60963155/204125574-1505e36c-de19-441b-a969-623a468ff52c.PNG)
-![スライド3](https://user-images.githubusercontent.com/60963155/204125577-f33773ef-3f87-4ad9-a265-3e75f8bb5a69.PNG)
-![スライド4](https://user-images.githubusercontent.com/60963155/204125579-daf59ad4-3019-4e23-9214-aa8e972d936e.PNG)
+|履歴画面|インフォ画面|
+|:-:|:-:|
+|<img width="480" alt="record_dialog" src="https://user-images.githubusercontent.com/60963155/204125577-f33773ef-3f87-4ad9-a265-3e75f8bb5a69.PNG">|<img width="480" alt="info_dialog" src="https://user-images.githubusercontent.com/60963155/204125579-daf59ad4-3019-4e23-9214-aa8e972d936e.PNG">|
+
