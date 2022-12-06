@@ -6,6 +6,7 @@ plugins {
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.7.10"
 }
 
 android {
@@ -78,22 +79,17 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.1.0-alpha02")
 
     // accompanist
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.23.1")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.28.0")
 
     // COIL
     implementation("io.coil-kt:coil-compose:2.2.2")
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.6.0")
-
-    // moshi
-    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
-    implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.43.2")
-    kapt("com.google.dagger:hilt-compiler:2.43.2")
+    implementation("com.google.dagger:hilt-android:2.44.2")
+    kapt("com.google.dagger:hilt-compiler:2.44.2")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     // dataStore preferences
@@ -114,6 +110,10 @@ dependencies {
     // Robolectric environment
     testImplementation("androidx.test:core:1.5.0")
     testImplementation("org.robolectric:robolectric:4.9")
+
+    // kotlinx serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
 }
 
 // チェック
