@@ -1,16 +1,18 @@
 package ksnd.open.hiraganaconverter.model.repository
 
 import android.util.Log
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import ksnd.open.hiraganaconverter.model.ConvertApiClient
 import ksnd.open.hiraganaconverter.model.RequestData
 import ksnd.open.hiraganaconverter.model.ResponseData
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import java.io.IOException
 import javax.inject.Inject
 
@@ -18,15 +20,12 @@ class ConvertRepositoryImpl @Inject constructor() : ConvertRepository {
 
     private val tag = ConvertRepositoryImpl::class.java.simpleName
 
-    // JSONからKotlinのクラスに変換するためのライブラリの設定
-    private val moshi = Moshi.Builder()
-        .add(KotlinJsonAdapterFactory())
-        .build()
+    private val contentType = "application/json".toMediaType()
 
-    // REST APIを利用するためのライブラリの設定
+    @OptIn(ExperimentalSerializationApi::class)
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://labs.goo.ne.jp/api/hiragana/")
-        .addConverterFactory(MoshiConverterFactory.create(moshi))
+        .addConverterFactory(Json.asConverterFactory(contentType))
         .build()
 
     // ApiClientに定義したメソッドを呼び出すための設定
@@ -44,7 +43,7 @@ class ConvertRepositoryImpl @Inject constructor() : ConvertRepository {
                 sentence = sentence,
                 outputType = type
             )
-            val json = moshi.adapter(RequestData::class.java).toJson(requestData)
+            val json = Json.encodeToString(requestData)
             Log.i(tag, "json: $json")
             val body = json.toRequestBody(
                 contentType = "application/json; charset=utf-8".toMediaTypeOrNull()
