@@ -82,7 +82,6 @@ private fun ConvertHistoryDialogContent(
     onCloseClick: () -> Unit,
     viewModel: ConvertHistoryViewModel
 ) {
-
     LaunchedEffect(true) {
         viewModel.getAllConvertHistory()
     }

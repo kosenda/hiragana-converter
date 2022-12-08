@@ -24,6 +24,8 @@
     <string name="request_too_large">Too many characters. Please reduce the number of characters to be converted.</string>
     <string name="limit_exceeded">Today\'s usage limit for the API you have provided has been reached, so it is not available for use today.</string>
     <string name="limit_local_count">The API provided by gooラボ（API provider） has a limit of 3,000 uses per day, so we limit each user to %1$d uses per day.</string>
+    <string name="network_error">Network error.</string>
+    <string name="internal_server_error">Failure occurred in the API.</string>
 
     <!-- Font -->
     <string name="default_font">Default</string>
