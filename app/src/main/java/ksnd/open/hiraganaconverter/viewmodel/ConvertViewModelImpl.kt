@@ -91,21 +91,32 @@ class ConvertViewModelImpl @Inject constructor(
 
             // 変換後の文字列を表示
             _uiState.update { it.copy(outputText = raw.value?.body()?.converted ?: "") }
+            Log.i(tag, "outputText: ${uiState.value.outputText}")
 
             // 変換した文字列(input)を設定
             previousInputText.value = uiState.value.inputText
+            Log.i(tag, "inputText: ${uiState.value.inputText}")
 
-            // 変換に失敗しているか確認し、失敗していた場合はエラー表示
-            val isFailedConverted = checkAndDisplayRawCode(context)
-
-            // 変換に失敗していなければ履歴の追加
-            if (isFailedConverted.not()) {
-                insertConvertHistory(
-                    beforeText = uiState.value.inputText,
-                    afterText = uiState.value.outputText,
-                    context = context
-                )
+            // レスポンスがNullの場合はエラーメッセージを表示
+            if (raw.value == null) {
+                _uiState.update { it.copy(errorText = context.getString(R.string.conversion_failed)) }
             }
+
+            raw.value?.let { response ->
+                if (response.isSuccessful) {
+                    // 変換が成功したときはエラーメッセージを消去し履歴を追加
+                    _uiState.update { it.copy(errorText = "") }
+                    insertConvertHistory(
+                        beforeText = uiState.value.inputText,
+                        afterText = uiState.value.outputText,
+                        context = context
+                    )
+                } else {
+                    // 変換が失敗したときはレスポンスのメッセージ（ErrorInterceptorで変換済み）を表示
+                    _uiState.update { it.copy(errorText = response.message()) }
+                }
+            }
+            Log.i(tag, "errorText: ${uiState.value.errorText}")
         }
     }
 
@@ -159,41 +170,5 @@ class ConvertViewModelImpl @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch {
             convertHistoryRepository.insertConvertHistory(convertHistoryData)
         }
-    }
-
-    private fun checkAndDisplayRawCode(context: Context): Boolean {
-        Log.i(tag, "raw: ${raw.value?.raw()}")
-        var isFailedConverted = true // コードが200のときだけ変換成功
-        when (raw.value?.code()) {
-            null -> {
-                _uiState.update { it.copy(errorText = context.getString(R.string.conversion_failed)) }
-            }
-            200 -> {
-                isFailedConverted = false
-                _uiState.update { it.copy(errorText = "") }
-            }
-            413 -> {
-                _uiState.update { it.copy(errorText = context.getString(R.string.request_too_large)) }
-            }
-            400 -> {
-                _uiState.update {
-                    it.copy(
-                        errorText = when (raw.value?.message()) {
-                            "Rate limit exceeded" -> {
-                                context.getString(R.string.limit_exceeded)
-                            }
-                            else -> {
-                                context.getString(R.string.conversion_failed)
-                            }
-                        }
-                    )
-                }
-            }
-            else -> {
-                _uiState.update { it.copy(errorText = context.getString(R.string.conversion_failed)) }
-            }
-        }
-        Log.i(tag, "errorText: ${uiState.value.errorText}")
-        return isFailedConverted
     }
 }

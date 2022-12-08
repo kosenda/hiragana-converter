@@ -6,26 +6,31 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ksnd.open.hiraganaconverter.model.ConvertApiClient
+import ksnd.open.hiraganaconverter.model.ErrorInterceptor
 import ksnd.open.hiraganaconverter.model.RequestData
 import ksnd.open.hiraganaconverter.model.ResponseData
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
 import retrofit2.Retrofit
-import java.io.IOException
 import javax.inject.Inject
 
-class ConvertRepositoryImpl @Inject constructor() : ConvertRepository {
+class ConvertRepositoryImpl @Inject constructor(
+    errorInterceptor: ErrorInterceptor
+) : ConvertRepository {
 
     private val tag = ConvertRepositoryImpl::class.java.simpleName
 
     private val contentType = "application/json".toMediaType()
+    private val client = OkHttpClient.Builder().addInterceptor(errorInterceptor).build()
 
     @OptIn(ExperimentalSerializationApi::class)
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://labs.goo.ne.jp/api/hiragana/")
         .addConverterFactory(Json.asConverterFactory(contentType))
+        .client(client)
         .build()
 
     // ApiClientに定義したメソッドを呼び出すための設定
@@ -48,15 +53,14 @@ class ConvertRepositoryImpl @Inject constructor() : ConvertRepository {
             val body = json.toRequestBody(
                 contentType = "application/json; charset=utf-8".toMediaTypeOrNull()
             )
-            val response = convertService.requestConvert(body)
+            val response: Response<ResponseData> = convertService.requestConvert(body)
             if (response.isSuccessful.not()) {
-                Log.w(tag, response.raw().message)
+                Log.w(tag, "response_message: ${response.raw().message}")
             }
             return response
-        } catch (ioe: IOException) {
-            Log.e(tag, "ネットワークエラー: $ioe")
-            return null
         } catch (e: Exception) {
+            // 基本的にはAPI通信に関してはErrorInterceptorでcatchされ失敗してもレスポンスが返ってくる想定であり、
+            // ここのcatchはいらないとは思うが念のためここでもエラー処理を行う
             Log.e(tag, e.toString())
             return null
         }
