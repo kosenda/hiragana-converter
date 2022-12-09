@@ -114,7 +114,7 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
                 // 変換タイプ（ひらがな、カタカナ）を選択するスピナー
                 Row(modifier = Modifier.weight(1f)) {
                     ConversionTypeSpinnerCard(
-                        onSelectedChange = { type -> viewModel.changeHiraKanaType(type) }
+                        onSelectedChange = viewModel::changeHiraKanaType
                     )
                 }
                 // 変換するときに押すボタン
@@ -129,9 +129,7 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
             if (convertUiState.errorText != "") {
                 ErrorCard(
                     errorText = convertUiState.errorText,
-                    onClick = {
-                        viewModel.clearErrorText()
-                    }
+                    onClick = viewModel::clearErrorText
                 )
             }
 
@@ -140,9 +138,7 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
                 inputText = convertUiState.inputText,
                 clipboardManager = clipboardManager,
                 focusManager = focusManager,
-                onValueChange = { new ->
-                    viewModel.updateInputText(inputText = new)
-                }
+                onValueChange = viewModel::updateInputText
             )
 
             Divider(
@@ -156,9 +152,7 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
                 outputText = convertUiState.outputText,
                 clipboardManager = clipboardManager,
                 focusManager = focusManager,
-                onValueChange = { new ->
-                    viewModel.updateOutputText(outputText = new)
-                }
+                onValueChange = viewModel::updateOutputText
             )
         }
     }

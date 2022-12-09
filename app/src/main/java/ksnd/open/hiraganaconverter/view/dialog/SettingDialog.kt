@@ -106,8 +106,8 @@ private fun SettingDialogContent(
         ) {
             // テーマ設定
             SettingThemeContent(
-                onRadioButtonClick = { index -> viewModel.updateThemeNum(index) },
-                isSelectedNum = { index -> viewModel.isSelectedThemeNum(index) }
+                onRadioButtonClick = viewModel::updateThemeNum,
+                isSelectedNum = viewModel::isSelectedThemeNum
             )
             // 言語設定
             SettingLanguageContent(
@@ -117,8 +117,8 @@ private fun SettingDialogContent(
             )
             // フォント設定
             SettingFontContent(
-                updateCustomFont = { customFont -> viewModel.updateCustomFont(customFont) },
-                isSelectedFont = { customFont -> viewModel.isSelectedFont(customFont) },
+                updateCustomFont = viewModel::updateCustomFont,
+                isSelectedFont = viewModel::isSelectedFont,
                 onCloseClick = onCloseClick
             )
         }
