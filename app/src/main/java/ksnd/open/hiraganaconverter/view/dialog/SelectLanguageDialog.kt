@@ -73,9 +73,7 @@ private fun SelectLanguageDialogContent(
         ) {
             displayLanguageList.forEachIndexed { index, language ->
                 LanguageCard(
-                    onNewLanguageClick = { newLanguage ->
-                        viewModel.updateSelectLanguage(newLanguage)
-                    },
+                    onNewLanguageClick = viewModel::updateSelectLanguage,
                     index = index,
                     displayLanguage = language
                 )
