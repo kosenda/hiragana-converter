@@ -1,43 +1,72 @@
 package ksnd.open.hiraganaconverter.viewmodel
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ksnd.open.hiraganaconverter.model.ConvertHistoryData
 import ksnd.open.hiraganaconverter.model.repository.ConvertHistoryRepository
+import ksnd.open.hiraganaconverter.view.uistate.ConvertHistoryUiState
 import javax.inject.Inject
 
 @HiltViewModel
 class ConvertHistoryViewModelImpl @Inject constructor(
-    private val convertHistoryRepository: ConvertHistoryRepository
+    private val convertHistoryRepository: ConvertHistoryRepository,
+    private val dispatcher: CoroutineDispatcher
 ) : ConvertHistoryViewModel() {
 
-    override val convertHistories: MutableState<List<ConvertHistoryData>> =
-        mutableStateOf(emptyList())
+    private val _uiState = MutableStateFlow(ConvertHistoryUiState())
+    override val uiState: StateFlow<ConvertHistoryUiState> = _uiState.asStateFlow()
 
     override fun deleteAllConvertHistory() {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(dispatcher).launch {
             convertHistoryRepository.deleteAllConvertHistory()
         }
+        _uiState.update { it.copy(convertHistories = emptyList()) }
     }
 
-    override fun deleteConvertHistory(id: Long) {
-        CoroutineScope(Dispatchers.IO).launch {
-            convertHistoryRepository.deleteConvertHistory(id)
-            val newList = convertHistories.value.toMutableList()
-            newList.removeIf { it.id == id }
-            convertHistories.value = newList
+    override fun deleteConvertHistory(historyData: ConvertHistoryData) {
+        CoroutineScope(dispatcher).launch {
+            convertHistoryRepository.deleteConvertHistory(historyData.id)
+        }
+        _uiState.update {
+            val newList = it.convertHistories.toMutableList()
+            newList.removeIf { deleteTarget -> deleteTarget.id == historyData.id }
+            it.copy(convertHistories = newList)
         }
     }
 
     override fun getAllConvertHistory() {
-        CoroutineScope(Dispatchers.IO).launch {
-            convertHistories.value = convertHistoryRepository
-                .getAllConvertHistory()
-                .sortedByDescending { it.id }
+        CoroutineScope(dispatcher).launch {
+            _uiState.update {
+                it.copy(
+                    convertHistories = convertHistoryRepository
+                        .getAllConvertHistory()
+                        .sortedByDescending { data -> data.id }
+                )
+            }
+        }
+    }
+
+    override fun closeConvertHistoryDetailDialog() {
+        _uiState.update {
+            it.copy(
+                isShowDetailDialog = false,
+                usedHistoryDataByDetail = null
+            )
+        }
+    }
+
+    override fun showConvertHistoryDetailDialog(historyData: ConvertHistoryData) {
+        _uiState.update {
+            it.copy(
+                isShowDetailDialog = true,
+                usedHistoryDataByDetail = historyData
+            )
         }
     }
 }

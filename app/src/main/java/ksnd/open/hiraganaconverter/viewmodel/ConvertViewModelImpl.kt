@@ -24,7 +24,7 @@ import ksnd.open.hiraganaconverter.model.getNowTime
 import ksnd.open.hiraganaconverter.model.repository.ConvertHistoryRepository
 import ksnd.open.hiraganaconverter.model.repository.ConvertRepository
 import ksnd.open.hiraganaconverter.model.repository.DataStoreRepository
-import ksnd.open.hiraganaconverter.view.ConvertUiState
+import ksnd.open.hiraganaconverter.view.uistate.ConvertUiState
 import retrofit2.Response
 import java.util.*
 import javax.inject.Inject

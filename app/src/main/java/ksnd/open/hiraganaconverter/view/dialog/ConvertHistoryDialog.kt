@@ -32,10 +32,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -53,7 +51,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import ksnd.open.hiraganaconverter.R
-import ksnd.open.hiraganaconverter.model.ConvertHistoryData
 import ksnd.open.hiraganaconverter.view.parts.BottomCloseButton
 import ksnd.open.hiraganaconverter.viewmodel.ConvertHistoryViewModel
 import ksnd.open.hiraganaconverter.viewmodel.ConvertHistoryViewModelImpl
@@ -82,6 +79,8 @@ private fun ConvertHistoryDialogContent(
     onCloseClick: () -> Unit,
     viewModel: ConvertHistoryViewModel
 ) {
+    val convertHistoryUiState by viewModel.uiState.collectAsState()
+
     LaunchedEffect(true) {
         viewModel.getAllConvertHistory()
     }
@@ -96,18 +95,10 @@ private fun ConvertHistoryDialogContent(
         }
     ) { padding ->
 
-        var isShowDetail by rememberSaveable { mutableStateOf(false) }
-        var showHistoryData by rememberSaveable {
-            mutableStateOf<ConvertHistoryData?>(null)
-        }
-
-        if (isShowDetail) {
-            showHistoryData?.let {
+        if (convertHistoryUiState.isShowDetailDialog) {
+            convertHistoryUiState.usedHistoryDataByDetail?.let {
                 ConvertHistoryDetailDialog(
-                    onCloseClick = {
-                        isShowDetail = false
-                        showHistoryData = null
-                    },
+                    onCloseClick = viewModel::closeConvertHistoryDetailDialog,
                     historyData = it
                 )
             }
@@ -118,7 +109,7 @@ private fun ConvertHistoryDialogContent(
                 .padding(padding)
                 .fillMaxSize()
         ) {
-            if (viewModel.convertHistories.value.isEmpty()) {
+            if (convertHistoryUiState.convertHistories.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -148,26 +139,22 @@ private fun ConvertHistoryDialogContent(
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
                     DeleteButton(
-                        onClick = {
-                            viewModel.deleteAllConvertHistory()
-                            viewModel.convertHistories.value = emptyList()
-                        }
+                        onClick = viewModel::deleteAllConvertHistory
                     )
                 }
                 LazyColumn {
                     items(
-                        items = viewModel.convertHistories.value,
+                        items = convertHistoryUiState.convertHistories,
                         key = { history -> history.id }
                     ) { history ->
                         ConvertHistoryCard(
                             beforeText = history.before,
                             time = history.time,
                             onClick = {
-                                isShowDetail = true
-                                showHistoryData = history
+                                viewModel.showConvertHistoryDetailDialog(history)
                             },
-                            onCloseClick = {
-                                viewModel.deleteConvertHistory(history.id)
+                            onDeleteClick = {
+                                viewModel.deleteConvertHistory(history)
                             }
                         )
                     }
@@ -182,7 +169,7 @@ private fun ConvertHistoryCard(
     beforeText: String,
     time: String,
     onClick: () -> Unit,
-    onCloseClick: () -> Unit
+    onDeleteClick: () -> Unit
 ) {
     OutlinedCard(
         modifier = Modifier
@@ -219,7 +206,7 @@ private fun ConvertHistoryCard(
                 )
             }
             FilledTonalIconButton(
-                onClick = onCloseClick,
+                onClick = onDeleteClick,
                 colors = IconButtonDefaults.iconButtonColors(
                     containerColor = Color.Transparent
                 )

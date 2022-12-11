@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.StateFlow
 import ksnd.open.hiraganaconverter.model.HiraKanaType
-import ksnd.open.hiraganaconverter.view.ConvertUiState
+import ksnd.open.hiraganaconverter.view.uistate.ConvertUiState
 
 abstract class ConvertViewModel : ViewModel() {
     abstract val uiState: StateFlow<ConvertUiState>

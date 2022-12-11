@@ -1,4 +1,4 @@
-package ksnd.open.hiraganaconverter.view
+package ksnd.open.hiraganaconverter.view.uistate
 
 import ksnd.open.hiraganaconverter.model.HiraKanaType
 

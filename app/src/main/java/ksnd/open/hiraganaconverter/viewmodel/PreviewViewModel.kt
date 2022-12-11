@@ -8,9 +8,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import ksnd.open.hiraganaconverter.model.ConvertHistoryData
 import ksnd.open.hiraganaconverter.model.HiraKanaType
-import ksnd.open.hiraganaconverter.view.ConvertUiState
 import ksnd.open.hiraganaconverter.view.CustomFont
 import ksnd.open.hiraganaconverter.view.ThemeNum
+import ksnd.open.hiraganaconverter.view.uistate.ConvertHistoryUiState
+import ksnd.open.hiraganaconverter.view.uistate.ConvertUiState
 
 class PreviewConvertViewModel : ConvertViewModel() {
     override val uiState: StateFlow<ConvertUiState> = MutableStateFlow(
@@ -39,27 +40,32 @@ class PreviewSelectLanguageViewModel : SelectLanguageViewModel() {
 }
 
 class PreviewConvertHistoryViewModel(isNoData: Boolean = false) : ConvertHistoryViewModel() {
-    override val convertHistories: MutableState<List<ConvertHistoryData>> = mutableStateOf(
-        if (isNoData) {
-            emptyList()
-        } else {
-            listOf(
-                ConvertHistoryData(
-                    id = 0,
-                    time = "2022/11/26 21:34",
-                    before = "漢字漢字漢字ひらがなひらがなひらがなカタカナカタカナカタカナEnglishEnglishEnglish",
-                    after = "ここはつかわれない"
-                ),
-                ConvertHistoryData(
-                    id = 1,
-                    time = "2022/11/27 11:42",
-                    before = "漢字漢字漢字",
-                    after = "ここはつかわれない"
+    override val uiState: StateFlow<ConvertHistoryUiState> = MutableStateFlow(
+        ConvertHistoryUiState(
+            convertHistories =
+            if (isNoData) {
+                emptyList()
+            } else {
+                listOf(
+                    ConvertHistoryData(
+                        id = 0,
+                        time = "2022/11/26 21:34",
+                        before = "漢字漢字漢字ひらがなひらがなひらがなカタカナカタカナカタカナEnglishEnglishEnglish",
+                        after = "ここはつかわれない"
+                    ),
+                    ConvertHistoryData(
+                        id = 1,
+                        time = "2022/11/27 11:42",
+                        before = "漢字漢字漢字",
+                        after = "ここはつかわれない"
+                    )
                 )
-            )
-        }
-    )
+            }
+        )
+    ).asStateFlow()
     override fun deleteAllConvertHistory() {}
-    override fun deleteConvertHistory(id: Long) {}
+    override fun deleteConvertHistory(historyData: ConvertHistoryData) {}
     override fun getAllConvertHistory() {}
+    override fun closeConvertHistoryDetailDialog() {}
+    override fun showConvertHistoryDetailDialog(historyData: ConvertHistoryData) {}
 }
