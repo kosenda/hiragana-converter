@@ -2,11 +2,7 @@ package ksnd.open.hiraganaconverter.viewmodel
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
+import kotlinx.coroutines.test.*
 import ksnd.open.hiraganaconverter.model.ConvertHistoryData
 import ksnd.open.hiraganaconverter.model.repository.ConvertHistoryRepository
 import org.junit.After
@@ -18,7 +14,7 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class ConvertHistoryViewModelImplTest {
 
-    private val testDispatcher = UnconfinedTestDispatcher()
+    private val testDispatcher = StandardTestDispatcher()
 
     // 既存のデータ（変換履歴）あり（２件）
     private val existInitDataViewModel = ConvertHistoryViewModelImpl(
