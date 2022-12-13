@@ -5,8 +5,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -18,7 +18,8 @@ import java.io.IOException
 import javax.inject.Inject
 
 class DataStoreRepositoryImpl @Inject constructor(
-    private val preferencesDataStore: DataStore<Preferences>
+    private val preferencesDataStore: DataStore<Preferences>,
+    private val dispatcher: CoroutineDispatcher
 ) : DataStoreRepository {
 
     private val tag = DataStoreRepositoryImpl::class.java.simpleName
@@ -54,13 +55,13 @@ class DataStoreRepositoryImpl @Inject constructor(
     }
 
     override fun updateThemeNum(newThemeNum: Int) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(dispatcher).launch {
             preferencesDataStore.edit { it[PreferenceKeys.THEME_NUM] = newThemeNum }
         }
     }
 
     override fun updateCustomFont(newCustomFont: CustomFont) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(dispatcher).launch {
             preferencesDataStore.edit { it[PreferenceKeys.CUSTOM_FONT] = newCustomFont.name }
         }
     }
@@ -92,13 +93,13 @@ class DataStoreRepositoryImpl @Inject constructor(
     }
 
     override fun updateLastConvertTime(lastConvertTime: String) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(dispatcher).launch {
             preferencesDataStore.edit { it[PreferenceKeys.LAST_CONVERT_TIME] = lastConvertTime }
         }
     }
 
     override fun updateConvertCount(convertCount: Int) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(dispatcher).launch {
             preferencesDataStore.edit { it[PreferenceKeys.CONVERT_COUNT] = convertCount }
         }
     }
