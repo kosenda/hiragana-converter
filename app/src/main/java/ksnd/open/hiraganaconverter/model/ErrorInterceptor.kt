@@ -2,6 +2,7 @@ package ksnd.open.hiraganaconverter.model
 
 import android.content.Context
 import android.util.Log
+import dagger.hilt.android.qualifiers.ApplicationContext
 import ksnd.open.hiraganaconverter.R
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
@@ -12,7 +13,7 @@ import java.io.IOException
 import javax.inject.Inject
 
 class ErrorInterceptor @Inject constructor(
-    private val context: Context
+    @ApplicationContext private val context: Context
 ) : Interceptor {
 
     private val tag = ErrorInterceptor::class.java.simpleName
