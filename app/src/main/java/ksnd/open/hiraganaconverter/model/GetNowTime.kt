@@ -4,7 +4,7 @@ import android.text.format.DateFormat
 import java.util.Calendar
 import java.util.TimeZone
 
-fun getNowTime(timeZone: String, format: String): String {
+fun getNowTime(timeZone: String, format: String = "yyyy/MM/dd HH:mm"): String {
     return DateFormat.format(
         format,
         Calendar.getInstance(
