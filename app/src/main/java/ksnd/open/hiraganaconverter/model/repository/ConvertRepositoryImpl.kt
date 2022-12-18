@@ -2,13 +2,15 @@ package ksnd.open.hiraganaconverter.model.repository
 
 import android.util.Log
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ksnd.open.hiraganaconverter.model.ConvertApiClient
-import ksnd.open.hiraganaconverter.model.ErrorInterceptor
 import ksnd.open.hiraganaconverter.model.RequestData
 import ksnd.open.hiraganaconverter.model.ResponseData
+import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
@@ -18,7 +20,7 @@ import retrofit2.Retrofit
 import javax.inject.Inject
 
 class ConvertRepositoryImpl @Inject constructor(
-    errorInterceptor: ErrorInterceptor
+    errorInterceptor: Interceptor
 ) : ConvertRepository {
 
     private val tag = ConvertRepositoryImpl::class.java.simpleName
@@ -57,6 +59,7 @@ class ConvertRepositoryImpl @Inject constructor(
             if (response.isSuccessful.not()) {
                 Log.w(tag, "response_message: ${response.raw().message}")
             }
+            Log.i(tag, "response raw: ${response.raw()}")
             return response
         } catch (e: Exception) {
             // 基本的にはAPI通信に関してはErrorInterceptorでcatchされ失敗してもレスポンスが返ってくる想定であり、
