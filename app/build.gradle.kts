@@ -128,9 +128,12 @@ tasks.create<JavaExec>("ktlintCheck") {
 }
 
 // フォーマット
+// jvmArgsは以下のサイトを参考にした（入れないと失敗してしまう）
+// https://github.com/pinterest/ktlint/issues/1195#issuecomment-1009027802
 tasks.create<JavaExec>("ktlintFormatting") {
     description = "Fix Kotlin code style deviations."
     classpath = ktlint
     mainClass.set("com.pinterest.ktlint.Main")
     args("-F", "src/**/*.kt")
+    jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }

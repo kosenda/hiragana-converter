@@ -8,8 +8,15 @@ class ConvertHistoryRepositoryImpl @Inject constructor(
     private val convertHistoryDao: ConvertHistoryDao
 ) : ConvertHistoryRepository {
     // ■ CREATE
-    override fun insertConvertHistory(convertHistoryData: ConvertHistoryData) =
-        convertHistoryDao.insertConvertHistory(convertHistoryData)
+    override fun insertConvertHistory(beforeText: String, afterText: String, time: String) {
+        convertHistoryDao.insertConvertHistory(
+            convertHistoryData = ConvertHistoryData(
+                before = beforeText,
+                after = afterText,
+                time = time
+            )
+        )
+    }
 
     // ■ READ
     override fun getAllConvertHistory(): List<ConvertHistoryData> =
