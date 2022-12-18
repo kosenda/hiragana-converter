@@ -45,13 +45,11 @@ class ConvertViewModelImpl @Inject constructor(
     private val previousInputText: MutableState<String> = mutableStateOf("")
 
     override fun convert(context: Context) {
-
         if (uiState.value.isChangedInputText(previousInputText = previousInputText.value).not()) {
             return
         }
 
         CoroutineScope(ioDispatcher).launch {
-
             val isReachedConvertMaxLimit = withContext(defaultDispatcher) {
                 dataStoreRepository.checkReachedConvertMaxLimit(
                     today = getNowTime(
@@ -62,8 +60,10 @@ class ConvertViewModelImpl @Inject constructor(
             }
 
             if (isReachedConvertMaxLimit) {
-                _uiState.update { it.copy(
-                    errorText = context.getString(R.string.limit_local_count, LIMIT_CONVERT_COUNT))
+                _uiState.update {
+                    it.copy(
+                        errorText = context.getString(R.string.limit_local_count, LIMIT_CONVERT_COUNT)
+                    )
                 }
                 return@launch
             }

@@ -35,7 +35,8 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -180,7 +181,6 @@ class ConvertViewModelImplTest {
     }
 }
 
-
 private fun createTestingConvertViewModel(
     context: Context,
     testDispatcher: CoroutineDispatcher,
@@ -271,8 +271,8 @@ private class FakeConvertHistoryRepositoryImpl : ConvertHistoryRepository {
 private class FakeDataStoreRepositoryImpl(
     private val isReachedConvertMaxLimit: Boolean
 ) : DataStoreRepository {
-    override fun selectedThemeNum(): Flow<Int> = flow {  }
-    override fun selectedCustomFont(): Flow<String> = flow {  }
+    override fun selectedThemeNum(): Flow<Int> = flow { }
+    override fun selectedCustomFont(): Flow<String> = flow { }
     override fun updateThemeNum(newThemeNum: Int) {}
     override fun updateCustomFont(newCustomFont: CustomFont) {}
     override suspend fun checkReachedConvertMaxLimit(today: String) = isReachedConvertMaxLimit
