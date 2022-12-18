@@ -19,7 +19,7 @@ class ConvertHistoryViewModelImplTest {
     // 既存のデータ（変換履歴）あり（２件）
     private val existInitDataViewModel = ConvertHistoryViewModelImpl(
         convertHistoryRepository = FakeConvertHistoryRepository(exitsInitData = true),
-        dispatcher = testDispatcher
+        ioDispatcher = testDispatcher
     )
 
     @Before
@@ -39,7 +39,7 @@ class ConvertHistoryViewModelImplTest {
         // 既存のデータ（変換履歴）なし
         val notExistInitDataViewModel = ConvertHistoryViewModelImpl(
             convertHistoryRepository = FakeConvertHistoryRepository(exitsInitData = false),
-            dispatcher = testDispatcher
+            ioDispatcher = testDispatcher
         )
         // 初期化時にデータ（変換履歴）が保存されていなかった場合、UiStateにデータが設定されていないことを確認
         assertTrue(notExistInitDataViewModel.uiState.value.convertHistories.isEmpty())
@@ -135,8 +135,15 @@ private class FakeConvertHistoryRepository(exitsInitData: Boolean) : ConvertHist
         }
     }
 
-    override fun insertConvertHistory(convertHistoryData: ConvertHistoryData) {
-        testData.add(convertHistoryData)
+    override fun insertConvertHistory(beforeText: String, afterText: String, time: String) {
+        testData.add(
+            ConvertHistoryData(
+                id = testData.size.toLong(),
+                before = beforeText,
+                after = afterText,
+                time = time
+            )
+        )
     }
 
     override fun getAllConvertHistory(): List<ConvertHistoryData> {
