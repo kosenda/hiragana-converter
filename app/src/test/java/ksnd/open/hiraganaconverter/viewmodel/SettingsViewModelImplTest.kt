@@ -26,20 +26,21 @@ import org.robolectric.RobolectricTestRunner
 class SettingsViewModelImplTest {
     private val context = ApplicationProvider.getApplicationContext<Context>()
     private val testDispatcher = UnconfinedTestDispatcher()
+    private val testDataStoreFile = context.dataStoreFile("TestDataStore.preferences_pb")
+    private val preferencesDataStore = PreferenceDataStoreFactory.create(
+        produceFile = { testDataStoreFile }
+    )
     private val viewModel = SettingsViewModelImpl(
         dataStoreRepository = DataStoreRepositoryImpl(
-            preferencesDataStore = PreferenceDataStoreFactory.create(
-                produceFile = {
-                    context.dataStoreFile("DataStore")
-                }
-            ),
-            dispatcher = testDispatcher
+            preferencesDataStore = preferencesDataStore,
+            ioDispatcher = testDispatcher
         )
     )
 
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
+        testDataStoreFile.deleteRecursively()
     }
 
     @After

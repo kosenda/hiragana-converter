@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ksnd.open.hiraganaconverter.di.module.IODispatcher
 import ksnd.open.hiraganaconverter.model.ConvertHistoryData
 import ksnd.open.hiraganaconverter.model.repository.ConvertHistoryRepository
 import ksnd.open.hiraganaconverter.view.uistate.ConvertHistoryUiState
@@ -16,21 +17,21 @@ import javax.inject.Inject
 @HiltViewModel
 class ConvertHistoryViewModelImpl @Inject constructor(
     private val convertHistoryRepository: ConvertHistoryRepository,
-    private val dispatcher: CoroutineDispatcher
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ConvertHistoryViewModel() {
 
     private val _uiState = MutableStateFlow(ConvertHistoryUiState())
     override val uiState: StateFlow<ConvertHistoryUiState> = _uiState.asStateFlow()
 
     override fun deleteAllConvertHistory() {
-        CoroutineScope(dispatcher).launch {
+        CoroutineScope(ioDispatcher).launch {
             convertHistoryRepository.deleteAllConvertHistory()
         }
         _uiState.update { it.copy(convertHistories = emptyList()) }
     }
 
     override fun deleteConvertHistory(historyData: ConvertHistoryData) {
-        CoroutineScope(dispatcher).launch {
+        CoroutineScope(ioDispatcher).launch {
             convertHistoryRepository.deleteConvertHistory(historyData.id)
         }
         _uiState.update {
@@ -41,7 +42,7 @@ class ConvertHistoryViewModelImpl @Inject constructor(
     }
 
     override fun getAllConvertHistory() {
-        CoroutineScope(dispatcher).launch {
+        CoroutineScope(ioDispatcher).launch {
             _uiState.update {
                 it.copy(
                     convertHistories = convertHistoryRepository
