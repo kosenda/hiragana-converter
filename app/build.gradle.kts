@@ -117,6 +117,12 @@ dependencies {
 
     // Kotlinコルーチンテスト
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+
+    // Truth
+    testImplementation("com.google.truth:truth:1.1.3")
+
+    // Turbine
+    testImplementation("app.cash.turbine:turbine:0.12.1")
 }
 
 // チェック

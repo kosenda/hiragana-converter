@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.dataStoreFile
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.test.core.app.ApplicationProvider
+import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -14,8 +15,6 @@ import ksnd.open.hiraganaconverter.model.repository.DataStoreRepositoryImpl
 import ksnd.open.hiraganaconverter.view.CustomFont
 import ksnd.open.hiraganaconverter.view.ThemeNum
 import org.junit.After
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -51,24 +50,24 @@ class SettingsViewModelImplTest {
     @Test
     fun settingViewModel_Initialization_FirstDefaultSet() = runTest {
         // モードの初期設定は自動モード
-        assertTrue(viewModel.isSelectedThemeNum(ThemeNum.AUTO.num))
+        assertThat(viewModel.isSelectedThemeNum(ThemeNum.AUTO.num)).isTrue()
         // フォントの初期設定はデフォルト
-        assertTrue(viewModel.isSelectedFont(CustomFont.DEFAULT))
+        assertThat(viewModel.isSelectedFont(CustomFont.DEFAULT)).isTrue()
     }
 
     @Test
     fun settingViewModel_SettingNightMode_NotAuto() = runTest {
         // ダークモードを設定したときにデフォルトでないことを確認
         viewModel.updateThemeNum(ThemeNum.NIGHT.num)
-        assertTrue(viewModel.isSelectedThemeNum(ThemeNum.NIGHT.num))
-        assertFalse(viewModel.isSelectedThemeNum(ThemeNum.AUTO.num))
+        assertThat(viewModel.isSelectedThemeNum(ThemeNum.NIGHT.num)).isTrue()
+        assertThat(viewModel.isSelectedThemeNum(ThemeNum.AUTO.num)).isFalse()
     }
 
     @Test
     fun settingViewModel_SettingCustomFont_NotDefault() = runTest {
         // カスタムフォントを設定したときにデフォルトでないことを確認
         viewModel.updateCustomFont(CustomFont.BIZ_UDGOTHIC)
-        assertTrue(viewModel.isSelectedFont(CustomFont.BIZ_UDGOTHIC))
-        assertFalse(viewModel.isSelectedFont(CustomFont.DEFAULT))
+        assertThat(viewModel.isSelectedFont(CustomFont.BIZ_UDGOTHIC)).isTrue()
+        assertThat(viewModel.isSelectedFont(CustomFont.DEFAULT)).isFalse()
     }
 }
