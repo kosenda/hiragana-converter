@@ -3,9 +3,9 @@ package ksnd.open.hiraganaconverter.model.repository
 import android.annotation.SuppressLint
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import com.google.common.truth.Truth.assertThat
 import ksnd.open.hiraganaconverter.model.ConvertHistoryDao
 import ksnd.open.hiraganaconverter.model.ConvertHistoryData
-import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ConvertHistoryRepositoryImplTest {
@@ -15,7 +15,7 @@ class ConvertHistoryRepositoryImplTest {
 
     @Test
     fun convertHistoryRepository_initial_size0() {
-        assertTrue(convertHistoryRepositoryImpl.getAllConvertHistory().isEmpty())
+        assertThat(convertHistoryRepositoryImpl.getAllConvertHistory()).isEmpty()
     }
 
     // ● insertConvertHistory & getAllConvertHistory--------------------------------------------- ●
@@ -26,7 +26,7 @@ class ConvertHistoryRepositoryImplTest {
             afterText = "B",
             time = "2022/12/20 22:10"
         )
-        assertTrue(convertHistoryRepositoryImpl.getAllConvertHistory().size == 1)
+        assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().size).isEqualTo(1)
     }
 
     @Test
@@ -38,7 +38,7 @@ class ConvertHistoryRepositoryImplTest {
                 time = "2022/12/20 22:10"
             )
         }
-        assertTrue(convertHistoryRepositoryImpl.getAllConvertHistory().size == 3)
+        assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().size).isEqualTo(3)
     }
 
     // ● deleteAllConvertHistory ---------------------------------------------------------------- ●
@@ -52,7 +52,7 @@ class ConvertHistoryRepositoryImplTest {
             )
         }
         convertHistoryRepositoryImpl.deleteAllConvertHistory()
-        assertTrue(convertHistoryRepositoryImpl.getAllConvertHistory().isEmpty())
+        assertThat(convertHistoryRepositoryImpl.getAllConvertHistory()).isEmpty()
     }
 
     // ● deleteConvertHistory ------------------------------------------------------------------- ●
@@ -68,7 +68,7 @@ class ConvertHistoryRepositoryImplTest {
         }
         val histories = convertHistoryRepositoryImpl.getAllConvertHistory()
         convertHistoryRepositoryImpl.deleteConvertHistory(id = histories[1].id)
-        assertTrue(convertHistoryRepositoryImpl.getAllConvertHistory().size == 2)
+        assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().size).isEqualTo(2)
     }
 }
 

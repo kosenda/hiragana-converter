@@ -1,5 +1,6 @@
 package ksnd.open.hiraganaconverter.viewmodel
 
+import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -10,8 +11,6 @@ import kotlinx.coroutines.test.setMain
 import ksnd.open.hiraganaconverter.model.ConvertHistoryData
 import ksnd.open.hiraganaconverter.model.repository.ConvertHistoryRepository
 import org.junit.After
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -46,19 +45,19 @@ class ConvertHistoryViewModelImplTest {
             ioDispatcher = testDispatcher
         )
         // 初期化時にデータ（変換履歴）が保存されていなかった場合、UiStateにデータが設定されていないことを確認
-        assertTrue(notExistInitDataViewModel.uiState.value.convertHistories.isEmpty())
+        assertThat(notExistInitDataViewModel.uiState.value.convertHistories).isEmpty()
         notExistInitDataViewModel.getAllConvertHistory()
         advanceUntilIdle()
-        assertTrue(notExistInitDataViewModel.uiState.value.convertHistories.isEmpty())
+        assertThat(notExistInitDataViewModel.uiState.value.convertHistories).isEmpty()
     }
 
     @Test
     fun convertHistoryViewModel_Initialization_ExistInitData() = runTest {
-        assertTrue(existInitDataViewModel.uiState.value.convertHistories.isEmpty())
+        assertThat(existInitDataViewModel.uiState.value.convertHistories).isEmpty()
         // 初期化時にデータ（変換履歴）が保存されていた場合、UiStateにデータが設定されていることを確認
         existInitDataViewModel.getAllConvertHistory()
         advanceUntilIdle()
-        assertTrue(existInitDataViewModel.uiState.value.convertHistories.isNotEmpty())
+        assertThat(existInitDataViewModel.uiState.value.convertHistories).isNotEmpty()
     }
 
     @Test
@@ -72,7 +71,8 @@ class ConvertHistoryViewModelImplTest {
             existInitDataViewModel.uiState.value.convertHistories.first()
         )
         advanceUntilIdle()
-        assertTrue(existInitDataViewModel.uiState.value.convertHistories.size == afterAddDataSize)
+        val convertHistoriesSize = existInitDataViewModel.uiState.value.convertHistories.size
+        assertThat(convertHistoriesSize).isEqualTo(afterAddDataSize)
     }
 
     @Test
@@ -82,7 +82,7 @@ class ConvertHistoryViewModelImplTest {
         advanceUntilIdle()
         existInitDataViewModel.deleteAllConvertHistory()
         advanceUntilIdle()
-        assertTrue(existInitDataViewModel.uiState.value.convertHistories.isEmpty())
+        assertThat(existInitDataViewModel.uiState.value.convertHistories).isEmpty()
     }
 
     // ■ データ（変換履歴）に関するテスト ------------------------------------------------------ End
@@ -95,8 +95,8 @@ class ConvertHistoryViewModelImplTest {
         existInitDataViewModel.getAllConvertHistory()
         advanceUntilIdle()
         // 初期化時はダイアログが非表示かつダイアログで使われるデータがuiStateにないことを確認
-        assertFalse(existInitDataViewModel.uiState.value.isShowDetailDialog)
-        assertTrue(existInitDataViewModel.uiState.value.usedHistoryDataByDetail == null)
+        assertThat(existInitDataViewModel.uiState.value.isShowDetailDialog).isFalse()
+        assertThat(existInitDataViewModel.uiState.value.usedHistoryDataByDetail).isNull()
     }
 
     @Test
@@ -108,8 +108,8 @@ class ConvertHistoryViewModelImplTest {
         existInitDataViewModel.showConvertHistoryDetailDialog(
             historyData = existInitDataViewModel.uiState.value.convertHistories.first()
         )
-        assertTrue(existInitDataViewModel.uiState.value.isShowDetailDialog)
-        assertFalse(existInitDataViewModel.uiState.value.usedHistoryDataByDetail == null)
+        assertThat(existInitDataViewModel.uiState.value.isShowDetailDialog).isTrue()
+        assertThat(existInitDataViewModel.uiState.value.usedHistoryDataByDetail).isNotNull()
     }
 
     @Test
@@ -122,8 +122,8 @@ class ConvertHistoryViewModelImplTest {
             historyData = existInitDataViewModel.uiState.value.convertHistories.first()
         )
         existInitDataViewModel.closeConvertHistoryDetailDialog()
-        assertFalse(existInitDataViewModel.uiState.value.isShowDetailDialog)
-        assertTrue(existInitDataViewModel.uiState.value.usedHistoryDataByDetail == null)
+        assertThat(existInitDataViewModel.uiState.value.isShowDetailDialog).isFalse()
+        assertThat(existInitDataViewModel.uiState.value.usedHistoryDataByDetail).isNull()
     }
 
     // ■ 変換履歴の詳細ダイアログに関するテスト ------------------------------------------------- End

@@ -2,6 +2,7 @@ package ksnd.open.hiraganaconverter.viewmodel
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
+import com.google.common.truth.Truth.assertThat
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -35,8 +36,6 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.After
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -68,10 +67,10 @@ class ConvertViewModelImplTest {
     @Test
     fun convertViewModel_initialization_setDefault() = runTest {
         viewModelNotReturnErrorResponse.uiState.value.let { uiState ->
-            assertTrue(uiState.inputText == "")
-            assertTrue(uiState.outputText == "")
-            assertTrue(uiState.errorText == "")
-            assertTrue(uiState.selectedTextType == HiraKanaType.HIRAGANA)
+            assertThat(uiState.inputText).isEqualTo("")
+            assertThat(uiState.outputText).isEqualTo("")
+            assertThat(uiState.errorText).isEqualTo("")
+            assertThat(uiState.selectedTextType).isEqualTo(HiraKanaType.HIRAGANA)
         }
     }
 
@@ -83,8 +82,8 @@ class ConvertViewModelImplTest {
             viewModel.updateInputText("文字列")
             viewModel.convert(context = context)
             advanceUntilIdle()
-            assertTrue(viewModel.uiState.value.outputText != "")
-            assertTrue(viewModel.uiState.value.errorText == "")
+            assertThat(viewModel.uiState.value.outputText).isNotEqualTo("")
+            assertThat(viewModel.uiState.value.errorText).isEqualTo("")
         }
     }
 
@@ -100,8 +99,8 @@ class ConvertViewModelImplTest {
         viewModel.updateInputText("文字列")
         viewModel.convert(context = context)
         advanceUntilIdle()
-        assertTrue(viewModel.uiState.value.outputText == "")
-        assertTrue(viewModel.uiState.value.errorText != "")
+        assertThat(viewModel.uiState.value.outputText).isEqualTo("")
+        assertThat(viewModel.uiState.value.errorText).isNotEqualTo("")
     }
 
     @Test
@@ -116,17 +115,17 @@ class ConvertViewModelImplTest {
         viewModel.updateInputText("文字列")
         viewModel.convert(context = context)
         advanceUntilIdle()
-        assertTrue(viewModel.uiState.value.outputText == "")
-        assertTrue(viewModel.uiState.value.errorText != "")
+        assertThat(viewModel.uiState.value.outputText).isEqualTo("")
+        assertThat(viewModel.uiState.value.errorText).isNotEqualTo("")
     }
 
     // ● updateInputText ------------------------------------------------------------------------ ●
     @Test
     fun convertViewModel_updateInputText_isUpdated() {
         viewModelNotReturnErrorResponse.let { viewModel ->
-            assertTrue(viewModel.uiState.value.inputText == "")
+            assertThat(viewModel.uiState.value.inputText).isEqualTo("")
             viewModel.updateInputText("あ")
-            assertTrue(viewModel.uiState.value.inputText == "あ")
+            assertThat(viewModel.uiState.value.inputText).isEqualTo("あ")
         }
     }
 
@@ -134,9 +133,9 @@ class ConvertViewModelImplTest {
     @Test
     fun convertViewModel_updateOutputText_isUpdated() {
         viewModelNotReturnErrorResponse.let { viewModel ->
-            assertTrue(viewModel.uiState.value.outputText == "")
+            assertThat(viewModel.uiState.value.outputText).isEqualTo("")
             viewModel.updateOutputText("い")
-            assertTrue(viewModel.uiState.value.outputText == "い")
+            assertThat(viewModel.uiState.value.outputText).isEqualTo("い")
         }
     }
 
@@ -150,13 +149,13 @@ class ConvertViewModelImplTest {
             isErrorResponse = true,
             isReachedConvertMaxLimit = false
         )
-        assertTrue(viewModel.uiState.value.errorText == "")
+        assertThat(viewModel.uiState.value.errorText).isEqualTo("")
         viewModel.updateInputText("う")
         viewModel.convert(context = context)
         advanceUntilIdle()
-        assertTrue(viewModel.uiState.value.errorText != "")
+        assertThat(viewModel.uiState.value.errorText).isNotEqualTo("")
         viewModel.clearErrorText()
-        assertTrue(viewModel.uiState.value.errorText == "")
+        assertThat(viewModel.uiState.value.errorText).isEqualTo("")
     }
 
     // ● changeHiraKanaType --------------------------------------------------------------------- ●
@@ -168,15 +167,15 @@ class ConvertViewModelImplTest {
             viewModel.updateInputText("お")
             viewModel.convert(context = context)
             advanceUntilIdle()
-            assertTrue(viewModel.uiState.value.outputText != "")
-            assertTrue(viewModel.uiState.value.selectedTextType == HiraKanaType.HIRAGANA)
+            assertThat(viewModel.uiState.value.outputText).isNotEqualTo("")
+            assertThat(viewModel.uiState.value.selectedTextType).isEqualTo(HiraKanaType.HIRAGANA)
             viewModel.changeHiraKanaType(type = HiraKanaType.KATAKANA)
-            assertTrue(viewModel.uiState.value.selectedTextType == HiraKanaType.KATAKANA)
+            assertThat(viewModel.uiState.value.selectedTextType).isEqualTo(HiraKanaType.KATAKANA)
             viewModel.updateOutputText("")
-            assertFalse(viewModel.uiState.value.outputText != "")
+            assertThat(viewModel.uiState.value.outputText).isEqualTo("")
             viewModel.convert(context = context)
             advanceUntilIdle()
-            assertTrue(viewModel.uiState.value.outputText != "")
+            assertThat(viewModel.uiState.value.outputText).isNotEqualTo("")
         }
     }
 }

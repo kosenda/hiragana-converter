@@ -1,7 +1,6 @@
 package ksnd.open.hiraganaconverter.view.uistate
 
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
 class ConvertUiStateTest {
@@ -9,29 +8,29 @@ class ConvertUiStateTest {
 
     @Test
     fun convertUiState_initialization_isFalse() {
-        assertFalse(convertUiState.isChangedInputText(previousInputText = ""))
+        assertThat(convertUiState.isChangedInputText(previousInputText = "")).isFalse()
     }
 
     @Test
     fun convertUiState_firstEnterInputText_isTrue() {
         convertUiState = convertUiState.copy(inputText = "temp")
-        assertTrue(convertUiState.isChangedInputText(previousInputText = ""))
+        assertThat(convertUiState.isChangedInputText(previousInputText = "")).isTrue()
     }
 
     @Test
     fun convertUiState_notNewEnterInputText_isFalse() {
-        assertFalse(convertUiState.isChangedInputText(previousInputText = "temp"))
+        assertThat(convertUiState.isChangedInputText(previousInputText = "temp")).isFalse()
     }
 
     @Test
     fun convertUiState_sameInputText_isFalse() {
         convertUiState = convertUiState.copy(inputText = "temp")
-        assertFalse(convertUiState.isChangedInputText(previousInputText = "temp"))
+        assertThat(convertUiState.isChangedInputText(previousInputText = "temp")).isFalse()
     }
 
     @Test
     fun convertUiState_differentInputText_isTrue() {
         convertUiState = convertUiState.copy(inputText = "input")
-        assertTrue(convertUiState.isChangedInputText(previousInputText = "previous"))
+        assertThat(convertUiState.isChangedInputText(previousInputText = "previous")).isTrue()
     }
 }
