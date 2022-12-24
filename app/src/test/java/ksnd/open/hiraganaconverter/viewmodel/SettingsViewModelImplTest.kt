@@ -1,8 +1,8 @@
 package ksnd.open.hiraganaconverter.viewmodel
 
 import android.content.Context
-import androidx.datastore.dataStoreFile
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers
@@ -25,21 +25,20 @@ import org.robolectric.RobolectricTestRunner
 class SettingsViewModelImplTest {
     private val context = ApplicationProvider.getApplicationContext<Context>()
     private val testDispatcher = UnconfinedTestDispatcher()
-    private val testDataStoreFile = context.dataStoreFile("TestDataStore.preferences_pb")
     private val preferencesDataStore = PreferenceDataStoreFactory.create(
-        produceFile = { testDataStoreFile }
+        produceFile = { context.preferencesDataStoreFile("TestDataStore") }
     )
     private val viewModel = SettingsViewModelImpl(
         dataStoreRepository = DataStoreRepositoryImpl(
             preferencesDataStore = preferencesDataStore,
             ioDispatcher = testDispatcher
-        )
+        ),
+        ioDispatcher = testDispatcher
     )
 
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        testDataStoreFile.deleteRecursively()
     }
 
     @After
