@@ -1,7 +1,6 @@
 package ksnd.open.hiraganaconverter.model
 
 import android.content.Context
-import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import ksnd.open.hiraganaconverter.R
 import okhttp3.Interceptor
@@ -9,14 +8,13 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Protocol
 import okhttp3.Response
 import okhttp3.ResponseBody.Companion.toResponseBody
+import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 
 class ErrorInterceptor @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : Interceptor {
-
-    private val tag = ErrorInterceptor::class.java.simpleName
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
@@ -28,7 +26,7 @@ class ErrorInterceptor @Inject constructor(
             }
 
             // 変換に失敗していた場合に、レスポンスコードによってメッセージを変換する
-            Log.w(tag, "beforeConvertedErrorMessage: ${response.message}")
+            Timber.w("beforeConvertedErrorMessage: %s", response.message)
             when (response.code) {
                 413 -> {
                     return response
@@ -57,7 +55,7 @@ class ErrorInterceptor @Inject constructor(
                 }
             }
         } catch (ioe: IOException) {
-            Log.w(tag, "ネットワークエラー: $ioe")
+            Timber.w("ネットワークエラー: %s", ioe)
             return Response
                 .Builder()
                 .request(request)
@@ -67,7 +65,7 @@ class ErrorInterceptor @Inject constructor(
                 .message(message = context.getString(R.string.network_error))
                 .build()
         } catch (e: Exception) {
-            Log.e(tag, e.toString())
+            Timber.e(e)
             return Response
                 .Builder()
                 .request(request)

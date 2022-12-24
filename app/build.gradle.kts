@@ -121,6 +121,9 @@ dependencies {
     // Truth
     testImplementation("com.google.truth:truth:1.1.3")
     androidTestImplementation("com.google.truth:truth:1.1.3")
+
+    // Timber
+    implementation("com.jakewharton.timber:timber:5.0.1")
 }
 
 // チェック

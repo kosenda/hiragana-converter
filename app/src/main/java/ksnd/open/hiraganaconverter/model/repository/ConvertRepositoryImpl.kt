@@ -1,6 +1,5 @@
 package ksnd.open.hiraganaconverter.model.repository
 
-import android.util.Log
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
@@ -15,13 +14,12 @@ import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
 import retrofit2.Retrofit
+import timber.log.Timber
 import javax.inject.Inject
 
 class ConvertRepositoryImpl @Inject constructor(
     errorInterceptor: Interceptor,
 ) : ConvertRepository {
-
-    private val tag = ConvertRepositoryImpl::class.java.simpleName
 
     private val contentType = "application/json".toMediaType()
     private val client = OkHttpClient.Builder().addInterceptor(errorInterceptor).build()
@@ -49,20 +47,20 @@ class ConvertRepositoryImpl @Inject constructor(
                 outputType = type,
             )
             val json = Json.encodeToString(requestData)
-            Log.i(tag, "json: $json")
+            Timber.i("json: %s", json)
             val body = json.toRequestBody(
                 contentType = "application/json; charset=utf-8".toMediaTypeOrNull(),
             )
             val response: Response<ResponseData> = convertService.requestConvert(body)
             if (response.isSuccessful.not()) {
-                Log.w(tag, "response_message: ${response.raw().message}")
+                Timber.w("response_message: %s", response.raw().message)
             }
-            Log.i(tag, "response raw: ${response.raw()}")
+            Timber.i("response raw: %s" + response.raw())
             return response
         } catch (e: Exception) {
             // 基本的にはAPI通信に関してはErrorInterceptorでcatchされ失敗してもレスポンスが返ってくる想定であり、
             // ここのcatchはいらないとは思うが念のためここでもエラー処理を行う
-            Log.e(tag, e.toString())
+            Timber.e(e)
             return null
         }
     }

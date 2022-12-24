@@ -1,7 +1,6 @@
 package ksnd.open.hiraganaconverter.viewmodel
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,6 +24,7 @@ import ksnd.open.hiraganaconverter.model.repository.ConvertRepository
 import ksnd.open.hiraganaconverter.model.repository.DataStoreRepository
 import ksnd.open.hiraganaconverter.model.repository.LIMIT_CONVERT_COUNT
 import ksnd.open.hiraganaconverter.view.uistate.ConvertUiState
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -36,8 +36,6 @@ class ConvertViewModelImpl @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
 ) : ConvertViewModel() {
-
-    private val tag = ConvertViewModelImpl::class.java.simpleName
 
     private val _uiState = MutableStateFlow(ConvertUiState())
     override val uiState: StateFlow<ConvertUiState> = _uiState.asStateFlow()
@@ -62,7 +60,10 @@ class ConvertViewModelImpl @Inject constructor(
             if (isReachedConvertMaxLimit) {
                 _uiState.update {
                     it.copy(
-                        errorText = context.getString(R.string.limit_local_count, LIMIT_CONVERT_COUNT),
+                        errorText = context.getString(
+                            R.string.limit_local_count,
+                            LIMIT_CONVERT_COUNT,
+                        ),
                     )
                 }
                 return@launch
@@ -76,11 +77,11 @@ class ConvertViewModelImpl @Inject constructor(
 
             // 変換後の文字列を表示
             _uiState.update { it.copy(outputText = response?.body()?.converted ?: "") }
-            Log.i(tag, "outputText: ${uiState.value.outputText}")
+            Timber.i("outputText: %s", uiState.value.outputText)
 
             // 変換した文字列を記録
             previousInputText.value = uiState.value.inputText
-            Log.i(tag, "previousInputText: ${previousInputText.value}")
+            Timber.i("previousInputText: %s", previousInputText.value)
 
             if (response == null) {
                 _uiState.update { it.copy(errorText = context.getString(R.string.conversion_failed)) }
@@ -102,7 +103,7 @@ class ConvertViewModelImpl @Inject constructor(
                 }
             }
 
-            Log.i(tag, "errorText: ${uiState.value.errorText}")
+            Timber.i("errorText: %s", uiState.value.errorText)
         }
     }
 

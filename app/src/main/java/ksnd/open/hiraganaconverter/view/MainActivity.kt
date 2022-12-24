@@ -9,9 +9,11 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import ksnd.open.hiraganaconverter.BuildConfig
 import ksnd.open.hiraganaconverter.view.screen.ConverterScreen
 import ksnd.open.hiraganaconverter.view.theme.HiraganaConverterTheme
 import ksnd.open.hiraganaconverter.viewmodel.MainViewModel
+import timber.log.Timber
 import java.util.*
 
 @AndroidEntryPoint
@@ -19,6 +21,9 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
 
         setContent {
             val mainViewModel: MainViewModel = hiltViewModel()

@@ -1,6 +1,5 @@
 package ksnd.open.hiraganaconverter.model.repository
 
-import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -15,6 +14,7 @@ import ksnd.open.hiraganaconverter.di.module.IODispatcher
 import ksnd.open.hiraganaconverter.model.PreferenceKeys
 import ksnd.open.hiraganaconverter.view.CustomFont
 import ksnd.open.hiraganaconverter.view.ThemeNum
+import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 
@@ -25,12 +25,10 @@ class DataStoreRepositoryImpl @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : DataStoreRepository {
 
-    private val tag = DataStoreRepositoryImpl::class.java.simpleName
-
     override fun selectedThemeNum(): Flow<Int> {
         return preferencesDataStore.data
             .catch { exception ->
-                Log.e(tag, "preferencesDataStore $exception")
+                Timber.e("preferencesDataStore: %s", exception)
                 when (exception) {
                     is IOException -> emit(emptyPreferences())
                     else -> ThemeNum.AUTO.num
@@ -44,7 +42,7 @@ class DataStoreRepositoryImpl @Inject constructor(
     override fun selectedCustomFont(): Flow<String> {
         return preferencesDataStore.data
             .catch { exception ->
-                Log.e(tag, "preferencesDataStore $exception")
+                Timber.e("preferencesDataStore: %s", exception)
                 when (exception) {
                     is IOException -> emit(emptyPreferences())
                     else -> CustomFont.DEFAULT.name
@@ -74,18 +72,18 @@ class DataStoreRepositoryImpl @Inject constructor(
         } catch (e: NoSuchElementException) {
             ""
         }
-        Log.i(tag, "old_convert_count: $oldConvertCount")
-        Log.i(tag, "old_convert_time: $oldLastConvertTime")
+        Timber.i("old_convert_count: %d", oldConvertCount)
+        Timber.i("old_convert_time: %s", oldLastConvertTime)
 
         return if (today != oldLastConvertTime) {
             updateLastConvertTime(today)
             updateConvertCount(1)
-            Log.i(tag, "new_convert_count: 1")
-            Log.i(tag, "new_convert_time: $today")
+            Timber.i("new_convert_count: 1")
+            Timber.i("new_convert_time: %s", today)
             false
         } else {
             val newConvertCount = oldConvertCount + 1
-            Log.i(tag, "new_convert_count: $newConvertCount")
+            Timber.i("new_convert_count: %d", newConvertCount)
             updateConvertCount(newConvertCount)
             newConvertCount > LIMIT_CONVERT_COUNT
         }
@@ -94,7 +92,7 @@ class DataStoreRepositoryImpl @Inject constructor(
     private fun lastConvertTime(): Flow<String> {
         return preferencesDataStore.data
             .catch { exception ->
-                Log.e(tag, "preferencesDataStore $exception")
+                Timber.e("preferencesDataStore: %s", exception)
                 if (exception is IOException) emit(emptyPreferences())
             }
             .map { preferences ->
@@ -105,7 +103,7 @@ class DataStoreRepositoryImpl @Inject constructor(
     private fun convertCount(): Flow<Int> {
         return preferencesDataStore.data
             .catch { exception ->
-                Log.e(tag, "preferencesDataStore $exception")
+                Timber.e("preferencesDataStore: %s", exception)
                 if (exception is IOException) emit(emptyPreferences())
             }
             .map { preferences ->
