@@ -34,7 +34,7 @@ class ConvertViewModelImpl @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
     private val convertHistoryRepository: ConvertHistoryRepository,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
-    @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher
+    @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
 ) : ConvertViewModel() {
 
     private val tag = ConvertViewModelImpl::class.java.simpleName
@@ -54,15 +54,15 @@ class ConvertViewModelImpl @Inject constructor(
                 dataStoreRepository.checkReachedConvertMaxLimit(
                     today = getNowTime(
                         timeZone = context.getString(R.string.time_zone),
-                        format = TimeFormat.YEAR_MONTH_DATE
-                    )
+                        format = TimeFormat.YEAR_MONTH_DATE,
+                    ),
                 )
             }
 
             if (isReachedConvertMaxLimit) {
                 _uiState.update {
                     it.copy(
-                        errorText = context.getString(R.string.limit_local_count, LIMIT_CONVERT_COUNT)
+                        errorText = context.getString(R.string.limit_local_count, LIMIT_CONVERT_COUNT),
                     )
                 }
                 return@launch
@@ -71,7 +71,7 @@ class ConvertViewModelImpl @Inject constructor(
             val response = convertRepository.requestConvert(
                 sentence = uiState.value.inputText,
                 type = uiState.value.selectedTextType.name.lowercase(Locale.ENGLISH),
-                appId = BuildConfig.apiKey
+                appId = BuildConfig.apiKey,
             )
 
             // 変換後の文字列を表示
@@ -93,8 +93,8 @@ class ConvertViewModelImpl @Inject constructor(
                         afterText = uiState.value.outputText,
                         time = getNowTime(
                             timeZone = context.getString(R.string.time_zone),
-                            format = TimeFormat.YEAR_MONTH_DATE_HOUR_MINUTE
-                        )
+                            format = TimeFormat.YEAR_MONTH_DATE_HOUR_MINUTE,
+                        ),
                     )
                 } else {
                     // 変換が失敗したときはレスポンスのメッセージ（ErrorInterceptorで変換済み）を表示

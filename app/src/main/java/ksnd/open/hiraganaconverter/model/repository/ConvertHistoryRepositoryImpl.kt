@@ -5,7 +5,7 @@ import ksnd.open.hiraganaconverter.model.ConvertHistoryData
 import javax.inject.Inject
 
 class ConvertHistoryRepositoryImpl @Inject constructor(
-    private val convertHistoryDao: ConvertHistoryDao
+    private val convertHistoryDao: ConvertHistoryDao,
 ) : ConvertHistoryRepository {
     // ■ CREATE
     override fun insertConvertHistory(beforeText: String, afterText: String, time: String) {
@@ -13,8 +13,8 @@ class ConvertHistoryRepositoryImpl @Inject constructor(
             convertHistoryData = ConvertHistoryData(
                 before = beforeText,
                 after = afterText,
-                time = time
-            )
+                time = time,
+            ),
         )
     }
 

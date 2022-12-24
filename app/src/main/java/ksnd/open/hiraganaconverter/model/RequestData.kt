@@ -16,5 +16,5 @@ data class RequestData(
 
     /** 出力タイプ */
     @SerialName("output_type")
-    val outputType: String
+    val outputType: String,
 )

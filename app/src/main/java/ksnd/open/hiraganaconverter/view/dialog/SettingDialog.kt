@@ -62,15 +62,15 @@ import ksnd.open.hiraganaconverter.viewmodel.SettingsViewModelImpl
 @Composable
 fun SettingDialog(
     onCloseClick: () -> Unit,
-    settingsViewModel: SettingsViewModelImpl = hiltViewModel()
+    settingsViewModel: SettingsViewModelImpl = hiltViewModel(),
 ) {
     Dialog(
         onDismissRequest = { },
-        properties = DialogProperties(usePlatformDefaultWidth = false)
+        properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         SettingDialogContent(
             onCloseClick = onCloseClick,
-            viewModel = settingsViewModel
+            viewModel = settingsViewModel,
         )
     }
 }
@@ -79,13 +79,13 @@ fun SettingDialog(
 @Composable
 private fun SettingDialogContent(
     onCloseClick: () -> Unit,
-    viewModel: SettingsViewModel
+    viewModel: SettingsViewModel,
 ) {
     val isShowSelectLanguageDialog = rememberSaveable { mutableStateOf(false) }
 
     if (isShowSelectLanguageDialog.value) {
         SelectLanguageDialog(
-            onCloseClick = { isShowSelectLanguageDialog.value = false }
+            onCloseClick = { isShowSelectLanguageDialog.value = false },
         )
     }
 
@@ -96,30 +96,30 @@ private fun SettingDialogContent(
             .clip(RoundedCornerShape(16.dp)),
         bottomBar = {
             BottomCloseButton(onClick = onCloseClick)
-        }
+        },
     ) {
         Column(
             modifier = Modifier
                 .padding(it)
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
         ) {
             // テーマ設定
             SettingThemeContent(
                 onRadioButtonClick = viewModel::updateThemeNum,
-                isSelectedNum = viewModel::isSelectedThemeNum
+                isSelectedNum = viewModel::isSelectedThemeNum,
             )
             // 言語設定
             SettingLanguageContent(
                 onClick = {
                     isShowSelectLanguageDialog.value = true
-                }
+                },
             )
             // フォント設定
             SettingFontContent(
                 updateCustomFont = viewModel::updateCustomFont,
                 isSelectedFont = viewModel::isSelectedFont,
-                onCloseClick = onCloseClick
+                onCloseClick = onCloseClick,
             )
         }
     }
@@ -128,20 +128,20 @@ private fun SettingDialogContent(
 @Composable
 private fun SettingThemeContent(
     onRadioButtonClick: (Int) -> Unit,
-    isSelectedNum: (Int) -> Boolean
+    isSelectedNum: (Int) -> Boolean,
 ) {
     val modeRadio = listOf(
         stringResource(id = R.string.dark_mode),
         stringResource(id = R.string.light_mode),
-        stringResource(id = R.string.auto_mode)
+        stringResource(id = R.string.auto_mode),
     )
     TitleCard(text = stringResource(id = R.string.theme_setting))
     OutlinedCard(
         colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surface,
         ),
         modifier = Modifier.padding(all = 8.dp),
-        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary)
+        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary),
     ) {
         Column {
             modeRadio.forEachIndexed { index, buttonText ->
@@ -153,9 +153,9 @@ private fun SettingThemeContent(
                         .clickable(
                             onClick = {
                                 onRadioButtonClick(index)
-                            }
+                            },
                         ),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Spacer(modifier = Modifier.width(16.dp))
                     Image(
@@ -173,7 +173,7 @@ private fun SettingThemeContent(
                         contentDescription = buttonText,
                         colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                         contentScale = ContentScale.Fit,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(24.dp),
                     )
                     Text(
                         text = buttonText,
@@ -181,14 +181,14 @@ private fun SettingThemeContent(
                             .padding(start = 12.dp)
                             .weight(1f),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.primary
+                        color = MaterialTheme.colorScheme.primary,
                     )
                     RadioButton(
                         selected = isSelectedNum(index),
                         colors = RadioButtonDefaults.colors(),
                         onClick = {
                             onRadioButtonClick(index)
-                        }
+                        },
                     )
                 }
             }
@@ -201,20 +201,20 @@ private fun SettingLanguageContent(onClick: () -> Unit) {
     TitleCard(text = stringResource(id = R.string.language_setting))
     OutlinedCard(
         colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surface,
         ),
         modifier = Modifier
             .padding(all = 8.dp)
             .clickable(
-                onClick = onClick
+                onClick = onClick,
             ),
-        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary)
+        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary),
     ) {
         Row(
             modifier = Modifier
                 .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
                 .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_baseline_language_24),
@@ -223,13 +223,13 @@ private fun SettingLanguageContent(onClick: () -> Unit) {
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .size(40.dp)
-                    .padding(start = 16.dp)
+                    .padding(start = 16.dp),
             )
             Text(
                 text = stringResource(id = R.string.select_language),
                 modifier = Modifier.padding(start = 12.dp),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.primary,
             )
             Spacer(modifier = Modifier.weight(1f))
         }
@@ -240,15 +240,15 @@ private fun SettingLanguageContent(onClick: () -> Unit) {
 private fun SettingFontContent(
     updateCustomFont: (CustomFont) -> Unit,
     isSelectedFont: (CustomFont) -> Boolean,
-    onCloseClick: () -> Unit
+    onCloseClick: () -> Unit,
 ) {
     TitleCard(text = stringResource(id = R.string.font_setting))
     OutlinedCard(
         colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surface,
         ),
         modifier = Modifier.padding(all = 8.dp),
-        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary)
+        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary),
     ) {
         Column {
             CustomFontRadioButton(
@@ -258,7 +258,7 @@ private fun SettingFontContent(
                 },
                 selected = isSelectedFont(CustomFont.DEFAULT),
                 text = stringResource(id = R.string.default_font),
-                fontFamily = FontFamily.Default
+                fontFamily = FontFamily.Default,
             )
             CustomFontRadioButton(
                 onClick = {
@@ -267,7 +267,7 @@ private fun SettingFontContent(
                 },
                 selected = isSelectedFont(CustomFont.CORPORATE_LOGO_ROUNDED),
                 text = stringResource(id = R.string.corporate_logo_rounded_font),
-                fontFamily = FontFamily(Font(R.font.corporate_logo_rounded_bold_ver3))
+                fontFamily = FontFamily(Font(R.font.corporate_logo_rounded_bold_ver3)),
             )
             CustomFontRadioButton(
                 onClick = {
@@ -276,7 +276,7 @@ private fun SettingFontContent(
                 },
                 selected = isSelectedFont(CustomFont.CORPORATE_YAWAMIN),
                 text = stringResource(id = R.string.corporate_yawamin_font),
-                fontFamily = FontFamily(Font(R.font.corporate_yawamin_ver3))
+                fontFamily = FontFamily(Font(R.font.corporate_yawamin_ver3)),
             )
             CustomFontRadioButton(
                 onClick = {
@@ -285,7 +285,7 @@ private fun SettingFontContent(
                 },
                 selected = isSelectedFont(CustomFont.NOSUTARU_DOT_M_PLUS),
                 text = stringResource(id = R.string.nosutaru_dot_font),
-                fontFamily = FontFamily(Font(R.font.nosutaru_dotmplush_10_regular))
+                fontFamily = FontFamily(Font(R.font.nosutaru_dotmplush_10_regular)),
             )
             CustomFontRadioButton(
                 onClick = {
@@ -294,7 +294,7 @@ private fun SettingFontContent(
                 },
                 selected = isSelectedFont(CustomFont.BIZ_UDGOTHIC),
                 text = stringResource(id = R.string.biz_udgothic),
-                fontFamily = FontFamily(Font(R.font.bizudgothic_regular))
+                fontFamily = FontFamily(Font(R.font.bizudgothic_regular)),
             )
         }
     }
@@ -304,11 +304,11 @@ private fun SettingFontContent(
 @Composable
 fun PreviewSettingDialogContent() {
     Surface(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         SettingDialogContent(
             onCloseClick = {},
-            viewModel = PreviewSettingViewModel()
+            viewModel = PreviewSettingViewModel(),
         )
     }
 }

@@ -10,7 +10,7 @@ import org.junit.Test
 
 class ConvertHistoryRepositoryImplTest {
     private val convertHistoryRepositoryImpl = ConvertHistoryRepositoryImpl(
-        convertHistoryDao = FakeConvertHistoryDao()
+        convertHistoryDao = FakeConvertHistoryDao(),
     )
 
     @Test
@@ -24,7 +24,7 @@ class ConvertHistoryRepositoryImplTest {
         convertHistoryRepositoryImpl.insertConvertHistory(
             beforeText = "A",
             afterText = "B",
-            time = "2022/12/20 22:10"
+            time = "2022/12/20 22:10",
         )
         assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().size).isEqualTo(1)
     }
@@ -35,7 +35,7 @@ class ConvertHistoryRepositoryImplTest {
             convertHistoryRepositoryImpl.insertConvertHistory(
                 beforeText = "A",
                 afterText = "B",
-                time = "2022/12/20 22:10"
+                time = "2022/12/20 22:10",
             )
         }
         assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().size).isEqualTo(3)
@@ -48,7 +48,7 @@ class ConvertHistoryRepositoryImplTest {
             convertHistoryRepositoryImpl.insertConvertHistory(
                 beforeText = "A",
                 afterText = "B",
-                time = "2022/12/20 22:10"
+                time = "2022/12/20 22:10",
             )
         }
         convertHistoryRepositoryImpl.deleteAllConvertHistory()
@@ -63,7 +63,7 @@ class ConvertHistoryRepositoryImplTest {
             convertHistoryRepositoryImpl.insertConvertHistory(
                 beforeText = "A",
                 afterText = "B",
-                time = "2022/12/20 22:10"
+                time = "2022/12/20 22:10",
             )
         }
         val histories = convertHistoryRepositoryImpl.getAllConvertHistory()

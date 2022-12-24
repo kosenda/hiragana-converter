@@ -21,7 +21,7 @@ fun HiraganaConverterTheme(
     isDarkTheme: Boolean = isSystemInDarkTheme(),
     isDynamicColor: Boolean = true,
     customFont: String,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val dynamicColor = isDynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     val colorScheme = when {
@@ -38,6 +38,6 @@ fun HiraganaConverterTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = typography(customFont = customFont),
-        content = content
+        content = content,
     )
 }

@@ -15,7 +15,7 @@ object ConvertHistoryDatabaseModule {
     @Provides
     @Singleton
     fun provideConvertHistoryDatabase(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
     ): ConvertHistoryDatabase {
         return ConvertHistoryDatabase.getInstance(context)
     }

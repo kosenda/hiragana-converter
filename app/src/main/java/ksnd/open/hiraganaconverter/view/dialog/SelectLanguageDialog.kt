@@ -33,15 +33,15 @@ import ksnd.open.hiraganaconverter.viewmodel.SelectLanguageViewModelImpl
 @Composable
 fun SelectLanguageDialog(
     onCloseClick: () -> Unit,
-    selectLanguageViewModel: SelectLanguageViewModelImpl = hiltViewModel()
+    selectLanguageViewModel: SelectLanguageViewModelImpl = hiltViewModel(),
 ) {
     Dialog(
         onDismissRequest = { },
-        properties = DialogProperties(usePlatformDefaultWidth = false)
+        properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         SelectLanguageDialogContent(
             onCloseClick = onCloseClick,
-            viewModel = selectLanguageViewModel
+            viewModel = selectLanguageViewModel,
         )
     }
 }
@@ -50,7 +50,7 @@ fun SelectLanguageDialog(
 @Composable
 private fun SelectLanguageDialogContent(
     onCloseClick: () -> Unit,
-    viewModel: SelectLanguageViewModel
+    viewModel: SelectLanguageViewModel,
 ) {
     val displayLanguageList = stringArrayResource(id = R.array.display_language)
 
@@ -61,7 +61,7 @@ private fun SelectLanguageDialogContent(
             .clip(RoundedCornerShape(16.dp)),
         bottomBar = {
             BottomCloseButton(onClick = onCloseClick)
-        }
+        },
     ) { padding ->
         Column(
             modifier = Modifier
@@ -69,13 +69,13 @@ private fun SelectLanguageDialogContent(
                 .padding(padding)
                 .padding(all = 8.dp),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             displayLanguageList.forEachIndexed { index, language ->
                 LanguageCard(
                     onNewLanguageClick = viewModel::updateSelectLanguage,
                     index = index,
-                    displayLanguage = language
+                    displayLanguage = language,
                 )
             }
             Spacer(modifier = Modifier.height(24.dp))
@@ -88,6 +88,6 @@ private fun SelectLanguageDialogContent(
 private fun PreviewSelectLanguageDialogContent() {
     SelectLanguageDialogContent(
         onCloseClick = {},
-        PreviewSelectLanguageViewModel()
+        PreviewSelectLanguageViewModel(),
     )
 }

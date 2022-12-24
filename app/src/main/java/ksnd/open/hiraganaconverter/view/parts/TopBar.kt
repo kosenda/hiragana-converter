@@ -39,17 +39,17 @@ fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
 
     if (isShowSettingDialog) {
         SettingDialog(
-            onCloseClick = { isShowSettingDialog = false }
+            onCloseClick = { isShowSettingDialog = false },
         )
     }
     if (isShowInfoDialog) {
         InfoDialog(
-            onCloseClick = { isShowInfoDialog = false }
+            onCloseClick = { isShowInfoDialog = false },
         )
     }
     if (isShowConvertHistoryDialog) {
         ConvertHistoryDialog(
-            onCloseClick = { isShowConvertHistoryDialog = false }
+            onCloseClick = { isShowConvertHistoryDialog = false },
         )
     }
 
@@ -57,36 +57,36 @@ fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
         title = {},
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.surface,
-            titleContentColor = MaterialTheme.colorScheme.primary
+            titleContentColor = MaterialTheme.colorScheme.primary,
         ),
         actions = {
             FilledTonalIconButton(
                 modifier = Modifier.padding(start = 16.dp, end = 8.dp),
-                onClick = { isShowInfoDialog = true }
+                onClick = { isShowInfoDialog = true },
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Info,
                     contentDescription = "info",
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = MaterialTheme.colorScheme.primary,
                 )
             }
             FilledTonalIconButton(
                 modifier = Modifier.padding(end = 8.dp),
-                onClick = { isShowSettingDialog = true }
+                onClick = { isShowSettingDialog = true },
             ) {
                 Icon(
                     imageVector = Icons.Outlined.Settings,
                     contentDescription = "settings",
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = MaterialTheme.colorScheme.primary,
                 )
             }
             FilledTonalIconButton(
-                onClick = { isShowConvertHistoryDialog = true }
+                onClick = { isShowConvertHistoryDialog = true },
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_baseline_history_24),
                     contentDescription = "history",
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = MaterialTheme.colorScheme.primary,
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
@@ -95,10 +95,10 @@ fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
                     .data("https://u.xgoo.jp/img/sgoo.png")
                     .crossfade(true)
                     .build(),
-                contentDescription = "goo logo"
+                contentDescription = "goo logo",
             )
         },
-        scrollBehavior = scrollBehavior
+        scrollBehavior = scrollBehavior,
     )
 }
 

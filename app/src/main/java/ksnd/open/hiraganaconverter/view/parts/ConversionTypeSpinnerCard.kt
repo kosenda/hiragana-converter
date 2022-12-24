@@ -34,7 +34,7 @@ import ksnd.open.hiraganaconverter.model.HiraKanaType
  */
 @Composable
 fun ConversionTypeSpinnerCard(
-    onSelectedChange: (type: HiraKanaType) -> Unit
+    onSelectedChange: (type: HiraKanaType) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
     var selectedTextType by rememberSaveable { mutableStateOf(HiraKanaType.HIRAGANA) }
@@ -44,17 +44,17 @@ fun ConversionTypeSpinnerCard(
             .padding(all = 8.dp)
             .clickable { expanded = true },
         colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
         ),
-        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primaryContainer)
+        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primaryContainer),
     ) {
         Column(
-            modifier = Modifier.padding(all = 8.dp)
+            modifier = Modifier.padding(all = 8.dp),
         ) {
             Text(
                 text = stringResource(id = R.string.conversion_type),
                 style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
             Row {
                 Text(
@@ -65,17 +65,17 @@ fun ConversionTypeSpinnerCard(
                     style = MaterialTheme.typography.bodyMedium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
                 Icon(
                     imageVector = Icons.Filled.ArrowDropDown,
                     contentDescription = "spinner",
                     tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                    modifier = Modifier.padding(horizontal = 4.dp)
+                    modifier = Modifier.padding(horizontal = 4.dp),
                 )
                 DropdownMenu(
                     expanded = expanded,
-                    onDismissRequest = { expanded = false }
+                    onDismissRequest = { expanded = false },
                 ) {
                     val conversionTypeArray = stringArrayResource(id = R.array.conversion_type)
                     conversionTypeArray.forEach {
@@ -93,9 +93,9 @@ fun ConversionTypeSpinnerCard(
                                 Text(
                                     text = it,
                                     style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                                 )
-                            }
+                            },
                         )
                     }
                 }

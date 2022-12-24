@@ -17,17 +17,17 @@ fun MovesToSiteDialog(onDismissRequest: () -> Unit, onClick: () -> Unit, url: St
         confirmButton = {
             TextButton(onClick = onClick) {
                 Text(
-                    text = "OK"
+                    text = "OK",
                 )
             }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
                 Text(
-                    text = "Cancel"
+                    text = "Cancel",
                 )
             }
-        }
+        },
     )
 }
 
@@ -37,6 +37,6 @@ private fun PreviewMovesToSiteDialog() {
     MovesToSiteDialog(
         onDismissRequest = {},
         onClick = {},
-        url = "架空のURL"
+        url = "架空のURL",
     )
 }

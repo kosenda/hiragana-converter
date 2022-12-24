@@ -14,6 +14,6 @@ abstract class ConvertHistoryRepositoryModule {
     @Binds
     @Singleton
     abstract fun bindConvertHistoryRepository(
-        impl: ConvertHistoryRepositoryImpl
+        impl: ConvertHistoryRepositoryImpl,
     ): ConvertHistoryRepository
 }

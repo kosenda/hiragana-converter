@@ -26,14 +26,14 @@ class SettingsViewModelImplTest {
     private val context = ApplicationProvider.getApplicationContext<Context>()
     private val testDispatcher = UnconfinedTestDispatcher()
     private val preferencesDataStore = PreferenceDataStoreFactory.create(
-        produceFile = { context.preferencesDataStoreFile("TestDataStore") }
+        produceFile = { context.preferencesDataStoreFile("TestDataStore") },
     )
     private val viewModel = SettingsViewModelImpl(
         dataStoreRepository = DataStoreRepositoryImpl(
             preferencesDataStore = preferencesDataStore,
-            ioDispatcher = testDispatcher
+            ioDispatcher = testDispatcher,
         ),
-        ioDispatcher = testDispatcher
+        ioDispatcher = testDispatcher,
     )
 
     @Before

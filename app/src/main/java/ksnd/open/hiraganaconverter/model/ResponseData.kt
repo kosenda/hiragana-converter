@@ -16,5 +16,5 @@ data class ResponseData(
 
     /** 変換後文字列 */
     @SerialName("converted")
-    val converted: String
+    val converted: String,
 )

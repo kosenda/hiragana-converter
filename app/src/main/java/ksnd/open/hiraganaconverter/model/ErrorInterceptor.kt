@@ -13,7 +13,7 @@ import java.io.IOException
 import javax.inject.Inject
 
 class ErrorInterceptor @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
 ) : Interceptor {
 
     private val tag = ErrorInterceptor::class.java.simpleName

@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    dataStoreRepository: DataStoreRepository
+    dataStoreRepository: DataStoreRepository,
 ) : ViewModel() {
     val themeNum: Flow<Int> = dataStoreRepository.selectedThemeNum()
     val customFont: Flow<String> = dataStoreRepository.selectedCustomFont()

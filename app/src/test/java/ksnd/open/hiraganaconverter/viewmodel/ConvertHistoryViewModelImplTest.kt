@@ -22,7 +22,7 @@ class ConvertHistoryViewModelImplTest {
     // 既存のデータ（変換履歴）あり（２件）
     private val existInitDataViewModel = ConvertHistoryViewModelImpl(
         convertHistoryRepository = FakeConvertHistoryRepository(exitsInitData = true),
-        ioDispatcher = testDispatcher
+        ioDispatcher = testDispatcher,
     )
 
     @Before
@@ -42,7 +42,7 @@ class ConvertHistoryViewModelImplTest {
         // 既存のデータ（変換履歴）なし
         val notExistInitDataViewModel = ConvertHistoryViewModelImpl(
             convertHistoryRepository = FakeConvertHistoryRepository(exitsInitData = false),
-            ioDispatcher = testDispatcher
+            ioDispatcher = testDispatcher,
         )
         // 初期化時にデータ（変換履歴）が保存されていなかった場合、UiStateにデータが設定されていないことを確認
         assertThat(notExistInitDataViewModel.uiState.value.convertHistories).isEmpty()
@@ -68,7 +68,7 @@ class ConvertHistoryViewModelImplTest {
         val initializedSize = existInitDataViewModel.uiState.value.convertHistories.size
         val afterAddDataSize = initializedSize - 1
         existInitDataViewModel.deleteConvertHistory(
-            existInitDataViewModel.uiState.value.convertHistories.first()
+            existInitDataViewModel.uiState.value.convertHistories.first(),
         )
         advanceUntilIdle()
         val convertHistoriesSize = existInitDataViewModel.uiState.value.convertHistories.size
@@ -106,7 +106,7 @@ class ConvertHistoryViewModelImplTest {
         advanceUntilIdle()
         // ダイアログが表示されたときにダイアログで使われるデータがuiStateにあることを確認
         existInitDataViewModel.showConvertHistoryDetailDialog(
-            historyData = existInitDataViewModel.uiState.value.convertHistories.first()
+            historyData = existInitDataViewModel.uiState.value.convertHistories.first(),
         )
         assertThat(existInitDataViewModel.uiState.value.isShowDetailDialog).isTrue()
         assertThat(existInitDataViewModel.uiState.value.usedHistoryDataByDetail).isNotNull()
@@ -119,7 +119,7 @@ class ConvertHistoryViewModelImplTest {
         advanceUntilIdle()
         // ダイアログが非表示したときにダイアログで使われるデータがuiStateにないことを確認
         existInitDataViewModel.showConvertHistoryDetailDialog(
-            historyData = existInitDataViewModel.uiState.value.convertHistories.first()
+            historyData = existInitDataViewModel.uiState.value.convertHistories.first(),
         )
         existInitDataViewModel.closeConvertHistoryDetailDialog()
         assertThat(existInitDataViewModel.uiState.value.isShowDetailDialog).isFalse()
@@ -145,8 +145,8 @@ private class FakeConvertHistoryRepository(exitsInitData: Boolean) : ConvertHist
                 id = testData.size.toLong(),
                 before = beforeText,
                 after = afterText,
-                time = time
-            )
+                time = time,
+            ),
         )
     }
 
