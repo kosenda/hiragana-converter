@@ -6,12 +6,10 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ksnd.open.hiraganaconverter.di.module.IODispatcher
 import ksnd.open.hiraganaconverter.model.PreferenceKeys
@@ -33,10 +31,9 @@ class DataStoreRepositoryImpl @Inject constructor(
         return preferencesDataStore.data
             .catch { exception ->
                 Log.e(tag, "preferencesDataStore $exception")
-                if (exception is IOException) {
-                    emit(emptyPreferences())
-                } else {
-                    ThemeNum.AUTO.num
+                when (exception) {
+                    is IOException -> emit(emptyPreferences())
+                    else -> ThemeNum.AUTO.num
                 }
             }
             .map { preferences ->
@@ -48,10 +45,9 @@ class DataStoreRepositoryImpl @Inject constructor(
         return preferencesDataStore.data
             .catch { exception ->
                 Log.e(tag, "preferencesDataStore $exception")
-                if (exception is IOException) {
-                    emit(emptyPreferences())
-                } else {
-                    CustomFont.DEFAULT.name
+                when (exception) {
+                    is IOException -> emit(emptyPreferences())
+                    else -> CustomFont.DEFAULT.name
                 }
             }
             .map { preferences ->
@@ -59,16 +55,12 @@ class DataStoreRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun updateThemeNum(newThemeNum: Int) {
-        CoroutineScope(ioDispatcher).launch {
-            preferencesDataStore.edit { it[PreferenceKeys.THEME_NUM] = newThemeNum }
-        }
+    override suspend fun updateThemeNum(newThemeNum: Int) {
+        preferencesDataStore.edit { it[PreferenceKeys.THEME_NUM] = newThemeNum }
     }
 
-    override fun updateCustomFont(newCustomFont: CustomFont) {
-        CoroutineScope(ioDispatcher).launch {
-            preferencesDataStore.edit { it[PreferenceKeys.CUSTOM_FONT] = newCustomFont.name }
-        }
+    override suspend fun updateCustomFont(newCustomFont: CustomFont) {
+        preferencesDataStore.edit { it[PreferenceKeys.CUSTOM_FONT] = newCustomFont.name }
     }
 
     override suspend fun checkReachedConvertMaxLimit(today: String): Boolean {
@@ -103,9 +95,7 @@ class DataStoreRepositoryImpl @Inject constructor(
         return preferencesDataStore.data
             .catch { exception ->
                 Log.e(tag, "preferencesDataStore $exception")
-                if (exception is IOException) {
-                    emit(emptyPreferences())
-                }
+                if (exception is IOException) emit(emptyPreferences())
             }
             .map { preferences ->
                 preferences[PreferenceKeys.LAST_CONVERT_TIME] ?: ""
@@ -116,9 +106,7 @@ class DataStoreRepositoryImpl @Inject constructor(
         return preferencesDataStore.data
             .catch { exception ->
                 Log.e(tag, "preferencesDataStore $exception")
-                if (exception is IOException) {
-                    emit(emptyPreferences())
-                }
+                if (exception is IOException) emit(emptyPreferences())
             }
             .map { preferences ->
                 preferences[PreferenceKeys.CONVERT_COUNT] ?: 1

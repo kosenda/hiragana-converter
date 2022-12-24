@@ -3,9 +3,13 @@ package ksnd.open.hiraganaconverter.viewmodel
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import ksnd.open.hiraganaconverter.di.module.IODispatcher
 import ksnd.open.hiraganaconverter.model.repository.DataStoreRepository
 import ksnd.open.hiraganaconverter.view.CustomFont
 import ksnd.open.hiraganaconverter.view.ThemeNum
@@ -13,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModelImpl @Inject constructor(
-    private val dataStoreRepository: DataStoreRepository
+    private val dataStoreRepository: DataStoreRepository,
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : SettingsViewModel() {
 
     override val themeNum = mutableStateOf(ThemeNum.AUTO.num)
@@ -36,18 +41,22 @@ class SettingsViewModelImpl @Inject constructor(
         )
 
     init {
-        getThemeNum()
-        getCustomFont()
+        themeNum.value = themeNumFlow.value
+        customFont.value = customFontFlow.value
     }
 
     override fun updateThemeNum(newThemeNum: Int) {
         themeNum.value = newThemeNum
-        dataStoreRepository.updateThemeNum(newThemeNum)
+        CoroutineScope(ioDispatcher).launch {
+            dataStoreRepository.updateThemeNum(newThemeNum)
+        }
     }
 
     override fun updateCustomFont(newCustomFont: CustomFont) {
         customFont.value = newCustomFont.name
-        dataStoreRepository.updateCustomFont(newCustomFont)
+        CoroutineScope(ioDispatcher).launch {
+            dataStoreRepository.updateCustomFont(newCustomFont)
+        }
     }
 
     override fun isSelectedThemeNum(index: Int): Boolean {
@@ -56,13 +65,5 @@ class SettingsViewModelImpl @Inject constructor(
 
     override fun isSelectedFont(targetCustomFont: CustomFont): Boolean {
         return customFont.value == targetCustomFont.name
-    }
-
-    private fun getThemeNum() {
-        themeNum.value = themeNumFlow.value
-    }
-
-    private fun getCustomFont() {
-        customFont.value = customFontFlow.value
     }
 }

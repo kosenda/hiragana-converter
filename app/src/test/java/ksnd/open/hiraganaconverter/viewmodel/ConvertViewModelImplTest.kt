@@ -272,7 +272,7 @@ private class FakeDataStoreRepositoryImpl(
 ) : DataStoreRepository {
     override fun selectedThemeNum(): Flow<Int> = flow { }
     override fun selectedCustomFont(): Flow<String> = flow { }
-    override fun updateThemeNum(newThemeNum: Int) {}
-    override fun updateCustomFont(newCustomFont: CustomFont) {}
+    override suspend fun updateThemeNum(newThemeNum: Int) {}
+    override suspend fun updateCustomFont(newCustomFont: CustomFont) {}
     override suspend fun checkReachedConvertMaxLimit(today: String) = isReachedConvertMaxLimit
 }
