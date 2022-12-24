@@ -96,7 +96,7 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // ktlint
-    ktlint("com.pinterest:ktlint:0.47.1") {
+    ktlint("com.pinterest:ktlint:0.48.0") {
         attributes {
             attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
         }
@@ -109,7 +109,7 @@ dependencies {
 
     // Robolectric environment
     testImplementation("androidx.test:core:1.5.0")
-    testImplementation("org.robolectric:robolectric:4.9")
+    testImplementation("org.robolectric:robolectric:4.9.1")
 
     // kotlinx serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
@@ -120,9 +120,7 @@ dependencies {
 
     // Truth
     testImplementation("com.google.truth:truth:1.1.3")
-
-    // Turbine
-    testImplementation("app.cash.turbine:turbine:0.12.1")
+    androidTestImplementation("com.google.truth:truth:1.1.3")
 }
 
 // チェック

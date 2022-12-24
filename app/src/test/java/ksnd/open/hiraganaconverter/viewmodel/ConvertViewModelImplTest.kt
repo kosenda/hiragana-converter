@@ -76,6 +76,23 @@ class ConvertViewModelImplTest {
 
     // ● convert -------------------------------------------------------------------------------- ●
     @Test
+    fun convertViewModel_convert_NotChangeInputTextDoNotReturnResponse() = runTest {
+        // 前回の変換のテキストが同じかつ変換タイプも同じ場合は変換処理を行わないことを確認
+        viewModelNotReturnErrorResponse.let { viewModel ->
+            viewModel.updateInputText("あ")
+            viewModel.updateOutputText("い")
+            viewModel.convert(context = context)
+            advanceUntilIdle()
+            assertThat(viewModel.uiState.value.outputText).isNotEqualTo("い")
+            viewModel.updateOutputText("い")
+            assertThat(viewModel.uiState.value.outputText).isEqualTo("い")
+            viewModel.convert(context = context)
+            advanceUntilIdle()
+            assertThat(viewModel.uiState.value.outputText).isEqualTo("い")
+        }
+    }
+
+    @Test
     fun convertViewModel_convert_receiveResponse() = runTest {
         // 変換に成功し変換後文字列が設定されていることとエラーテキストが設定されていないことを確認
         viewModelNotReturnErrorResponse.let { viewModel ->
