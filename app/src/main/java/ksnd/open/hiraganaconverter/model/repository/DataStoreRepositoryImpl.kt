@@ -22,7 +22,7 @@ const val LIMIT_CONVERT_COUNT = 200
 
 class DataStoreRepositoryImpl @Inject constructor(
     private val preferencesDataStore: DataStore<Preferences>,
-    @IODispatcher private val ioDispatcher: CoroutineDispatcher
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : DataStoreRepository {
 
     private val tag = DataStoreRepositoryImpl::class.java.simpleName

@@ -15,7 +15,7 @@ import ksnd.open.hiraganaconverter.view.uistate.ConvertUiState
 
 class PreviewConvertViewModel : ConvertViewModel() {
     override val uiState: StateFlow<ConvertUiState> = MutableStateFlow(
-        ConvertUiState(errorText = "失敗")
+        ConvertUiState(errorText = "失敗"),
     ).asStateFlow()
     override fun convert(context: Context) {}
     override fun updateInputText(inputText: String) {}
@@ -51,17 +51,17 @@ class PreviewConvertHistoryViewModel(isNoData: Boolean = false) : ConvertHistory
                         id = 0,
                         time = "2022/11/26 21:34",
                         before = "漢字漢字漢字ひらがなひらがなひらがなカタカナカタカナカタカナEnglishEnglishEnglish",
-                        after = "ここはつかわれない"
+                        after = "ここはつかわれない",
                     ),
                     ConvertHistoryData(
                         id = 1,
                         time = "2022/11/27 11:42",
                         before = "漢字漢字漢字",
-                        after = "ここはつかわれない"
-                    )
+                        after = "ここはつかわれない",
+                    ),
                 )
-            }
-        )
+            },
+        ),
     ).asStateFlow()
     override fun deleteAllConvertHistory() {}
     override fun deleteConvertHistory(historyData: ConvertHistoryData) {}

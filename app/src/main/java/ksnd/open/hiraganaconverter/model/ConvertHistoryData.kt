@@ -8,5 +8,5 @@ data class ConvertHistoryData(
     @PrimaryKey(autoGenerate = true) var id: Long = 0,
     var time: String,
     var before: String,
-    var after: String
+    var after: String,
 )

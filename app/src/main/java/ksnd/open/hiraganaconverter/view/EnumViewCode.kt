@@ -6,7 +6,7 @@ package ksnd.open.hiraganaconverter.view
 enum class ThemeNum(val num: Int) {
     NIGHT(num = 0),
     DAY(num = 1),
-    AUTO(num = 2)
+    AUTO(num = 2),
 }
 
 /**
@@ -17,5 +17,5 @@ enum class CustomFont {
     CORPORATE_LOGO_ROUNDED,
     CORPORATE_YAWAMIN,
     NOSUTARU_DOT_M_PLUS,
-    BIZ_UDGOTHIC
+    BIZ_UDGOTHIC,
 }

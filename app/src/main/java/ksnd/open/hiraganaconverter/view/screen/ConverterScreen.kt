@@ -75,7 +75,7 @@ fun ConverterScreen(convertViewModel: ConvertViewModelImpl = hiltViewModel()) {
 
     // Preview用に切り離し
     ConverterScreenContent(
-        viewModel = convertViewModel
+        viewModel = convertViewModel,
     )
 }
 
@@ -92,7 +92,7 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
 
     Scaffold(
         topBar = { TopBar(scrollBehavior) },
-        containerColor = MaterialTheme.colorScheme.surface
+        containerColor = MaterialTheme.colorScheme.surface,
     ) { padding ->
         Column(
             modifier = Modifier
@@ -104,24 +104,24 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
                     detectTapGestures(
                         onTap = {
                             focusManager.clearFocus()
-                        }
+                        },
                     )
-                }
+                },
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 // 変換タイプ（ひらがな、カタカナ）を選択するスピナー
                 Row(modifier = Modifier.weight(1f)) {
                     ConversionTypeSpinnerCard(
-                        onSelectedChange = viewModel::changeHiraKanaType
+                        onSelectedChange = viewModel::changeHiraKanaType,
                     )
                 }
                 // 変換するときに押すボタン
                 ConvertButton(
                     onClick = {
                         viewModel.convert(context = context)
-                    }
+                    },
                 )
             }
 
@@ -129,7 +129,7 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
             if (convertUiState.errorText != "") {
                 ErrorCard(
                     errorText = convertUiState.errorText,
-                    onClick = viewModel::clearErrorText
+                    onClick = viewModel::clearErrorText,
                 )
             }
 
@@ -138,13 +138,13 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
                 inputText = convertUiState.inputText,
                 clipboardManager = clipboardManager,
                 focusManager = focusManager,
-                onValueChange = viewModel::updateInputText
+                onValueChange = viewModel::updateInputText,
             )
 
             Divider(
                 thickness = 2.dp,
                 color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(vertical = 8.dp, horizontal = 50.dp)
+                modifier = Modifier.padding(vertical = 8.dp, horizontal = 50.dp),
             )
 
             // 変換後用
@@ -152,7 +152,7 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
                 outputText = convertUiState.outputText,
                 clipboardManager = clipboardManager,
                 focusManager = focusManager,
-                onValueChange = viewModel::updateOutputText
+                onValueChange = viewModel::updateOutputText,
             )
         }
     }
@@ -166,30 +166,30 @@ private fun ConvertButton(onClick: () -> Unit) {
             .height(48.dp),
         onClick = onClick,
         colors = ButtonDefaults.filledTonalButtonColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        )
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+        ),
     ) {
         Row(
             modifier = Modifier
                 .wrapContentWidth()
                 .fillMaxHeight(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_baseline_compare_arrows_24),
                 contentDescription = "convert",
                 colorFilter = ColorFilter.tint(
-                    MaterialTheme.colorScheme.onPrimaryContainer
+                    MaterialTheme.colorScheme.onPrimaryContainer,
                 ),
                 contentScale = ContentScale.Fit,
-                modifier = Modifier.size(36.dp)
+                modifier = Modifier.size(36.dp),
             )
             Text(
                 text = stringResource(id = R.string.conversion),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
-                modifier = Modifier.padding(start = 8.dp)
+                modifier = Modifier.padding(start = 8.dp),
             )
         }
     }
@@ -198,7 +198,7 @@ private fun ConvertButton(onClick: () -> Unit) {
 @Composable
 private fun ErrorCard(
     errorText: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     OutlinedCard(
         modifier = Modifier
@@ -206,25 +206,25 @@ private fun ErrorCard(
             .padding(all = 16.dp)
             .clickable(onClick = onClick),
         colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.errorContainer
+            containerColor = MaterialTheme.colorScheme.errorContainer,
         ),
-        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.error)
+        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.error),
     ) {
         Row(
-            modifier = Modifier.padding(all = 16.dp)
+            modifier = Modifier.padding(all = 16.dp),
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_baseline_error_outline_24),
                 contentDescription = "convert",
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.error),
                 contentScale = ContentScale.Fit,
-                modifier = Modifier.size(36.dp)
+                modifier = Modifier.size(36.dp),
             )
             Text(
                 text = errorText,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.error,
-                modifier = Modifier.padding(start = 8.dp)
+                modifier = Modifier.padding(start = 8.dp),
             )
         }
     }
@@ -235,7 +235,7 @@ private fun BeforeTextField(
     inputText: String,
     clipboardManager: ClipboardManager,
     focusManager: FocusManager,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
 ) {
     val context = LocalContext.current
     Row {
@@ -245,7 +245,7 @@ private fun BeforeTextField(
             modifier = Modifier
                 .padding(all = 16.dp)
                 .weight(1f),
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
         )
         FilledTonalIconButton(
             modifier = Modifier
@@ -253,19 +253,19 @@ private fun BeforeTextField(
                 .size(48.dp),
             onClick = {
                 clipboardManager.setText(
-                    AnnotatedString(inputText)
+                    AnnotatedString(inputText),
                 )
                 Toast
                     .makeText(context, "COPIED.", Toast.LENGTH_SHORT)
                     .show()
-            }
+            },
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
                 contentDescription = "copy",
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                 contentScale = ContentScale.Fit,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(24.dp),
             )
         }
     }
@@ -279,18 +279,18 @@ private fun BeforeTextField(
         colors = TextFieldDefaults.outlinedTextFieldColors(
             textColor = MaterialTheme.colorScheme.secondary,
             unfocusedBorderColor = MaterialTheme.colorScheme.surface,
-            focusedBorderColor = MaterialTheme.colorScheme.surface
+            focusedBorderColor = MaterialTheme.colorScheme.surface,
         ),
         placeholder = {
             Text(
                 text = stringResource(id = R.string.input_hint),
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.secondary
+                color = MaterialTheme.colorScheme.secondary,
             )
         },
         modifier = Modifier
             .defaultMinSize(minHeight = 120.dp)
-            .fillMaxWidth()
+            .fillMaxWidth(),
     )
 }
 
@@ -299,7 +299,7 @@ private fun AfterTextField(
     outputText: String,
     clipboardManager: ClipboardManager,
     focusManager: FocusManager,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
 ) {
     val context = LocalContext.current
     Row {
@@ -309,7 +309,7 @@ private fun AfterTextField(
             modifier = Modifier
                 .padding(all = 16.dp)
                 .weight(1f),
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
         )
         FilledTonalIconButton(
             modifier = Modifier
@@ -317,12 +317,12 @@ private fun AfterTextField(
                 .size(48.dp),
             onClick = {
                 clipboardManager.setText(
-                    AnnotatedString(outputText)
+                    AnnotatedString(outputText),
                 )
                 Toast
                     .makeText(context, "COPIED.", Toast.LENGTH_SHORT)
                     .show()
-            }
+            },
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
@@ -330,7 +330,7 @@ private fun AfterTextField(
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .size(24.dp)
+                    .size(24.dp),
             )
         }
     }
@@ -342,18 +342,18 @@ private fun AfterTextField(
         colors = TextFieldDefaults.outlinedTextFieldColors(
             textColor = MaterialTheme.colorScheme.tertiary,
             unfocusedBorderColor = MaterialTheme.colorScheme.surface,
-            focusedBorderColor = MaterialTheme.colorScheme.surface
+            focusedBorderColor = MaterialTheme.colorScheme.surface,
         ),
         placeholder = {
             Text(
                 text = stringResource(id = R.string.output_hint),
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.tertiary
+                color = MaterialTheme.colorScheme.tertiary,
             )
         },
         modifier = Modifier
             .defaultMinSize(minHeight = 120.dp)
-            .fillMaxWidth()
+            .fillMaxWidth(),
     )
 }
 
@@ -361,6 +361,6 @@ private fun AfterTextField(
 @Composable
 private fun PreviewConverterScreenContent() {
     ConverterScreenContent(
-        viewModel = PreviewConvertViewModel()
+        viewModel = PreviewConvertViewModel(),
     )
 }

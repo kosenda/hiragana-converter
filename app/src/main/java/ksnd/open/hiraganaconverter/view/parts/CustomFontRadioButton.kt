@@ -26,7 +26,7 @@ fun CustomFontRadioButton(
     onClick: () -> Unit,
     selected: Boolean,
     text: String,
-    fontFamily: FontFamily?
+    fontFamily: FontFamily?,
 ) {
     Row(
         modifier = Modifier
@@ -34,7 +34,7 @@ fun CustomFontRadioButton(
             .fillMaxWidth()
             .height(40.dp)
             .clickable(onClick = onClick),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = text,
@@ -44,12 +44,12 @@ fun CustomFontRadioButton(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.primary,
             overflow = TextOverflow.Ellipsis,
-            fontFamily = fontFamily
+            fontFamily = fontFamily,
         )
         RadioButton(
             selected = selected,
             colors = RadioButtonDefaults.colors(),
-            onClick = onClick
+            onClick = onClick,
         )
     }
 }
@@ -61,6 +61,6 @@ private fun PreviewCustomFontRadioButton() {
         onClick = {},
         selected = true,
         text = CustomFont.DEFAULT.name,
-        fontFamily = FontFamily.Default
+        fontFamily = FontFamily.Default,
     )
 }

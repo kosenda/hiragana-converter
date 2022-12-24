@@ -60,15 +60,15 @@ import ksnd.open.hiraganaconverter.viewmodel.PreviewConvertHistoryViewModel
 @Composable
 fun ConvertHistoryDialog(
     onCloseClick: () -> Unit,
-    convertHistoryViewModel: ConvertHistoryViewModelImpl = hiltViewModel()
+    convertHistoryViewModel: ConvertHistoryViewModelImpl = hiltViewModel(),
 ) {
     Dialog(
         onDismissRequest = { },
-        properties = DialogProperties(usePlatformDefaultWidth = false)
+        properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         ConvertHistoryDialogContent(
             onCloseClick = onCloseClick,
-            viewModel = convertHistoryViewModel
+            viewModel = convertHistoryViewModel,
         )
     }
 }
@@ -77,7 +77,7 @@ fun ConvertHistoryDialog(
 @Composable
 private fun ConvertHistoryDialogContent(
     onCloseClick: () -> Unit,
-    viewModel: ConvertHistoryViewModel
+    viewModel: ConvertHistoryViewModel,
 ) {
     val convertHistoryUiState by viewModel.uiState.collectAsState()
 
@@ -92,14 +92,14 @@ private fun ConvertHistoryDialogContent(
             .clip(RoundedCornerShape(16.dp)),
         bottomBar = {
             BottomCloseButton(onClick = onCloseClick)
-        }
+        },
     ) { padding ->
 
         if (convertHistoryUiState.isShowDetailDialog) {
             convertHistoryUiState.usedHistoryDataByDetail?.let {
                 ConvertHistoryDetailDialog(
                     onCloseClick = viewModel::closeConvertHistoryDetailDialog,
-                    historyData = it
+                    historyData = it,
                 )
             }
         }
@@ -107,12 +107,12 @@ private fun ConvertHistoryDialogContent(
         Column(
             modifier = Modifier
                 .padding(padding)
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             if (convertHistoryUiState.convertHistories.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                 ) {
                     Column {
                         Image(
@@ -122,30 +122,30 @@ private fun ConvertHistoryDialogContent(
                                 .fillMaxWidth()
                                 .size(144.dp),
                             alignment = Alignment.Center,
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                         )
                         Text(
                             text = "NO DATA",
                             color = MaterialTheme.colorScheme.primary,
                             style = MaterialTheme.typography.titleLarge,
                             modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
                         )
                     }
                 }
             } else {
                 Row(
-                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp)
+                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp),
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
                     DeleteButton(
-                        onClick = viewModel::deleteAllConvertHistory
+                        onClick = viewModel::deleteAllConvertHistory,
                     )
                 }
                 LazyColumn {
                     items(
                         items = convertHistoryUiState.convertHistories,
-                        key = { history -> history.id }
+                        key = { history -> history.id },
                     ) { history ->
                         ConvertHistoryCard(
                             beforeText = history.before,
@@ -155,7 +155,7 @@ private fun ConvertHistoryDialogContent(
                             },
                             onDeleteClick = {
                                 viewModel.deleteConvertHistory(history)
-                            }
+                            },
                         )
                     }
                 }
@@ -169,7 +169,7 @@ private fun ConvertHistoryCard(
     beforeText: String,
     time: String,
     onClick: () -> Unit,
-    onDeleteClick: () -> Unit
+    onDeleteClick: () -> Unit,
 ) {
     OutlinedCard(
         modifier = Modifier
@@ -177,22 +177,22 @@ private fun ConvertHistoryCard(
             .wrapContentHeight()
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.secondary)
+        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.secondary),
     ) {
         Row(verticalAlignment = Alignment.Top) {
             Column(
                 modifier = Modifier
                     .padding(all = 8.dp)
-                    .weight(1f)
+                    .weight(1f),
             ) {
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         modifier = Modifier.padding(end = 8.dp),
                         text = time,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.secondary
+                        color = MaterialTheme.colorScheme.secondary,
                     )
                     Spacer(modifier = Modifier.weight(1f))
                 }
@@ -202,19 +202,19 @@ private fun ConvertHistoryCard(
                     minLines = 2,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
             FilledTonalIconButton(
                 onClick = onDeleteClick,
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = Color.Transparent
-                )
+                    containerColor = Color.Transparent,
+                ),
             ) {
                 Image(
                     imageVector = Icons.Outlined.Close,
                     contentDescription = "delete convert history",
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
                 )
             }
         }
@@ -229,30 +229,30 @@ private fun DeleteButton(onClick: () -> Unit) {
             .height(48.dp),
         onClick = onClick,
         colors = ButtonDefaults.filledTonalButtonColors(
-            containerColor = MaterialTheme.colorScheme.errorContainer
-        )
+            containerColor = MaterialTheme.colorScheme.errorContainer,
+        ),
     ) {
         Row(
             modifier = Modifier
                 .wrapContentWidth()
                 .fillMaxHeight(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_baseline_delete_outline_24),
                 contentDescription = "convert",
                 colorFilter = ColorFilter.tint(
-                    MaterialTheme.colorScheme.onErrorContainer
+                    MaterialTheme.colorScheme.onErrorContainer,
                 ),
                 contentScale = ContentScale.Fit,
-                modifier = Modifier.size(36.dp)
+                modifier = Modifier.size(36.dp),
             )
             Text(
                 text = stringResource(id = R.string.delete_all),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onErrorContainer,
-                modifier = Modifier.padding(start = 8.dp)
+                modifier = Modifier.padding(start = 8.dp),
             )
         }
     }
@@ -264,7 +264,7 @@ private fun PreviewConvertHistoryDialogContent() {
     Box(modifier = Modifier.fillMaxSize()) {
         ConvertHistoryDialogContent(
             onCloseClick = {},
-            viewModel = PreviewConvertHistoryViewModel()
+            viewModel = PreviewConvertHistoryViewModel(),
         )
     }
 }
@@ -275,7 +275,7 @@ private fun PreviewConvertHistoryDialogContent_NoData() {
     Box(modifier = Modifier.fillMaxSize()) {
         ConvertHistoryDialogContent(
             onCloseClick = {},
-            viewModel = PreviewConvertHistoryViewModel(isNoData = true)
+            viewModel = PreviewConvertHistoryViewModel(isNoData = true),
         )
     }
 }

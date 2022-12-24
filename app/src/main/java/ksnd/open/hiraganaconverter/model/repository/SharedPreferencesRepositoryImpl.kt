@@ -5,7 +5,7 @@ import android.util.Log
 import javax.inject.Inject
 
 class SharedPreferencesRepositoryImpl @Inject constructor(
-    private val sharedPreferences: SharedPreferences
+    private val sharedPreferences: SharedPreferences,
 ) : SharedPreferencesRepository {
 
     private val tag = SharedPreferencesRepositoryImpl::class.java.simpleName

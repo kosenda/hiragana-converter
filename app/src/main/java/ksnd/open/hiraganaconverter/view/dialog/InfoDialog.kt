@@ -55,7 +55,7 @@ import ksnd.open.hiraganaconverter.view.theme.urlColor
 fun InfoDialog(onCloseClick: () -> Unit) {
     Dialog(
         onDismissRequest = { },
-        properties = DialogProperties(usePlatformDefaultWidth = false)
+        properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         InfoDialogContent(onCloseClick = onCloseClick)
     }
@@ -76,7 +76,7 @@ private fun InfoDialogContent(onCloseClick: () -> Unit) {
             .clip(RoundedCornerShape(16.dp)),
         bottomBar = {
             BottomCloseButton(onClick = onCloseClick)
-        }
+        },
     ) { padding ->
 
         if (isShowMovesToAppSiteDialog) {
@@ -88,7 +88,7 @@ private fun InfoDialogContent(onCloseClick: () -> Unit) {
                     isShowMovesToAppSiteDialog = false
                     urlHandler.openUri(uri = context.getString(R.string.review_url))
                 },
-                url = stringResource(id = R.string.review_url)
+                url = stringResource(id = R.string.review_url),
             )
         }
         if (isShowMovesToApiSiteDialog) {
@@ -100,7 +100,7 @@ private fun InfoDialogContent(onCloseClick: () -> Unit) {
                     isShowMovesToApiSiteDialog = false
                     urlHandler.openUri(uri = context.getString(R.string.goo_url))
                 },
-                url = stringResource(id = R.string.goo_url)
+                url = stringResource(id = R.string.goo_url),
             )
         }
 
@@ -108,13 +108,13 @@ private fun InfoDialogContent(onCloseClick: () -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(padding)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
         ) {
             // アプリの情報
             AppInfoContent(
                 onURLClick = {
                     isShowMovesToAppSiteDialog = true
-                }
+                },
             )
             // 開発者情報
             DeveloperInfoContent()
@@ -122,7 +122,7 @@ private fun InfoDialogContent(onCloseClick: () -> Unit) {
             APIInfoContent(
                 onURLClick = {
                     isShowMovesToApiSiteDialog = true
-                }
+                },
             )
             // 余白
             Spacer(modifier = Modifier.height(40.dp))
@@ -138,9 +138,9 @@ private fun AppInfoContent(onURLClick: () -> Unit) {
             .padding(all = 8.dp)
             .fillMaxWidth(),
         colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surface,
         ),
-        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary)
+        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
@@ -150,26 +150,26 @@ private fun AppInfoContent(onURLClick: () -> Unit) {
                 modifier = Modifier
                     .padding(all = 16.dp)
                     .size(72.dp)
-                    .clip(CircleShape)
+                    .clip(CircleShape),
             )
             Column(
-                modifier = Modifier.padding(vertical = 16.dp)
+                modifier = Modifier.padding(vertical = 16.dp),
             ) {
                 ItemTitle(
                     text = stringResource(id = R.string.app_name_title),
-                    modifier = Modifier.padding(bottom = 4.dp)
+                    modifier = Modifier.padding(bottom = 4.dp),
                 )
                 BodyMedium(text = stringResource(id = R.string.app_name))
 
                 ItemTitle(
                     text = stringResource(id = R.string.version_title),
-                    modifier = Modifier.padding(bottom = 4.dp, top = 16.dp)
+                    modifier = Modifier.padding(bottom = 4.dp, top = 16.dp),
                 )
                 BodyMedium(text = BuildConfig.VERSION_NAME)
 
                 ItemTitle(
                     text = stringResource(id = R.string.google_play),
-                    modifier = Modifier.padding(bottom = 4.dp, top = 16.dp)
+                    modifier = Modifier.padding(bottom = 4.dp, top = 16.dp),
                 )
                 Text(
                     text = stringResource(id = R.string.review_url),
@@ -181,7 +181,7 @@ private fun AppInfoContent(onURLClick: () -> Unit) {
                     textAlign = TextAlign.Center,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    textDecoration = TextDecoration.Underline
+                    textDecoration = TextDecoration.Underline,
                 )
             }
         }
@@ -196,9 +196,9 @@ private fun DeveloperInfoContent() {
             .padding(all = 8.dp)
             .fillMaxWidth(),
         colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surface,
         ),
-        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary)
+        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
@@ -208,14 +208,14 @@ private fun DeveloperInfoContent() {
                 modifier = Modifier
                     .padding(all = 16.dp)
                     .size(72.dp)
-                    .clip(CircleShape)
+                    .clip(CircleShape),
             )
             Column(
-                modifier = Modifier.padding(vertical = 16.dp)
+                modifier = Modifier.padding(vertical = 16.dp),
             ) {
                 ItemTitle(
                     text = stringResource(id = R.string.developer_name_title),
-                    modifier = Modifier.padding(bottom = 4.dp)
+                    modifier = Modifier.padding(bottom = 4.dp),
                 )
                 BodyMedium(text = stringResource(id = R.string.developer_name))
             }
@@ -231,36 +231,36 @@ private fun APIInfoContent(onURLClick: () -> Unit) {
             .padding(all = 8.dp)
             .fillMaxWidth(),
         colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surface,
         ),
-        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary)
+        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary),
     ) {
         Column(
             modifier = Modifier
                 .padding(start = 16.dp)
                 .fillMaxWidth(),
-            horizontalAlignment = Alignment.Start
+            horizontalAlignment = Alignment.Start,
         ) {
             AsyncImage(
                 ImageRequest.Builder(LocalContext.current)
                     .data("https://u.xgoo.jp/img/sgoo.png")
                     .crossfade(true)
                     .build(),
-                contentDescription = null
+                contentDescription = null,
             )
         }
         Column(
-            modifier = Modifier.padding(vertical = 16.dp)
+            modifier = Modifier.padding(vertical = 16.dp),
         ) {
             ItemTitle(
                 text = stringResource(id = R.string.api_name_title),
-                modifier = Modifier.padding(bottom = 4.dp)
+                modifier = Modifier.padding(bottom = 4.dp),
             )
             BodyMedium(text = stringResource(id = R.string.api_name))
 
             ItemTitle(
                 text = stringResource(id = R.string.url_title),
-                modifier = Modifier.padding(bottom = 4.dp, top = 16.dp)
+                modifier = Modifier.padding(bottom = 4.dp, top = 16.dp),
             )
             Text(
                 text = stringResource(id = R.string.goo_url),
@@ -272,7 +272,7 @@ private fun APIInfoContent(onURLClick: () -> Unit) {
                 textAlign = TextAlign.Center,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                textDecoration = TextDecoration.Underline
+                textDecoration = TextDecoration.Underline,
             )
         }
     }
@@ -285,7 +285,7 @@ private fun ItemTitle(text: String, modifier: Modifier = Modifier) {
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.primary,
         modifier = modifier.padding(horizontal = 16.dp),
-        textAlign = TextAlign.Center
+        textAlign = TextAlign.Center,
     )
 }
 
@@ -296,7 +296,7 @@ private fun BodyMedium(text: String, modifier: Modifier = Modifier) {
         style = MaterialTheme.typography.bodyLarge,
         color = MaterialTheme.colorScheme.tertiary,
         modifier = modifier.padding(horizontal = 16.dp),
-        textAlign = TextAlign.Left
+        textAlign = TextAlign.Left,
     )
 }
 

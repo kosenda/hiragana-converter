@@ -36,47 +36,47 @@ fun typography(customFont: String): Typography {
     return Typography(
         headlineLarge = TextStyle(
             fontWeight = FontWeight.Normal,
-            fontSize = 32.sp
+            fontSize = 32.sp,
         ),
         titleLarge = TextStyle(
             fontFamily = selectedFont,
             fontWeight = FontWeight.Normal,
-            fontSize = 26.sp
+            fontSize = 26.sp,
         ),
         titleMedium = TextStyle(
             fontFamily = selectedFont,
             fontWeight = FontWeight.Normal,
-            fontSize = 24.sp
+            fontSize = 24.sp,
         ),
         titleSmall = TextStyle(
             fontFamily = selectedFont,
             fontWeight = FontWeight.Normal,
-            fontSize = 22.sp
+            fontSize = 22.sp,
         ),
         bodyLarge = TextStyle(
             fontFamily = selectedFont,
             fontWeight = FontWeight.Normal,
-            fontSize = 20.sp
+            fontSize = 20.sp,
         ),
         bodyMedium = TextStyle(
             fontFamily = selectedFont,
             fontWeight = FontWeight.Normal,
-            fontSize = 18.sp
+            fontSize = 18.sp,
         ),
         bodySmall = TextStyle(
             fontFamily = selectedFont,
             fontWeight = FontWeight.Normal,
-            fontSize = 16.sp
+            fontSize = 16.sp,
         ),
         labelLarge = TextStyle(
             fontFamily = selectedFont,
             fontWeight = FontWeight.Normal,
-            fontSize = 14.sp
+            fontSize = 14.sp,
         ),
         labelMedium = TextStyle(
             fontFamily = selectedFont,
             fontWeight = FontWeight.Normal,
-            fontSize = 12.sp
-        )
+            fontSize = 12.sp,
+        ),
     )
 }

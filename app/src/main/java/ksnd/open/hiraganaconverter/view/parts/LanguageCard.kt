@@ -32,7 +32,7 @@ import ksnd.open.hiraganaconverter.view.MainActivity
 fun LanguageCard(
     onNewLanguageClick: (String) -> Unit,
     index: Int,
-    displayLanguage: String
+    displayLanguage: String,
 ) {
     val context = LocalContext.current
     val languageList = stringArrayResource(id = R.array.language)
@@ -48,19 +48,19 @@ fun LanguageCard(
                 ContextCompat.startActivity(context, intent, null)
             },
         colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surface,
         ),
-        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary)
+        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary),
     ) {
         Box(
             modifier = Modifier.fillMaxSize(1f),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Text(
                 text = displayLanguage,
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
             )
         }
     }
@@ -74,7 +74,7 @@ private fun PreviewLanguageCard_Night() {
         LanguageCard(
             onNewLanguageClick = {},
             index = 0,
-            displayLanguage = displayLanguageList[0]
+            displayLanguage = displayLanguageList[0],
         )
     }
 }

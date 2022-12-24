@@ -21,7 +21,7 @@ object PreferencesDataStoreModule {
         return PreferenceDataStoreFactory.create(
             produceFile = {
                 context.preferencesDataStoreFile("DataStore")
-            }
+            },
         )
     }
 }

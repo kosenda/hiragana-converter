@@ -21,14 +21,14 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun TitleCard(text: String) {
     Card(
-        modifier = Modifier.padding(top = 24.dp, bottom = 8.dp, start = 8.dp, end = 8.dp)
+        modifier = Modifier.padding(top = 24.dp, bottom = 8.dp, start = 8.dp, end = 8.dp),
     ) {
         Row(
             modifier = Modifier
                 .wrapContentWidth()
                 .height(48.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
         ) {
             Spacer(modifier = Modifier.width(8.dp))
             Box(
@@ -36,13 +36,13 @@ fun TitleCard(text: String) {
                     .width(4.dp)
                     .height(32.dp)
                     .background(MaterialTheme.colorScheme.tertiary)
-                    .padding(vertical = 8.dp)
+                    .padding(vertical = 8.dp),
             )
             Text(
                 text = text,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(all = 8.dp),
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.primary,
             )
         }
     }

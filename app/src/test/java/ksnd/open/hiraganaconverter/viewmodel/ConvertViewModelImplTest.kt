@@ -51,7 +51,7 @@ class ConvertViewModelImplTest {
         context = context,
         testDispatcher = testDispatcher,
         isErrorResponse = false,
-        isReachedConvertMaxLimit = false
+        isReachedConvertMaxLimit = false,
     )
 
     @Before
@@ -111,7 +111,7 @@ class ConvertViewModelImplTest {
             context = context,
             testDispatcher = testDispatcher,
             isErrorResponse = false,
-            isReachedConvertMaxLimit = true
+            isReachedConvertMaxLimit = true,
         )
         viewModel.updateInputText("文字列")
         viewModel.convert(context = context)
@@ -127,7 +127,7 @@ class ConvertViewModelImplTest {
             context = context,
             testDispatcher = testDispatcher,
             isErrorResponse = true,
-            isReachedConvertMaxLimit = false
+            isReachedConvertMaxLimit = false,
         )
         viewModel.updateInputText("文字列")
         viewModel.convert(context = context)
@@ -164,7 +164,7 @@ class ConvertViewModelImplTest {
             context = context,
             testDispatcher = testDispatcher,
             isErrorResponse = true,
-            isReachedConvertMaxLimit = false
+            isReachedConvertMaxLimit = false,
         )
         assertThat(viewModel.uiState.value.errorText).isEqualTo("")
         viewModel.updateInputText("う")
@@ -201,26 +201,26 @@ private fun createTestingConvertViewModel(
     context: Context,
     testDispatcher: CoroutineDispatcher,
     isErrorResponse: Boolean,
-    isReachedConvertMaxLimit: Boolean
+    isReachedConvertMaxLimit: Boolean,
 ): ConvertViewModelImpl {
     return ConvertViewModelImpl(
         convertRepository = FakeConverterRepository(context, isErrorResponse),
         dataStoreRepository = FakeDataStoreRepositoryImpl(isReachedConvertMaxLimit),
         convertHistoryRepository = FakeConvertHistoryRepositoryImpl(),
         ioDispatcher = testDispatcher,
-        defaultDispatcher = testDispatcher
+        defaultDispatcher = testDispatcher,
     )
 }
 
 @OptIn(ExperimentalSerializationApi::class)
 private class FakeConverterRepository(
     context: Context,
-    isErrorResponse: Boolean
+    isErrorResponse: Boolean,
 ) : ConvertRepository {
     private val contentType = "application/json".toMediaType()
     private val fakeInterceptor = FakeInterceptor(
         isErrorResponse = isErrorResponse,
-        context = context
+        context = context,
     )
     private val client = OkHttpClient.Builder().addInterceptor(fakeInterceptor).build()
     private val convertService = Retrofit.Builder()
@@ -233,12 +233,12 @@ private class FakeConverterRepository(
     override suspend fun requestConvert(
         sentence: String,
         type: String,
-        appId: String
+        appId: String,
     ): retrofit2.Response<ResponseData> {
         val requestData = RequestData(
             appId = appId,
             sentence = sentence,
-            outputType = type
+            outputType = type,
         )
         val json = Json.encodeToString(requestData)
         val body = json.toRequestBody(contentType)
@@ -248,7 +248,7 @@ private class FakeConverterRepository(
 
 private class FakeInterceptor(
     private val isErrorResponse: Boolean,
-    private val context: Context
+    private val context: Context,
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
@@ -261,16 +261,16 @@ private class FakeInterceptor(
                     ResponseData(
                         requestId = "",
                         outputType = "Hiragana",
-                        converted = "えー"
-                    )
-                ).toResponseBody("application/json".toMediaType())
+                        converted = "えー",
+                    ),
+                ).toResponseBody("application/json".toMediaType()),
             )
             .message(
                 message = if (isErrorResponse) {
                     context.getString(R.string.network_error)
                 } else {
                     "OK"
-                }
+                },
             )
             .request(request)
             .build()
@@ -285,7 +285,7 @@ private class FakeConvertHistoryRepositoryImpl : ConvertHistoryRepository {
 }
 
 private class FakeDataStoreRepositoryImpl(
-    private val isReachedConvertMaxLimit: Boolean
+    private val isReachedConvertMaxLimit: Boolean,
 ) : DataStoreRepository {
     override fun selectedThemeNum(): Flow<Int> = flow { }
     override fun selectedCustomFont(): Flow<String> = flow { }

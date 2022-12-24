@@ -14,6 +14,6 @@ abstract class SharedPreferencesRepositoryModule {
     @Singleton
     @Binds
     abstract fun bindSharedPreferencesRepository(
-        impl: SharedPreferencesRepositoryImpl
+        impl: SharedPreferencesRepositoryImpl,
     ): SharedPreferencesRepository
 }

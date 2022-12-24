@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModelImpl @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
-    @IODispatcher private val ioDispatcher: CoroutineDispatcher
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : SettingsViewModel() {
 
     override val themeNum = mutableStateOf(ThemeNum.AUTO.num)
@@ -29,7 +29,7 @@ class SettingsViewModelImpl @Inject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
-            initialValue = CustomFont.DEFAULT.name
+            initialValue = CustomFont.DEFAULT.name,
         )
 
     private val themeNumFlow: StateFlow<Int> = dataStoreRepository
@@ -37,7 +37,7 @@ class SettingsViewModelImpl @Inject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
-            initialValue = ThemeNum.AUTO.num
+            initialValue = ThemeNum.AUTO.num,
         )
 
     init {

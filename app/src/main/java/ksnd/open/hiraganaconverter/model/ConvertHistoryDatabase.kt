@@ -19,7 +19,7 @@ abstract class ConvertHistoryDatabase : RoomDatabase() {
         private fun buildDatabase(context: Context) = Room.databaseBuilder(
             context.applicationContext,
             ConvertHistoryDatabase::class.java,
-            "history"
+            "history",
         ).build()
     }
 }

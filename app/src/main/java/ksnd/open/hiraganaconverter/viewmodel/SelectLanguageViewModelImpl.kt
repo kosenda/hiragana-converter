@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SelectLanguageViewModelImpl @Inject constructor(
-    private val sharedPreferencesRepository: SharedPreferencesRepository
+    private val sharedPreferencesRepository: SharedPreferencesRepository,
 ) : SelectLanguageViewModel() {
 
     override fun updateSelectLanguage(newLanguage: String) {

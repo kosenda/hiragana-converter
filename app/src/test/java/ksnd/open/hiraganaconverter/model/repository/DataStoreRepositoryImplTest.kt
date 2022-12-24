@@ -33,11 +33,11 @@ class DataStoreRepositoryImplTest {
     private val testDispatcher = UnconfinedTestDispatcher()
     private val testScope = TestScope(testDispatcher + Job())
     private val dataStore = PreferenceDataStoreFactory.create(
-        produceFile = { context.preferencesDataStoreFile("TestDataStore") }
+        produceFile = { context.preferencesDataStoreFile("TestDataStore") },
     )
     private val dataStoreRepository = DataStoreRepositoryImpl(
         preferencesDataStore = dataStore,
-        ioDispatcher = testDispatcher
+        ioDispatcher = testDispatcher,
     )
 
     @Before
@@ -81,6 +81,7 @@ class DataStoreRepositoryImplTest {
             assertThat(dataStoreRepository.selectedThemeNum().first()).isEqualTo(ThemeNum.NIGHT.num)
         }
     }
+
     // ● updateCustomFont ----------------------------------------------------------------------- ●
     @Test
     fun dataStoreRepository_updateCustomFont_isChanged() {
@@ -100,7 +101,7 @@ class DataStoreRepositoryImplTest {
     fun dataStoreRepository_checkReachedConvertMaxLimitOnce_isFalse() {
         val today = getNowTime(
             timeZone = context.getString(R.string.time_zone),
-            format = TimeFormat.YEAR_MONTH_DATE
+            format = TimeFormat.YEAR_MONTH_DATE,
         )
         testScope.runTest {
             assertThat(dataStoreRepository.checkReachedConvertMaxLimit(today)).isFalse()
@@ -111,7 +112,7 @@ class DataStoreRepositoryImplTest {
     fun dataStoreRepository_checkReachedConvertMaxLimitMaxPlus1Times_isFalse() {
         val today = getNowTime(
             timeZone = context.getString(R.string.time_zone),
-            format = TimeFormat.YEAR_MONTH_DATE
+            format = TimeFormat.YEAR_MONTH_DATE,
         )
         testScope.runTest {
             repeat(LIMIT_CONVERT_COUNT) {
@@ -122,6 +123,4 @@ class DataStoreRepositoryImplTest {
             }
         }
     }
-
-
 }

@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ConvertHistoryViewModelImpl @Inject constructor(
     private val convertHistoryRepository: ConvertHistoryRepository,
-    @IODispatcher private val ioDispatcher: CoroutineDispatcher
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ConvertHistoryViewModel() {
 
     private val _uiState = MutableStateFlow(ConvertHistoryUiState())
@@ -47,7 +47,7 @@ class ConvertHistoryViewModelImpl @Inject constructor(
                 it.copy(
                     convertHistories = convertHistoryRepository
                         .getAllConvertHistory()
-                        .sortedByDescending { data -> data.id }
+                        .sortedByDescending { data -> data.id },
                 )
             }
         }
@@ -57,7 +57,7 @@ class ConvertHistoryViewModelImpl @Inject constructor(
         _uiState.update {
             it.copy(
                 isShowDetailDialog = false,
-                usedHistoryDataByDetail = null
+                usedHistoryDataByDetail = null,
             )
         }
     }
@@ -66,7 +66,7 @@ class ConvertHistoryViewModelImpl @Inject constructor(
         _uiState.update {
             it.copy(
                 isShowDetailDialog = true,
-                usedHistoryDataByDetail = historyData
+                usedHistoryDataByDetail = historyData,
             )
         }
     }

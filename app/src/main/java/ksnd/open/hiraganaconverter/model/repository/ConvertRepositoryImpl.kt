@@ -18,7 +18,7 @@ import retrofit2.Retrofit
 import javax.inject.Inject
 
 class ConvertRepositoryImpl @Inject constructor(
-    errorInterceptor: Interceptor
+    errorInterceptor: Interceptor,
 ) : ConvertRepository {
 
     private val tag = ConvertRepositoryImpl::class.java.simpleName
@@ -40,18 +40,18 @@ class ConvertRepositoryImpl @Inject constructor(
     override suspend fun requestConvert(
         sentence: String,
         type: String,
-        appId: String
+        appId: String,
     ): Response<ResponseData>? {
         try {
             val requestData = RequestData(
                 appId = appId,
                 sentence = sentence,
-                outputType = type
+                outputType = type,
             )
             val json = Json.encodeToString(requestData)
             Log.i(tag, "json: $json")
             val body = json.toRequestBody(
-                contentType = "application/json; charset=utf-8".toMediaTypeOrNull()
+                contentType = "application/json; charset=utf-8".toMediaTypeOrNull(),
             )
             val response: Response<ResponseData> = convertService.requestConvert(body)
             if (response.isSuccessful.not()) {

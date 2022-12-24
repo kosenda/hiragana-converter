@@ -45,15 +45,15 @@ import ksnd.open.hiraganaconverter.view.parts.BottomCloseButton
 @Composable
 fun ConvertHistoryDetailDialog(
     onCloseClick: () -> Unit,
-    historyData: ConvertHistoryData
+    historyData: ConvertHistoryData,
 ) {
     Dialog(
         onDismissRequest = { },
-        properties = DialogProperties(usePlatformDefaultWidth = false)
+        properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         ConvertHistoryDetailDialogContent(
             onCloseClick = onCloseClick,
-            historyData = historyData
+            historyData = historyData,
         )
     }
 }
@@ -62,7 +62,7 @@ fun ConvertHistoryDetailDialog(
 @Composable
 private fun ConvertHistoryDetailDialogContent(
     onCloseClick: () -> Unit,
-    historyData: ConvertHistoryData
+    historyData: ConvertHistoryData,
 ) {
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
 
@@ -73,34 +73,34 @@ private fun ConvertHistoryDetailDialogContent(
             .clip(RoundedCornerShape(16.dp)),
         bottomBar = {
             BottomCloseButton(onClick = onCloseClick)
-        }
+        },
     ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
         ) {
             Text(
                 text = historyData.time,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(start = 16.dp, top = 8.dp)
+                modifier = Modifier.padding(start = 16.dp, top = 8.dp),
             )
             BeforeOrAfterText(
                 historyData = historyData,
                 isBefore = true,
-                clipboardManager = clipboardManager
+                clipboardManager = clipboardManager,
             )
             Divider(
                 thickness = 1.dp,
                 color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(vertical = 8.dp, horizontal = 48.dp)
+                modifier = Modifier.padding(vertical = 8.dp, horizontal = 48.dp),
             )
             BeforeOrAfterText(
                 historyData = historyData,
                 isBefore = false,
-                clipboardManager = clipboardManager
+                clipboardManager = clipboardManager,
             )
         }
     }
@@ -110,7 +110,7 @@ private fun ConvertHistoryDetailDialogContent(
 private fun BeforeOrAfterText(
     historyData: ConvertHistoryData,
     isBefore: Boolean,
-    clipboardManager: ClipboardManager
+    clipboardManager: ClipboardManager,
 ) {
     val context = LocalContext.current
     Row {
@@ -124,7 +124,7 @@ private fun BeforeOrAfterText(
             modifier = Modifier
                 .padding(all = 16.dp)
                 .weight(1f),
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
         )
         FilledTonalIconButton(
             modifier = Modifier
@@ -137,20 +137,20 @@ private fun BeforeOrAfterText(
                             historyData.before
                         } else {
                             historyData.after
-                        }
-                    )
+                        },
+                    ),
                 )
                 Toast
                     .makeText(context, "COPIED.", Toast.LENGTH_SHORT)
                     .show()
-            }
+            },
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
                 contentDescription = "copy",
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                 contentScale = ContentScale.Fit,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(24.dp),
             )
         }
     }
@@ -170,7 +170,7 @@ private fun BeforeOrAfterText(
             modifier = Modifier
                 .padding(all = 16.dp)
                 .defaultMinSize(minHeight = 120.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         )
     }
 }
@@ -185,8 +185,8 @@ private fun PreviewConvertHistoryDetailDialogContent() {
                 id = 0,
                 time = "2022/11/26 22:25",
                 before = "変換前はこんな感じ",
-                after = "へんかんごはこんなかんじ"
-            )
+                after = "へんかんごはこんなかんじ",
+            ),
         )
     }
 }

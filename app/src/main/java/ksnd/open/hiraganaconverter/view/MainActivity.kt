@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
                     ThemeNum.DAY.num -> false
                     else -> isSystemInDarkTheme()
                 },
-                customFont = customFont.value
+                customFont = customFont.value,
             ) {
                 ConverterScreen()
             }

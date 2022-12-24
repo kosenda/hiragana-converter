@@ -25,7 +25,7 @@ import ksnd.open.hiraganaconverter.R
 @Composable
 fun BottomCloseButton(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     OutlinedButton(
         modifier = modifier
@@ -34,18 +34,18 @@ fun BottomCloseButton(
             .height(48.dp),
         shape = RoundedCornerShape(50),
         border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.tertiary),
-        onClick = onClick
+        onClick = onClick,
     ) {
         Icon(
             imageVector = Icons.Default.Close,
             contentDescription = "close button",
             modifier = Modifier.padding(end = 16.dp).size(36.dp),
-            tint = MaterialTheme.colorScheme.tertiary
+            tint = MaterialTheme.colorScheme.tertiary,
         )
         Text(
             text = stringResource(id = R.string.close),
             style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.tertiary
+            color = MaterialTheme.colorScheme.tertiary,
         )
     }
 }
