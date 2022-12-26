@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -48,6 +49,7 @@ import ksnd.open.hiraganaconverter.view.CustomFont
 import ksnd.open.hiraganaconverter.view.parts.BottomCloseButton
 import ksnd.open.hiraganaconverter.view.parts.CustomFontRadioButton
 import ksnd.open.hiraganaconverter.view.parts.TitleCard
+import ksnd.open.hiraganaconverter.view.rememberButtonScaleState
 import ksnd.open.hiraganaconverter.viewmodel.PreviewSettingViewModel
 import ksnd.open.hiraganaconverter.viewmodel.SettingsViewModel
 import ksnd.open.hiraganaconverter.viewmodel.SettingsViewModelImpl
@@ -198,6 +200,7 @@ private fun SettingThemeContent(
 
 @Composable
 private fun SettingLanguageContent(onClick: () -> Unit) {
+    val buttonScaleState = rememberButtonScaleState()
     TitleCard(text = stringResource(id = R.string.language_setting))
     OutlinedCard(
         colors = CardDefaults.outlinedCardColors(
@@ -205,7 +208,10 @@ private fun SettingLanguageContent(onClick: () -> Unit) {
         ),
         modifier = Modifier
             .padding(all = 8.dp)
+            .scale(scale = buttonScaleState.animationScale.value)
             .clickable(
+                interactionSource = buttonScaleState.interactionSource,
+                indication = null,
                 onClick = onClick,
             ),
         border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary),

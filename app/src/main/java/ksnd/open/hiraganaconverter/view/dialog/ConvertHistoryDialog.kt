@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
@@ -52,6 +53,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.view.parts.BottomCloseButton
+import ksnd.open.hiraganaconverter.view.rememberButtonScaleState
 import ksnd.open.hiraganaconverter.viewmodel.ConvertHistoryViewModel
 import ksnd.open.hiraganaconverter.viewmodel.ConvertHistoryViewModelImpl
 import ksnd.open.hiraganaconverter.viewmodel.PreviewConvertHistoryViewModel
@@ -171,12 +173,18 @@ private fun ConvertHistoryCard(
     onClick: () -> Unit,
     onDeleteClick: () -> Unit,
 ) {
+    val buttonScaleState = rememberButtonScaleState()
     OutlinedCard(
         modifier = Modifier
             .padding(top = 4.dp, start = 8.dp, end = 8.dp)
             .wrapContentHeight()
             .fillMaxWidth()
-            .clickable(onClick = onClick),
+            .scale(scale = buttonScaleState.animationScale.value)
+            .clickable(
+                interactionSource = buttonScaleState.interactionSource,
+                indication = null,
+                onClick = onClick,
+            ),
         border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.secondary),
     ) {
         Row(verticalAlignment = Alignment.Top) {
@@ -223,14 +231,17 @@ private fun ConvertHistoryCard(
 
 @Composable
 private fun DeleteButton(onClick: () -> Unit) {
+    val buttonScaleState = rememberButtonScaleState()
     FilledTonalButton(
         modifier = Modifier
             .padding(all = 8.dp)
-            .height(48.dp),
+            .height(48.dp)
+            .scale(scale = buttonScaleState.animationScale.value),
         onClick = onClick,
         colors = ButtonDefaults.filledTonalButtonColors(
             containerColor = MaterialTheme.colorScheme.errorContainer,
         ),
+        interactionSource = buttonScaleState.interactionSource,
     ) {
         Row(
             modifier = Modifier
