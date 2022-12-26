@@ -1,7 +1,6 @@
 package ksnd.open.hiraganaconverter.view.dialog
 
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,14 +9,12 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -25,8 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
@@ -40,6 +35,7 @@ import androidx.compose.ui.window.DialogProperties
 import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.model.ConvertHistoryData
 import ksnd.open.hiraganaconverter.view.parts.BottomCloseButton
+import ksnd.open.hiraganaconverter.view.parts.CustomFilledTonalIconButton
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -126,10 +122,10 @@ private fun BeforeOrAfterText(
                 .weight(1f),
             color = MaterialTheme.colorScheme.onSurface,
         )
-        FilledTonalIconButton(
-            modifier = Modifier
-                .padding(top = 16.dp, bottom = 16.dp, end = 16.dp)
-                .size(48.dp),
+        CustomFilledTonalIconButton(
+            modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
+            contentDescription = "copyText",
+            painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
             onClick = {
                 clipboardManager.setText(
                     AnnotatedString(
@@ -144,15 +140,7 @@ private fun BeforeOrAfterText(
                     .makeText(context, "COPIED.", Toast.LENGTH_SHORT)
                     .show()
             },
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
-                contentDescription = "copy",
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
-                contentScale = ContentScale.Fit,
-                modifier = Modifier.size(24.dp),
-            )
-        }
+        )
     }
     SelectionContainer {
         Text(
