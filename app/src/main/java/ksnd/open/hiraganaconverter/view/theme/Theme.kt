@@ -9,6 +9,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import ksnd.open.hiraganaconverter.view.CustomFont
 
 private val LightThemeColors = lightColorScheme()
 private val DarkThemeColors = darkColorScheme()
@@ -20,7 +21,7 @@ private val DarkThemeColors = darkColorScheme()
 fun HiraganaConverterTheme(
     isDarkTheme: Boolean = isSystemInDarkTheme(),
     isDynamicColor: Boolean = true,
-    customFont: String,
+    customFont: String = CustomFont.DEFAULT.name,
     content: @Composable () -> Unit,
 ) {
     val dynamicColor = isDynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
