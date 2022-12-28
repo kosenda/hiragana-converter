@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,6 +21,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -48,6 +50,7 @@ import ksnd.open.hiraganaconverter.BuildConfig
 import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.view.parts.BottomCloseButton
 import ksnd.open.hiraganaconverter.view.parts.TitleCard
+import ksnd.open.hiraganaconverter.view.theme.HiraganaConverterTheme
 import ksnd.open.hiraganaconverter.view.theme.urlColor
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -132,7 +135,10 @@ private fun InfoDialogContent(onCloseClick: () -> Unit) {
 
 @Composable
 private fun AppInfoContent(onURLClick: () -> Unit) {
-    TitleCard(text = stringResource(id = R.string.app_info_title))
+    TitleCard(
+        text = stringResource(id = R.string.app_info_title),
+        painter = painterResource(id = R.drawable.ic_outline_info_24),
+    )
     Card(
         modifier = Modifier
             .padding(all = 8.dp)
@@ -225,7 +231,10 @@ private fun DeveloperInfoContent() {
 
 @Composable
 private fun APIInfoContent(onURLClick: () -> Unit) {
-    TitleCard(text = stringResource(id = R.string.api_info_title))
+    TitleCard(
+        text = stringResource(id = R.string.api_info_title),
+        painter = painterResource(id = R.drawable.ic_outline_info_24),
+    )
     Card(
         modifier = Modifier
             .padding(all = 8.dp)
@@ -302,6 +311,20 @@ private fun BodyMedium(text: String, modifier: Modifier = Modifier) {
 
 @Preview
 @Composable
-private fun PreviewInfoDialogContent() {
-    InfoDialogContent(onCloseClick = {})
+private fun PreviewInfoDialogContent_Light() {
+    HiraganaConverterTheme(isDarkTheme = false) {
+        Surface(modifier = Modifier.fillMaxSize()) {
+            InfoDialogContent(onCloseClick = {})
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewInfoDialogContent_Dark() {
+    HiraganaConverterTheme(isDarkTheme = true) {
+        Surface(modifier = Modifier.fillMaxSize()) {
+            InfoDialogContent(onCloseClick = {})
+        }
+    }
 }
