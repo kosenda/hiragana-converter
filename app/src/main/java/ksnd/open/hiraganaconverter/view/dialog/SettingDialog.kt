@@ -50,6 +50,7 @@ import ksnd.open.hiraganaconverter.view.parts.BottomCloseButton
 import ksnd.open.hiraganaconverter.view.parts.CustomFontRadioButton
 import ksnd.open.hiraganaconverter.view.parts.TitleCard
 import ksnd.open.hiraganaconverter.view.rememberButtonScaleState
+import ksnd.open.hiraganaconverter.view.theme.HiraganaConverterTheme
 import ksnd.open.hiraganaconverter.viewmodel.PreviewSettingViewModel
 import ksnd.open.hiraganaconverter.viewmodel.SettingsViewModel
 import ksnd.open.hiraganaconverter.viewmodel.SettingsViewModelImpl
@@ -137,7 +138,10 @@ private fun SettingThemeContent(
         stringResource(id = R.string.light_mode),
         stringResource(id = R.string.auto_mode),
     )
-    TitleCard(text = stringResource(id = R.string.theme_setting))
+    TitleCard(
+        text = stringResource(id = R.string.theme_setting),
+        painter = painterResource(id = R.drawable.ic_baseline_brightness_4_24),
+    )
     OutlinedCard(
         colors = CardDefaults.outlinedCardColors(
             containerColor = MaterialTheme.colorScheme.surface,
@@ -201,13 +205,17 @@ private fun SettingThemeContent(
 @Composable
 private fun SettingLanguageContent(onClick: () -> Unit) {
     val buttonScaleState = rememberButtonScaleState()
-    TitleCard(text = stringResource(id = R.string.language_setting))
+    TitleCard(
+        text = stringResource(id = R.string.language_setting),
+        painter = painterResource(id = R.drawable.ic_baseline_language_24)
+    )
     OutlinedCard(
         colors = CardDefaults.outlinedCardColors(
             containerColor = MaterialTheme.colorScheme.surface,
         ),
         modifier = Modifier
             .padding(all = 8.dp)
+            .height(56.dp)
             .scale(scale = buttonScaleState.animationScale.value)
             .clickable(
                 interactionSource = buttonScaleState.interactionSource,
@@ -218,22 +226,13 @@ private fun SettingLanguageContent(onClick: () -> Unit) {
     ) {
         Row(
             modifier = Modifier
-                .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
-                .fillMaxWidth(),
+                .padding(all = 8.dp)
+                .fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_baseline_language_24),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .size(40.dp)
-                    .padding(start = 16.dp),
-            )
             Text(
                 text = stringResource(id = R.string.select_language),
-                modifier = Modifier.padding(start = 12.dp),
+                modifier = Modifier.padding(start = 16.dp),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.primary,
             )
@@ -248,7 +247,10 @@ private fun SettingFontContent(
     isSelectedFont: (CustomFont) -> Boolean,
     onCloseClick: () -> Unit,
 ) {
-    TitleCard(text = stringResource(id = R.string.font_setting))
+    TitleCard(
+        text = stringResource(id = R.string.font_setting),
+        painterResource(id = R.drawable.ic_baseline_text_fields_24),
+    )
     OutlinedCard(
         colors = CardDefaults.outlinedCardColors(
             containerColor = MaterialTheme.colorScheme.surface,
@@ -308,13 +310,30 @@ private fun SettingFontContent(
 
 @Preview
 @Composable
-fun PreviewSettingDialogContent() {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        SettingDialogContent(
-            onCloseClick = {},
-            viewModel = PreviewSettingViewModel(),
-        )
+fun PreviewSettingDialogContent_Light() {
+    HiraganaConverterTheme(isDarkTheme = false) {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            SettingDialogContent(
+                onCloseClick = {},
+                viewModel = PreviewSettingViewModel(),
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun PreviewSettingDialogContent_Dark() {
+    HiraganaConverterTheme(isDarkTheme = true) {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            SettingDialogContent(
+                onCloseClick = {},
+                viewModel = PreviewSettingViewModel(),
+            )
+        }
     }
 }
