@@ -127,7 +127,6 @@ private fun InfoDialogContent(onCloseClick: () -> Unit) {
                     isShowMovesToApiSiteDialog = true
                 },
             )
-            // 余白
             Spacer(modifier = Modifier.height(40.dp))
         }
     }
@@ -177,17 +176,9 @@ private fun AppInfoContent(onURLClick: () -> Unit) {
                     text = stringResource(id = R.string.google_play),
                     modifier = Modifier.padding(bottom = 4.dp, top = 16.dp),
                 )
-                Text(
-                    text = stringResource(id = R.string.review_url),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = urlColor,
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .clickable(onClick = onURLClick),
-                    textAlign = TextAlign.Center,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    textDecoration = TextDecoration.Underline,
+                UrlText(
+                    url = stringResource(id = R.string.review_url),
+                    onURLClick = onURLClick,
                 )
             }
         }
@@ -196,7 +187,6 @@ private fun AppInfoContent(onURLClick: () -> Unit) {
 
 @Composable
 private fun DeveloperInfoContent() {
-    // 開発者情報
     Card(
         modifier = Modifier
             .padding(all = 8.dp)
@@ -271,17 +261,9 @@ private fun APIInfoContent(onURLClick: () -> Unit) {
                 text = stringResource(id = R.string.url_title),
                 modifier = Modifier.padding(bottom = 4.dp, top = 16.dp),
             )
-            Text(
-                text = stringResource(id = R.string.goo_url),
-                style = MaterialTheme.typography.bodyLarge,
-                color = urlColor,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .clickable(onClick = onURLClick),
-                textAlign = TextAlign.Center,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                textDecoration = TextDecoration.Underline,
+            UrlText(
+                url = stringResource(id = R.string.goo_url),
+                onURLClick = onURLClick,
             )
         }
     }
@@ -306,6 +288,22 @@ private fun BodyMedium(text: String, modifier: Modifier = Modifier) {
         color = MaterialTheme.colorScheme.tertiary,
         modifier = modifier.padding(horizontal = 16.dp),
         textAlign = TextAlign.Left,
+    )
+}
+
+@Composable
+private fun UrlText(url: String, onURLClick: () -> Unit) {
+    Text(
+        text = url,
+        style = MaterialTheme.typography.bodyLarge,
+        color = urlColor,
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .clickable(onClick = onURLClick),
+        textAlign = TextAlign.Center,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        textDecoration = TextDecoration.Underline,
     )
 }
 

@@ -207,7 +207,7 @@ private fun SettingLanguageContent(onClick: () -> Unit) {
     val buttonScaleState = rememberButtonScaleState()
     TitleCard(
         text = stringResource(id = R.string.language_setting),
-        painter = painterResource(id = R.drawable.ic_baseline_language_24)
+        painter = painterResource(id = R.drawable.ic_baseline_language_24),
     )
     OutlinedCard(
         colors = CardDefaults.outlinedCardColors(

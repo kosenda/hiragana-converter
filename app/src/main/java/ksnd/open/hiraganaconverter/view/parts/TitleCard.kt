@@ -42,7 +42,7 @@ fun TitleCard(text: String, painter: Painter) {
                 painter = painter,
                 contentDescription = text,
                 modifier = Modifier.padding(start = 8.dp).size(28.dp),
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary)
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary),
             )
             Text(
                 text = text,
