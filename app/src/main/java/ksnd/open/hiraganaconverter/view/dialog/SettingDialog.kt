@@ -1,7 +1,6 @@
 package ksnd.open.hiraganaconverter.view.dialog
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,8 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -20,8 +17,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -33,8 +28,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
@@ -46,8 +40,10 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.view.CustomFont
+import ksnd.open.hiraganaconverter.view.ThemeNum
 import ksnd.open.hiraganaconverter.view.parts.BottomCloseButton
 import ksnd.open.hiraganaconverter.view.parts.CustomFontRadioButton
+import ksnd.open.hiraganaconverter.view.parts.CustomThemeRadioButton
 import ksnd.open.hiraganaconverter.view.parts.TitleCard
 import ksnd.open.hiraganaconverter.view.rememberButtonScaleState
 import ksnd.open.hiraganaconverter.view.theme.HiraganaConverterTheme
@@ -133,11 +129,24 @@ private fun SettingThemeContent(
     onRadioButtonClick: (Int) -> Unit,
     isSelectedNum: (Int) -> Boolean,
 ) {
-    val modeRadio = listOf(
-        stringResource(id = R.string.dark_mode),
-        stringResource(id = R.string.light_mode),
-        stringResource(id = R.string.auto_mode),
+    val modeRadioResourcePairList: List<Triple<Int, String, Painter>> = listOf(
+        Triple(
+            ThemeNum.NIGHT.num,
+            stringResource(id = R.string.dark_mode),
+            painterResource(id = R.drawable.ic_baseline_brightness_2_24),
+        ),
+        Triple(
+            ThemeNum.DAY.num,
+            stringResource(id = R.string.light_mode),
+            painterResource(id = R.drawable.ic_baseline_brightness_low_24),
+        ),
+        Triple(
+            ThemeNum.AUTO.num,
+            stringResource(id = R.string.auto_mode),
+            painterResource(id = R.drawable.ic_baseline_brightness_auto_24),
+        ),
     )
+
     TitleCard(
         text = stringResource(id = R.string.theme_setting),
         painter = painterResource(id = R.drawable.ic_baseline_brightness_4_24),
@@ -150,53 +159,13 @@ private fun SettingThemeContent(
         border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary),
     ) {
         Column {
-            modeRadio.forEachIndexed { index, buttonText ->
-                Row(
-                    modifier = Modifier
-                        .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
-                        .fillMaxWidth()
-                        .height(40.dp)
-                        .clickable(
-                            onClick = {
-                                onRadioButtonClick(index)
-                            },
-                        ),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Image(
-                        painter = when (buttonText) {
-                            modeRadio[0] -> {
-                                painterResource(id = R.drawable.ic_baseline_brightness_2_24)
-                            }
-                            modeRadio[1] -> {
-                                painterResource(id = R.drawable.ic_baseline_brightness_low_24)
-                            }
-                            else -> {
-                                painterResource(id = R.drawable.ic_baseline_brightness_auto_24)
-                            }
-                        },
-                        contentDescription = buttonText,
-                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier.size(24.dp),
-                    )
-                    Text(
-                        text = buttonText,
-                        modifier = Modifier
-                            .padding(start = 12.dp)
-                            .weight(1f),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                    RadioButton(
-                        selected = isSelectedNum(index),
-                        colors = RadioButtonDefaults.colors(),
-                        onClick = {
-                            onRadioButtonClick(index)
-                        },
-                    )
-                }
+            modeRadioResourcePairList.forEach { resource ->
+                CustomThemeRadioButton(
+                    isSelected = isSelectedNum(resource.first),
+                    buttonText = resource.second,
+                    painter = resource.third,
+                    onClick = { onRadioButtonClick(resource.first) },
+                )
             }
         }
     }
