@@ -23,7 +23,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import ksnd.open.hiraganaconverter.R
-import ksnd.open.hiraganaconverter.view.parts.LanguageCard
+import ksnd.open.hiraganaconverter.view.parts.card.LanguageCard
 import ksnd.open.hiraganaconverter.view.parts.button.BottomCloseButton
 import ksnd.open.hiraganaconverter.viewmodel.PreviewSelectLanguageViewModel
 import ksnd.open.hiraganaconverter.viewmodel.SelectLanguageViewModel

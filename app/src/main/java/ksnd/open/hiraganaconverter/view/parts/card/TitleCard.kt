@@ -1,4 +1,4 @@
-package ksnd.open.hiraganaconverter.view.parts
+package ksnd.open.hiraganaconverter.view.parts.card
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image

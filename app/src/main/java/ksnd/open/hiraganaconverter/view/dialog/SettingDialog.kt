@@ -41,7 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.view.CustomFont
 import ksnd.open.hiraganaconverter.view.ThemeNum
-import ksnd.open.hiraganaconverter.view.parts.TitleCard
+import ksnd.open.hiraganaconverter.view.parts.card.TitleCard
 import ksnd.open.hiraganaconverter.view.parts.button.BottomCloseButton
 import ksnd.open.hiraganaconverter.view.parts.button.CustomFontRadioButton
 import ksnd.open.hiraganaconverter.view.parts.button.CustomThemeRadioButton
