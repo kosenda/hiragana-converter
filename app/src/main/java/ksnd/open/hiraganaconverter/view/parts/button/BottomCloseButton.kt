@@ -1,4 +1,4 @@
-package ksnd.open.hiraganaconverter.view.parts
+package ksnd.open.hiraganaconverter.view.parts.button
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,9 +21,6 @@ import androidx.compose.ui.unit.dp
 import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.view.rememberButtonScaleState
 
-/**
- * Dialogで使用するボトムに配置する閉じるボタン
- */
 @Composable
 fun BottomCloseButton(
     modifier: Modifier = Modifier,

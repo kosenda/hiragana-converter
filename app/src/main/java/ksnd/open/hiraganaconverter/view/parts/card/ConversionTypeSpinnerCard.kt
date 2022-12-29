@@ -1,4 +1,4 @@
-package ksnd.open.hiraganaconverter.view.parts
+package ksnd.open.hiraganaconverter.view.parts.card
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -32,9 +32,6 @@ import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.model.HiraKanaType
 import ksnd.open.hiraganaconverter.view.rememberButtonScaleState
 
-/**
- * 更新画面で使用するひらがな or カタカナ を選択できるSpinner
- */
 @Composable
 fun ConversionTypeSpinnerCard(
     onSelectedChange: (type: HiraKanaType) -> Unit,

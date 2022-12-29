@@ -25,7 +25,6 @@ class ErrorInterceptor @Inject constructor(
                 return response
             }
 
-            // 変換に失敗していた場合に、レスポンスコードによってメッセージを変換する
             Timber.w("beforeConvertedErrorMessage: %s", response.message)
             when (response.code) {
                 413 -> {

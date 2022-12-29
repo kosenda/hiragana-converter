@@ -1,8 +1,6 @@
 package ksnd.open.hiraganaconverter.view.dialog
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,17 +10,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalIconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -34,21 +26,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import ksnd.open.hiraganaconverter.R
-import ksnd.open.hiraganaconverter.view.parts.BottomCloseButton
-import ksnd.open.hiraganaconverter.view.parts.DeleteButton
-import ksnd.open.hiraganaconverter.view.rememberButtonScaleState
+import ksnd.open.hiraganaconverter.view.parts.button.BottomCloseButton
+import ksnd.open.hiraganaconverter.view.parts.button.DeleteButton
+import ksnd.open.hiraganaconverter.view.parts.card.ConvertHistoryCard
 import ksnd.open.hiraganaconverter.view.theme.HiraganaConverterTheme
 import ksnd.open.hiraganaconverter.viewmodel.ConvertHistoryViewModel
 import ksnd.open.hiraganaconverter.viewmodel.ConvertHistoryViewModelImpl
@@ -137,74 +126,6 @@ private fun ConvertHistoryDialogContent(
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun ConvertHistoryCard(
-    beforeText: String,
-    time: String,
-    onClick: () -> Unit,
-    onDeleteClick: () -> Unit,
-) {
-    val buttonScaleState = rememberButtonScaleState()
-    OutlinedCard(
-        modifier = Modifier
-            .padding(top = 4.dp, start = 8.dp, end = 8.dp)
-            .wrapContentHeight()
-            .fillMaxWidth()
-            .scale(scale = buttonScaleState.animationScale.value)
-            .clickable(
-                interactionSource = buttonScaleState.interactionSource,
-                indication = null,
-                onClick = onClick,
-            ),
-        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.secondary),
-    ) {
-        Row(verticalAlignment = Alignment.Top) {
-            Column(
-                modifier = Modifier
-                    .padding(all = 8.dp)
-                    .weight(1f),
-            ) {
-                ConvertHistoryCardTimeText(timeText = time)
-                Text(
-                    text = beforeText,
-                    maxLines = 2,
-                    minLines = 2,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.primary,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
-            FilledTonalIconButton(
-                onClick = onDeleteClick,
-                colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = Color.Transparent,
-                ),
-            ) {
-                Image(
-                    imageVector = Icons.Outlined.Close,
-                    contentDescription = "delete convert history",
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun ConvertHistoryCardTimeText(timeText: String) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            modifier = Modifier.padding(end = 8.dp),
-            text = timeText,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.secondary,
-        )
-        Spacer(modifier = Modifier.weight(1f))
     }
 }
 

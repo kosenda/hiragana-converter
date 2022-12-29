@@ -9,11 +9,8 @@ import androidx.compose.ui.unit.sp
 import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.view.CustomFont
 
-/**
- * Data Preferencesで管理しているフォントの種類をテーマに反映させるための処理
- */
-fun typography(customFont: String): Typography {
-    val selectedFont = when (customFont) {
+fun fontFamily(customFont: String): FontFamily {
+    return when (customFont) {
         // https://logotype.jp/font-corpmaru.html
         CustomFont.CORPORATE_LOGO_ROUNDED.name ->
             FontFamily(Font(R.font.corporate_logo_rounded_bold_ver3))
@@ -32,6 +29,10 @@ fun typography(customFont: String): Typography {
 
         else -> FontFamily.Default
     }
+}
+
+fun typography(customFont: String): Typography {
+    val selectedFontFamily = fontFamily(customFont = customFont)
 
     return Typography(
         headlineLarge = TextStyle(
@@ -39,42 +40,42 @@ fun typography(customFont: String): Typography {
             fontSize = 32.sp,
         ),
         titleLarge = TextStyle(
-            fontFamily = selectedFont,
+            fontFamily = selectedFontFamily,
             fontWeight = FontWeight.Normal,
             fontSize = 26.sp,
         ),
         titleMedium = TextStyle(
-            fontFamily = selectedFont,
+            fontFamily = selectedFontFamily,
             fontWeight = FontWeight.Normal,
             fontSize = 24.sp,
         ),
         titleSmall = TextStyle(
-            fontFamily = selectedFont,
+            fontFamily = selectedFontFamily,
             fontWeight = FontWeight.Normal,
             fontSize = 22.sp,
         ),
         bodyLarge = TextStyle(
-            fontFamily = selectedFont,
+            fontFamily = selectedFontFamily,
             fontWeight = FontWeight.Normal,
             fontSize = 20.sp,
         ),
         bodyMedium = TextStyle(
-            fontFamily = selectedFont,
+            fontFamily = selectedFontFamily,
             fontWeight = FontWeight.Normal,
             fontSize = 18.sp,
         ),
         bodySmall = TextStyle(
-            fontFamily = selectedFont,
+            fontFamily = selectedFontFamily,
             fontWeight = FontWeight.Normal,
             fontSize = 16.sp,
         ),
         labelLarge = TextStyle(
-            fontFamily = selectedFont,
+            fontFamily = selectedFontFamily,
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp,
         ),
         labelMedium = TextStyle(
-            fontFamily = selectedFont,
+            fontFamily = selectedFontFamily,
             fontWeight = FontWeight.Normal,
             fontSize = 12.sp,
         ),

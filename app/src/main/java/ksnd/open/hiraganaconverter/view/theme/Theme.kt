@@ -14,9 +14,6 @@ import ksnd.open.hiraganaconverter.view.CustomFont
 private val LightThemeColors = lightColorScheme()
 private val DarkThemeColors = darkColorScheme()
 
-/**
- * 本アプリのテーマ
- */
 @Composable
 fun HiraganaConverterTheme(
     isDarkTheme: Boolean = isSystemInDarkTheme(),

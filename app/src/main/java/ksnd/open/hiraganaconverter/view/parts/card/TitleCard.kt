@@ -1,4 +1,4 @@
-package ksnd.open.hiraganaconverter.view.parts
+package ksnd.open.hiraganaconverter.view.parts.card
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -42,7 +42,7 @@ fun TitleCard(text: String, painter: Painter) {
                 painter = painter,
                 contentDescription = text,
                 modifier = Modifier.padding(start = 8.dp).size(28.dp),
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary)
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary),
             )
             Text(
                 text = text,

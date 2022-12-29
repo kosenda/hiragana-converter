@@ -34,8 +34,8 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.model.ConvertHistoryData
-import ksnd.open.hiraganaconverter.view.parts.BottomCloseButton
-import ksnd.open.hiraganaconverter.view.parts.CustomFilledTonalIconButton
+import ksnd.open.hiraganaconverter.view.parts.button.BottomCloseButton
+import ksnd.open.hiraganaconverter.view.parts.button.CustomFilledTonalIconButton
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
