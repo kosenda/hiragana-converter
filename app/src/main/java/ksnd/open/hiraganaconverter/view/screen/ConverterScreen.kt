@@ -52,11 +52,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ksnd.open.hiraganaconverter.R
-import ksnd.open.hiraganaconverter.view.parts.card.ConversionTypeSpinnerCard
 import ksnd.open.hiraganaconverter.view.parts.TopBar
 import ksnd.open.hiraganaconverter.view.parts.button.ConvertButton
 import ksnd.open.hiraganaconverter.view.parts.button.CustomFilledTonalIconButton
 import ksnd.open.hiraganaconverter.view.parts.button.MoveTopButton
+import ksnd.open.hiraganaconverter.view.parts.card.ConversionTypeSpinnerCard
 import ksnd.open.hiraganaconverter.view.rememberButtonScaleState
 import ksnd.open.hiraganaconverter.viewmodel.ConvertViewModel
 import ksnd.open.hiraganaconverter.viewmodel.ConvertViewModelImpl
