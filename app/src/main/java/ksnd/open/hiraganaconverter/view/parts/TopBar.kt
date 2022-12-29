@@ -24,6 +24,7 @@ import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.view.dialog.ConvertHistoryDialog
 import ksnd.open.hiraganaconverter.view.dialog.InfoDialog
 import ksnd.open.hiraganaconverter.view.dialog.SettingDialog
+import ksnd.open.hiraganaconverter.view.parts.button.CustomFilledTonalIconButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

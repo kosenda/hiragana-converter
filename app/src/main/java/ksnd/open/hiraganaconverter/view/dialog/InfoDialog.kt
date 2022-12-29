@@ -48,8 +48,8 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import ksnd.open.hiraganaconverter.BuildConfig
 import ksnd.open.hiraganaconverter.R
-import ksnd.open.hiraganaconverter.view.parts.BottomCloseButton
 import ksnd.open.hiraganaconverter.view.parts.TitleCard
+import ksnd.open.hiraganaconverter.view.parts.button.BottomCloseButton
 import ksnd.open.hiraganaconverter.view.theme.HiraganaConverterTheme
 import ksnd.open.hiraganaconverter.view.theme.urlColor
 

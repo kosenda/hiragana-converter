@@ -71,8 +71,8 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.view.parts.ConversionTypeSpinnerCard
-import ksnd.open.hiraganaconverter.view.parts.CustomFilledTonalIconButton
 import ksnd.open.hiraganaconverter.view.parts.TopBar
+import ksnd.open.hiraganaconverter.view.parts.button.CustomFilledTonalIconButton
 import ksnd.open.hiraganaconverter.view.rememberButtonScaleState
 import ksnd.open.hiraganaconverter.viewmodel.ConvertViewModel
 import ksnd.open.hiraganaconverter.viewmodel.ConvertViewModelImpl

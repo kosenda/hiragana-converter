@@ -46,8 +46,8 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import ksnd.open.hiraganaconverter.R
-import ksnd.open.hiraganaconverter.view.parts.BottomCloseButton
-import ksnd.open.hiraganaconverter.view.parts.DeleteButton
+import ksnd.open.hiraganaconverter.view.parts.button.BottomCloseButton
+import ksnd.open.hiraganaconverter.view.parts.button.DeleteButton
 import ksnd.open.hiraganaconverter.view.rememberButtonScaleState
 import ksnd.open.hiraganaconverter.view.theme.HiraganaConverterTheme
 import ksnd.open.hiraganaconverter.viewmodel.ConvertHistoryViewModel
