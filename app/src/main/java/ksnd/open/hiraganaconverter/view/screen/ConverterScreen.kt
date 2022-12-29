@@ -64,7 +64,6 @@ import ksnd.open.hiraganaconverter.viewmodel.PreviewConvertViewModel
 
 @Composable
 fun ConverterScreen(convertViewModel: ConvertViewModelImpl = hiltViewModel()) {
-
     val systemUiController = rememberSystemUiController()
     val color = MaterialTheme.colorScheme.surface
 

@@ -97,7 +97,6 @@ private fun SettingDialogContent(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
-
             SettingThemeContent(
                 onRadioButtonClick = viewModel::updateThemeNum,
                 isSelectedNum = viewModel::isSelectedThemeNum,
