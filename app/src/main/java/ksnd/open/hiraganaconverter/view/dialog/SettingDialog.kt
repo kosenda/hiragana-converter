@@ -51,12 +51,6 @@ import ksnd.open.hiraganaconverter.viewmodel.PreviewSettingViewModel
 import ksnd.open.hiraganaconverter.viewmodel.SettingsViewModel
 import ksnd.open.hiraganaconverter.viewmodel.SettingsViewModelImpl
 
-/**
- * 設定画面
- * ① テーマ設定
- * ② 言語設定
- * ③ フォント設定
- */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SettingDialog(
@@ -103,18 +97,18 @@ private fun SettingDialogContent(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
-            // テーマ設定
+
             SettingThemeContent(
                 onRadioButtonClick = viewModel::updateThemeNum,
                 isSelectedNum = viewModel::isSelectedThemeNum,
             )
-            // 言語設定
+
             SettingLanguageContent(
                 onClick = {
                     isShowSelectLanguageDialog.value = true
                 },
             )
-            // フォント設定
+
             SettingFontContent(
                 updateCustomFont = viewModel::updateCustomFont,
                 isSelectedFont = viewModel::isSelectedFont,

@@ -9,9 +9,6 @@ import androidx.compose.ui.unit.sp
 import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.view.CustomFont
 
-/**
- * Data Preferencesで管理しているフォントの種類をテーマに反映させるための処理
- */
 fun typography(customFont: String): Typography {
     val selectedFont = when (customFont) {
         // https://logotype.jp/font-corpmaru.html

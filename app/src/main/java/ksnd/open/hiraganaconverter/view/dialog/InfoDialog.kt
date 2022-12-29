@@ -113,15 +113,14 @@ private fun InfoDialogContent(onCloseClick: () -> Unit) {
                 .padding(padding)
                 .verticalScroll(rememberScrollState()),
         ) {
-            // アプリの情報
             AppInfoContent(
                 onURLClick = {
                     isShowMovesToAppSiteDialog = true
                 },
             )
-            // 開発者情報
+
             DeveloperInfoContent()
-            // APIの情報
+
             APIInfoContent(
                 onURLClick = {
                     isShowMovesToApiSiteDialog = true

@@ -27,9 +27,6 @@ import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.view.MainActivity
 import ksnd.open.hiraganaconverter.view.rememberButtonScaleState
 
-/**
- * 設定画面で使用する選択言語のカード
- */
 @Composable
 fun LanguageCard(
     onNewLanguageClick: (String) -> Unit,

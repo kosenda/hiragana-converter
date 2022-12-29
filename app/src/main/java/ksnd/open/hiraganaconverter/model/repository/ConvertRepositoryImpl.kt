@@ -31,10 +31,8 @@ class ConvertRepositoryImpl @Inject constructor(
         .client(client)
         .build()
 
-    // ApiClientに定義したメソッドを呼び出すための設定
     private val convertService = retrofit.create(ConvertApiClient::class.java)
 
-    // APIからデータを取得するメソッド
     override suspend fun requestConvert(
         sentence: String,
         type: String,

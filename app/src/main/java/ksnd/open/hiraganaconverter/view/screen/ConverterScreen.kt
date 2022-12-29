@@ -64,7 +64,7 @@ import ksnd.open.hiraganaconverter.viewmodel.PreviewConvertViewModel
 
 @Composable
 fun ConverterScreen(convertViewModel: ConvertViewModelImpl = hiltViewModel()) {
-    // ステータスバーとナビゲーションバーの色を設定する
+
     val systemUiController = rememberSystemUiController()
     val color = MaterialTheme.colorScheme.surface
 
@@ -73,7 +73,6 @@ fun ConverterScreen(convertViewModel: ConvertViewModelImpl = hiltViewModel()) {
         systemUiController.setNavigationBarColor(color)
     }
 
-    // Preview用に切り離し
     ConverterScreenContent(
         viewModel = convertViewModel,
     )
@@ -124,7 +123,6 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
                 )
             }
 
-            // エラーに何かある場合のみエラー表示を行う
             if (convertUiState.errorText != "") {
                 ErrorCard(
                     errorText = convertUiState.errorText,
@@ -132,7 +130,6 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
                 )
             }
 
-            // 変換前用
             BeforeTextField(
                 inputText = convertUiState.inputText,
                 clipboardManager = clipboardManager,
@@ -146,7 +143,6 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 50.dp),
             )
 
-            // 変換後用
             AfterTextField(
                 outputText = convertUiState.outputText,
                 clipboardManager = clipboardManager,
