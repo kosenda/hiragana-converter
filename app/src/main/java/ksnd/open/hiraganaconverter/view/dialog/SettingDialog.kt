@@ -216,6 +216,34 @@ private fun SettingFontContent(
     isSelectedFont: (CustomFont) -> Boolean,
     onCloseClick: () -> Unit,
 ) {
+    val customFontResourceTripleList: List<Triple<CustomFont, String, FontFamily>> = listOf(
+        Triple(
+            CustomFont.DEFAULT,
+            stringResource(id = R.string.default_font),
+            FontFamily.Default,
+        ),
+        Triple(
+            CustomFont.CORPORATE_LOGO_ROUNDED,
+            stringResource(id = R.string.corporate_logo_rounded_font),
+            FontFamily(Font(R.font.corporate_logo_rounded_bold_ver3)),
+        ),
+        Triple(
+            CustomFont.CORPORATE_YAWAMIN,
+            stringResource(id = R.string.corporate_yawamin_font),
+            FontFamily(Font(R.font.corporate_yawamin_ver3)),
+        ),
+        Triple(
+            CustomFont.NOSUTARU_DOT_M_PLUS,
+            stringResource(id = R.string.nosutaru_dot_font),
+            FontFamily(Font(R.font.nosutaru_dotmplush_10_regular)),
+        ),
+        Triple(
+            CustomFont.BIZ_UDGOTHIC,
+            stringResource(id = R.string.biz_udgothic),
+            FontFamily(Font(R.font.bizudgothic_regular)),
+        ),
+    )
+
     TitleCard(
         text = stringResource(id = R.string.font_setting),
         painterResource(id = R.drawable.ic_baseline_text_fields_24),
@@ -227,51 +255,15 @@ private fun SettingFontContent(
         modifier = Modifier.padding(all = 8.dp),
         border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary),
     ) {
-        Column {
+        customFontResourceTripleList.forEach { resource ->
             CustomFontRadioButton(
                 onClick = {
-                    updateCustomFont(CustomFont.DEFAULT)
+                    updateCustomFont(resource.first)
                     onCloseClick()
                 },
-                selected = isSelectedFont(CustomFont.DEFAULT),
-                text = stringResource(id = R.string.default_font),
-                fontFamily = FontFamily.Default,
-            )
-            CustomFontRadioButton(
-                onClick = {
-                    updateCustomFont(CustomFont.CORPORATE_LOGO_ROUNDED)
-                    onCloseClick()
-                },
-                selected = isSelectedFont(CustomFont.CORPORATE_LOGO_ROUNDED),
-                text = stringResource(id = R.string.corporate_logo_rounded_font),
-                fontFamily = FontFamily(Font(R.font.corporate_logo_rounded_bold_ver3)),
-            )
-            CustomFontRadioButton(
-                onClick = {
-                    updateCustomFont(CustomFont.CORPORATE_YAWAMIN)
-                    onCloseClick()
-                },
-                selected = isSelectedFont(CustomFont.CORPORATE_YAWAMIN),
-                text = stringResource(id = R.string.corporate_yawamin_font),
-                fontFamily = FontFamily(Font(R.font.corporate_yawamin_ver3)),
-            )
-            CustomFontRadioButton(
-                onClick = {
-                    updateCustomFont(CustomFont.NOSUTARU_DOT_M_PLUS)
-                    onCloseClick()
-                },
-                selected = isSelectedFont(CustomFont.NOSUTARU_DOT_M_PLUS),
-                text = stringResource(id = R.string.nosutaru_dot_font),
-                fontFamily = FontFamily(Font(R.font.nosutaru_dotmplush_10_regular)),
-            )
-            CustomFontRadioButton(
-                onClick = {
-                    updateCustomFont(CustomFont.BIZ_UDGOTHIC)
-                    onCloseClick()
-                },
-                selected = isSelectedFont(CustomFont.BIZ_UDGOTHIC),
-                text = stringResource(id = R.string.biz_udgothic),
-                fontFamily = FontFamily(Font(R.font.bizudgothic_regular)),
+                selected = isSelectedFont(resource.first),
+                text = resource.second,
+                fontFamily = resource.third,
             )
         }
     }
