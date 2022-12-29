@@ -31,8 +31,6 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -47,6 +45,7 @@ import ksnd.open.hiraganaconverter.view.parts.button.CustomThemeRadioButton
 import ksnd.open.hiraganaconverter.view.parts.card.TitleCard
 import ksnd.open.hiraganaconverter.view.rememberButtonScaleState
 import ksnd.open.hiraganaconverter.view.theme.HiraganaConverterTheme
+import ksnd.open.hiraganaconverter.view.theme.fontFamily
 import ksnd.open.hiraganaconverter.viewmodel.PreviewSettingViewModel
 import ksnd.open.hiraganaconverter.viewmodel.SettingsViewModel
 import ksnd.open.hiraganaconverter.viewmodel.SettingsViewModelImpl
@@ -151,15 +150,14 @@ private fun SettingThemeContent(
         modifier = Modifier.padding(all = 8.dp),
         border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary),
     ) {
-        Column {
-            modeRadioResourcePairList.forEach { resource ->
-                CustomThemeRadioButton(
-                    isSelected = isSelectedNum(resource.first),
-                    buttonText = resource.second,
-                    painter = resource.third,
-                    onClick = { onRadioButtonClick(resource.first) },
-                )
-            }
+        modeRadioResourcePairList.forEach { resource ->
+            val (themeNum, displayThemeName, painter) = resource
+            CustomThemeRadioButton(
+                isSelected = isSelectedNum(themeNum),
+                buttonText = displayThemeName,
+                painter = painter,
+                onClick = { onRadioButtonClick(themeNum) },
+            )
         }
     }
 }
@@ -209,31 +207,26 @@ private fun SettingFontContent(
     isSelectedFont: (CustomFont) -> Boolean,
     onCloseClick: () -> Unit,
 ) {
-    val customFontResourceTripleList: List<Triple<CustomFont, String, FontFamily>> = listOf(
-        Triple(
+    val customFontResourceTripleList: List<Pair<CustomFont, String>> = listOf(
+        Pair(
             CustomFont.DEFAULT,
             stringResource(id = R.string.default_font),
-            FontFamily.Default,
         ),
-        Triple(
+        Pair(
             CustomFont.CORPORATE_LOGO_ROUNDED,
             stringResource(id = R.string.corporate_logo_rounded_font),
-            FontFamily(Font(R.font.corporate_logo_rounded_bold_ver3)),
         ),
-        Triple(
+        Pair(
             CustomFont.CORPORATE_YAWAMIN,
             stringResource(id = R.string.corporate_yawamin_font),
-            FontFamily(Font(R.font.corporate_yawamin_ver3)),
         ),
-        Triple(
+        Pair(
             CustomFont.NOSUTARU_DOT_M_PLUS,
             stringResource(id = R.string.nosutaru_dot_font),
-            FontFamily(Font(R.font.nosutaru_dotmplush_10_regular)),
         ),
-        Triple(
+        Pair(
             CustomFont.BIZ_UDGOTHIC,
             stringResource(id = R.string.biz_udgothic),
-            FontFamily(Font(R.font.bizudgothic_regular)),
         ),
     )
 
@@ -249,14 +242,15 @@ private fun SettingFontContent(
         border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary),
     ) {
         customFontResourceTripleList.forEach { resource ->
+            val (customFont, displayFontName) = resource
             CustomFontRadioButton(
                 onClick = {
-                    updateCustomFont(resource.first)
+                    updateCustomFont(customFont)
                     onCloseClick()
                 },
-                selected = isSelectedFont(resource.first),
-                text = resource.second,
-                fontFamily = resource.third,
+                selected = isSelectedFont(customFont),
+                text = displayFontName,
+                fontFamily = fontFamily(customFont.name),
             )
         }
     }
