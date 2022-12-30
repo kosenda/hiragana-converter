@@ -26,6 +26,7 @@ import androidx.core.content.ContextCompat
 import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.view.MainActivity
 import ksnd.open.hiraganaconverter.view.rememberButtonScaleState
+import ksnd.open.hiraganaconverter.view.theme.HiraganaConverterTheme
 
 @Composable
 fun LanguageCard(
@@ -73,13 +74,30 @@ fun LanguageCard(
 
 @Preview
 @Composable
-private fun PreviewLanguageCard_Night() {
+private fun PreviewLanguageCard_Light() {
     val displayLanguageList = stringArrayResource(id = R.array.display_language)
-    Column(Modifier.fillMaxWidth()) {
-        LanguageCard(
-            onNewLanguageClick = {},
-            index = 0,
-            displayLanguage = displayLanguageList[0],
-        )
+    HiraganaConverterTheme(isDarkTheme = false) {
+        Column(Modifier.fillMaxWidth()) {
+            LanguageCard(
+                onNewLanguageClick = {},
+                index = 0,
+                displayLanguage = displayLanguageList[0],
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewLanguageCard_Dark() {
+    val displayLanguageList = stringArrayResource(id = R.array.display_language)
+    HiraganaConverterTheme(isDarkTheme = true) {
+        Column(Modifier.fillMaxWidth()) {
+            LanguageCard(
+                onNewLanguageClick = {},
+                index = 0,
+                displayLanguage = displayLanguageList[0],
+            )
+        }
     }
 }

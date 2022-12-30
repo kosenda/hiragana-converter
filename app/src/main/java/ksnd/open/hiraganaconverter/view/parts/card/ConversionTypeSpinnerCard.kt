@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.model.HiraKanaType
 import ksnd.open.hiraganaconverter.view.rememberButtonScaleState
+import ksnd.open.hiraganaconverter.view.theme.HiraganaConverterTheme
 
 @Composable
 fun ConversionTypeSpinnerCard(
@@ -115,6 +116,16 @@ fun ConversionTypeSpinnerCard(
 
 @Preview
 @Composable
-private fun PreviewConversionTypeSpinnerCard() {
-    ConversionTypeSpinnerCard(onSelectedChange = {})
+private fun PreviewConversionTypeSpinnerCard_Light() {
+    HiraganaConverterTheme(isDarkTheme = false) {
+        ConversionTypeSpinnerCard(onSelectedChange = {})
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewConversionTypeSpinnerCard_Dark() {
+    HiraganaConverterTheme(isDarkTheme = true) {
+        ConversionTypeSpinnerCard(onSelectedChange = {})
+    }
 }
