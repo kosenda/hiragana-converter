@@ -40,6 +40,19 @@ https://labs.goo.ne.jp/apiusage/
 apiKey=<1.で取得したAPIキー>  
 （例： apiKey=011222333333abcd）
 
+## 使用している代表的なライブラリ
+- Material3(デザイン)
+- Retrofit2(API通信)
+- kotlinx serialization(シリアライザー)
+- Interceptor(エラーレスポンス作成)
+- Preferences DataStore(永続化データ)
+- Room(データベース)
+- Robolectric(単体テストフレームワーク)
+- Truth(アサーション)
+- Hilt(依存性注入)
+- COIL(画像読み込み)
+- Timber(ログ出力)
+
 ## イメージ
 |変換画面|
 |:-:|
