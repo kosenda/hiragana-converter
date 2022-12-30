@@ -46,7 +46,7 @@ ___
 |Material3|デザイン|
 |Retrofit2|API通信|
 |kotlinx serialization|シリアライザー|
-|Interceptor|エラーレスポンス作成)
+|Interceptor|エラーレスポンス作成
 |Preferences DataStore|永続化データ|
 |Room|データベース|
 |Robolectric|単体テストフレームワーク|
