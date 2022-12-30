@@ -36,7 +36,7 @@ class DataStoreRepositoryImplTest {
         produceFile = { context.preferencesDataStoreFile("TestDataStore") },
     )
     private val dataStoreRepository = DataStoreRepositoryImpl(
-        preferencesDataStore = dataStore,
+        dataStore = dataStore,
         ioDispatcher = testDispatcher,
     )
 

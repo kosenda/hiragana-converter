@@ -55,6 +55,8 @@
     <string name="api_info_title" translatable="false">API Info</string>
     <string name="api_name_title" translatable="false">API Name</string>
 
+    <string name="goo_credit_uri" translatable="false">"https://u.xgoo.jp/img/sgoo.png"</string>
+
     <string-array name="language">
         <item>en</item>
         <item>ja</item>

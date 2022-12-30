@@ -21,14 +21,14 @@ import javax.inject.Inject
 const val LIMIT_CONVERT_COUNT = 200
 
 class DataStoreRepositoryImpl @Inject constructor(
-    private val preferencesDataStore: DataStore<Preferences>,
+    private val dataStore: DataStore<Preferences>,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : DataStoreRepository {
 
     override fun selectedThemeNum(): Flow<Int> {
-        return preferencesDataStore.data
+        return dataStore.data
             .catch { exception ->
-                Timber.e("preferencesDataStore: %s", exception)
+                Timber.e("DataStore: %s", exception)
                 when (exception) {
                     is IOException -> emit(emptyPreferences())
                     else -> ThemeNum.AUTO.num
@@ -40,9 +40,9 @@ class DataStoreRepositoryImpl @Inject constructor(
     }
 
     override fun selectedCustomFont(): Flow<String> {
-        return preferencesDataStore.data
+        return dataStore.data
             .catch { exception ->
-                Timber.e("preferencesDataStore: %s", exception)
+                Timber.e("DataStore: %s", exception)
                 when (exception) {
                     is IOException -> emit(emptyPreferences())
                     else -> CustomFont.DEFAULT.name
@@ -54,11 +54,11 @@ class DataStoreRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateThemeNum(newThemeNum: Int) {
-        preferencesDataStore.edit { it[PreferenceKeys.THEME_NUM] = newThemeNum }
+        dataStore.edit { it[PreferenceKeys.THEME_NUM] = newThemeNum }
     }
 
     override suspend fun updateCustomFont(newCustomFont: CustomFont) {
-        preferencesDataStore.edit { it[PreferenceKeys.CUSTOM_FONT] = newCustomFont.name }
+        dataStore.edit { it[PreferenceKeys.CUSTOM_FONT] = newCustomFont.name }
     }
 
     override suspend fun checkReachedConvertMaxLimit(today: String): Boolean {
@@ -90,9 +90,9 @@ class DataStoreRepositoryImpl @Inject constructor(
     }
 
     private fun lastConvertTime(): Flow<String> {
-        return preferencesDataStore.data
+        return dataStore.data
             .catch { exception ->
-                Timber.e("preferencesDataStore: %s", exception)
+                Timber.e("DataStore: %s", exception)
                 if (exception is IOException) emit(emptyPreferences())
             }
             .map { preferences ->
@@ -101,9 +101,9 @@ class DataStoreRepositoryImpl @Inject constructor(
     }
 
     private fun convertCount(): Flow<Int> {
-        return preferencesDataStore.data
+        return dataStore.data
             .catch { exception ->
-                Timber.e("preferencesDataStore: %s", exception)
+                Timber.e("DataStore: %s", exception)
                 if (exception is IOException) emit(emptyPreferences())
             }
             .map { preferences ->
@@ -112,10 +112,10 @@ class DataStoreRepositoryImpl @Inject constructor(
     }
 
     private suspend fun updateLastConvertTime(lastConvertTime: String) = withContext(ioDispatcher) {
-        preferencesDataStore.edit { it[PreferenceKeys.LAST_CONVERT_TIME] = lastConvertTime }
+        dataStore.edit { it[PreferenceKeys.LAST_CONVERT_TIME] = lastConvertTime }
     }
 
     private suspend fun updateConvertCount(convertCount: Int) = withContext(ioDispatcher) {
-        preferencesDataStore.edit { it[PreferenceKeys.CONVERT_COUNT] = convertCount }
+        dataStore.edit { it[PreferenceKeys.CONVERT_COUNT] = convertCount }
     }
 }

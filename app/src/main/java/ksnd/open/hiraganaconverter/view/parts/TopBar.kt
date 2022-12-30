@@ -14,12 +14,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.view.dialog.ConvertHistoryDialog
 import ksnd.open.hiraganaconverter.view.dialog.InfoDialog
@@ -74,13 +71,7 @@ fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
                 onClick = { isShowConvertHistoryDialog = true },
             )
             Spacer(modifier = Modifier.weight(1f))
-            AsyncImage(
-                ImageRequest.Builder(LocalContext.current)
-                    .data("https://u.xgoo.jp/img/sgoo.png")
-                    .crossfade(true)
-                    .build(),
-                contentDescription = "goo logo",
-            )
+            GooCreditImage()
         },
         scrollBehavior = scrollBehavior,
     )

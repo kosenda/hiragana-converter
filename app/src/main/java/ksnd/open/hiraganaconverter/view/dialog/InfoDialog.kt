@@ -44,10 +44,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import ksnd.open.hiraganaconverter.BuildConfig
 import ksnd.open.hiraganaconverter.R
+import ksnd.open.hiraganaconverter.view.parts.GooCreditImage
 import ksnd.open.hiraganaconverter.view.parts.button.BottomCloseButton
 import ksnd.open.hiraganaconverter.view.parts.card.TitleCard
 import ksnd.open.hiraganaconverter.view.theme.HiraganaConverterTheme
@@ -239,13 +238,7 @@ private fun APIInfoContent(onURLClick: () -> Unit) {
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.Start,
         ) {
-            AsyncImage(
-                ImageRequest.Builder(LocalContext.current)
-                    .data("https://u.xgoo.jp/img/sgoo.png")
-                    .crossfade(true)
-                    .build(),
-                contentDescription = null,
-            )
+            GooCreditImage()
         }
         Column(
             modifier = Modifier.padding(vertical = 16.dp),
