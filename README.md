@@ -54,19 +54,18 @@ apiKey=<1.で取得したAPIキー>
 - Timber(ログ出力)
 
 ## イメージ
-|変換画面|
-|:-:|
-|<img width="640" alt="convert_screen" src="https://user-images.githubusercontent.com/60963155/204125570-59fb7b51-0fff-465a-ad28-4d7290aaf989.PNG">|
+|変換画面(ライト)|変換画面(ダーク)|
+|:-:|:-:|
+|<img width="320" alt="convert_screen" src="https://user-images.githubusercontent.com/60963155/210051987-be80696a-8bad-4b68-b9ae-72ddf2097b1e.PNG">|<img width="320" alt="convert_screen" src="https://user-images.githubusercontent.com/60963155/210051997-1f7f02d2-ea72-4768-a696-1db928339cb4.PNG">|
 
-|設定画面|
-|:-:|
-|<img width="640" alt="setting_dialog" src="https://user-images.githubusercontent.com/60963155/204125574-1505e36c-de19-441b-a969-623a468ff52c.PNG">|
+|設定画面(ライト)|設定画面(ダーク)|
+|:-:|:-:|
+|<img width="320" alt="convert_screen" src="https://user-images.githubusercontent.com/60963155/210052008-847e6dca-9961-4a0b-83a0-c0a48e964180.PNG">|<img width="320" alt="convert_screen" src="https://user-images.githubusercontent.com/60963155/210052014-e5bea46c-10af-4b92-b346-12e97cab3572.PNG">|
 
-|履歴画面|
-|:-:|
-|<img width="640" alt="record_dialog" src="https://user-images.githubusercontent.com/60963155/204125577-f33773ef-3f87-4ad9-a265-3e75f8bb5a69.PNG">|
+|履歴画面(ライト)|履歴画面(ダーク)|
+|:-:|:-:|
+|<img width="320" alt="convert_screen" src="https://user-images.githubusercontent.com/60963155/210052019-3b9c0f74-f874-4258-9eee-e29d2488d52b.PNG">|<img width="320" alt="convert_screen" src="https://user-images.githubusercontent.com/60963155/210052028-29f8d902-2aed-47c8-a164-f90aa2b1d9b4.PNG">|
 
-|インフォ画面|
-|:-:|
-|<img width="640" alt="info_dialog" src="https://user-images.githubusercontent.com/60963155/204125579-daf59ad4-3019-4e23-9214-aa8e972d936e.PNG">|
-
+|インフォ画面(ライト)|インフォ画面(ダーク)|
+|:-:|:-:|
+|<img width="320" alt="convert_screen" src="https://user-images.githubusercontent.com/60963155/210052030-5425ffc2-3f1f-4a72-94c9-b52b33144654.PNG">|<img width="320" alt="convert_screen" src="https://user-images.githubusercontent.com/60963155/210052039-eaf98871-e8db-439e-98e6-4c80124ada5b.PNG">|
