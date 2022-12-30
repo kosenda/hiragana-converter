@@ -16,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -76,7 +77,7 @@ fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
             Spacer(modifier = Modifier.weight(1f))
             AsyncImage(
                 ImageRequest.Builder(LocalContext.current)
-                    .data("https://u.xgoo.jp/img/sgoo.png")
+                    .data(stringResource(id = R.string.goo_credit_uri))
                     .crossfade(true)
                     .build(),
                 contentDescription = "goo logo",

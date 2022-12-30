@@ -241,7 +241,7 @@ private fun APIInfoContent(onURLClick: () -> Unit) {
         ) {
             AsyncImage(
                 ImageRequest.Builder(LocalContext.current)
-                    .data("https://u.xgoo.jp/img/sgoo.png")
+                    .data(stringResource(id = R.string.goo_credit_uri))
                     .crossfade(true)
                     .build(),
                 contentDescription = null,
