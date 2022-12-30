@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
@@ -121,8 +120,9 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
                 )
             }
 
-            BeforeTextField(
-                inputText = convertUiState.inputText,
+            BeforeOrAfterTextField(
+                isBefore = true,
+                text = convertUiState.inputText,
                 clipboardManager = clipboardManager,
                 focusManager = focusManager,
                 onValueChange = viewModel::updateInputText,
@@ -134,8 +134,9 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 50.dp),
             )
 
-            AfterTextField(
-                outputText = convertUiState.outputText,
+            BeforeOrAfterTextField(
+                isBefore = false,
+                text = convertUiState.outputText,
                 clipboardManager = clipboardManager,
                 focusManager = focusManager,
                 onValueChange = viewModel::updateOutputText,
@@ -147,8 +148,9 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
 }
 
 @Composable
-private fun BeforeTextField(
-    inputText: String,
+private fun BeforeOrAfterTextField(
+    isBefore: Boolean,
+    text: String,
     clipboardManager: ClipboardManager,
     focusManager: FocusManager,
     onValueChange: (String) -> Unit,
@@ -156,11 +158,13 @@ private fun BeforeTextField(
     val context = LocalContext.current
     Row {
         Text(
-            text = "[ ${stringResource(id = R.string.before_conversion)} ]",
+            text = if (isBefore) {
+                String.format("[ %s ]", stringResource(id = R.string.before_conversion))
+            } else {
+                String.format("[ %s ]", stringResource(id = R.string.after_conversion))
+            },
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier
-                .padding(all = 16.dp)
-                .weight(1f),
+            modifier = Modifier.padding(all = 16.dp).weight(1f),
             color = MaterialTheme.colorScheme.onSurface,
         )
 
@@ -169,80 +173,40 @@ private fun BeforeTextField(
             contentDescription = "copyText",
             painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
             onClick = {
-                clipboardManager.setText(AnnotatedString(inputText))
+                clipboardManager.setText(AnnotatedString(text))
                 Toast.makeText(context, "COPIED.", Toast.LENGTH_SHORT).show()
             },
         )
     }
     OutlinedTextField(
-        value = inputText,
+        value = text,
         onValueChange = onValueChange,
         keyboardActions = KeyboardActions {
             focusManager.clearFocus()
         },
         textStyle = MaterialTheme.typography.titleMedium,
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            textColor = MaterialTheme.colorScheme.secondary,
-            unfocusedBorderColor = MaterialTheme.colorScheme.surface,
-            focusedBorderColor = MaterialTheme.colorScheme.surface,
-        ),
-        placeholder = {
-            Text(
-                text = stringResource(id = R.string.input_hint),
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.secondary,
-            )
-        },
-        modifier = Modifier
-            .defaultMinSize(minHeight = 120.dp)
-            .fillMaxWidth(),
-    )
-}
-
-@Composable
-private fun AfterTextField(
-    outputText: String,
-    clipboardManager: ClipboardManager,
-    focusManager: FocusManager,
-    onValueChange: (String) -> Unit,
-) {
-    val context = LocalContext.current
-    Row {
-        Text(
-            text = "[ ${stringResource(id = R.string.after_conversion)} ]",
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier
-                .padding(all = 16.dp)
-                .weight(1f),
-            color = MaterialTheme.colorScheme.onSurface,
-        )
-        CustomFilledTonalIconButton(
-            modifier = Modifier
-                .padding(top = 16.dp, bottom = 16.dp, end = 16.dp)
-                .size(48.dp),
-            contentDescription = "copyText",
-            painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
-            onClick = {
-                clipboardManager.setText(AnnotatedString(outputText))
-                Toast.makeText(context, "COPIED.", Toast.LENGTH_SHORT).show()
+            textColor = if (isBefore) {
+                MaterialTheme.colorScheme.secondary
+            } else {
+                MaterialTheme.colorScheme.tertiary
             },
-        )
-    }
-    OutlinedTextField(
-        value = outputText,
-        onValueChange = onValueChange,
-        keyboardActions = KeyboardActions { focusManager.clearFocus() },
-        textStyle = MaterialTheme.typography.titleMedium,
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            textColor = MaterialTheme.colorScheme.tertiary,
             unfocusedBorderColor = MaterialTheme.colorScheme.surface,
             focusedBorderColor = MaterialTheme.colorScheme.surface,
         ),
         placeholder = {
             Text(
-                text = stringResource(id = R.string.output_hint),
+                text = if (isBefore) {
+                    stringResource(id = R.string.input_hint)
+                } else {
+                    stringResource(id = R.string.output_hint)
+                },
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.tertiary,
+                color = if (isBefore) {
+                    MaterialTheme.colorScheme.secondary
+                } else {
+                    MaterialTheme.colorScheme.tertiary
+                },
             )
         },
         modifier = Modifier
