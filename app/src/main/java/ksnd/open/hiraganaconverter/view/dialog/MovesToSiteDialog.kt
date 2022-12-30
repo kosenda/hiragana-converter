@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import ksnd.open.hiraganaconverter.R
+import ksnd.open.hiraganaconverter.view.theme.HiraganaConverterTheme
 
 @Composable
 fun MovesToSiteDialog(onDismissRequest: () -> Unit, onClick: () -> Unit, url: String) {
@@ -33,10 +34,24 @@ fun MovesToSiteDialog(onDismissRequest: () -> Unit, onClick: () -> Unit, url: St
 
 @Preview
 @Composable
-private fun PreviewMovesToSiteDialog() {
-    MovesToSiteDialog(
-        onDismissRequest = {},
-        onClick = {},
-        url = "架空のURL",
-    )
+private fun PreviewMovesToSiteDialog_Light() {
+    HiraganaConverterTheme(isDarkTheme = false) {
+        MovesToSiteDialog(
+            onDismissRequest = {},
+            onClick = {},
+            url = "架空のURL",
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewMovesToSiteDialog_Dark() {
+    HiraganaConverterTheme(isDarkTheme = true) {
+        MovesToSiteDialog(
+            onDismissRequest = {},
+            onClick = {},
+            url = "架空のURL",
+        )
+    }
 }

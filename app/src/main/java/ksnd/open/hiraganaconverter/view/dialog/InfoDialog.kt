@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,6 +21,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -46,8 +48,9 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import ksnd.open.hiraganaconverter.BuildConfig
 import ksnd.open.hiraganaconverter.R
-import ksnd.open.hiraganaconverter.view.parts.BottomCloseButton
-import ksnd.open.hiraganaconverter.view.parts.TitleCard
+import ksnd.open.hiraganaconverter.view.parts.button.BottomCloseButton
+import ksnd.open.hiraganaconverter.view.parts.card.TitleCard
+import ksnd.open.hiraganaconverter.view.theme.HiraganaConverterTheme
 import ksnd.open.hiraganaconverter.view.theme.urlColor
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -110,21 +113,19 @@ private fun InfoDialogContent(onCloseClick: () -> Unit) {
                 .padding(padding)
                 .verticalScroll(rememberScrollState()),
         ) {
-            // アプリの情報
             AppInfoContent(
                 onURLClick = {
                     isShowMovesToAppSiteDialog = true
                 },
             )
-            // 開発者情報
+
             DeveloperInfoContent()
-            // APIの情報
+
             APIInfoContent(
                 onURLClick = {
                     isShowMovesToApiSiteDialog = true
                 },
             )
-            // 余白
             Spacer(modifier = Modifier.height(40.dp))
         }
     }
@@ -132,7 +133,10 @@ private fun InfoDialogContent(onCloseClick: () -> Unit) {
 
 @Composable
 private fun AppInfoContent(onURLClick: () -> Unit) {
-    TitleCard(text = stringResource(id = R.string.app_info_title))
+    TitleCard(
+        text = stringResource(id = R.string.app_info_title),
+        painter = painterResource(id = R.drawable.ic_outline_info_24),
+    )
     Card(
         modifier = Modifier
             .padding(all = 8.dp)
@@ -171,17 +175,9 @@ private fun AppInfoContent(onURLClick: () -> Unit) {
                     text = stringResource(id = R.string.google_play),
                     modifier = Modifier.padding(bottom = 4.dp, top = 16.dp),
                 )
-                Text(
-                    text = stringResource(id = R.string.review_url),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = urlColor,
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .clickable(onClick = onURLClick),
-                    textAlign = TextAlign.Center,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    textDecoration = TextDecoration.Underline,
+                UrlText(
+                    url = stringResource(id = R.string.review_url),
+                    onURLClick = onURLClick,
                 )
             }
         }
@@ -190,7 +186,6 @@ private fun AppInfoContent(onURLClick: () -> Unit) {
 
 @Composable
 private fun DeveloperInfoContent() {
-    // 開発者情報
     Card(
         modifier = Modifier
             .padding(all = 8.dp)
@@ -225,7 +220,10 @@ private fun DeveloperInfoContent() {
 
 @Composable
 private fun APIInfoContent(onURLClick: () -> Unit) {
-    TitleCard(text = stringResource(id = R.string.api_info_title))
+    TitleCard(
+        text = stringResource(id = R.string.api_info_title),
+        painter = painterResource(id = R.drawable.ic_outline_info_24),
+    )
     Card(
         modifier = Modifier
             .padding(all = 8.dp)
@@ -262,17 +260,9 @@ private fun APIInfoContent(onURLClick: () -> Unit) {
                 text = stringResource(id = R.string.url_title),
                 modifier = Modifier.padding(bottom = 4.dp, top = 16.dp),
             )
-            Text(
-                text = stringResource(id = R.string.goo_url),
-                style = MaterialTheme.typography.bodyLarge,
-                color = urlColor,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .clickable(onClick = onURLClick),
-                textAlign = TextAlign.Center,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                textDecoration = TextDecoration.Underline,
+            UrlText(
+                url = stringResource(id = R.string.goo_url),
+                onURLClick = onURLClick,
             )
         }
     }
@@ -300,8 +290,38 @@ private fun BodyMedium(text: String, modifier: Modifier = Modifier) {
     )
 }
 
+@Composable
+private fun UrlText(url: String, onURLClick: () -> Unit) {
+    Text(
+        text = url,
+        style = MaterialTheme.typography.bodyLarge,
+        color = urlColor,
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .clickable(onClick = onURLClick),
+        textAlign = TextAlign.Center,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        textDecoration = TextDecoration.Underline,
+    )
+}
+
 @Preview
 @Composable
-private fun PreviewInfoDialogContent() {
-    InfoDialogContent(onCloseClick = {})
+private fun PreviewInfoDialogContent_Light() {
+    HiraganaConverterTheme(isDarkTheme = false) {
+        Surface(modifier = Modifier.fillMaxSize()) {
+            InfoDialogContent(onCloseClick = {})
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewInfoDialogContent_Dark() {
+    HiraganaConverterTheme(isDarkTheme = true) {
+        Surface(modifier = Modifier.fillMaxSize()) {
+            InfoDialogContent(onCloseClick = {})
+        }
+    }
 }

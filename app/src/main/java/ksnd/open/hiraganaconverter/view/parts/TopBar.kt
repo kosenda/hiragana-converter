@@ -2,12 +2,7 @@ package ksnd.open.hiraganaconverter.view.parts
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalIconButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -29,6 +24,7 @@ import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.view.dialog.ConvertHistoryDialog
 import ksnd.open.hiraganaconverter.view.dialog.InfoDialog
 import ksnd.open.hiraganaconverter.view.dialog.SettingDialog
+import ksnd.open.hiraganaconverter.view.parts.button.CustomFilledTonalIconButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,35 +56,23 @@ fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
             titleContentColor = MaterialTheme.colorScheme.primary,
         ),
         actions = {
-            FilledTonalIconButton(
-                modifier = Modifier.padding(start = 16.dp, end = 8.dp),
+            CustomFilledTonalIconButton(
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                contentDescription = "info",
+                painter = painterResource(id = R.drawable.ic_outline_info_24),
                 onClick = { isShowInfoDialog = true },
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Info,
-                    contentDescription = "info",
-                    tint = MaterialTheme.colorScheme.primary,
-                )
-            }
-            FilledTonalIconButton(
-                modifier = Modifier.padding(end = 8.dp),
+            )
+            CustomFilledTonalIconButton(
+                modifier = Modifier.padding(end = 16.dp),
+                contentDescription = "settings",
+                painter = painterResource(id = R.drawable.ic_outline_settings_24),
                 onClick = { isShowSettingDialog = true },
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Settings,
-                    contentDescription = "settings",
-                    tint = MaterialTheme.colorScheme.primary,
-                )
-            }
-            FilledTonalIconButton(
+            )
+            CustomFilledTonalIconButton(
+                contentDescription = "history",
+                painter = painterResource(id = R.drawable.ic_baseline_history_24),
                 onClick = { isShowConvertHistoryDialog = true },
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_baseline_history_24),
-                    contentDescription = "history",
-                    tint = MaterialTheme.colorScheme.primary,
-                )
-            }
+            )
             Spacer(modifier = Modifier.weight(1f))
             AsyncImage(
                 ImageRequest.Builder(LocalContext.current)

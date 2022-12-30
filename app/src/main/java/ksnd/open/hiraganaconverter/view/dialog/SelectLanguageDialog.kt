@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Surface
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -23,8 +24,9 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import ksnd.open.hiraganaconverter.R
-import ksnd.open.hiraganaconverter.view.parts.BottomCloseButton
-import ksnd.open.hiraganaconverter.view.parts.LanguageCard
+import ksnd.open.hiraganaconverter.view.parts.button.BottomCloseButton
+import ksnd.open.hiraganaconverter.view.parts.card.LanguageCard
+import ksnd.open.hiraganaconverter.view.theme.HiraganaConverterTheme
 import ksnd.open.hiraganaconverter.viewmodel.PreviewSelectLanguageViewModel
 import ksnd.open.hiraganaconverter.viewmodel.SelectLanguageViewModel
 import ksnd.open.hiraganaconverter.viewmodel.SelectLanguageViewModelImpl
@@ -85,9 +87,26 @@ private fun SelectLanguageDialogContent(
 
 @Preview
 @Composable
-private fun PreviewSelectLanguageDialogContent() {
-    SelectLanguageDialogContent(
-        onCloseClick = {},
-        PreviewSelectLanguageViewModel(),
-    )
+private fun PreviewSelectLanguageDialogContent_Light() {
+    HiraganaConverterTheme(isDarkTheme = false) {
+        Surface(modifier = Modifier.fillMaxSize()) {
+            SelectLanguageDialogContent(
+                onCloseClick = {},
+                PreviewSelectLanguageViewModel(),
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewSelectLanguageDialogContent_Dark() {
+    HiraganaConverterTheme(isDarkTheme = true) {
+        Surface(modifier = Modifier.fillMaxSize()) {
+            SelectLanguageDialogContent(
+                onCloseClick = {},
+                PreviewSelectLanguageViewModel(),
+            )
+        }
+    }
 }
