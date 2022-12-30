@@ -36,6 +36,7 @@ import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.model.ConvertHistoryData
 import ksnd.open.hiraganaconverter.view.parts.button.BottomCloseButton
 import ksnd.open.hiraganaconverter.view.parts.button.CustomFilledTonalIconButton
+import ksnd.open.hiraganaconverter.view.theme.HiraganaConverterTheme
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -165,16 +166,36 @@ private fun BeforeOrAfterText(
 
 @Preview
 @Composable
-private fun PreviewConvertHistoryDetailDialogContent() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        ConvertHistoryDetailDialogContent(
-            onCloseClick = {},
-            historyData = ConvertHistoryData(
-                id = 0,
-                time = "2022/11/26 22:25",
-                before = "変換前はこんな感じ",
-                after = "へんかんごはこんなかんじ",
-            ),
-        )
+private fun PreviewConvertHistoryDetailDialogContent_Light() {
+    HiraganaConverterTheme(isDarkTheme = false) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            ConvertHistoryDetailDialogContent(
+                onCloseClick = {},
+                historyData = ConvertHistoryData(
+                    id = 0,
+                    time = "2022/11/26 22:25",
+                    before = "変換前はこんな感じ",
+                    after = "へんかんごはこんなかんじ",
+                ),
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewConvertHistoryDetailDialogContent_Dark() {
+    HiraganaConverterTheme(isDarkTheme = true) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            ConvertHistoryDetailDialogContent(
+                onCloseClick = {},
+                historyData = ConvertHistoryData(
+                    id = 0,
+                    time = "2022/11/26 22:25",
+                    before = "変換前はこんな感じ",
+                    after = "へんかんごはこんなかんじ",
+                ),
+            )
+        }
     }
 }

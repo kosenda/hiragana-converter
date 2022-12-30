@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ksnd.open.hiraganaconverter.view.rememberButtonScaleState
+import ksnd.open.hiraganaconverter.view.theme.HiraganaConverterTheme
 
 @Composable
 fun ConvertHistoryCard(
@@ -97,11 +98,26 @@ private fun ConvertHistoryCardTimeText(timeText: String) {
 
 @Preview
 @Composable
-private fun PreviewConvertHistoryCard() {
-    ConvertHistoryCard(
-        beforeText = "変換前文章",
-        time = "2022/12/29 18:19",
-        onClick = {},
-        onDeleteClick = {},
-    )
+private fun PreviewConvertHistoryCard_Light() {
+    HiraganaConverterTheme(isDarkTheme = false) {
+        ConvertHistoryCard(
+            beforeText = "変換前文章",
+            time = "2022/12/29 18:19",
+            onClick = {},
+            onDeleteClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewConvertHistoryCard_Dark() {
+    HiraganaConverterTheme(isDarkTheme = true) {
+        ConvertHistoryCard(
+            beforeText = "変換前文章",
+            time = "2022/12/29 18:19",
+            onClick = {},
+            onDeleteClick = {},
+        )
+    }
 }

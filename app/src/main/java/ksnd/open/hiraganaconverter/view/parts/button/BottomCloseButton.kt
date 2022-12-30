@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.view.rememberButtonScaleState
+import ksnd.open.hiraganaconverter.view.theme.HiraganaConverterTheme
 
 @Composable
 fun BottomCloseButton(
@@ -56,6 +58,20 @@ fun BottomCloseButton(
 
 @Preview
 @Composable
-private fun PreviewBottomComposableButton() {
-    BottomCloseButton {}
+private fun PreviewBottomComposableButton_Light() {
+    HiraganaConverterTheme(isDarkTheme = false) {
+        Surface(color = MaterialTheme.colorScheme.surface) {
+            BottomCloseButton {}
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewBottomComposableButton_Dark() {
+    HiraganaConverterTheme(isDarkTheme = true) {
+        Surface(color = MaterialTheme.colorScheme.surface) {
+            BottomCloseButton {}
+        }
+    }
 }
