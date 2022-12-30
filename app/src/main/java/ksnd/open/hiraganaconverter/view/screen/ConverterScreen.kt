@@ -49,6 +49,7 @@ import ksnd.open.hiraganaconverter.view.parts.button.CustomFilledTonalIconButton
 import ksnd.open.hiraganaconverter.view.parts.button.MoveTopButton
 import ksnd.open.hiraganaconverter.view.parts.card.ConversionTypeSpinnerCard
 import ksnd.open.hiraganaconverter.view.parts.card.ErrorCard
+import ksnd.open.hiraganaconverter.view.theme.HiraganaConverterTheme
 import ksnd.open.hiraganaconverter.viewmodel.ConvertViewModel
 import ksnd.open.hiraganaconverter.viewmodel.ConvertViewModelImpl
 import ksnd.open.hiraganaconverter.viewmodel.PreviewConvertViewModel
@@ -131,7 +132,7 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
             Divider(
                 thickness = 2.dp,
                 color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(vertical = 8.dp, horizontal = 50.dp),
+                modifier = Modifier.padding(vertical = 8.dp, horizontal = 48.dp),
             )
 
             BeforeOrAfterTextField(
@@ -164,7 +165,9 @@ private fun BeforeOrAfterTextField(
                 String.format("[ %s ]", stringResource(id = R.string.after_conversion))
             },
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(all = 16.dp).weight(1f),
+            modifier = Modifier
+                .padding(all = 16.dp)
+                .weight(1f),
             color = MaterialTheme.colorScheme.onSurface,
         )
 
@@ -217,8 +220,20 @@ private fun BeforeOrAfterTextField(
 
 @Preview
 @Composable
-private fun PreviewConverterScreenContent() {
-    ConverterScreenContent(
-        viewModel = PreviewConvertViewModel(),
-    )
+private fun PreviewConverterScreenContent_Light() {
+    HiraganaConverterTheme(isDarkTheme = false) {
+        ConverterScreenContent(
+            viewModel = PreviewConvertViewModel(),
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewConverterScreenContent_Dark() {
+    HiraganaConverterTheme(isDarkTheme = true) {
+        ConverterScreenContent(
+            viewModel = PreviewConvertViewModel(),
+        )
+    }
 }
