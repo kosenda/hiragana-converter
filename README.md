@@ -2,21 +2,20 @@
 ## アプリ名「ひらがな変換」（ Hiragana Converter ）
 Google Play  
 https://play.google.com/store/apps/details?id=ksnd.hiraganaconverter
-
+___
 ## アプリの説明
 漢字やアルファベットを含む日本語文字列をひらがな／カタカナに変換します。
-#### 変換例  
-　＜変換前＞  
-　　漢字とWORDを含む日本語文字列  
-　＜ひらがな＞  
-　　かんじと わーどを ふくむ にほんごもじれつ  
-　＜カタカナ＞  
-　　カンジト ワードヲ フクム ニホンゴモジレツ  
-
+### 変換例
+|変換前 / 変換後|文章|
+|:--|:--|
+|変換前|漢字とWORDを含む日本語文字列|
+|変換後（ひらがな）|かんじと わーどを ふくむ にほんごもじれつ|
+|変換後（カタカナ）|カンジト ワードヲ フクム ニホンゴモジレツ|
+___
 ## 使用しているAPIについて
 gooラボ様の「ひらがな化API」になります。  
 https://labs.goo.ne.jp/api/jp/hiragana-translation/
-
+___
 ## 使用しているフォントについて
 
 - かわいい場面におすすめの「コーポレート・ロゴ（ラウンド）ver3」フォント無料DL  
@@ -30,29 +29,32 @@ https://logotype.jp/nosutaru-dot.html
 
 - BIZ UDGothic  
 https://fonts.google.com/specimen/BIZ+UDGothic  
-
+___
 ## アプリ内でAPI通信を行う方法
 
-- 1.以下でAPIキーを取得してください。  
+1. 以下でAPIキーを取得してください。  
 https://labs.goo.ne.jp/apiusage/  
 
-- 2.local.properties の一番下に以下を追加してください。  
+2. local.properties の一番下に以下を追加してください。  
 apiKey=<1.で取得したAPIキー>  
 （例： apiKey=011222333333abcd）
-
-## 使用している代表的なライブラリ
-- Material3(デザイン)
-- Retrofit2(API通信)
-- kotlinx serialization(シリアライザー)
-- Interceptor(エラーレスポンス作成)
-- Preferences DataStore(永続化データ)
-- Room(データベース)
-- Robolectric(単体テストフレームワーク)
-- Truth(アサーション)
-- Hilt(依存性注入)
-- COIL(画像読み込み)
-- Timber(ログ出力)
-
+___
+## 使用している代表的なライブラリ  
+|名前|簡単な説明|
+|:--|:--|
+|Jetpack Compose|UIアプリ開発ツールキット|
+|Material3|デザイン|
+|Retrofit2|API通信|
+|kotlinx serialization|シリアライザー|
+|Interceptor|エラーレスポンス作成)
+|Preferences DataStore|永続化データ|
+|Room|データベース|
+|Robolectric|単体テストフレームワーク|
+|Truth|アサーション|
+|Hilt|依存性注入|
+|Coil|画像読み込み|
+|Timber|ログ出力|
+___
 ## イメージ
 |変換画面(ライト)|変換画面(ダーク)|
 |:-:|:-:|
