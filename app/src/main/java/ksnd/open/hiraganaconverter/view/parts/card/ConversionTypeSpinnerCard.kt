@@ -55,33 +55,7 @@ fun ConversionTypeSpinnerCard(
             ),
             border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primaryContainer),
         ) {
-            Column(
-                modifier = Modifier.padding(all = 8.dp),
-            ) {
-                Text(
-                    text = stringResource(id = R.string.conversion_type),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                )
-                Row {
-                    Text(
-                        text = when (selectedTextType) {
-                            HiraKanaType.HIRAGANA -> stringArrayResource(id = R.array.conversion_type)[0]
-                            HiraKanaType.KATAKANA -> stringArrayResource(id = R.array.conversion_type)[1]
-                        },
-                        style = MaterialTheme.typography.bodyMedium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    )
-                    Icon(
-                        imageVector = Icons.Filled.ArrowDropDown,
-                        contentDescription = "spinner",
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                        modifier = Modifier.padding(horizontal = 4.dp),
-                    )
-                }
-            }
+            ConversionTypeSpinnerCardContent(selectedTextType = selectedTextType)
         }
 
         DropdownMenu(
@@ -110,6 +84,37 @@ fun ConversionTypeSpinnerCard(
                     },
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun ConversionTypeSpinnerCardContent(selectedTextType: HiraKanaType) {
+    Column(
+        modifier = Modifier.padding(all = 8.dp),
+    ) {
+        Text(
+            text = stringResource(id = R.string.conversion_type),
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+        )
+        Row {
+            Text(
+                text = when (selectedTextType) {
+                    HiraKanaType.HIRAGANA -> stringArrayResource(id = R.array.conversion_type)[0]
+                    HiraKanaType.KATAKANA -> stringArrayResource(id = R.array.conversion_type)[1]
+                },
+                style = MaterialTheme.typography.bodyMedium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+            )
+            Icon(
+                imageVector = Icons.Filled.ArrowDropDown,
+                contentDescription = "spinner",
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                modifier = Modifier.padding(horizontal = 4.dp),
+            )
         }
     }
 }
