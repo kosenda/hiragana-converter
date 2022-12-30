@@ -1,9 +1,6 @@
 package ksnd.open.hiraganaconverter.view.screen
 
 import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,10 +17,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -34,12 +29,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
@@ -57,7 +49,7 @@ import ksnd.open.hiraganaconverter.view.parts.button.ConvertButton
 import ksnd.open.hiraganaconverter.view.parts.button.CustomFilledTonalIconButton
 import ksnd.open.hiraganaconverter.view.parts.button.MoveTopButton
 import ksnd.open.hiraganaconverter.view.parts.card.ConversionTypeSpinnerCard
-import ksnd.open.hiraganaconverter.view.rememberButtonScaleState
+import ksnd.open.hiraganaconverter.view.parts.card.ErrorCard
 import ksnd.open.hiraganaconverter.viewmodel.ConvertViewModel
 import ksnd.open.hiraganaconverter.viewmodel.ConvertViewModelImpl
 import ksnd.open.hiraganaconverter.viewmodel.PreviewConvertViewModel
@@ -150,47 +142,6 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
             )
 
             Spacer(modifier = Modifier.height(120.dp))
-        }
-    }
-}
-
-@Composable
-private fun ErrorCard(
-    errorText: String,
-    onClick: () -> Unit,
-) {
-    val buttonScaleState = rememberButtonScaleState()
-    OutlinedCard(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(all = 16.dp)
-            .scale(scale = buttonScaleState.animationScale.value)
-            .clickable(
-                interactionSource = buttonScaleState.interactionSource,
-                indication = null,
-                onClick = onClick,
-            ),
-        colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.errorContainer,
-        ),
-        border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.error),
-    ) {
-        Row(
-            modifier = Modifier.padding(all = 16.dp),
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_baseline_error_outline_24),
-                contentDescription = "convert",
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.error),
-                contentScale = ContentScale.Fit,
-                modifier = Modifier.size(36.dp),
-            )
-            Text(
-                text = errorText,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.error,
-                modifier = Modifier.padding(start = 8.dp),
-            )
         }
     }
 }
