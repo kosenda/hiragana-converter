@@ -57,6 +57,9 @@
 
     <string name="goo_credit_uri" translatable="false">"https://u.xgoo.jp/img/sgoo.png"</string>
 
+    <string name="licenses_title" translatable="false">Licenses</string>
+    <string name="oss_licenses" translatable="false">OSS Licenses</string>
+
     <string-array name="language">
         <item>en</item>
         <item>ja</item>

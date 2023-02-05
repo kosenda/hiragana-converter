@@ -135,6 +135,9 @@ dependencies {
 
     // Timber
     implementation("com.jakewharton.timber:timber:5.0.1")
+
+    // OSS Licenses Gradle Plugin
+    implementation("com.google.android.gms:play-services-oss-licenses:17.0.0")
 }
 
 // チェック
