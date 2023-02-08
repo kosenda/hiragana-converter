@@ -138,6 +138,9 @@ dependencies {
 
     // OSS Licenses Gradle Plugin
     implementation("com.google.android.gms:play-services-oss-licenses:17.0.0")
+
+    // Splash Screen
+    implementation("androidx.core:core-splashscreen:1.0.0")
 }
 
 // チェック

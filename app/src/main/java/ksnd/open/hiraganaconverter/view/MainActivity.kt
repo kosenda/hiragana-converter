@@ -7,8 +7,16 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import ksnd.open.hiraganaconverter.BuildConfig
 import ksnd.open.hiraganaconverter.view.screen.ConverterScreen
 import ksnd.open.hiraganaconverter.view.theme.HiraganaConverterTheme
@@ -20,6 +28,14 @@ import java.util.*
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        var isAnimateSplash by mutableStateOf(true)
+        CoroutineScope(Dispatchers.Default).launch {
+            delay(800L)
+            isAnimateSplash = false
+        }
+        val splashScreen = installSplashScreen()
+        splashScreen.setKeepOnScreenCondition { isAnimateSplash }
+
         super.onCreate(savedInstanceState)
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())

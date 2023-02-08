@@ -14,7 +14,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringArrayResource
@@ -31,7 +30,6 @@ import ksnd.open.hiraganaconverter.viewmodel.PreviewSelectLanguageViewModel
 import ksnd.open.hiraganaconverter.viewmodel.SelectLanguageViewModel
 import ksnd.open.hiraganaconverter.viewmodel.SelectLanguageViewModelImpl
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SelectLanguageDialog(
     onCloseClick: () -> Unit,
@@ -58,8 +56,8 @@ private fun SelectLanguageDialogContent(
 
     Scaffold(
         modifier = Modifier
-            .fillMaxHeight(0.9f)
-            .fillMaxWidth(0.9f)
+            .fillMaxHeight(0.95f)
+            .fillMaxWidth(0.95f)
             .clip(RoundedCornerShape(16.dp)),
         bottomBar = {
             BottomCloseButton(onClick = onCloseClick)
@@ -73,8 +71,9 @@ private fun SelectLanguageDialogContent(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            displayLanguageList.forEachIndexed { index, language ->
+            displayLanguageList.mapIndexed { index, language ->
                 LanguageCard(
+                    modifier = Modifier.weight(1f),
                     onNewLanguageClick = viewModel::updateSelectLanguage,
                     index = index,
                     displayLanguage = language,

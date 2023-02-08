@@ -1,7 +1,6 @@
 package ksnd.open.hiraganaconverter.view.dialog
 
 import android.content.Intent
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -112,6 +111,7 @@ private fun InfoDialogContent(onCloseClick: () -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(padding)
+                .padding(all = 16.dp)
                 .verticalScroll(rememberScrollState()),
         ) {
             AppInfoContent(onURLClick = { isShowMovesToAppSiteDialog = true })
@@ -131,12 +131,11 @@ private fun AppInfoContent(onURLClick: () -> Unit) {
     )
     Card(
         modifier = Modifier
-            .padding(all = 8.dp)
+            .padding(vertical = 8.dp)
             .fillMaxWidth(),
-        colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
-        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
@@ -180,12 +179,11 @@ private fun AppInfoContent(onURLClick: () -> Unit) {
 private fun DeveloperInfoContent() {
     Card(
         modifier = Modifier
-            .padding(all = 8.dp)
+            .padding(vertical = 8.dp)
             .fillMaxWidth(),
-        colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
-        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
@@ -218,12 +216,11 @@ private fun APIInfoContent(onURLClick: () -> Unit) {
     )
     Card(
         modifier = Modifier
-            .padding(all = 8.dp)
+            .padding(vertical = 8.dp)
             .fillMaxWidth(),
-        colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
-        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary),
     ) {
         Column(
             modifier = Modifier
@@ -263,7 +260,6 @@ private fun LicensesContent() {
         painter = painterResource(id = R.drawable.ic_outline_info_24),
     )
     CustomButton(
-        modifier = Modifier.padding(horizontal = 8.dp),
         text = buttonText,
         onClick = {
             val intent = Intent(context, OssLicensesMenuActivity::class.java)
