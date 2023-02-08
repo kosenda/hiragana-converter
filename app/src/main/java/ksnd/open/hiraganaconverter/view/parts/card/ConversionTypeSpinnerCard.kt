@@ -1,18 +1,18 @@
 package ksnd.open.hiraganaconverter.view.parts.card
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,6 +22,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -32,6 +33,7 @@ import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.model.HiraKanaType
 import ksnd.open.hiraganaconverter.view.rememberButtonScaleState
 import ksnd.open.hiraganaconverter.view.theme.HiraganaConverterTheme
+import ksnd.open.hiraganaconverter.view.theme.changeBrightness
 
 @Composable
 fun ConversionTypeSpinnerCard(
@@ -41,19 +43,20 @@ fun ConversionTypeSpinnerCard(
     var selectedTextType by rememberSaveable { mutableStateOf(HiraKanaType.HIRAGANA) }
     val buttonScaleState = rememberButtonScaleState()
     Row {
-        OutlinedCard(
+        Card(
             modifier = Modifier
                 .padding(all = 8.dp)
                 .scale(scale = buttonScaleState.animationScale.value)
+                .shadow(shape = RoundedCornerShape(12.dp), elevation = 4.dp)
                 .clickable(
                     interactionSource = buttonScaleState.interactionSource,
                     indication = null,
                     onClick = { expanded = true },
                 ),
-            colors = CardDefaults.outlinedCardColors(
-                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.secondaryContainer
+                    .changeBrightness(1.1f),
             ),
-            border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.primaryContainer),
         ) {
             ConversionTypeSpinnerCardContent(selectedTextType = selectedTextType)
         }
@@ -64,7 +67,7 @@ fun ConversionTypeSpinnerCard(
             offset = DpOffset(x = 8.dp, y = 4.dp),
         ) {
             val conversionTypeArray = stringArrayResource(id = R.array.conversion_type)
-            conversionTypeArray.forEach {
+            conversionTypeArray.map {
                 DropdownMenuItem(
                     onClick = {
                         val selectHiraKanaType = when (it) {
@@ -96,7 +99,7 @@ private fun ConversionTypeSpinnerCardContent(selectedTextType: HiraKanaType) {
         Text(
             text = stringResource(id = R.string.conversion_type),
             style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            color = MaterialTheme.colorScheme.secondary,
         )
         Row {
             Text(
@@ -107,12 +110,12 @@ private fun ConversionTypeSpinnerCardContent(selectedTextType: HiraKanaType) {
                 style = MaterialTheme.typography.bodyMedium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                color = MaterialTheme.colorScheme.secondary,
             )
             Icon(
                 imageVector = Icons.Filled.ArrowDropDown,
                 contentDescription = "spinner",
-                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                tint = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier.padding(horizontal = 4.dp),
             )
         }

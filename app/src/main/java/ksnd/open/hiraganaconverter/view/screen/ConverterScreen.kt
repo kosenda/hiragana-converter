@@ -45,7 +45,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.view.parts.TopBar
 import ksnd.open.hiraganaconverter.view.parts.button.ConvertButton
-import ksnd.open.hiraganaconverter.view.parts.button.CustomFilledTonalIconButton
+import ksnd.open.hiraganaconverter.view.parts.button.CustomIconButton
 import ksnd.open.hiraganaconverter.view.parts.button.MoveTopButton
 import ksnd.open.hiraganaconverter.view.parts.card.ConversionTypeSpinnerCard
 import ksnd.open.hiraganaconverter.view.parts.card.ErrorCard
@@ -88,6 +88,7 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
         Column(
             modifier = Modifier
                 .padding(padding)
+                .padding(all = 8.dp)
                 .fillMaxSize()
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .verticalScroll(scrollState)
@@ -160,18 +161,18 @@ private fun BeforeOrAfterTextField(
     Row {
         Text(
             text = if (isBefore) {
-                String.format("[ %s ]", stringResource(id = R.string.before_conversion))
+                String.format("〈 %s 〉", stringResource(id = R.string.before_conversion))
             } else {
-                String.format("[ %s ]", stringResource(id = R.string.after_conversion))
+                String.format("〈 %s 〉", stringResource(id = R.string.after_conversion))
             },
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
-                .padding(all = 16.dp)
+                .padding(vertical = 16.dp)
                 .weight(1f),
             color = MaterialTheme.colorScheme.onSurface,
         )
 
-        CustomFilledTonalIconButton(
+        CustomIconButton(
             modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
             contentDescription = "copyText",
             painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),

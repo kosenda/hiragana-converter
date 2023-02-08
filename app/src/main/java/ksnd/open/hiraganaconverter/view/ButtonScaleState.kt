@@ -26,7 +26,7 @@ fun rememberButtonScaleState(): ButtonScaleState {
             when (interaction) {
                 is PressInteraction.Press -> {
                     buttonScaleState.animationScale.animateTo(
-                        targetValue = 0.9f,
+                        targetValue = 0.95f,
                         animationSpec = tween(durationMillis = 100),
                     )
                 }

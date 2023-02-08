@@ -19,7 +19,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ClipboardManager
@@ -35,10 +34,9 @@ import androidx.compose.ui.window.DialogProperties
 import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.model.ConvertHistoryData
 import ksnd.open.hiraganaconverter.view.parts.button.BottomCloseButton
-import ksnd.open.hiraganaconverter.view.parts.button.CustomFilledTonalIconButton
+import ksnd.open.hiraganaconverter.view.parts.button.CustomIconButton
 import ksnd.open.hiraganaconverter.view.theme.HiraganaConverterTheme
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ConvertHistoryDetailDialog(
     onCloseClick: () -> Unit,
@@ -123,7 +121,7 @@ private fun BeforeOrAfterText(
                 .weight(1f),
             color = MaterialTheme.colorScheme.onSurface,
         )
-        CustomFilledTonalIconButton(
+        CustomIconButton(
             modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
             contentDescription = "copyText",
             painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),

@@ -1,33 +1,24 @@
 package ksnd.open.hiraganaconverter.view.dialog
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,17 +31,16 @@ import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.view.CustomFont
 import ksnd.open.hiraganaconverter.view.ThemeNum
 import ksnd.open.hiraganaconverter.view.parts.button.BottomCloseButton
+import ksnd.open.hiraganaconverter.view.parts.button.CustomButton
 import ksnd.open.hiraganaconverter.view.parts.button.CustomFontRadioButton
 import ksnd.open.hiraganaconverter.view.parts.button.CustomThemeRadioButton
 import ksnd.open.hiraganaconverter.view.parts.card.TitleCard
-import ksnd.open.hiraganaconverter.view.rememberButtonScaleState
 import ksnd.open.hiraganaconverter.view.theme.HiraganaConverterTheme
 import ksnd.open.hiraganaconverter.view.theme.fontFamily
 import ksnd.open.hiraganaconverter.viewmodel.PreviewSettingViewModel
 import ksnd.open.hiraganaconverter.viewmodel.SettingsViewModel
 import ksnd.open.hiraganaconverter.viewmodel.SettingsViewModelImpl
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SettingDialog(
     onCloseClick: () -> Unit,
@@ -93,6 +83,7 @@ private fun SettingDialogContent(
         Column(
             modifier = Modifier
                 .padding(it)
+                .padding(all = 16.dp)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
@@ -100,17 +91,14 @@ private fun SettingDialogContent(
                 onRadioButtonClick = viewModel::updateThemeNum,
                 isSelectedNum = viewModel::isSelectedThemeNum,
             )
-
             SettingLanguageContent(
                 onClick = {
                     isShowSelectLanguageDialog.value = true
                 },
             )
-
             SettingFontContent(
                 updateCustomFont = viewModel::updateCustomFont,
                 isSelectedFont = viewModel::isSelectedFont,
-                onCloseClick = onCloseClick,
             )
         }
     }
@@ -121,7 +109,7 @@ private fun SettingThemeContent(
     onRadioButtonClick: (Int) -> Unit,
     isSelectedNum: (Int) -> Boolean,
 ) {
-    val modeRadioResourcePairList: List<Triple<Int, String, Painter>> = listOf(
+    val modeRadioResourceTriple: List<Triple<Int, String, Painter>> = listOf(
         Triple(
             ThemeNum.NIGHT.num,
             stringResource(id = R.string.dark_mode),
@@ -143,14 +131,13 @@ private fun SettingThemeContent(
         text = stringResource(id = R.string.theme_setting),
         painter = painterResource(id = R.drawable.ic_baseline_brightness_4_24),
     )
-    OutlinedCard(
-        colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
-        modifier = Modifier.padding(all = 8.dp),
-        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary),
+        modifier = Modifier.padding(vertical = 8.dp),
     ) {
-        modeRadioResourcePairList.forEach { resource ->
+        modeRadioResourceTriple.map { resource ->
             val (themeNum, displayThemeName, painter) = resource
             CustomThemeRadioButton(
                 isSelected = isSelectedNum(themeNum),
@@ -164,50 +151,22 @@ private fun SettingThemeContent(
 
 @Composable
 private fun SettingLanguageContent(onClick: () -> Unit) {
-    val buttonScaleState = rememberButtonScaleState()
     TitleCard(
         text = stringResource(id = R.string.language_setting),
         painter = painterResource(id = R.drawable.ic_baseline_language_24),
     )
-    OutlinedCard(
-        colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-        ),
-        modifier = Modifier
-            .padding(all = 8.dp)
-            .height(56.dp)
-            .scale(scale = buttonScaleState.animationScale.value)
-            .clickable(
-                interactionSource = buttonScaleState.interactionSource,
-                indication = null,
-                onClick = onClick,
-            ),
-        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary),
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(all = 8.dp)
-                .fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = stringResource(id = R.string.select_language),
-                modifier = Modifier.padding(start = 16.dp),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primary,
-            )
-            Spacer(modifier = Modifier.weight(1f))
-        }
-    }
+    CustomButton(
+        text = stringResource(id = R.string.select_language),
+        onClick = onClick,
+    )
 }
 
 @Composable
 private fun SettingFontContent(
     updateCustomFont: (CustomFont) -> Unit,
     isSelectedFont: (CustomFont) -> Boolean,
-    onCloseClick: () -> Unit,
 ) {
-    val customFontResourceTripleList: List<Pair<CustomFont, String>> = listOf(
+    val customFontResourcePair: List<Pair<CustomFont, String>> = listOf(
         Pair(
             CustomFont.DEFAULT,
             stringResource(id = R.string.default_font),
@@ -234,20 +193,16 @@ private fun SettingFontContent(
         text = stringResource(id = R.string.font_setting),
         painterResource(id = R.drawable.ic_baseline_text_fields_24),
     )
-    OutlinedCard(
-        colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
-        modifier = Modifier.padding(all = 8.dp),
-        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary),
+        modifier = Modifier.padding(vertical = 8.dp),
     ) {
-        customFontResourceTripleList.forEach { resource ->
+        customFontResourcePair.map { resource ->
             val (customFont, displayFontName) = resource
             CustomFontRadioButton(
-                onClick = {
-                    updateCustomFont(customFont)
-                    onCloseClick()
-                },
+                onClick = { updateCustomFont(customFont) },
                 selected = isSelectedFont(customFont),
                 text = displayFontName,
                 fontFamily = fontFamily(customFont.name),

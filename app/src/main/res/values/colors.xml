@@ -2,4 +2,5 @@
 <resources>
     <color name="ic_launcher_background">#FF9DC3E6</color>
     <color name="ic_launcher_foreground">#FFFFFFFF</color>
+    <color name="splash_background">@android:color/background_dark</color>
 </resources>

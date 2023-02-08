@@ -1,6 +1,5 @@
 package ksnd.open.hiraganaconverter.view.parts.card
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -11,10 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -36,9 +36,9 @@ fun ConvertHistoryCard(
     onDeleteClick: () -> Unit,
 ) {
     val buttonScaleState = rememberButtonScaleState()
-    OutlinedCard(
+    Card(
         modifier = Modifier
-            .padding(top = 4.dp, start = 8.dp, end = 8.dp)
+            .padding(top = 8.dp)
             .wrapContentHeight()
             .fillMaxWidth()
             .scale(scale = buttonScaleState.animationScale.value)
@@ -47,7 +47,9 @@ fun ConvertHistoryCard(
                 indication = null,
                 onClick = onClick,
             ),
-        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.secondary),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        ),
     ) {
         Row(verticalAlignment = Alignment.Top) {
             Column(

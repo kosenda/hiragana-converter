@@ -1,17 +1,15 @@
 package ksnd.open.hiraganaconverter.view.parts.card
 
 import android.content.Intent
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,6 +28,7 @@ import ksnd.open.hiraganaconverter.view.theme.HiraganaConverterTheme
 
 @Composable
 fun LanguageCard(
+    modifier: Modifier = Modifier,
     onNewLanguageClick: (String) -> Unit,
     index: Int,
     displayLanguage: String,
@@ -37,11 +36,9 @@ fun LanguageCard(
     val context = LocalContext.current
     val languageList = stringArrayResource(id = R.array.language)
     val buttonScaleState = rememberButtonScaleState()
-    OutlinedCard(
-        modifier = Modifier
-            .padding(all = 24.dp)
-            .fillMaxWidth(0.7f)
-            .height(96.dp)
+    Card(
+        modifier = modifier
+            .padding(all = 16.dp)
             .scale(scale = buttonScaleState.animationScale.value)
             .clickable(
                 interactionSource = buttonScaleState.interactionSource,
@@ -53,10 +50,9 @@ fun LanguageCard(
                     ContextCompat.startActivity(context, intent, null)
                 },
             ),
-        colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
         ),
-        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary),
     ) {
         Box(
             modifier = Modifier.fillMaxSize(1f),

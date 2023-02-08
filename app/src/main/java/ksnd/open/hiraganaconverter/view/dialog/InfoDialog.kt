@@ -1,6 +1,6 @@
 package ksnd.open.hiraganaconverter.view.dialog
 
-import androidx.compose.foundation.BorderStroke
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -29,7 +29,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -44,15 +43,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.core.content.ContextCompat
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import ksnd.open.hiraganaconverter.BuildConfig
 import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.view.parts.GooCreditImage
 import ksnd.open.hiraganaconverter.view.parts.button.BottomCloseButton
+import ksnd.open.hiraganaconverter.view.parts.button.CustomButton
 import ksnd.open.hiraganaconverter.view.parts.card.TitleCard
 import ksnd.open.hiraganaconverter.view.theme.HiraganaConverterTheme
 import ksnd.open.hiraganaconverter.view.theme.urlColor
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun InfoDialog(onCloseClick: () -> Unit) {
     Dialog(
@@ -110,21 +111,13 @@ private fun InfoDialogContent(onCloseClick: () -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(padding)
+                .padding(all = 16.dp)
                 .verticalScroll(rememberScrollState()),
         ) {
-            AppInfoContent(
-                onURLClick = {
-                    isShowMovesToAppSiteDialog = true
-                },
-            )
-
+            AppInfoContent(onURLClick = { isShowMovesToAppSiteDialog = true })
             DeveloperInfoContent()
-
-            APIInfoContent(
-                onURLClick = {
-                    isShowMovesToApiSiteDialog = true
-                },
-            )
+            APIInfoContent(onURLClick = { isShowMovesToApiSiteDialog = true })
+            LicensesContent()
             Spacer(modifier = Modifier.height(40.dp))
         }
     }
@@ -138,12 +131,11 @@ private fun AppInfoContent(onURLClick: () -> Unit) {
     )
     Card(
         modifier = Modifier
-            .padding(all = 8.dp)
+            .padding(vertical = 8.dp)
             .fillMaxWidth(),
-        colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
-        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
@@ -187,12 +179,11 @@ private fun AppInfoContent(onURLClick: () -> Unit) {
 private fun DeveloperInfoContent() {
     Card(
         modifier = Modifier
-            .padding(all = 8.dp)
+            .padding(vertical = 8.dp)
             .fillMaxWidth(),
-        colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
-        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
@@ -225,12 +216,11 @@ private fun APIInfoContent(onURLClick: () -> Unit) {
     )
     Card(
         modifier = Modifier
-            .padding(all = 8.dp)
+            .padding(vertical = 8.dp)
             .fillMaxWidth(),
-        colors = CardDefaults.outlinedCardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
-        border = BorderStroke(width = 2.dp, color = MaterialTheme.colorScheme.primary),
     ) {
         Column(
             modifier = Modifier
@@ -259,6 +249,24 @@ private fun APIInfoContent(onURLClick: () -> Unit) {
             )
         }
     }
+}
+
+@Composable
+private fun LicensesContent() {
+    val context = LocalContext.current
+    val buttonText = stringResource(id = R.string.oss_licenses)
+    TitleCard(
+        text = stringResource(id = R.string.licenses_title),
+        painter = painterResource(id = R.drawable.ic_outline_info_24),
+    )
+    CustomButton(
+        text = buttonText,
+        onClick = {
+            val intent = Intent(context, OssLicensesMenuActivity::class.java)
+            intent.putExtra("title", buttonText)
+            ContextCompat.startActivity(context, intent, null)
+        },
+    )
 }
 
 @Composable

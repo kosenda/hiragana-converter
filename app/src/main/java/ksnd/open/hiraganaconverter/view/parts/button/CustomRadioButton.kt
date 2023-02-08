@@ -52,13 +52,15 @@ fun CustomFontRadioButton(
                 .padding(start = 16.dp, end = 8.dp)
                 .weight(1f),
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             overflow = TextOverflow.Ellipsis,
             fontFamily = fontFamily,
         )
         RadioButton(
             selected = selected,
-            colors = RadioButtonDefaults.colors(),
+            colors = RadioButtonDefaults.colors(
+                selectedColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            ),
             onClick = onClick,
         )
     }
@@ -84,7 +86,7 @@ fun CustomThemeRadioButton(
         Image(
             painter = painter,
             contentDescription = buttonText,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurfaceVariant),
             contentScale = ContentScale.Fit,
             modifier = Modifier.size(24.dp),
         )
@@ -94,11 +96,13 @@ fun CustomThemeRadioButton(
                 .padding(start = 12.dp)
                 .weight(1f),
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         RadioButton(
             selected = isSelected,
-            colors = RadioButtonDefaults.colors(),
+            colors = RadioButtonDefaults.colors(
+                selectedColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            ),
             onClick = onClick,
         )
     }

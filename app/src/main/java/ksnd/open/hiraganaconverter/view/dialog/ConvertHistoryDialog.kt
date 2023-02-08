@@ -23,7 +23,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
@@ -43,7 +42,6 @@ import ksnd.open.hiraganaconverter.viewmodel.ConvertHistoryViewModel
 import ksnd.open.hiraganaconverter.viewmodel.ConvertHistoryViewModelImpl
 import ksnd.open.hiraganaconverter.viewmodel.PreviewConvertHistoryViewModel
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ConvertHistoryDialog(
     onCloseClick: () -> Unit,
@@ -94,13 +92,14 @@ private fun ConvertHistoryDialogContent(
         Column(
             modifier = Modifier
                 .padding(padding)
+                .padding(all = 16.dp)
                 .fillMaxSize(),
         ) {
             if (convertHistoryUiState.convertHistories.isEmpty()) {
                 EmptyHistoryImage()
             } else {
                 Row(
-                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp),
+                    modifier = Modifier.padding(vertical = 8.dp),
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
                     DeleteButton(

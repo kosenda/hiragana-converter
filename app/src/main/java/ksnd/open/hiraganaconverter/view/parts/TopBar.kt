@@ -21,7 +21,7 @@ import ksnd.open.hiraganaconverter.R
 import ksnd.open.hiraganaconverter.view.dialog.ConvertHistoryDialog
 import ksnd.open.hiraganaconverter.view.dialog.InfoDialog
 import ksnd.open.hiraganaconverter.view.dialog.SettingDialog
-import ksnd.open.hiraganaconverter.view.parts.button.CustomFilledTonalIconButton
+import ksnd.open.hiraganaconverter.view.parts.button.CustomIconButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,19 +53,19 @@ fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
             titleContentColor = MaterialTheme.colorScheme.primary,
         ),
         actions = {
-            CustomFilledTonalIconButton(
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+            CustomIconButton(
+                modifier = Modifier.padding(horizontal = 8.dp),
                 contentDescription = "info",
                 painter = painterResource(id = R.drawable.ic_outline_info_24),
                 onClick = { isShowInfoDialog = true },
             )
-            CustomFilledTonalIconButton(
-                modifier = Modifier.padding(end = 16.dp),
+            CustomIconButton(
+                modifier = Modifier.padding(end = 8.dp),
                 contentDescription = "settings",
                 painter = painterResource(id = R.drawable.ic_outline_settings_24),
                 onClick = { isShowSettingDialog = true },
             )
-            CustomFilledTonalIconButton(
+            CustomIconButton(
                 contentDescription = "history",
                 painter = painterResource(id = R.drawable.ic_baseline_history_24),
                 onClick = { isShowConvertHistoryDialog = true },
