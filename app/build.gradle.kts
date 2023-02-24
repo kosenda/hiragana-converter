@@ -88,7 +88,7 @@ dependencies {
 
     // Material you
     implementation("com.google.android.material:material:1.8.0")
-    implementation("androidx.compose.material3:material3:1.1.0-alpha05")
+    implementation("androidx.compose.material3:material3:1.1.0-alpha06")
 
     // accompanist
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.28.0")
@@ -101,7 +101,7 @@ dependencies {
 
     // Hilt
     implementation("com.google.dagger:hilt-android:2.44.2")
-    kapt("com.google.dagger:hilt-compiler:2.44.2")
+    kapt("com.google.dagger:hilt-compiler:2.45")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     // dataStore preferences
@@ -121,7 +121,7 @@ dependencies {
 
     // Robolectric environment
     testImplementation("androidx.test:core:1.5.0")
-    testImplementation("org.robolectric:robolectric:4.9.1")
+    testImplementation("org.robolectric:robolectric:4.9.2")
 
     // kotlinx serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
