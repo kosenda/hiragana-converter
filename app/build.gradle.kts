@@ -9,6 +9,7 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("org.jetbrains.kotlin.plugin.serialization") version "1.7.10"
+    id("com.google.android.gms.oss-licenses-plugin")
 }
 
 android {
