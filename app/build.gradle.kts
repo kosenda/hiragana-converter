@@ -73,25 +73,25 @@ dependencies {
         }
     }
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.compose.ui:ui:1.3.3")
-    implementation("androidx.compose.material:material:1.3.1")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.3.3")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
-    implementation("androidx.activity:activity-compose:1.6.1")
+    implementation("androidx.core:core-ktx:1.10.1")
+    implementation("androidx.compose.ui:ui:1.4.3")
+    implementation("androidx.compose.material:material:1.4.3")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.4.3")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+    implementation("androidx.activity:activity-compose:1.7.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.3.3")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.3.3")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.3.3")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.4.3")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.4.3")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.4.3")
 
     // Material you
-    implementation("com.google.android.material:material:1.8.0")
-    implementation("androidx.compose.material3:material3:1.1.0-alpha06")
+    implementation("com.google.android.material:material:1.9.0")
+    implementation("androidx.compose.material3:material3:1.2.0-alpha01")
 
     // accompanist
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.28.0")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
 
     // COIL
     implementation("io.coil-kt:coil-compose:2.2.2")
@@ -100,8 +100,8 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.44.2")
-    kapt("com.google.dagger:hilt-compiler:2.45")
+    implementation("com.google.dagger:hilt-android:2.46.1")
+    kapt("com.google.dagger:hilt-compiler:2.46.1")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     // dataStore preferences
@@ -115,20 +115,20 @@ dependencies {
     }
 
     // ROOM
-    implementation("androidx.room:room-runtime:2.5.0")
-    annotationProcessor("androidx.room:room-compiler:2.5.0")
-    kapt("androidx.room:room-compiler:2.5.0")
+    implementation("androidx.room:room-runtime:2.5.1")
+    annotationProcessor("androidx.room:room-compiler:2.5.1")
+    kapt("androidx.room:room-compiler:2.5.1")
 
     // Robolectric environment
     testImplementation("androidx.test:core:1.5.0")
-    testImplementation("org.robolectric:robolectric:4.9.2")
+    testImplementation("org.robolectric:robolectric:4.10.3")
 
     // kotlinx serialization
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
 
-    // Kotlinコルーチンテスト
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    // Kotlin Coroutine Test
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
 
     // Truth
     testImplementation("com.google.truth:truth:1.1.3")
@@ -138,10 +138,10 @@ dependencies {
     implementation("com.jakewharton.timber:timber:5.0.1")
 
     // OSS Licenses Gradle Plugin
-    implementation("com.google.android.gms:play-services-oss-licenses:17.0.0")
+    implementation("com.google.android.gms:play-services-oss-licenses:17.0.1")
 
     // Splash Screen
-    implementation("androidx.core:core-splashscreen:1.0.0")
+    implementation("androidx.core:core-splashscreen:1.0.1")
 }
 
 // チェック
