@@ -19,7 +19,7 @@ class ConvertHistoryViewModelImplTest {
 
     private val testDispatcher = StandardTestDispatcher()
 
-    // 既存のデータ（変換履歴）あり（２件）
+    // 既存のデータ（変換履歴）あり（2件）
     private val existInitDataViewModel = ConvertHistoryViewModelImpl(
         convertHistoryRepository = FakeConvertHistoryRepository(exitsInitData = true),
         ioDispatcher = testDispatcher,

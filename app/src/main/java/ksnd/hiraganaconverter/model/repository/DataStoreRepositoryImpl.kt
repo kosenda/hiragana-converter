@@ -24,7 +24,6 @@ class DataStoreRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : DataStoreRepository {
-
     override fun selectedThemeNum(): Flow<Int> {
         return dataStore.data
             .catch { exception ->

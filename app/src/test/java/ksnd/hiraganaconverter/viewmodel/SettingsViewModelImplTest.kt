@@ -47,7 +47,7 @@ class SettingsViewModelImplTest {
     fun settingViewModel_Initialization_FirstDefaultSet() = runTest {
         // モードの初期設定は自動モード
         assertThat(viewModel.isSelectedThemeNum(ThemeNum.AUTO.num)).isTrue()
-        // フォントの初期設定はデフォルト
+        // フォントの初期設定はDefault
         assertThat(viewModel.isSelectedFont(CustomFont.DEFAULT)).isTrue()
     }
 

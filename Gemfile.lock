@@ -27,6 +27,9 @@ GEM
     danger-checkstyle_format (0.1.1)
       danger-plugin-api (~> 1.0)
       ox (~> 2.0)
+    danger-jacoco (0.1.9)
+      danger-plugin-api (~> 1.0)
+      nokogiri-happymapper (~> 0.6)
     danger-plugin-api (1.0.0)
       danger (> 2.0)
     faraday (2.7.10)
@@ -44,12 +47,17 @@ GEM
       kramdown (~> 2.0)
     nap (1.1.0)
     no_proxy_fix (0.1.2)
+    nokogiri (1.15.3-arm64-darwin)
+      racc (~> 1.4)
+    nokogiri-happymapper (0.9.0)
+      nokogiri (~> 1.5)
     octokit (6.1.1)
       faraday (>= 1, < 3)
       sawyer (~> 0.9)
     open4 (1.3.4)
     ox (2.14.16)
     public_suffix (5.0.1)
+    racc (1.7.1)
     rchardet (1.8.0)
     rexml (3.2.5)
     ruby2_keywords (0.0.5)
@@ -66,6 +74,7 @@ PLATFORMS
 DEPENDENCIES
   danger (~> 9.3.0)
   danger-checkstyle_format
+  danger-jacoco
 
 BUNDLED WITH
    2.4.13
