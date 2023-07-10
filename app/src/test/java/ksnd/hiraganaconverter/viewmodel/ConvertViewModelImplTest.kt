@@ -18,6 +18,7 @@ import kotlinx.coroutines.test.setMain
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import ksnd.hiraganaconverter.R
 import ksnd.hiraganaconverter.model.ConvertApiClient
 import ksnd.hiraganaconverter.model.ConvertHistoryData
 import ksnd.hiraganaconverter.model.HiraKanaType
@@ -27,7 +28,6 @@ import ksnd.hiraganaconverter.model.repository.ConvertHistoryRepository
 import ksnd.hiraganaconverter.model.repository.ConvertRepository
 import ksnd.hiraganaconverter.model.repository.DataStoreRepository
 import ksnd.hiraganaconverter.view.CustomFont
-import ksnd.hiraganaconverter.R
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient

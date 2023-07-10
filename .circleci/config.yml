@@ -20,10 +20,10 @@ jobs:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
 
-#      - run:
-#          command: sudo gem install bundler:2.4.12
-#      - run:
-#          command: bundle install --path vendor/bundle
+      - run:
+          command: sudo gem install bundler:2.4.12
+      - run:
+          command: bundle install --path vendor/bundle
       - run:
           name: ktlint-check
           command: ./gradlew --continue ktlintCheck
@@ -32,9 +32,9 @@ jobs:
           name: test
           command: ./gradlew testDebug --stacktrace
 
-#      - run:
-#          name: run-danger-file
-#          command: bundle exec danger --verbose
+      - run:
+          name: run-danger-file
+          command: bundle exec danger --verbose
 
 
 workflows:
