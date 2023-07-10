@@ -1,0 +1,52 @@
+version: 2.1
+
+jobs:
+  build-and-test:
+    docker:
+      - image: cimg/android:2023.06
+    steps:
+      - checkout
+      - run:
+          name: set local.properties
+          command: |
+              LOCAL_PROPERTIES_PATH=./local.properties
+              echo "apiKey=$.Environment.DEBUG_AD_APPLICATION_ID" >> $LOCAL_PROPERTIES_PATH
+
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
+      - run: ./gradlew androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
+
+      - run:
+          command: sudo gem install bundler:2.4.12
+      - run:
+          command: bundle install --path vendor/bundle
+      - run:
+          name: ktlint-check
+          command: ./gradlew --continue ktlintCheck
+
+      - run:
+          name: test
+          command: ./gradlew testDebug --stacktrace
+
+      - run:
+          name: run-danger-file
+          command: bundle exec danger --verbose
+
+
+workflows:
+  test:
+    jobs:
+      - build-and-test
+
+# ■ memo ■
+# チェックコマンド： circleci config validate
+#
+# ■ 特に参考にしたサイト ■
+# Android プロジェクトの継続的インテグレーション
+# https://circleci.com/ja/blog/building-android-on-circleci/
+# 3年の運用で編み出した CircleCI 超設計大全
+# https://qiita.com/dodonki1223/items/98dbdac6f31f9b486ecf

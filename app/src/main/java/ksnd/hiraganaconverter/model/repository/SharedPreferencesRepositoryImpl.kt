@@ -1,7 +1,6 @@
 package ksnd.hiraganaconverter.model.repository
 
 import android.content.SharedPreferences
-import ksnd.hiraganaconverter.model.repository.SharedPreferencesRepository
 import timber.log.Timber
 import javax.inject.Inject
 

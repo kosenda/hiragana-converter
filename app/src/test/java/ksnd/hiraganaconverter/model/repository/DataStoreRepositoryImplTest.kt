@@ -15,11 +15,11 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
+import ksnd.hiraganaconverter.R
 import ksnd.hiraganaconverter.model.TimeFormat
 import ksnd.hiraganaconverter.model.getNowTime
 import ksnd.hiraganaconverter.view.CustomFont
 import ksnd.hiraganaconverter.view.ThemeNum
-import ksnd.hiraganaconverter.R
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

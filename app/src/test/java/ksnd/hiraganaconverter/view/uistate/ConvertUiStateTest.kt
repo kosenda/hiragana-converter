@@ -1,7 +1,6 @@
 package ksnd.hiraganaconverter.view.uistate
 
 import com.google.common.truth.Truth.assertThat
-import ksnd.hiraganaconverter.view.uistate.ConvertUiState
 import org.junit.Test
 
 class ConvertUiStateTest {
