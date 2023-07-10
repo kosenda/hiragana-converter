@@ -7,7 +7,7 @@ import javax.inject.Inject
 class ConvertHistoryRepositoryImpl @Inject constructor(
     private val convertHistoryDao: ConvertHistoryDao,
 ) : ConvertHistoryRepository {
-    // ■ CREATE
+    // ■ CREATE --
     override fun insertConvertHistory(beforeText: String, afterText: String, time: String) {
         convertHistoryDao.insertConvertHistory(
             convertHistoryData = ConvertHistoryData(
@@ -18,11 +18,11 @@ class ConvertHistoryRepositoryImpl @Inject constructor(
         )
     }
 
-    // ■ READ
+    // ■ READ --
     override fun getAllConvertHistory(): List<ConvertHistoryData> =
         convertHistoryDao.getAllConvertHistory()
 
-    // ■ DELETE
+    // ■ DELETE --
     override fun deleteAllConvertHistory() =
         convertHistoryDao.deleteAllConvertHistory()
 
