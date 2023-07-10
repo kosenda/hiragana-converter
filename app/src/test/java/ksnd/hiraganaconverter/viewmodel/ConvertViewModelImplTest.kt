@@ -79,7 +79,7 @@ class ConvertViewModelImplTest {
     fun convertViewModel_convert_NotChangeInputTextDoNotReturnResponse() = runTest {
         // 前回の変換のテキストが同じかつ変換タイプも同じ場合は変換処理を行わないことを確認
         viewModelNotReturnErrorResponse.let { viewModel ->
-            viewModel.updateInputText("あ")
+            viewModel.updateInputText("ああ")
             viewModel.updateOutputText("い")
             viewModel.convert(context = context)
             advanceUntilIdle()

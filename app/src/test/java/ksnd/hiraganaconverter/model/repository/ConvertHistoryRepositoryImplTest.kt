@@ -24,7 +24,7 @@ class ConvertHistoryRepositoryImplTest {
         convertHistoryRepositoryImpl.insertConvertHistory(
             beforeText = "A",
             afterText = "B",
-            time = "2022/12/20 22:10",
+            time = "2022/12/20 22:11",
         )
         assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().size).isEqualTo(1)
     }

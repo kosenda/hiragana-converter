@@ -63,7 +63,7 @@ class DataStoreRepositoryImplTest {
     // ● selectedCustomFont --------------------------------------------------------------------- ●
     @Test
     fun dataStoreRepository_initialCustomFont_isDefault() {
-        // フォントの初期値はDefaultであることを確認
+        // フォントの初期値は Defaultであることを確認
         testScope.runTest {
             assertThat(dataStoreRepository.selectedCustomFont().first())
                 .isEqualTo(CustomFont.DEFAULT.name)

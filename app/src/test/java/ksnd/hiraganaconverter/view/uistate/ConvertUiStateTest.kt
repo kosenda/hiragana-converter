@@ -24,8 +24,8 @@ class ConvertUiStateTest {
 
     @Test
     fun convertUiState_sameInputText_isFalse() {
-        convertUiState = convertUiState.copy(inputText = "temp")
-        assertThat(convertUiState.isChangedInputText(previousInputText = "temp")).isFalse()
+        convertUiState = convertUiState.copy(inputText = "temp_")
+        assertThat(convertUiState.isChangedInputText(previousInputText = "temp_")).isFalse()
     }
 
     @Test

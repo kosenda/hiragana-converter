@@ -10,6 +10,10 @@ plugins {
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("org.jetbrains.kotlin.plugin.serialization") version "1.7.10"
     id("com.google.android.gms.oss-licenses-plugin")
+    jacoco
+}
+jacoco {
+    toolVersion = "0.8.9"
 }
 
 android {
@@ -161,4 +165,40 @@ tasks.create<JavaExec>("ktlintFormatting") {
     mainClass.set("com.pinterest.ktlint.Main")
     args("-F", "src/**/*.kt")
     jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
+}
+
+tasks.create<JacocoReport>("jacocoTestReport") {
+    val testTaskName = "testDebugUnitTest"
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+    }
+    gradle.afterProject {
+        executionData.setFrom(file("$buildDir/jacoco/$testTaskName.exec"))
+        sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
+        classDirectories.setFrom(
+            fileTree("$buildDir/tmp/kotlin-classes/debug") {
+                exclude(
+                    "**/R.class",
+                    "**/R\$*.class",
+                    "**/*Fake*.*",
+                    "**/*Preview*.*",
+                    "**/BuildConfig.*",
+                    "**/*Manifest*.*",
+                    "**/*Test*.*",
+                    "**/*Hilt*.*",
+                    "**/*Factory*.*",
+                    "**/*Module*.*",
+                    "**/*Key*.*",
+                    "**/*Screen*.*",
+                    "**/*Content*.*",
+                    "**/*Dialog*.*",
+                    "**/*Drawer*.*",
+                    "**/*Navigation*.*",
+                    "**/*MainActivity*.*",
+                    "**/view/**",
+                )
+            }
+        )
+    }
 }
