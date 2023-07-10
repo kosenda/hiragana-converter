@@ -13,11 +13,11 @@ plugins {
 }
 
 android {
-    namespace = "ksnd.open.hiraganaconverter"
+    namespace = "ksnd.hiraganaconverter"
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "ksnd.open.hiraganaconverter"
+        applicationId = "ksnd.hiraganaconverter"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
