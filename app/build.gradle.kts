@@ -174,10 +174,10 @@ tasks.create<JacocoReport>("jacocoTestReport") {
         xml.required.set(true)
     }
     gradle.afterProject {
-        executionData.setFrom(file("${project.buildDir}/jacoco"))
+        executionData.setFrom(file("$buildDir/jacoco/$testTaskName.exec"))
         sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
         classDirectories.setFrom(
-            fileTree("${project.buildDir}/tmp/kotlin-classes/debug") {
+            fileTree("$buildDir/tmp/kotlin-classes/debug") {
                 exclude(
                     "**/R.class",
                     "**/R\$*.class",
