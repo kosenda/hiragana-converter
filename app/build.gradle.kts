@@ -67,8 +67,11 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.compose.ui:ui:1.4.3")
+    implementation(libs.androidx.core.ktx)
+
+    // Compose
+    implementation(libs.androidx.compose.ui)
+
     implementation("androidx.compose.material:material:1.4.3")
     implementation("androidx.compose.ui:ui-tooling-preview:1.4.3")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
