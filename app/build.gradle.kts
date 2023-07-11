@@ -68,23 +68,15 @@ android {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
+    implementation(libs.junit)
 
     // Compose
+    implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.compose.ui.tooling.preview)
 
-    implementation("androidx.compose.ui:ui-tooling-preview:1.4.3")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.activity:activity-compose:1.7.2")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.4.3")
-    debugImplementation("androidx.compose.ui:ui-tooling:1.4.3")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.4.3")
-
-    // Material you
     implementation("com.google.android.material:material:1.9.0")
-    implementation("androidx.compose.material3:material3:1.2.0-alpha03")
 
     // accompanist
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
