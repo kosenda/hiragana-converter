@@ -70,6 +70,9 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.junit)
 
+    // Accompanist
+    implementation(libs.accompanist.systemuicontroller)
+
     // Compose
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
@@ -77,9 +80,6 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
 
     implementation("com.google.android.material:material:1.9.0")
-
-    // accompanist
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
 
     // COIL
     implementation("io.coil-kt:coil-compose:2.2.2")
