@@ -72,7 +72,6 @@ dependencies {
     // Compose
     implementation(libs.androidx.compose.ui)
 
-    implementation("androidx.compose.material:material:1.4.3")
     implementation("androidx.compose.ui:ui-tooling-preview:1.4.3")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
     implementation("androidx.activity:activity-compose:1.7.2")
