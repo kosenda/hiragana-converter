@@ -82,18 +82,18 @@ dependencies {
     implementation("com.google.android.material:material:1.9.0")
 
     // COIL
-    implementation("io.coil-kt:coil-compose:2.2.2")
+    implementation(libs.coil)
 
     // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation(libs.retrofit)
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.46.1")
-    kapt("com.google.dagger:hilt-compiler:2.46.1")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     // dataStore preferences
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation(libs.androidx.dataStore.preferences)
 
     // ktlint
     ktlint("com.pinterest:ktlint:0.48.0") {
