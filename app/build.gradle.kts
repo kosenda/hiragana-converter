@@ -14,7 +14,7 @@ plugins {
     jacoco
 }
 jacoco {
-    toolVersion = "0.8.9"
+    toolVersion = libs.versions.jacoco.get()
 }
 
 android {
@@ -51,7 +51,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
     }
-    packagingOptions {
+    packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
@@ -126,8 +126,8 @@ dependencies {
     // Timber
     implementation(libs.timber)
 
-    // OSS Licenses Gradle Plugin
-    implementation("com.google.android.gms:play-services-oss-licenses:17.0.1")
+    // OSS Licenses
+    implementation(libs.play.oss.licenses)
 
     // Splash Screen
     implementation(libs.androidx.core.splashscreen)
