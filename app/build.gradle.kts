@@ -1,5 +1,3 @@
-@file:Suppress("UnstableApiUsage")
-
 val ktlint: Configuration by configurations.creating
 
 plugins {
