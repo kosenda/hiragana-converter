@@ -3,14 +3,14 @@
 val ktlint: Configuration by configurations.creating
 
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.ksp)
-    id("dagger.hilt.android.plugin")
-    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
-    id("com.google.android.gms.oss-licenses-plugin")
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.oss.licenses)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.secrets)
     jacoco
 }
 jacoco {
