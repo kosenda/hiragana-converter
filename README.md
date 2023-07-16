@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/circleci/circleci-docs.svg?style=svg)](https://https://github.com/kosenda/hiragana-converter)　[![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg?style=flat)](https://renovatebot.com)　
+
 # Hiragana Converter （Japanese app name: ひらがな変換）
 
 ## Summary
@@ -12,23 +14,6 @@ This is an Android app that uses gooラボ's API ([Japanese Hiragana Conversion 
 |After（Hiragana）|かんじと わーどを ふくむ にほんごもじれつ|
 |After（Katakana）|カンジト ワードヲ フクム ニホンゴモジレツ|
 
-## About fonts
-
-#### [Corporate Logo (Round) ver3](https://logotype.jp/font-corpmaru.html)
-- Free "Corporate Logo (Round) ver3" font DL recommended for cute occasions. 
-- かわいい場面におすすめの「コーポレート・ロゴ（ラウンド）ver3」フォント無料DL 
-
-#### [Corporate Yawa Akira ver3](https://logotype.jp/corp-yawamin.html)
-- Free download of the rounded "Corporate Yawa Akira ver3" font
-- 丸く加工した「コーポレートやわ明ver3」フォントの無料ダウンロード  
-  
-#### [Nostal Dot (M+)](https://logotype.jp/nosutaru-dot.html)
-- 「Nostal Dot (M+)」 font DL  
-- 「ノスタルドット（M+）」フォントDL  
-  
-#### [BIZ UDGothic](https://fonts.google.com/specimen/BIZ+UDGothic)
-- a universal design typeface designed to be easy to read and ideal for education and business documentation
-  
 ## How to perform API communication within the app
 
 1. Get your API key below.  
@@ -58,6 +43,23 @@ https://labs.goo.ne.jp/apiusage/
 |Secrets gradle plugin|Reading API keys from `local.properties`|
 |Truth|Assertions used in testing|
 |Timber|Log output library|
+
+## About fonts
+
+#### [Corporate Logo (Round) ver3](https://logotype.jp/font-corpmaru.html)
+- Free "Corporate Logo (Round) ver3" font DL recommended for cute occasions. 
+- かわいい場面におすすめの「コーポレート・ロゴ（ラウンド）ver3」フォント無料DL 
+
+#### [Corporate Yawa Akira ver3](https://logotype.jp/corp-yawamin.html)
+- Free download of the rounded "Corporate Yawa Akira ver3" font
+- 丸く加工した「コーポレートやわ明ver3」フォントの無料ダウンロード  
+  
+#### [Nostal Dot (M+)](https://logotype.jp/nosutaru-dot.html)
+- 「Nostal Dot (M+)」 font DL  
+- 「ノスタルドット（M+）」フォントDL  
+  
+#### [BIZ UDGothic](https://fonts.google.com/specimen/BIZ+UDGothic)
+- a universal design typeface designed to be easy to read and ideal for education and business documentation
 
 ## Image
 |Conversion screen(Light)|Conversion screen(Dark)|
