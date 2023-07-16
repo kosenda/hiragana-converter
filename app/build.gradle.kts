@@ -87,6 +87,7 @@ dependencies {
 
     // Retrofit
     implementation(libs.retrofit)
+    implementation(libs.retrofit.kotlinx.serialization.converter)
 
     // Hilt
     implementation(libs.hilt.android)
@@ -110,28 +111,26 @@ dependencies {
     implementation(libs.room.ktx)
 
     // Robolectric environment
-    testImplementation("androidx.test:core:1.5.0")
-    testImplementation("org.robolectric:robolectric:4.10.3")
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.robolectric)
 
     // kotlinx serialization
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
-    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
+    implementation(libs.kotlinx.serialization.json)
 
     // Kotlin Coroutine Test
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2")
+    testImplementation(libs.kotlinx.coroutines.test)
 
     // Truth
-    testImplementation("com.google.truth:truth:1.1.5")
-    androidTestImplementation("com.google.truth:truth:1.1.5")
+    testImplementation(libs.truth)
 
     // Timber
-    implementation("com.jakewharton.timber:timber:5.0.1")
+    implementation(libs.timber)
 
     // OSS Licenses Gradle Plugin
     implementation("com.google.android.gms:play-services-oss-licenses:17.0.1")
 
     // Splash Screen
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation(libs.androidx.core.splashscreen)
 }
 
 // チェック

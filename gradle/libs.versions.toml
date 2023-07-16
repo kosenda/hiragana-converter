@@ -8,13 +8,13 @@ androidxComposeMaterial3 = "1.2.0-alpha02"
 androidxCore = "1.10.1"
 androidxCoreSplashscreen = "1.0.1"
 androidxDataStore = "1.0.0"
-androidxCoroutines = "1.7.2"
 androidxHilt = "1.0.0"
 androidxNavigation = "2.6.0"
 androidxTestCore = "1.5.0"
 androidxUi = "1.5.0-beta03"
 coil = "2.2.2"
 constraintlayout = "2.1.4"
+coroutines = "1.7.2"
 dokka = "1.8.20"
 firebaseBom = "32.1.1"
 firebaseCrashlyticsPlugin = "2.9.6"
@@ -28,6 +28,7 @@ ktlint = "0.50.0"
 ossLicenses = "17.0.1"
 ossLicensesPlugin = "0.10.6"
 retrofit = "2.9.0"
+retrofitSerialization = "0.8.0"
 robolectric = "4.10.3"
 room = "2.5.2"
 secrets = "2.0.1"
@@ -57,10 +58,11 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidxCoreSplashscreen" }
 androidx-dataStore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidxDataStore" }
-androidx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "androidxCoroutines" }
-androidx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "androidxCoroutines" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTestCore" }
+
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 
 # Coil
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
@@ -101,6 +103,7 @@ firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashly
 
 # Retrofit
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-kotlinx-serialization-converter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitSerialization" }
 
 # Room
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
