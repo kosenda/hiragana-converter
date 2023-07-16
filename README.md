@@ -1,46 +1,43 @@
-# Google Play でリリースしたアプリのコピー版です
-## アプリ名「ひらがな変換」（ Hiragana Converter ）
-Google Play  
-https://play.google.com/store/apps/details?id=ksnd.hiraganaconverter
-___
-## アプリの説明
-漢字やアルファベットを含む日本語文字列をひらがな／カタカナに変換します。
-### 変換例
-|変換前 / 変換後|文章|
+# Hiragana Converter （Japanese app name: ひらがな変換）
+
+## Summary
+This is an Android app that uses gooラボ's API ([Japanese Hiragana Conversion API](https://labs.goo.ne.jp/api/en/hiragana-translation/)) to convert Japanese strings, including kanji and alphabets, into hiragana/katakana.
+
+<a href='https://play.google.com/store/apps/details?id=ksnd.hiraganaconverter&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img width="300" alt='Get it on Google Play' src='https://play.google.com/intl/ja/badges/static/images/badges/en_badge_web_generic.png'/></a>
+
+## Conversion example
+|-|text|
 |:--|:--|
-|変換前|漢字とWORDを含む日本語文字列|
-|変換後（ひらがな）|かんじと わーどを ふくむ にほんごもじれつ|
-|変換後（カタカナ）|カンジト ワードヲ フクム ニホンゴモジレツ|
-___
-## 使用しているAPIについて
-gooラボ様の「ひらがな化API」になります。  
-https://labs.goo.ne.jp/api/jp/hiragana-translation/
-___
-## 使用しているフォントについて
+|Before|漢字とWORDを含む日本語文字列|
+|After（Hiragana）|かんじと わーどを ふくむ にほんごもじれつ|
+|After（Katakana）|カンジト ワードヲ フクム ニホンゴモジレツ|
 
-- かわいい場面におすすめの「コーポレート・ロゴ（ラウンド）ver3」フォント無料DL  
-https://logotype.jp/font-corpmaru.html  
+## About fonts
 
+#### [Corporate Logo (Round) ver3](https://logotype.jp/font-corpmaru.html)
+- Free "Corporate Logo (Round) ver3" font DL recommended for cute occasions. 
+- かわいい場面におすすめの「コーポレート・ロゴ（ラウンド）ver3」フォント無料DL 
+
+#### [Corporate Yawa Akira ver3](https://logotype.jp/corp-yawamin.html)
+- Free download of the rounded "Corporate Yawa Akira ver3" font
 - 丸く加工した「コーポレートやわ明ver3」フォントの無料ダウンロード  
-https://logotype.jp/corp-yawamin.html  
-
+  
+#### [Nostal Dot (M+)](https://logotype.jp/nosutaru-dot.html)
+- 「Nostal Dot (M+)」 font DL  
 - 「ノスタルドット（M+）」フォントDL  
-https://logotype.jp/nosutaru-dot.html  
+  
+#### [BIZ UDGothic](https://fonts.google.com/specimen/BIZ+UDGothic)
+  
+## How to perform API communication within the app
 
-- BIZ UDGothic  
-https://fonts.google.com/specimen/BIZ+UDGothic  
-___
-## アプリ内でAPI通信を行う方法
-
-1. 以下でAPIキーを取得してください。  
+1. Get your API key below.  
 https://labs.goo.ne.jp/apiusage/  
 
-2. local.properties の一番下に以下を追加してください。  
-apiKey=<1.で取得したAPIキー>  
-（例： apiKey=011222333333abcd）
-___
-## 使用している代表的なライブラリ  
-|名前|簡単な説明|
+2. Add the following to the bottom of `local.properties`  
+`apiKey=<API key obtained in 1.>`  （Example： apiKey=011222333333abcd）  
+
+## Typical libraries used  
+|Name|Brief description|
 |:--|:--|
 |Jetpack Compose|UIアプリ開発ツールキット|
 |Material3|デザイン|
