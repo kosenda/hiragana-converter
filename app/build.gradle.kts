@@ -68,6 +68,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.junit)
 
@@ -79,8 +80,6 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     debugImplementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.compose.ui.tooling.preview)
-
-    implementation("com.google.android.material:material:1.9.0")
 
     // COIL
     implementation(libs.coil)
