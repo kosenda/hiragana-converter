@@ -40,19 +40,25 @@ https://labs.goo.ne.jp/apiusage/
 ## Typical libraries used  
 |Name|Brief description|
 |:--|:--|
-|Jetpack Compose|Toolkit for building native UIs in Android|
-|Material3|Design|
-|Retrofit2|Library for API communications|
-|kotlinx serialization|Serializer / Deserializer|
-|Interceptor|Create error response|
-|Preferences DataStore|Permanent data|
-|Room|Database|
-|Robolectric|Unit Test Framework|
-|Truth|Assertions used in testing|
-|Hilt|Dependency Injection|
 |Coil|Image loading library|
+|Danger|Automatic review|
+|Hilt|Dependency Injection|
+|Interceptor|Create error response|
+|Jacoco|Code coverage library|
+|Jetpack Compose|Toolkit for building native UIs in Android|
+|Kotlinx serialization|Serializer / Deserializer|
+|Ktlint|Formatter|
+|Material3|Design|
+|OSS licenses plugin|OSS Licenses|
+|Preferences DataStore|Permanent data|
+|Renovate|Automated project dependency updates|
+|Retrofit2|Library for API communications|
+|Robolectric|Unit Test Framework|
+|Room|Database|
+|Secrets gradle plugin|Reading API keys from `local.properties`|
+|Truth|Assertions used in testing|
 |Timber|Log output library|
-___
+
 ## Image
 |Conversion screen(Light)|Conversion screen(Dark)|
 |:-:|:-:|
