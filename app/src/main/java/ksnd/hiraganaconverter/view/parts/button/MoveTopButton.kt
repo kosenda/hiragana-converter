@@ -5,9 +5,11 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
@@ -19,6 +21,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
@@ -46,12 +50,13 @@ fun MoveTopButton(scrollState: ScrollState) {
                     scrollState.animateScrollTo(0)
                 }
             },
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
         ) {
-            Text(
-                modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp),
-                text = stringResource(id = R.string.top),
-                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                style = MaterialTheme.typography.bodyLarge,
+            Image(
+                painter = painterResource(id = R.drawable.baseline_keyboard_arrow_up_24),
+                contentDescription = stringResource(id = R.string.top),
+                modifier = Modifier.size(48.dp),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondaryContainer),
             )
         }
     }
