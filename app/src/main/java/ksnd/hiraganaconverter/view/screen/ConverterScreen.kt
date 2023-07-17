@@ -120,7 +120,7 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Row(modifier = Modifier.weight(1f)) {
-                    ConversionTypeSpinnerCard(onSelectedChange = viewModel::changeHiraKanaType,)
+                    ConversionTypeSpinnerCard(onSelectedChange = viewModel::changeHiraKanaType)
                 }
                 CustomButtonWithBackground(
                     id = R.drawable.ic_reset,
