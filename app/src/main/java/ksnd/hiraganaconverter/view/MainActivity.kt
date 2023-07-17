@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -53,15 +53,21 @@ class MainActivity : ComponentActivity() {
             val customFont: State<String> =
                 mainViewModel.customFont.collectAsState(initial = CustomFont.DEFAULT.name)
 
-            HiraganaConverterTheme(
-                isDarkTheme = when (themeNum.value) {
-                    ThemeNum.NIGHT.num -> true
-                    ThemeNum.DAY.num -> false
-                    else -> isSystemInDarkTheme()
-                },
-                customFont = customFont.value,
+            val isDarkTheme = when (themeNum.value) {
+                ThemeNum.NIGHT.num -> true
+                ThemeNum.DAY.num -> false
+                else -> isSystemInDarkTheme()
+            }
+
+            CompositionLocalProvider(
+                LocalIsDark provides isDarkTheme,
             ) {
-                ConverterScreen()
+                HiraganaConverterTheme(
+                    isDarkTheme = isDarkTheme,
+                    customFont = customFont.value,
+                ) {
+                    ConverterScreen()
+                }
             }
         }
     }

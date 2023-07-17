@@ -1,5 +1,8 @@
 package ksnd.hiraganaconverter.view.parts
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -9,8 +12,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -25,7 +30,10 @@ import ksnd.hiraganaconverter.view.parts.button.CustomIconButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
+fun TopBar(
+    modifier: Modifier = Modifier,
+    scrollBehavior: TopAppBarScrollBehavior,
+) {
     var isShowSettingDialog by rememberSaveable { mutableStateOf(false) }
     var isShowInfoDialog by rememberSaveable { mutableStateOf(false) }
     var isShowConvertHistoryDialog by rememberSaveable { mutableStateOf(false) }
@@ -46,41 +54,54 @@ fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
         )
     }
 
-    TopAppBar(
-        title = {},
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-            scrolledContainerColor = MaterialTheme.colorScheme.surface,
-            titleContentColor = MaterialTheme.colorScheme.primary,
-        ),
-        actions = {
-            CustomIconButton(
-                modifier = Modifier.padding(horizontal = 8.dp),
-                contentDescription = "info",
-                painter = painterResource(id = R.drawable.ic_outline_info_24),
-                onClick = { isShowInfoDialog = true },
-            )
-            CustomIconButton(
-                modifier = Modifier.padding(end = 8.dp),
-                contentDescription = "settings",
-                painter = painterResource(id = R.drawable.ic_outline_settings_24),
-                onClick = { isShowSettingDialog = true },
-            )
-            CustomIconButton(
-                contentDescription = "history",
-                painter = painterResource(id = R.drawable.ic_baseline_history_24),
-                onClick = { isShowConvertHistoryDialog = true },
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            GooCreditImage()
-        },
-        scrollBehavior = scrollBehavior,
-    )
+    val isShowTopBar by remember(scrollBehavior.state.collapsedFraction) {
+        derivedStateOf { scrollBehavior.state.collapsedFraction != 1.toFloat() }
+    }
+
+    AnimatedVisibility(
+        visible = isShowTopBar,
+        modifier = modifier,
+        enter = fadeIn(),
+        exit = fadeOut(),
+    ) {
+        TopAppBar(
+            title = {},
+            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = MaterialTheme.colorScheme.surface,
+                scrolledContainerColor = MaterialTheme.colorScheme.surface,
+                titleContentColor = MaterialTheme.colorScheme.primary,
+            ),
+            actions = {
+                CustomIconButton(
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    contentDescription = "info",
+                    painter = painterResource(id = R.drawable.ic_outline_info_24),
+                    onClick = { isShowInfoDialog = true },
+                )
+                CustomIconButton(
+                    modifier = Modifier.padding(end = 8.dp),
+                    contentDescription = "settings",
+                    painter = painterResource(id = R.drawable.ic_outline_settings_24),
+                    onClick = { isShowSettingDialog = true },
+                )
+                CustomIconButton(
+                    contentDescription = "history",
+                    painter = painterResource(id = R.drawable.ic_baseline_history_24),
+                    onClick = { isShowConvertHistoryDialog = true },
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                GooCreditImage()
+            },
+            scrollBehavior = scrollBehavior,
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 private fun PreviewTopBar() {
-    TopBar(TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState()))
+    TopBar(
+        scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState()),
+    )
 }
