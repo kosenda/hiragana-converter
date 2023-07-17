@@ -40,6 +40,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
