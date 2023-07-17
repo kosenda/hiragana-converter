@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.oss.licenses)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.secrets)
+    alias(libs.plugins.dokka)
     jacoco
 }
 jacoco {
