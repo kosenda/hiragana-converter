@@ -4,7 +4,6 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,7 +18,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ClipboardManager
@@ -71,12 +69,16 @@ private fun ConvertHistoryDetailDialogContent(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
-            DialogCloseButton(onCloseClick = onCloseClick)
-            Text(
-                text = historyData.time,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(start = 16.dp, top = 8.dp),
+            DialogCloseButton(
+                leftContent = {
+                    Text(
+                        text = historyData.time,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(start = 16.dp, top = 8.dp),
+                    )
+                },
+                onCloseClick = onCloseClick
             )
             BeforeOrAfterText(
                 historyData = historyData,
