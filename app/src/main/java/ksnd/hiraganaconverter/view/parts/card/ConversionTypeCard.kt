@@ -77,7 +77,7 @@ private fun ConversionTypeSpinnerCardContent(selectedTextType: HiraKanaType) {
 
 @Preview
 @Composable
-private fun PreviewConversionTypeSpinnerCard_Light() {
+private fun PreviewConversionTypeCard_Light() {
     HiraganaConverterTheme(isDarkTheme = false) {
         ConversionTypeCard(onSelectedChange = {})
     }
@@ -85,7 +85,7 @@ private fun PreviewConversionTypeSpinnerCard_Light() {
 
 @Preview
 @Composable
-private fun PreviewConversionTypeSpinnerCard_Dark() {
+private fun PreviewConversionTypeCard_Dark() {
     HiraganaConverterTheme(isDarkTheme = true) {
         ConversionTypeCard(onSelectedChange = {})
     }
