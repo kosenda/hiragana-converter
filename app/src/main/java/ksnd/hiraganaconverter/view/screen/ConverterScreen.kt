@@ -3,8 +3,10 @@ package ksnd.hiraganaconverter.view.screen
 import android.widget.Toast
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,15 +28,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -44,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ksnd.hiraganaconverter.R
+import ksnd.hiraganaconverter.view.LocalIsDark
 import ksnd.hiraganaconverter.view.parts.TopBar
 import ksnd.hiraganaconverter.view.parts.button.ConvertButton
 import ksnd.hiraganaconverter.view.parts.button.CustomIconButton
@@ -58,11 +66,10 @@ import ksnd.hiraganaconverter.viewmodel.PreviewConvertViewModel
 @Composable
 fun ConverterScreen(convertViewModel: ConvertViewModelImpl = hiltViewModel()) {
     val systemUiController = rememberSystemUiController()
-    val color = MaterialTheme.colorScheme.surface
+    val isDarkTheme = LocalIsDark.current
 
     SideEffect {
-        systemUiController.setStatusBarColor(color)
-        systemUiController.setNavigationBarColor(color)
+        systemUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = isDarkTheme.not())
     }
 
     ConverterScreenContent(
@@ -70,26 +77,33 @@ fun ConverterScreen(convertViewModel: ConvertViewModelImpl = hiltViewModel()) {
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 private fun ConverterScreenContent(viewModel: ConvertViewModel) {
     val focusManager = LocalFocusManager.current
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     val context = LocalContext.current
     val convertUiState by viewModel.uiState.collectAsState()
+    val density = LocalDensity.current.density
+    var topBarHeight by remember { mutableIntStateOf(0) }
 
     val scrollState = rememberScrollState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
-        topBar = { TopBar(scrollBehavior) },
+        topBar = {
+            TopBar(
+                modifier = Modifier.onSizeChanged { topBarHeight = it.height },
+                scrollBehavior = scrollBehavior,
+            )
+        },
         containerColor = MaterialTheme.colorScheme.surface,
         floatingActionButton = { MoveTopButton(scrollState = scrollState) },
-    ) { padding ->
+    ) { innerPadding ->
         Column(
             modifier = Modifier
-                .padding(padding)
-                .padding(all = 8.dp)
+                .padding(horizontal = 8.dp)
+                .consumeWindowInsets(innerPadding)
                 .fillMaxSize()
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .verticalScroll(scrollState)
@@ -101,6 +115,7 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
                     )
                 },
         ) {
+            Spacer(modifier = Modifier.height((topBarHeight / density).toInt().dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {

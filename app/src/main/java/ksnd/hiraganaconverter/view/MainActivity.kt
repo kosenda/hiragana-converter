@@ -5,12 +5,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -41,6 +43,8 @@ class MainActivity : ComponentActivity() {
             Timber.plant(Timber.DebugTree())
         }
 
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
             val mainViewModel: MainViewModel = hiltViewModel()
 
@@ -49,15 +53,21 @@ class MainActivity : ComponentActivity() {
             val customFont: State<String> =
                 mainViewModel.customFont.collectAsState(initial = CustomFont.DEFAULT.name)
 
-            HiraganaConverterTheme(
-                isDarkTheme = when (themeNum.value) {
-                    ThemeNum.NIGHT.num -> true
-                    ThemeNum.DAY.num -> false
-                    else -> isSystemInDarkTheme()
-                },
-                customFont = customFont.value,
+            val isDarkTheme = when (themeNum.value) {
+                ThemeNum.NIGHT.num -> true
+                ThemeNum.DAY.num -> false
+                else -> isSystemInDarkTheme()
+            }
+
+            CompositionLocalProvider(
+                LocalIsDark provides isDarkTheme,
             ) {
-                ConverterScreen()
+                HiraganaConverterTheme(
+                    isDarkTheme = isDarkTheme,
+                    customFont = customFont.value,
+                ) {
+                    ConverterScreen()
+                }
             }
         }
     }
