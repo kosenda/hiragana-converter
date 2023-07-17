@@ -56,7 +56,7 @@ import ksnd.hiraganaconverter.view.parts.TopBar
 import ksnd.hiraganaconverter.view.parts.button.CustomButtonWithBackground
 import ksnd.hiraganaconverter.view.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.view.parts.button.MoveTopButton
-import ksnd.hiraganaconverter.view.parts.card.ConversionTypeSpinnerCard
+import ksnd.hiraganaconverter.view.parts.card.ConversionTypeCard
 import ksnd.hiraganaconverter.view.parts.card.ErrorCard
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.viewmodel.ConvertViewModel
@@ -120,7 +120,7 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Row(modifier = Modifier.weight(1f)) {
-                    ConversionTypeSpinnerCard(onSelectedChange = viewModel::changeHiraKanaType)
+                    ConversionTypeCard(onSelectedChange = viewModel::changeHiraKanaType)
                 }
                 CustomButtonWithBackground(
                     id = R.drawable.ic_reset,
