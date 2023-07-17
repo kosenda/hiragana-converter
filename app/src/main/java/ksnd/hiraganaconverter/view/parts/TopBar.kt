@@ -50,6 +50,7 @@ fun TopBar(scrollBehavior: TopAppBarScrollBehavior) {
         title = {},
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.surface,
+            scrolledContainerColor = MaterialTheme.colorScheme.surface,
             titleContentColor = MaterialTheme.colorScheme.primary,
         ),
         actions = {
