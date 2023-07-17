@@ -2,6 +2,7 @@ package ksnd.hiraganaconverter.viewmodel
 
 import android.content.Context
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,12 +22,14 @@ class PreviewConvertViewModel : ConvertViewModel() {
     override fun updateInputText(inputText: String) {}
     override fun updateOutputText(outputText: String) {}
     override fun clearErrorText() {}
+    override fun clearAllText() {}
+
     override fun changeHiraKanaType(type: HiraKanaType) {}
 }
 
 class PreviewSettingViewModel : SettingsViewModel() {
     override val customFont: MutableState<String> = mutableStateOf(CustomFont.DEFAULT.name)
-    override val themeNum: MutableState<Int> = mutableStateOf(ThemeNum.AUTO.num)
+    override val themeNum: MutableState<Int> = mutableIntStateOf(ThemeNum.AUTO.num)
     override fun updateThemeNum(newThemeNum: Int) {}
     override fun updateCustomFont(newCustomFont: CustomFont) {}
     override fun isSelectedThemeNum(index: Int): Boolean = 0 == index

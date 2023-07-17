@@ -12,5 +12,6 @@ abstract class ConvertViewModel : ViewModel() {
     abstract fun updateInputText(inputText: String)
     abstract fun updateOutputText(outputText: String)
     abstract fun clearErrorText()
+    abstract fun clearAllText()
     abstract fun changeHiraKanaType(type: HiraKanaType)
 }

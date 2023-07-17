@@ -119,6 +119,16 @@ class ConvertViewModelImpl @Inject constructor(
         _uiState.update { it.copy(errorText = "") }
     }
 
+    override fun clearAllText() {
+        _uiState.update {
+            it.copy(
+                inputText = "",
+                outputText = "",
+                errorText = "",
+            )
+        }
+    }
+
     override fun changeHiraKanaType(type: HiraKanaType) {
         _uiState.update { it.copy(selectedTextType = type) }
         previousInputText.value = ""

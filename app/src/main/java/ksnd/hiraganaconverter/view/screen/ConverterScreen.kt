@@ -53,7 +53,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ksnd.hiraganaconverter.R
 import ksnd.hiraganaconverter.view.LocalIsDark
 import ksnd.hiraganaconverter.view.parts.TopBar
-import ksnd.hiraganaconverter.view.parts.button.ConvertButton
+import ksnd.hiraganaconverter.view.parts.button.CustomButtonWithBackground
 import ksnd.hiraganaconverter.view.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.view.parts.button.MoveTopButton
 import ksnd.hiraganaconverter.view.parts.card.ConversionTypeSpinnerCard
@@ -120,14 +120,22 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Row(modifier = Modifier.weight(1f)) {
-                    ConversionTypeSpinnerCard(
-                        onSelectedChange = viewModel::changeHiraKanaType,
-                    )
+                    ConversionTypeSpinnerCard(onSelectedChange = viewModel::changeHiraKanaType,)
                 }
-                ConvertButton(
-                    onClick = {
-                        viewModel.convert(context = context)
-                    },
+                CustomButtonWithBackground(
+                    id = R.drawable.ic_reset,
+                    convertDescription = "reset",
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    onClick = { viewModel.convert(context = context) },
+                )
+                CustomButtonWithBackground(
+                    modifier = Modifier.padding(start = 4.dp),
+                    id = R.drawable.ic_baseline_compare_arrows_24,
+                    convertDescription = stringResource(id = R.string.conversion),
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    onClick = viewModel::clearAllText,
                 )
             }
 
