@@ -127,7 +127,7 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
                     convertDescription = "reset",
                     containerColor = MaterialTheme.colorScheme.surfaceVariant,
                     contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    onClick = { viewModel.convert(context = context) },
+                    onClick = viewModel::clearAllText,
                 )
                 CustomButtonWithBackground(
                     modifier = Modifier.padding(start = 4.dp),
@@ -135,7 +135,7 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
                     convertDescription = stringResource(id = R.string.conversion),
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    onClick = viewModel::clearAllText,
+                    onClick = { viewModel.convert(context = context) },
                 )
             }
 
