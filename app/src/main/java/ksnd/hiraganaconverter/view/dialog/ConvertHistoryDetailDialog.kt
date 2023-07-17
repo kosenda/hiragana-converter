@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,9 +16,10 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ClipboardManager
@@ -32,7 +34,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import ksnd.hiraganaconverter.R
 import ksnd.hiraganaconverter.model.ConvertHistoryData
-import ksnd.hiraganaconverter.view.parts.button.BottomCloseButton
 import ksnd.hiraganaconverter.view.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 
@@ -46,34 +47,31 @@ fun ConvertHistoryDetailDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         ConvertHistoryDetailDialogContent(
-            onCloseClick = onCloseClick,
             historyData = historyData,
+            onCloseClick = onCloseClick,
         )
     }
 }
 
 @Composable
 private fun ConvertHistoryDetailDialogContent(
-    onCloseClick: () -> Unit,
     historyData: ConvertHistoryData,
+    onCloseClick: () -> Unit,
 ) {
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
 
-    Scaffold(
+    Surface(
         modifier = Modifier
             .fillMaxHeight(0.90f)
             .fillMaxWidth(0.90f)
             .clip(RoundedCornerShape(16.dp)),
-        bottomBar = {
-            BottomCloseButton(onClick = onCloseClick)
-        },
-    ) { padding ->
+    ) {
         Column(
             modifier = Modifier
-                .padding(padding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
+            DialogCloseButton(onCloseClick = onCloseClick)
             Text(
                 text = historyData.time,
                 style = MaterialTheme.typography.bodyMedium,
@@ -109,9 +107,9 @@ private fun BeforeOrAfterText(
     Row {
         Text(
             text = if (isBefore) {
-                "[ ${stringResource(id = R.string.before_conversion)} ]"
+                String.format("〈 %s 〉", stringResource(id = R.string.before_conversion))
             } else {
-                "[ ${stringResource(id = R.string.after_conversion)} ]"
+                String.format("〈 %s 〉", stringResource(id = R.string.after_conversion))
             },
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
@@ -166,13 +164,13 @@ private fun PreviewConvertHistoryDetailDialogContent_Light() {
     HiraganaConverterTheme(isDarkTheme = false) {
         Box(modifier = Modifier.fillMaxSize()) {
             ConvertHistoryDetailDialogContent(
-                onCloseClick = {},
                 historyData = ConvertHistoryData(
                     id = 0,
                     time = "2022/11/26 22:25",
                     before = "変換前はこんな感じ",
                     after = "へんかんごはこんなかんじ",
                 ),
+                onCloseClick = {},
             )
         }
     }
@@ -184,13 +182,13 @@ private fun PreviewConvertHistoryDetailDialogContent_Dark() {
     HiraganaConverterTheme(isDarkTheme = true) {
         Box(modifier = Modifier.fillMaxSize()) {
             ConvertHistoryDetailDialogContent(
-                onCloseClick = {},
                 historyData = ConvertHistoryData(
                     id = 0,
                     time = "2022/11/26 22:25",
                     before = "変換前はこんな感じ",
                     after = "へんかんごはこんなかんじ",
                 ),
+                onCloseClick = {},
             )
         }
     }
