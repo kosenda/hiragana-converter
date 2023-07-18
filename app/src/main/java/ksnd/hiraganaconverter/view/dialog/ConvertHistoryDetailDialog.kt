@@ -1,6 +1,7 @@
 package ksnd.hiraganaconverter.view.dialog
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -44,6 +45,7 @@ fun ConvertHistoryDetailDialog(
         onDismissRequest = { },
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
+        BackHandler(onBack = onCloseClick)
         ConvertHistoryDetailDialogContent(
             historyData = historyData,
             onCloseClick = onCloseClick,

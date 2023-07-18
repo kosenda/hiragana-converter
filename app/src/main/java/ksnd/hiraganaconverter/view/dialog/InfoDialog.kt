@@ -1,6 +1,7 @@
 package ksnd.hiraganaconverter.view.dialog
 
 import android.content.Intent
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -57,6 +58,7 @@ fun InfoDialog(onCloseClick: () -> Unit) {
         onDismissRequest = { },
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
+        BackHandler(onBack = onCloseClick)
         InfoDialogContent(onCloseClick = onCloseClick)
     }
 }

@@ -1,5 +1,6 @@
 package ksnd.hiraganaconverter.view.dialog
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -48,6 +49,7 @@ fun SettingDialog(
         onDismissRequest = { },
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
+        BackHandler(onBack = onCloseClick)
         SettingDialogContent(
             onCloseClick = onCloseClick,
             viewModel = settingsViewModel,

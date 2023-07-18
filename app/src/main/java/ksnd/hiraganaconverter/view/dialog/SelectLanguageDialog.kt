@@ -1,5 +1,6 @@
 package ksnd.hiraganaconverter.view.dialog
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -36,6 +37,7 @@ fun SelectLanguageDialog(
         onDismissRequest = { },
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
+        BackHandler(onBack = onCloseClick)
         SelectLanguageDialogContent(
             onCloseClick = onCloseClick,
             viewModel = selectLanguageViewModel,
