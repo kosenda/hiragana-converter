@@ -12,7 +12,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -70,7 +69,7 @@ private fun SettingDialogContent(
         )
     }
 
-    Scaffold(
+    Surface(
         modifier = Modifier
             .fillMaxHeight(0.95f)
             .fillMaxWidth(0.95f)
@@ -78,25 +77,25 @@ private fun SettingDialogContent(
     ) {
         Column(
             modifier = Modifier
-                .padding(it)
                 .padding(all = 16.dp)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
+                .fillMaxSize(),
         ) {
             DialogCloseButton(onCloseClick = onCloseClick)
-            SettingThemeContent(
-                onRadioButtonClick = viewModel::updateThemeNum,
-                isSelectedNum = viewModel::isSelectedThemeNum,
-            )
-            SettingLanguageContent(
-                onClick = {
-                    isShowSelectLanguageDialog.value = true
-                },
-            )
-            SettingFontContent(
-                updateCustomFont = viewModel::updateCustomFont,
-                isSelectedFont = viewModel::isSelectedFont,
-            )
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                SettingThemeContent(
+                    onRadioButtonClick = viewModel::updateThemeNum,
+                    isSelectedNum = viewModel::isSelectedThemeNum,
+                )
+                SettingLanguageContent(
+                    onClick = {
+                        isShowSelectLanguageDialog.value = true
+                    },
+                )
+                SettingFontContent(
+                    updateCustomFont = viewModel::updateCustomFont,
+                    isSelectedFont = viewModel::isSelectedFont,
+                )
+            }
         }
     }
 }

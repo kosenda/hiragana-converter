@@ -66,11 +66,7 @@ private fun ConvertHistoryDetailDialogContent(
             .fillMaxWidth(0.90f)
             .clip(RoundedCornerShape(16.dp)),
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-        ) {
+        Column(modifier = Modifier.fillMaxSize()) {
             DialogCloseButton(
                 leftContent = {
                     Text(
@@ -82,21 +78,23 @@ private fun ConvertHistoryDetailDialogContent(
                 },
                 onCloseClick = onCloseClick
             )
-            BeforeOrAfterText(
-                historyData = historyData,
-                isBefore = true,
-                clipboardManager = clipboardManager,
-            )
-            Divider(
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(vertical = 8.dp, horizontal = 48.dp),
-            )
-            BeforeOrAfterText(
-                historyData = historyData,
-                isBefore = false,
-                clipboardManager = clipboardManager,
-            )
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                BeforeOrAfterText(
+                    historyData = historyData,
+                    isBefore = true,
+                    clipboardManager = clipboardManager,
+                )
+                Divider(
+                    thickness = 1.dp,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 48.dp),
+                )
+                BeforeOrAfterText(
+                    historyData = historyData,
+                    isBefore = false,
+                    clipboardManager = clipboardManager,
+                )
+            }
         }
     }
 }

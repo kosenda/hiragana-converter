@@ -17,12 +17,13 @@ fun DialogCloseButton(
     onCloseClick: () -> Unit,
 ) {
     Row(
+        modifier = Modifier.padding(bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         leftContent()
         Spacer(modifier = Modifier.weight(1f))
         CustomIconButton(
-            modifier = Modifier.padding(top = 8.dp, end = 8.dp),
+            modifier = Modifier.padding(end = 8.dp),
             contentDescription = "",
             painter = painterResource(id = R.drawable.baseline_close_24),
             onClick = onCloseClick,

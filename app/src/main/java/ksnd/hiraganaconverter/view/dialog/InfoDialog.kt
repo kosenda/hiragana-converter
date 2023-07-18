@@ -103,16 +103,17 @@ private fun InfoDialogContent(onCloseClick: () -> Unit) {
 
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(all = 16.dp)
-                .verticalScroll(rememberScrollState()),
+                .fillMaxSize()
+                .padding(all = 16.dp),
         ) {
             DialogCloseButton(onCloseClick = onCloseClick)
-            AppInfoContent(onURLClick = { isShowMovesToAppSiteDialog = true })
-            DeveloperInfoContent()
-            APIInfoContent(onURLClick = { isShowMovesToApiSiteDialog = true })
-            LicensesContent()
-            Spacer(modifier = Modifier.height(40.dp))
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                AppInfoContent(onURLClick = { isShowMovesToAppSiteDialog = true })
+                DeveloperInfoContent()
+                APIInfoContent(onURLClick = { isShowMovesToApiSiteDialog = true })
+                LicensesContent()
+                Spacer(modifier = Modifier.height(40.dp))
+            }
         }
     }
 }

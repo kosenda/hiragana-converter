@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -66,15 +68,17 @@ private fun SelectLanguageDialogContent(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             DialogCloseButton(onCloseClick = onCloseClick)
-            displayLanguageList.forEachIndexed { index, language ->
-                LanguageCard(
-                    modifier = Modifier.weight(1f),
-                    onNewLanguageClick = viewModel::updateSelectLanguage,
-                    index = index,
-                    displayLanguage = language,
-                )
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                displayLanguageList.forEachIndexed { index, language ->
+                    LanguageCard(
+                        modifier = Modifier.weight(1f),
+                        onNewLanguageClick = viewModel::updateSelectLanguage,
+                        index = index,
+                        displayLanguage = language,
+                    )
+                }
+                Spacer(modifier = Modifier.height(24.dp))
             }
-            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }
