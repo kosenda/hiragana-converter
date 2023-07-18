@@ -10,7 +10,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -30,7 +29,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ksnd.hiraganaconverter.R
 import ksnd.hiraganaconverter.view.CustomFont
 import ksnd.hiraganaconverter.view.ThemeNum
-import ksnd.hiraganaconverter.view.parts.button.BottomCloseButton
 import ksnd.hiraganaconverter.view.parts.button.CustomButton
 import ksnd.hiraganaconverter.view.parts.button.CustomFontRadioButton
 import ksnd.hiraganaconverter.view.parts.button.CustomThemeRadioButton
@@ -57,7 +55,6 @@ fun SettingDialog(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SettingDialogContent(
     onCloseClick: () -> Unit,
@@ -76,9 +73,6 @@ private fun SettingDialogContent(
             .fillMaxHeight(0.95f)
             .fillMaxWidth(0.95f)
             .clip(RoundedCornerShape(16.dp)),
-        bottomBar = {
-            BottomCloseButton(onClick = onCloseClick)
-        },
     ) {
         Column(
             modifier = Modifier
@@ -87,6 +81,7 @@ private fun SettingDialogContent(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
+            DialogCloseButton(onCloseClick = onCloseClick)
             SettingThemeContent(
                 onRadioButtonClick = viewModel::updateThemeNum,
                 isSelectedNum = viewModel::isSelectedThemeNum,
