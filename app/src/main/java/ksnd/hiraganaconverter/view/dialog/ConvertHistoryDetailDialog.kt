@@ -76,7 +76,7 @@ private fun ConvertHistoryDetailDialogContent(
                         modifier = Modifier.padding(start = 16.dp, top = 8.dp),
                     )
                 },
-                onCloseClick = onCloseClick
+                onCloseClick = onCloseClick,
             )
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 BeforeOrAfterText(

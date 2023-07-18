@@ -97,7 +97,7 @@ private fun ConvertHistoryDialogContent(
             if (convertHistoryUiState.convertHistories.isEmpty()) {
                 EmptyHistoryImage()
             } else {
-                LazyColumn{
+                LazyColumn {
                     items(
                         items = convertHistoryUiState.convertHistories,
                         key = { history -> history.id },
