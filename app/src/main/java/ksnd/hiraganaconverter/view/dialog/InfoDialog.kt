@@ -1,6 +1,7 @@
 package ksnd.hiraganaconverter.view.dialog
 
 import android.content.Intent
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -18,9 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,7 +47,6 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import ksnd.hiraganaconverter.BuildConfig
 import ksnd.hiraganaconverter.R
 import ksnd.hiraganaconverter.view.parts.GooCreditImage
-import ksnd.hiraganaconverter.view.parts.button.BottomCloseButton
 import ksnd.hiraganaconverter.view.parts.button.CustomButton
 import ksnd.hiraganaconverter.view.parts.card.TitleCard
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
@@ -60,11 +58,11 @@ fun InfoDialog(onCloseClick: () -> Unit) {
         onDismissRequest = { },
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
+        BackHandler(onBack = onCloseClick)
         InfoDialogContent(onCloseClick = onCloseClick)
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun InfoDialogContent(onCloseClick: () -> Unit) {
     val urlHandler = LocalUriHandler.current
@@ -72,16 +70,12 @@ private fun InfoDialogContent(onCloseClick: () -> Unit) {
     var isShowMovesToAppSiteDialog by remember { mutableStateOf(false) }
     var isShowMovesToApiSiteDialog by remember { mutableStateOf(false) }
 
-    Scaffold(
+    Surface(
         modifier = Modifier
             .fillMaxHeight(0.95f)
             .fillMaxWidth(0.95f)
             .clip(RoundedCornerShape(16.dp)),
-        bottomBar = {
-            BottomCloseButton(onClick = onCloseClick)
-        },
-    ) { padding ->
-
+    ) {
         if (isShowMovesToAppSiteDialog) {
             MovesToSiteDialog(
                 onDismissRequest = {
@@ -109,16 +103,17 @@ private fun InfoDialogContent(onCloseClick: () -> Unit) {
 
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(padding)
-                .padding(all = 16.dp)
-                .verticalScroll(rememberScrollState()),
+                .fillMaxSize()
+                .padding(all = 16.dp),
         ) {
-            AppInfoContent(onURLClick = { isShowMovesToAppSiteDialog = true })
-            DeveloperInfoContent()
-            APIInfoContent(onURLClick = { isShowMovesToApiSiteDialog = true })
-            LicensesContent()
-            Spacer(modifier = Modifier.height(40.dp))
+            DialogCloseButton(onCloseClick = onCloseClick)
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                AppInfoContent(onURLClick = { isShowMovesToAppSiteDialog = true })
+                DeveloperInfoContent()
+                APIInfoContent(onURLClick = { isShowMovesToApiSiteDialog = true })
+                LicensesContent()
+                Spacer(modifier = Modifier.height(40.dp))
+            }
         }
     }
 }

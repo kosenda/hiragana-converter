@@ -1,10 +1,9 @@
 package ksnd.hiraganaconverter.view.dialog
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,9 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,7 +31,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import ksnd.hiraganaconverter.R
-import ksnd.hiraganaconverter.view.parts.button.BottomCloseButton
 import ksnd.hiraganaconverter.view.parts.button.DeleteButton
 import ksnd.hiraganaconverter.view.parts.card.ConvertHistoryCard
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
@@ -51,6 +47,7 @@ fun ConvertHistoryDialog(
         onDismissRequest = { },
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
+        BackHandler(onBack = onCloseClick)
         ConvertHistoryDialogContent(
             onCloseClick = onCloseClick,
             viewModel = convertHistoryViewModel,
@@ -58,7 +55,6 @@ fun ConvertHistoryDialog(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ConvertHistoryDialogContent(
     onCloseClick: () -> Unit,
@@ -70,16 +66,12 @@ private fun ConvertHistoryDialogContent(
         viewModel.getAllConvertHistory()
     }
 
-    Scaffold(
+    Surface(
         modifier = Modifier
             .fillMaxHeight(0.95f)
             .fillMaxWidth(0.95f)
             .clip(RoundedCornerShape(16.dp)),
-        bottomBar = {
-            BottomCloseButton(onClick = onCloseClick)
-        },
-    ) { padding ->
-
+    ) {
         if (convertHistoryUiState.isShowDetailDialog) {
             convertHistoryUiState.usedHistoryDataByDetail?.let {
                 ConvertHistoryDetailDialog(
@@ -91,21 +83,20 @@ private fun ConvertHistoryDialogContent(
 
         Column(
             modifier = Modifier
-                .padding(padding)
                 .padding(all = 16.dp)
                 .fillMaxSize(),
         ) {
+            DialogCloseButton(
+                leftContent = {
+                    if (convertHistoryUiState.convertHistories.isNotEmpty()) {
+                        DeleteButton(onClick = viewModel::deleteAllConvertHistory)
+                    }
+                },
+                onCloseClick = onCloseClick,
+            )
             if (convertHistoryUiState.convertHistories.isEmpty()) {
                 EmptyHistoryImage()
             } else {
-                Row(
-                    modifier = Modifier.padding(vertical = 8.dp),
-                ) {
-                    Spacer(modifier = Modifier.weight(1f))
-                    DeleteButton(
-                        onClick = viewModel::deleteAllConvertHistory,
-                    )
-                }
                 LazyColumn {
                     items(
                         items = convertHistoryUiState.convertHistories,

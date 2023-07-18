@@ -1,6 +1,7 @@
 package ksnd.hiraganaconverter.view.dialog
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,7 +16,7 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -32,7 +33,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import ksnd.hiraganaconverter.R
 import ksnd.hiraganaconverter.model.ConvertHistoryData
-import ksnd.hiraganaconverter.view.parts.button.BottomCloseButton
 import ksnd.hiraganaconverter.view.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 
@@ -45,56 +45,56 @@ fun ConvertHistoryDetailDialog(
         onDismissRequest = { },
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
+        BackHandler(onBack = onCloseClick)
         ConvertHistoryDetailDialogContent(
-            onCloseClick = onCloseClick,
             historyData = historyData,
+            onCloseClick = onCloseClick,
         )
     }
 }
 
 @Composable
 private fun ConvertHistoryDetailDialogContent(
-    onCloseClick: () -> Unit,
     historyData: ConvertHistoryData,
+    onCloseClick: () -> Unit,
 ) {
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
 
-    Scaffold(
+    Surface(
         modifier = Modifier
             .fillMaxHeight(0.90f)
             .fillMaxWidth(0.90f)
             .clip(RoundedCornerShape(16.dp)),
-        bottomBar = {
-            BottomCloseButton(onClick = onCloseClick)
-        },
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
-        ) {
-            Text(
-                text = historyData.time,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(start = 16.dp, top = 8.dp),
+    ) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            DialogCloseButton(
+                leftContent = {
+                    Text(
+                        text = historyData.time,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.padding(start = 16.dp, top = 8.dp),
+                    )
+                },
+                onCloseClick = onCloseClick,
             )
-            BeforeOrAfterText(
-                historyData = historyData,
-                isBefore = true,
-                clipboardManager = clipboardManager,
-            )
-            Divider(
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(vertical = 8.dp, horizontal = 48.dp),
-            )
-            BeforeOrAfterText(
-                historyData = historyData,
-                isBefore = false,
-                clipboardManager = clipboardManager,
-            )
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                BeforeOrAfterText(
+                    historyData = historyData,
+                    isBefore = true,
+                    clipboardManager = clipboardManager,
+                )
+                Divider(
+                    thickness = 1.dp,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 48.dp),
+                )
+                BeforeOrAfterText(
+                    historyData = historyData,
+                    isBefore = false,
+                    clipboardManager = clipboardManager,
+                )
+            }
         }
     }
 }
@@ -109,9 +109,9 @@ private fun BeforeOrAfterText(
     Row {
         Text(
             text = if (isBefore) {
-                "[ ${stringResource(id = R.string.before_conversion)} ]"
+                String.format("〈 %s 〉", stringResource(id = R.string.before_conversion))
             } else {
-                "[ ${stringResource(id = R.string.after_conversion)} ]"
+                String.format("〈 %s 〉", stringResource(id = R.string.after_conversion))
             },
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
@@ -166,13 +166,13 @@ private fun PreviewConvertHistoryDetailDialogContent_Light() {
     HiraganaConverterTheme(isDarkTheme = false) {
         Box(modifier = Modifier.fillMaxSize()) {
             ConvertHistoryDetailDialogContent(
-                onCloseClick = {},
                 historyData = ConvertHistoryData(
                     id = 0,
                     time = "2022/11/26 22:25",
                     before = "変換前はこんな感じ",
                     after = "へんかんごはこんなかんじ",
                 ),
+                onCloseClick = {},
             )
         }
     }
@@ -184,13 +184,13 @@ private fun PreviewConvertHistoryDetailDialogContent_Dark() {
     HiraganaConverterTheme(isDarkTheme = true) {
         Box(modifier = Modifier.fillMaxSize()) {
             ConvertHistoryDetailDialogContent(
-                onCloseClick = {},
                 historyData = ConvertHistoryData(
                     id = 0,
                     time = "2022/11/26 22:25",
                     before = "変換前はこんな感じ",
                     after = "へんかんごはこんなかんじ",
                 ),
+                onCloseClick = {},
             )
         }
     }

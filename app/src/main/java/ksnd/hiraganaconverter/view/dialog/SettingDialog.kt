@@ -1,5 +1,6 @@
 package ksnd.hiraganaconverter.view.dialog
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,9 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -30,7 +29,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ksnd.hiraganaconverter.R
 import ksnd.hiraganaconverter.view.CustomFont
 import ksnd.hiraganaconverter.view.ThemeNum
-import ksnd.hiraganaconverter.view.parts.button.BottomCloseButton
 import ksnd.hiraganaconverter.view.parts.button.CustomButton
 import ksnd.hiraganaconverter.view.parts.button.CustomFontRadioButton
 import ksnd.hiraganaconverter.view.parts.button.CustomThemeRadioButton
@@ -50,6 +48,7 @@ fun SettingDialog(
         onDismissRequest = { },
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
+        BackHandler(onBack = onCloseClick)
         SettingDialogContent(
             onCloseClick = onCloseClick,
             viewModel = settingsViewModel,
@@ -57,7 +56,6 @@ fun SettingDialog(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SettingDialogContent(
     onCloseClick: () -> Unit,
@@ -71,35 +69,33 @@ private fun SettingDialogContent(
         )
     }
 
-    Scaffold(
+    Surface(
         modifier = Modifier
             .fillMaxHeight(0.95f)
             .fillMaxWidth(0.95f)
             .clip(RoundedCornerShape(16.dp)),
-        bottomBar = {
-            BottomCloseButton(onClick = onCloseClick)
-        },
     ) {
         Column(
             modifier = Modifier
-                .padding(it)
                 .padding(all = 16.dp)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
+                .fillMaxSize(),
         ) {
-            SettingThemeContent(
-                onRadioButtonClick = viewModel::updateThemeNum,
-                isSelectedNum = viewModel::isSelectedThemeNum,
-            )
-            SettingLanguageContent(
-                onClick = {
-                    isShowSelectLanguageDialog.value = true
-                },
-            )
-            SettingFontContent(
-                updateCustomFont = viewModel::updateCustomFont,
-                isSelectedFont = viewModel::isSelectedFont,
-            )
+            DialogCloseButton(onCloseClick = onCloseClick)
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                SettingThemeContent(
+                    onRadioButtonClick = viewModel::updateThemeNum,
+                    isSelectedNum = viewModel::isSelectedThemeNum,
+                )
+                SettingLanguageContent(
+                    onClick = {
+                        isShowSelectLanguageDialog.value = true
+                    },
+                )
+                SettingFontContent(
+                    updateCustomFont = viewModel::updateCustomFont,
+                    isSelectedFont = viewModel::isSelectedFont,
+                )
+            }
         }
     }
 }
