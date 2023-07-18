@@ -68,16 +68,13 @@ private fun SelectLanguageDialogContent(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             DialogCloseButton(onCloseClick = onCloseClick)
-            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                displayLanguageList.forEachIndexed { index, language ->
-                    LanguageCard(
-                        modifier = Modifier.weight(1f),
-                        onNewLanguageClick = viewModel::updateSelectLanguage,
-                        index = index,
-                        displayLanguage = language,
-                    )
-                }
-                Spacer(modifier = Modifier.height(24.dp))
+            displayLanguageList.forEachIndexed { index, language ->
+                LanguageCard(
+                    modifier = Modifier.weight(1f),
+                    onNewLanguageClick = viewModel::updateSelectLanguage,
+                    index = index,
+                    displayLanguage = language,
+                )
             }
         }
     }
