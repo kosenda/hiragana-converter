@@ -40,7 +40,7 @@
         <item>カタカナ</item>
     </string-array>
 
-    <!-- 共通 Start ####################################################################### -->
+    <!-- Common Start ####################################################################### -->
 
     <string name="review_url" translatable="false">https://play.google.com/store/apps/details?id=ksnd.hiraganaconverter</string>
     <string name="url_title" translatable="false">URL</string>
@@ -60,15 +60,13 @@
     <string name="licenses_title" translatable="false">Licenses</string>
     <string name="oss_licenses" translatable="false">OSS Licenses</string>
 
-    <string-array name="language">
-        <item>en</item>
-        <item>ja</item>
-    </string-array>
+    <!-- Locale Name -->
+    <string name="locale_en" translatable="false">en</string>
+    <string name="locale_ja" translatable="false">ja</string>
 
-    <string-array name="display_language">
-        <item>English</item>
-        <item>日本語</item>
-    </string-array>
+    <!-- Display Language -->
+    <string name="display_en" translatable="false">English</string>
+    <string name="display_ja" translatable="false">日本語</string>
 
-    <!-- 共通 End ####################################################################### -->
+    <!-- Common End ####################################################################### -->
 </resources>
