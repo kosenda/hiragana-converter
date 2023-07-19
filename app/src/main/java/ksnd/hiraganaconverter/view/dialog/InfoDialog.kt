@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
@@ -48,6 +49,7 @@ import ksnd.hiraganaconverter.BuildConfig
 import ksnd.hiraganaconverter.R
 import ksnd.hiraganaconverter.view.parts.GooCreditImage
 import ksnd.hiraganaconverter.view.parts.button.CustomButton
+import ksnd.hiraganaconverter.view.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.view.parts.card.TitleCard
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.view.theme.urlColor
@@ -172,6 +174,7 @@ private fun AppInfoContent(onURLClick: () -> Unit) {
 
 @Composable
 private fun DeveloperInfoContent() {
+    val uriHandler = LocalUriHandler.current
     Card(
         modifier = Modifier
             .padding(vertical = 8.dp)
@@ -197,7 +200,24 @@ private fun DeveloperInfoContent() {
                     text = stringResource(id = R.string.developer_name_title),
                     modifier = Modifier.padding(bottom = 4.dp),
                 )
-                BodyMedium(text = stringResource(id = R.string.developer_name))
+                Row {
+                    BodyMedium(text = stringResource(id = R.string.developer_name))
+                    CustomIconButton(
+                        contentDescription = "",
+                        painter = painterResource(id = R.drawable.ic_github_logo),
+                        contentColor = null,
+                        containerColor = Color.White,
+                        onClick = { uriHandler.openUri(uri = "https://github.com/kosenda") },
+                    )
+                    CustomIconButton(
+                        modifier = Modifier.padding(start = 8.dp),
+                        contentDescription = "",
+                        painter = painterResource(id = R.drawable.ic_twitter_logo),
+                        contentColor = null,
+                        containerColor = Color.White,
+                        onClick = { uriHandler.openUri(uri = "https://twitter.com/ksnd_dev") },
+                    )
+                }
             }
         }
     }
