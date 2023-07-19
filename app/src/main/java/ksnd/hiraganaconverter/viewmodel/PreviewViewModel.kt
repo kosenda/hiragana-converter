@@ -38,10 +38,6 @@ class PreviewSettingViewModel : SettingsViewModel() {
     }
 }
 
-class PreviewSelectLanguageViewModel : SelectLanguageViewModel() {
-    override fun updateSelectLanguage(newLanguage: String) {}
-}
-
 class PreviewConvertHistoryViewModel(isNoData: Boolean = false) : ConvertHistoryViewModel() {
     override val uiState: StateFlow<ConvertHistoryUiState> = MutableStateFlow(
         ConvertHistoryUiState(
