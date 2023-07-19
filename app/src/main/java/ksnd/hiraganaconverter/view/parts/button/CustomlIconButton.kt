@@ -9,6 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
@@ -26,6 +27,8 @@ fun CustomIconButton(
     modifier: Modifier = Modifier,
     contentDescription: String,
     painter: Painter,
+    contentColor: Color? = MaterialTheme.colorScheme.primary,
+    containerColor: Color = MaterialTheme.colorScheme.surface,
     onClick: () -> Unit,
 ) {
     val buttonScaleState = rememberButtonScaleState()
@@ -36,17 +39,23 @@ fun CustomIconButton(
         onClick = onClick,
         interactionSource = buttonScaleState.interactionSource,
         colors = IconButtonDefaults.iconButtonColors(
-            containerColor = MaterialTheme.colorScheme.surface,
+            containerColor = containerColor,
         ),
     ) {
         Image(
             painter = painter,
             contentDescription = contentDescription,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+            colorFilter = if (contentColor == null) null else ColorFilter.tint(contentColor),
             contentScale = ContentScale.Fit,
             modifier = Modifier
                 .size(32.dp)
-                .contentBrush(brush = secondaryBrush()),
+                .then(
+                    if (contentColor == null) {
+                        Modifier
+                    } else {
+                        Modifier.contentBrush(brush = secondaryBrush())
+                    },
+                ),
         )
     }
 }
