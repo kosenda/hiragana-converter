@@ -1,7 +1,6 @@
 package ksnd.hiraganaconverter.view.parts.card
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,6 +24,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import ksnd.hiraganaconverter.view.extension.noRippleClickable
 import ksnd.hiraganaconverter.view.rememberButtonScaleState
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 
@@ -42,9 +42,8 @@ fun ConvertHistoryCard(
             .wrapContentHeight()
             .fillMaxWidth()
             .scale(scale = buttonScaleState.animationScale.value)
-            .clickable(
+            .noRippleClickable(
                 interactionSource = buttonScaleState.interactionSource,
-                indication = null,
                 onClick = onClick,
             ),
         colors = CardDefaults.cardColors(
