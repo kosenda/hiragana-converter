@@ -1,6 +1,5 @@
 package ksnd.hiraganaconverter.view.parts.card
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.R
+import ksnd.hiraganaconverter.view.extension.noRippleClickable
 import ksnd.hiraganaconverter.view.rememberButtonScaleState
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 
@@ -34,9 +34,8 @@ fun LanguageCard(
         modifier = modifier
             .padding(all = 16.dp)
             .scale(scale = buttonScaleState.animationScale.value)
-            .clickable(
+            .noRippleClickable(
                 interactionSource = buttonScaleState.interactionSource,
-                indication = null,
                 onClick = onClick,
             ),
         colors = CardDefaults.cardColors(

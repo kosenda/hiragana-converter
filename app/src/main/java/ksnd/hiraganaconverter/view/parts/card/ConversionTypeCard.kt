@@ -1,6 +1,5 @@
 package ksnd.hiraganaconverter.view.parts.card
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -20,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.R
 import ksnd.hiraganaconverter.model.HiraKanaType
+import ksnd.hiraganaconverter.view.extension.noRippleClickable
 import ksnd.hiraganaconverter.view.rememberButtonScaleState
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 
@@ -34,9 +34,8 @@ fun ConversionTypeCard(
         modifier = Modifier
             .padding(all = 8.dp)
             .scale(scale = buttonScaleState.animationScale.value)
-            .clickable(
+            .noRippleClickable(
                 interactionSource = buttonScaleState.interactionSource,
-                indication = null,
                 onClick = {
                     selectedTextType = when (selectedTextType) {
                         HiraKanaType.HIRAGANA -> HiraKanaType.KATAKANA
