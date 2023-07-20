@@ -2,6 +2,7 @@ package ksnd.hiraganaconverter.view.dialog
 
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -64,6 +65,7 @@ private fun ConvertHistoryDetailDialogContent(
         modifier = Modifier
             .fillMaxHeight(0.90f)
             .fillMaxWidth(0.90f)
+            .border(width = 4.dp, color = MaterialTheme.colorScheme.surfaceVariant, shape = RoundedCornerShape(16.dp))
             .clip(RoundedCornerShape(16.dp)),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
