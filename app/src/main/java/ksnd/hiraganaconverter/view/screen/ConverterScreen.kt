@@ -51,6 +51,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ksnd.hiraganaconverter.R
+import ksnd.hiraganaconverter.model.ConvertErrorType
+import ksnd.hiraganaconverter.model.repository.LIMIT_CONVERT_COUNT
 import ksnd.hiraganaconverter.view.LocalIsDark
 import ksnd.hiraganaconverter.view.parts.TopBar
 import ksnd.hiraganaconverter.view.parts.button.CustomButtonWithBackground
@@ -82,7 +84,7 @@ fun ConverterScreen(convertViewModel: ConvertViewModelImpl = hiltViewModel()) {
 private fun ConverterScreenContent(viewModel: ConvertViewModel) {
     val focusManager = LocalFocusManager.current
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
-    val context = LocalContext.current
+    val timeZone = stringResource(id = R.string.time_zone)
     val convertUiState by viewModel.uiState.collectAsState()
     val density = LocalDensity.current.density
     var topBarHeight by remember { mutableIntStateOf(0) }
@@ -135,14 +137,21 @@ private fun ConverterScreenContent(viewModel: ConvertViewModel) {
                     convertDescription = stringResource(id = R.string.conversion),
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    onClick = { viewModel.convert(context = context) },
+                    onClick = { viewModel.convert(timeZone = timeZone) },
                 )
             }
 
-            if (convertUiState.errorText != "") {
+            convertUiState.convertErrorType?.let {
                 ErrorCard(
-                    errorText = convertUiState.errorText,
-                    onClick = viewModel::clearErrorText,
+                    errorText = when (it) {
+                        ConvertErrorType.TOO_MANY_CHARACTER -> stringResource(id = R.string.request_too_large)
+                        ConvertErrorType.RATE_LIMIT_EXCEEDED -> stringResource(id = R.string.limit_exceeded)
+                        ConvertErrorType.CONVERSION_FAILED -> stringResource(id = R.string.conversion_failed)
+                        ConvertErrorType.INTERNAL_SERVER -> stringResource(id = R.string.internal_server_error)
+                        ConvertErrorType.NETWORK -> stringResource(id = R.string.network_error)
+                        ConvertErrorType.REACHED_CONVERT_MAX_LIMIT -> stringResource(id = R.string.limit_local_count, LIMIT_CONVERT_COUNT)
+                    },
+                    onClick = viewModel::clearConvertErrorType,
                 )
             }
 

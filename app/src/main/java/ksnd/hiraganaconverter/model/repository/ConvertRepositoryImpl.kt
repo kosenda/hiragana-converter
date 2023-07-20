@@ -1,7 +1,6 @@
 package ksnd.hiraganaconverter.model.repository
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ksnd.hiraganaconverter.model.ConvertApiClient
@@ -24,7 +23,6 @@ class ConvertRepositoryImpl @Inject constructor(
     private val contentType = "application/json".toMediaType()
     private val client = OkHttpClient.Builder().addInterceptor(errorInterceptor).build()
 
-    @OptIn(ExperimentalSerializationApi::class)
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://labs.goo.ne.jp/api/hiragana/")
         .addConverterFactory(Json.asConverterFactory(contentType))
@@ -51,13 +49,15 @@ class ConvertRepositoryImpl @Inject constructor(
             )
             val response: Response<ResponseData> = convertService.requestConvert(body)
             if (response.isSuccessful.not()) {
-                Timber.w("response_message: %s", response.raw().message)
+                Timber.w("response message: %s", response.raw().message)
             }
             Timber.i("response raw: %s" + response.raw())
             return response
         } catch (e: Exception) {
-            // 基本的にはAPI通信に関してはErrorInterceptorでcatchされ失敗してもレスポンスが返ってくる想定であり、
-            // ここのcatchはいらないとは思うが念のためここでもエラー処理を行う
+            /*
+             * Basically, it is assumed that API communication is caught by ErrorInterceptor and a response is returned even if it fails,
+             * and error processing is also performed here just in case, although it is not necessary to catch here.
+             */
             Timber.e(e)
             return null
         }

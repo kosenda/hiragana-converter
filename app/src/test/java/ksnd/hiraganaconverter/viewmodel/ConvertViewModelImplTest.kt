@@ -171,7 +171,7 @@ class ConvertViewModelImplTest {
         viewModel.convert(context = context)
         advanceUntilIdle()
         assertThat(viewModel.uiState.value.errorText).isNotEqualTo("")
-        viewModel.clearErrorText()
+        viewModel.clearConvertErrorType()
         assertThat(viewModel.uiState.value.errorText).isEqualTo("")
     }
 
