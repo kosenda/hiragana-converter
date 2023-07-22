@@ -1,5 +1,8 @@
 package ksnd.hiraganaconverter.model.usecase
 
-class IsReachedConvertMaxLimitException : Exception()
-class ConversionFailedException : Exception()
-class InterceptorError : Exception()
+import java.lang.RuntimeException
+
+sealed class ConvertTextUseCaseError : RuntimeException()
+object IsReachedConvertMaxLimitException : ConvertTextUseCaseError()
+object ConversionFailedException : ConvertTextUseCaseError()
+object InterceptorError : ConvertTextUseCaseError()
