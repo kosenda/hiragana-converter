@@ -33,53 +33,41 @@ class DataStoreRepositoryImplTest {
     )
 
     @Test
-    fun selectedThemeNum_initial_isAutoNum() {
-        mainDispatcherRule.testScope.runTest {
-            assertThat(dataStoreRepository.selectedThemeNum().first()).isEqualTo(Theme.AUTO.num)
-        }
+    fun selectedThemeNum_initial_isAutoNum() = runTest {
+        assertThat(dataStoreRepository.selectedThemeNum().first()).isEqualTo(Theme.AUTO.num)
     }
 
     @Test
-    fun selectedCustomFont_initial_isDefault() {
-        mainDispatcherRule.testScope.runTest {
-            assertThat(dataStoreRepository.selectedCustomFont().first()).isEqualTo(CustomFont.DEFAULT.name)
-        }
+    fun selectedCustomFont_initial_isDefault() = runTest {
+        assertThat(dataStoreRepository.selectedCustomFont().first()).isEqualTo(CustomFont.DEFAULT.name)
     }
 
     @Test
-    fun updateThemeNum_newThemeNum_isChangedTheme() {
-        mainDispatcherRule.testScope.runTest {
-            dataStoreRepository.updateTheme(Theme.DAY.num)
-            assertThat(dataStoreRepository.selectedThemeNum().first()).isEqualTo(Theme.DAY.num)
-            dataStoreRepository.updateTheme(Theme.NIGHT.num)
-            assertThat(dataStoreRepository.selectedThemeNum().first()).isEqualTo(Theme.NIGHT.num)
-        }
+    fun updateThemeNum_newThemeNum_isChangedTheme() = runTest {
+        dataStoreRepository.updateTheme(Theme.DAY.num)
+        assertThat(dataStoreRepository.selectedThemeNum().first()).isEqualTo(Theme.DAY.num)
+        dataStoreRepository.updateTheme(Theme.NIGHT.num)
+        assertThat(dataStoreRepository.selectedThemeNum().first()).isEqualTo(Theme.NIGHT.num)
     }
 
     @Test
-    fun updateCustomFont_newCustomFont_isChangedCustomFont() {
-        mainDispatcherRule.testScope.runTest {
-            dataStoreRepository.updateCustomFont(CustomFont.BIZ_UDGOTHIC)
-            assertThat(dataStoreRepository.selectedCustomFont().first()).isEqualTo(CustomFont.BIZ_UDGOTHIC.name)
-            dataStoreRepository.updateCustomFont(CustomFont.CORPORATE_LOGO_ROUNDED)
-            assertThat(dataStoreRepository.selectedCustomFont().first()).isEqualTo(CustomFont.CORPORATE_LOGO_ROUNDED.name)
-        }
+    fun updateCustomFont_newCustomFont_isChangedCustomFont() = runTest {
+        dataStoreRepository.updateCustomFont(CustomFont.BIZ_UDGOTHIC)
+        assertThat(dataStoreRepository.selectedCustomFont().first()).isEqualTo(CustomFont.BIZ_UDGOTHIC.name)
+        dataStoreRepository.updateCustomFont(CustomFont.CORPORATE_LOGO_ROUNDED)
+        assertThat(dataStoreRepository.selectedCustomFont().first()).isEqualTo(CustomFont.CORPORATE_LOGO_ROUNDED.name)
     }
 
     @Test
-    fun checkReachedConvertMaxLimit_first_isFalse() {
+    fun checkReachedConvertMaxLimit_first_isFalse() = runTest {
         val today = getNowTime(timeZone = context.getString(R.string.time_zone), format = TimeFormat.YEAR_MONTH_DATE)
-        mainDispatcherRule.testScope.runTest {
-            assertThat(dataStoreRepository.checkReachedConvertMaxLimit(today)).isFalse()
-        }
+        assertThat(dataStoreRepository.checkReachedConvertMaxLimit(today)).isFalse()
     }
 
     @Test
-    fun checkReachedConvertMaxLimit_convertToReachedConvertMaxLimitPlus1_isTrue() {
+    fun checkReachedConvertMaxLimit_convertToReachedConvertMaxLimitPlus1_isTrue() = runTest {
         val today = getNowTime(timeZone = context.getString(R.string.time_zone), format = TimeFormat.YEAR_MONTH_DATE)
-        mainDispatcherRule.testScope.runTest {
-            repeat(LIMIT_CONVERT_COUNT) { assertThat(dataStoreRepository.checkReachedConvertMaxLimit(today)).isFalse() }
-            assertThat(dataStoreRepository.checkReachedConvertMaxLimit(today)).isTrue()
-        }
+        repeat(LIMIT_CONVERT_COUNT) { assertThat(dataStoreRepository.checkReachedConvertMaxLimit(today)).isFalse() }
+        assertThat(dataStoreRepository.checkReachedConvertMaxLimit(today)).isTrue()
     }
 }

@@ -1,28 +1,21 @@
 package ksnd.hiraganaconverter.viewmodel
 
-//@OptIn(ExperimentalCoroutinesApi::class)
-//class ConvertHistoryViewModelImplTest {
-//
-//    private val testDispatcher = StandardTestDispatcher()
-//
-//    // 既存のデータ（変換履歴）あり（2件）
-//    private val existInitDataViewModel = ConvertHistoryViewModelImpl(
-//        convertHistoryRepository = FakeConvertHistoryRepository(exitsInitData = true),
-//        ioDispatcher = testDispatcher,
-//    )
-//
-//    @Before
-//    fun setUp() {
-//        Dispatchers.setMain(testDispatcher)
-//    }
-//
-//    @After
-//    fun tearDown() {
-//        Dispatchers.resetMain()
-//    }
-//
-//    // ■ データ（変換履歴）に関するテスト ------------------------------------------------------ START
-//
+import kotlinx.coroutines.test.runTest
+import ksnd.hiraganaconverter.MainDispatcherRule
+import ksnd.hiraganaconverter.model.ConvertHistoryData
+import ksnd.hiraganaconverter.model.repository.ConvertHistoryRepository
+import org.junit.Rule
+import org.junit.Test
+
+class ConvertHistoryViewModelImplTest {
+    @get: Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
+    private val existInitDataViewModel = ConvertHistoryViewModelImpl(
+        convertHistoryRepository = FakeConvertHistoryRepository(exitsInitData = true),
+        ioDispatcher = mainDispatcherRule.testDispatcher,
+    )
+
 //    @Test
 //    fun convertHistoryViewModel_Initialization_NotExistInitData() = runTest {
 //        // 既存のデータ（変換履歴）なし
@@ -111,40 +104,30 @@ package ksnd.hiraganaconverter.viewmodel
 //        assertThat(existInitDataViewModel.uiState.value.isShowDetailDialog).isFalse()
 //        assertThat(existInitDataViewModel.uiState.value.usedHistoryDataByDetail).isNull()
 //    }
-//
-//    // ■ 変換履歴の詳細ダイアログに関するテスト ------------------------------------------------- End
-//}
-//
-//private class FakeConvertHistoryRepository(exitsInitData: Boolean) : ConvertHistoryRepository {
-//    private var testData: MutableList<ConvertHistoryData> = mutableListOf()
-//
-//    init {
-//        if (exitsInitData) {
-//            testData.add(ConvertHistoryData(id = 0, time = "2022/12/10 10:49", "亜", "あ"))
-//            testData.add(ConvertHistoryData(id = 1, time = "2022/12/10 10:50", "位", "イ"))
-//        }
-//    }
-//
-//    override fun insertConvertHistory(beforeText: String, afterText: String, time: String) {
-//        testData.add(
-//            ConvertHistoryData(
-//                id = testData.size.toLong(),
-//                before = beforeText,
-//                after = afterText,
-//                time = time,
-//            ),
-//        )
-//    }
-//
-//    override fun getAllConvertHistory(): List<ConvertHistoryData> {
-//        return testData
-//    }
-//
-//    override fun deleteAllConvertHistory() {
-//        testData = mutableListOf()
-//    }
-//
-//    override fun deleteConvertHistory(id: Long) {
-//        testData.removeIf { deleteTarget -> deleteTarget.id == id }
-//    }
-//}
+
+}
+
+private class FakeConvertHistoryRepository(exitsInitData: Boolean) : ConvertHistoryRepository {
+    private var testData: MutableList<ConvertHistoryData> = mutableListOf()
+
+    init {
+        if (exitsInitData) {
+            testData.add(ConvertHistoryData(id = 0, time = "2022/12/10 10:49", "日本語", "にほんご"))
+            testData.add(ConvertHistoryData(id = 1, time = "2022/12/10 10:50", "英語", "エイゴ"))
+        }
+    }
+
+    override fun insertConvertHistory(beforeText: String, afterText: String, time: String) {
+        testData.add(ConvertHistoryData(id = testData.size.toLong(), before = beforeText, after = afterText, time = time))
+    }
+
+    override fun getAllConvertHistory(): List<ConvertHistoryData> = testData
+
+    override fun deleteAllConvertHistory() {
+        testData = mutableListOf()
+    }
+
+    override fun deleteConvertHistory(id: Long) {
+        testData.removeIf { deleteTarget -> deleteTarget.id == id }
+    }
+}
