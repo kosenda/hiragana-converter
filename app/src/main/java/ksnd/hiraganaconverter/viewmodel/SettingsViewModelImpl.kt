@@ -1,5 +1,6 @@
 package ksnd.hiraganaconverter.viewmodel
 
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +22,7 @@ class SettingsViewModelImpl @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : SettingsViewModel() {
 
-    override val themeNum = mutableStateOf(Theme.AUTO.num)
+    override val themeNum = mutableIntStateOf(Theme.AUTO.num)
     override val customFont = mutableStateOf(CustomFont.DEFAULT.name)
 
     private val customFontFlow: StateFlow<String> = dataStoreRepository
@@ -41,12 +42,12 @@ class SettingsViewModelImpl @Inject constructor(
         )
 
     init {
-        themeNum.value = themeNumFlow.value
+        themeNum.intValue = themeNumFlow.value
         customFont.value = customFontFlow.value
     }
 
     override fun updateThemeNum(newThemeNum: Int) {
-        themeNum.value = newThemeNum
+        themeNum.intValue = newThemeNum
         CoroutineScope(ioDispatcher).launch {
             dataStoreRepository.updateTheme(newThemeNum)
         }
@@ -60,7 +61,7 @@ class SettingsViewModelImpl @Inject constructor(
     }
 
     override fun isSelectedThemeNum(index: Int): Boolean {
-        return themeNum.value == index
+        return themeNum.intValue == index
     }
 
     override fun isSelectedFont(targetCustomFont: CustomFont): Boolean {
