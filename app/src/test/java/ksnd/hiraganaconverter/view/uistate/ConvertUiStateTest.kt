@@ -1,13 +1,16 @@
 package ksnd.hiraganaconverter.view.uistate
 
-//class ConvertUiStateTest {
-//    private var convertUiState = ConvertUiState()
-//
-//    @Test
-//    fun convertUiState_initialization_isFalse() {
-//        assertThat(convertUiState.isChangedInputText(previousInputText = "")).isFalse()
-//    }
-//
+import com.google.common.truth.Truth.assertThat
+import org.junit.Test
+
+class ConvertUiStateTest {
+    private var convertUiState = ConvertUiState()
+
+    @Test
+    fun convertUiState_initialization_isFalse() {
+        assertThat(convertUiState.isChangedInputText(previousInputText = "")).isFalse()
+    }
+
 //    @Test
 //    fun convertUiState_firstEnterInputText_isTrue() {
 //        convertUiState = convertUiState.copy(inputText = "temp")
@@ -30,4 +33,4 @@ package ksnd.hiraganaconverter.view.uistate
 //        convertUiState = convertUiState.copy(inputText = "input")
 //        assertThat(convertUiState.isChangedInputText(previousInputText = "previous")).isTrue()
 //    }
-//}
+}
