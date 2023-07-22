@@ -19,7 +19,7 @@ class ConvertTextUseCase @Inject constructor(
         val isReachedConvertMaxLimit = dataStoreRepository.checkReachedConvertMaxLimit(
             today = getNowTime(timeZone = timeZone, format = TimeFormat.YEAR_MONTH_DATE),
         )
-        if (isReachedConvertMaxLimit) throw IsReachedConvertMaxLimitException()
+        if (isReachedConvertMaxLimit) throw IsReachedConvertMaxLimitException
 
         val response = convertRepository.requestConvert(
             sentence = inputText,
@@ -28,8 +28,8 @@ class ConvertTextUseCase @Inject constructor(
         )
 
         when {
-            response == null -> throw ConversionFailedException()
-            response.isSuccessful.not() -> throw InterceptorError()
+            response == null -> throw ConversionFailedException
+            response.isSuccessful.not() -> throw InterceptorError
             else -> {
                 val outputText = response.body()?.converted ?: ""
                 convertHistoryRepository.insertConvertHistory(
