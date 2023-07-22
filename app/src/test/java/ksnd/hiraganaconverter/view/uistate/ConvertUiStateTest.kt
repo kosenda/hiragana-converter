@@ -8,29 +8,31 @@ class ConvertUiStateTest {
 
     @Test
     fun isChangedInputText_emptyPreviousInputText_isFalse() {
+        convertUiState = convertUiState.copy(inputText = "")
         assertThat(convertUiState.isChangedInputText(previousInputText = "")).isFalse()
     }
 
-//    @Test
-//    fun convertUiState_firstEnterInputText_isTrue() {
-//        convertUiState = convertUiState.copy(inputText = "temp")
-//        assertThat(convertUiState.isChangedInputText(previousInputText = "")).isTrue()
-//    }
-//
-//    @Test
-//    fun convertUiState_notNewEnterInputText_isFalse() {
-//        assertThat(convertUiState.isChangedInputText(previousInputText = "temp")).isFalse()
-//    }
-//
-//    @Test
-//    fun convertUiState_sameInputText_isFalse() {
-//        convertUiState = convertUiState.copy(inputText = "temp_")
-//        assertThat(convertUiState.isChangedInputText(previousInputText = "temp_")).isFalse()
-//    }
-//
-//    @Test
-//    fun convertUiState_differentInputText_isTrue() {
-//        convertUiState = convertUiState.copy(inputText = "input")
-//        assertThat(convertUiState.isChangedInputText(previousInputText = "previous")).isTrue()
-//    }
+    @Test
+    fun isChangedInputText_firstEnterInputText_isTrue() {
+        convertUiState = convertUiState.copy(inputText = "temp")
+        assertThat(convertUiState.isChangedInputText(previousInputText = "")).isTrue()
+    }
+
+    @Test
+    fun isChangedInputText_existPreviousAndEmptyInput_isFalse() {
+        convertUiState = convertUiState.copy(inputText = "")
+        assertThat(convertUiState.isChangedInputText(previousInputText = "temp")).isFalse()
+    }
+
+    @Test
+    fun isChangedInputText_noChangedInput_isFalse() {
+        convertUiState = convertUiState.copy(inputText = "temp")
+        assertThat(convertUiState.isChangedInputText(previousInputText = "temp")).isFalse()
+    }
+
+    @Test
+    fun convertUiState_differentInput_isTrue() {
+        convertUiState = convertUiState.copy(inputText = "temp")
+        assertThat(convertUiState.isChangedInputText(previousInputText = "previous")).isTrue()
+    }
 }
