@@ -189,6 +189,7 @@ tasks.create<JacocoReport>("jacocoTestReport") {
                     "**/*Drawer*.*",
                     "**/*Navigation*.*",
                     "**/*MainActivity*.*",
+                    "**/*ConvertTextUseCaseError*.*",
                     "**/view/**",
                 )
             }
