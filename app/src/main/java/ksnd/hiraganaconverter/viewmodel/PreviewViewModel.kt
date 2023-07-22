@@ -1,12 +1,12 @@
 package ksnd.hiraganaconverter.viewmodel
 
-import android.content.Context
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import ksnd.hiraganaconverter.model.ConvertErrorType
 import ksnd.hiraganaconverter.model.ConvertHistoryData
 import ksnd.hiraganaconverter.model.HiraKanaType
 import ksnd.hiraganaconverter.view.CustomFont
@@ -16,12 +16,12 @@ import ksnd.hiraganaconverter.view.uistate.ConvertUiState
 
 class PreviewConvertViewModel : ConvertViewModel() {
     override val uiState: StateFlow<ConvertUiState> = MutableStateFlow(
-        ConvertUiState(errorText = "失敗"),
+        ConvertUiState(convertErrorType = ConvertErrorType.CONVERSION_FAILED),
     ).asStateFlow()
-    override fun convert(context: Context) {}
+    override fun convert(timeZone: String) {}
     override fun updateInputText(inputText: String) {}
     override fun updateOutputText(outputText: String) {}
-    override fun clearErrorText() {}
+    override fun clearConvertErrorType() {}
     override fun clearAllText() {}
 
     override fun changeHiraKanaType(type: HiraKanaType) {}
