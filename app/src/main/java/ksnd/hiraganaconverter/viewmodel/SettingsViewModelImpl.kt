@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.di.module.IODispatcher
 import ksnd.hiraganaconverter.model.repository.DataStoreRepository
 import ksnd.hiraganaconverter.view.CustomFont
-import ksnd.hiraganaconverter.view.ThemeNum
+import ksnd.hiraganaconverter.view.Theme
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,7 +21,7 @@ class SettingsViewModelImpl @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : SettingsViewModel() {
 
-    override val themeNum = mutableStateOf(ThemeNum.AUTO.num)
+    override val themeNum = mutableStateOf(Theme.AUTO.num)
     override val customFont = mutableStateOf(CustomFont.DEFAULT.name)
 
     private val customFontFlow: StateFlow<String> = dataStoreRepository
@@ -37,7 +37,7 @@ class SettingsViewModelImpl @Inject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
-            initialValue = ThemeNum.AUTO.num,
+            initialValue = Theme.AUTO.num,
         )
 
     init {
@@ -48,7 +48,7 @@ class SettingsViewModelImpl @Inject constructor(
     override fun updateThemeNum(newThemeNum: Int) {
         themeNum.value = newThemeNum
         CoroutineScope(ioDispatcher).launch {
-            dataStoreRepository.updateThemeNum(newThemeNum)
+            dataStoreRepository.updateTheme(newThemeNum)
         }
     }
 

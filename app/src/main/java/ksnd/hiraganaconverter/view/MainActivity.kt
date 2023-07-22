@@ -49,13 +49,13 @@ class MainActivity : AppCompatActivity() {
             val mainViewModel: MainViewModel = hiltViewModel()
 
             val themeNum: State<Int> =
-                mainViewModel.themeNum.collectAsState(initial = ThemeNum.AUTO.num)
+                mainViewModel.themeNum.collectAsState(initial = Theme.AUTO.num)
             val customFont: State<String> =
                 mainViewModel.customFont.collectAsState(initial = CustomFont.DEFAULT.name)
 
             val isDarkTheme = when (themeNum.value) {
-                ThemeNum.NIGHT.num -> true
-                ThemeNum.DAY.num -> false
+                Theme.NIGHT.num -> true
+                Theme.DAY.num -> false
                 else -> isSystemInDarkTheme()
             }
 

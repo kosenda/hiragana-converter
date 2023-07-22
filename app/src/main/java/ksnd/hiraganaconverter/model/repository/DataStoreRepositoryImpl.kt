@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 import ksnd.hiraganaconverter.di.module.IODispatcher
 import ksnd.hiraganaconverter.model.PreferenceKeys
 import ksnd.hiraganaconverter.view.CustomFont
-import ksnd.hiraganaconverter.view.ThemeNum
+import ksnd.hiraganaconverter.view.Theme
 import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
@@ -30,11 +30,11 @@ class DataStoreRepositoryImpl @Inject constructor(
                 Timber.e("DataStore: %s", exception)
                 when (exception) {
                     is IOException -> emit(emptyPreferences())
-                    else -> ThemeNum.AUTO.num
+                    else -> Theme.AUTO.num
                 }
             }
             .map { preferences ->
-                preferences[PreferenceKeys.THEME_NUM] ?: ThemeNum.AUTO.num
+                preferences[PreferenceKeys.THEME_NUM] ?: Theme.AUTO.num
             }
     }
 
@@ -52,7 +52,7 @@ class DataStoreRepositoryImpl @Inject constructor(
             }
     }
 
-    override suspend fun updateThemeNum(newThemeNum: Int) {
+    override suspend fun updateTheme(newThemeNum: Int) {
         dataStore.edit { it[PreferenceKeys.THEME_NUM] = newThemeNum }
     }
 
