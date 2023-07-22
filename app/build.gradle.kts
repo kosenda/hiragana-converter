@@ -132,6 +132,9 @@ dependencies {
 
     // Splash Screen
     implementation(libs.androidx.core.splashscreen)
+
+    // Mockk
+    testImplementation(libs.mockk)
 }
 
 // チェック

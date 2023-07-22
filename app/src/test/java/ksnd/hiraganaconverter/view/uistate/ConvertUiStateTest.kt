@@ -7,7 +7,7 @@ class ConvertUiStateTest {
     private var convertUiState = ConvertUiState()
 
     @Test
-    fun convertUiState_initialization_isFalse() {
+    fun isChangedInputText_emptyPreviousInputText_isFalse() {
         assertThat(convertUiState.isChangedInputText(previousInputText = "")).isFalse()
     }
 
