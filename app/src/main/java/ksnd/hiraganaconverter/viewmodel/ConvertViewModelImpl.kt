@@ -1,7 +1,5 @@
 package ksnd.hiraganaconverter.viewmodel
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -30,11 +28,9 @@ class ConvertViewModelImpl @Inject constructor(
     private val _uiState = MutableStateFlow(ConvertUiState())
     override val uiState: StateFlow<ConvertUiState> = _uiState.asStateFlow()
 
-    private val previousInputText: MutableState<String> = mutableStateOf("")
-
     override fun convert(timeZone: String) {
         // If input has not changed since the last time, it will not be converted.
-        if (uiState.value.isChangedInputText(previousInputText = previousInputText.value).not()) return
+        if (uiState.value.isChangedInputText().not()) return
 
         CoroutineScope(ioDispatcher).launch {
             runCatching {
@@ -44,11 +40,11 @@ class ConvertViewModelImpl @Inject constructor(
                     it.copy(
                         outputText = outputText,
                         convertErrorType = null,
+                        previousInputText = uiState.value.inputText,
                     )
                 }
-                previousInputText.value = uiState.value.inputText
             }.onFailure { throwable ->
-                Timber.d("ログ throwable: $throwable")
+                Timber.d("convert throwable: $throwable")
                 _uiState.update {
                     it.copy(
                         convertErrorType = when (throwable) {
@@ -93,7 +89,11 @@ class ConvertViewModelImpl @Inject constructor(
     }
 
     override fun changeHiraKanaType(type: HiraKanaType) {
-        _uiState.update { it.copy(selectedTextType = type) }
-        previousInputText.value = ""
+        _uiState.update {
+            it.copy(
+                selectedTextType = type,
+                previousInputText = "",
+            )
+        }
     }
 }
