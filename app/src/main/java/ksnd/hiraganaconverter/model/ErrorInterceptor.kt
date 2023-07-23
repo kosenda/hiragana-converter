@@ -19,7 +19,7 @@ class ErrorInterceptor @Inject constructor() : Interceptor {
                 return response
             }
 
-            Timber.w("beforeConvertedErrorMessage: %s", response.message)
+            Timber.w("beforeConvertedErrorMessage: %s".format(response.message))
             when (response.code) {
                 413 -> {
                     return response
@@ -48,7 +48,7 @@ class ErrorInterceptor @Inject constructor() : Interceptor {
                 }
             }
         } catch (ioe: IOException) {
-            Timber.w("NetworkError: %s", ioe)
+            Timber.w("NetworkError: %s".format(ioe))
             return Response
                 .Builder()
                 .request(request)

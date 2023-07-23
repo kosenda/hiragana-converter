@@ -43,15 +43,15 @@ class ConvertRepositoryImpl @Inject constructor(
                 outputType = type,
             )
             val json = Json.encodeToString(requestData)
-            Timber.i("json: %s", json)
+            Timber.i("json: %s".format(json))
             val body = json.toRequestBody(
                 contentType = "application/json; charset=utf-8".toMediaTypeOrNull(),
             )
             val response: Response<ResponseData> = convertService.requestConvert(body)
             if (response.isSuccessful.not()) {
-                Timber.w("response message: %s", response.raw().message)
+                Timber.w("response message: %s".format(response.raw().message))
             }
-            Timber.i("response raw: %s" + response.raw())
+            Timber.i("response raw: %s".format(response.raw()))
             return response
         } catch (e: Exception) {
             /*
