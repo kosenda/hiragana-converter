@@ -204,6 +204,7 @@ tasks.create<JacocoReport>("jacocoTestReport") {
                     "**/*ResponseData*.*",
                     "**/*RequestData*.*",
                     "**/*ErrorInterceptor*.*",
+                    "**/*Application*.*",
                     "**/view/**",
                 )
             }
