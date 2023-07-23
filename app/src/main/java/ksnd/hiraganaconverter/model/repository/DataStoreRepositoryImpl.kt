@@ -27,7 +27,7 @@ class DataStoreRepositoryImpl @Inject constructor(
     override fun selectedThemeNum(): Flow<Int> {
         return dataStore.data
             .catch { exception ->
-                Timber.e("DataStore: %s", exception)
+                Timber.e("DataStore: %s".format(exception))
                 when (exception) {
                     is IOException -> emit(emptyPreferences())
                     else -> Theme.AUTO.num
@@ -41,7 +41,7 @@ class DataStoreRepositoryImpl @Inject constructor(
     override fun selectedCustomFont(): Flow<String> {
         return dataStore.data
             .catch { exception ->
-                Timber.e("DataStore: %s", exception)
+                Timber.e("DataStore: %s".format(exception))
                 when (exception) {
                     is IOException -> emit(emptyPreferences())
                     else -> CustomFont.DEFAULT.name
@@ -71,18 +71,18 @@ class DataStoreRepositoryImpl @Inject constructor(
         } catch (e: NoSuchElementException) {
             ""
         }
-        Timber.i("old_convert_count: %d", oldConvertCount)
-        Timber.i("old_convert_time: %s", oldLastConvertTime)
+        Timber.i("old_convert_count: %d".format(oldConvertCount))
+        Timber.i("old_convert_time: %s".format(oldLastConvertTime))
 
         return if (today != oldLastConvertTime) {
             updateLastConvertTime(today)
             updateConvertCount(1)
             Timber.i("new_convert_count: 1")
-            Timber.i("new_convert_time: %s", today)
+            Timber.i("new_convert_time: %s".format(today))
             false
         } else {
             val newConvertCount = oldConvertCount + 1
-            Timber.i("new_convert_count: %d", newConvertCount)
+            Timber.i("new_convert_count: %d".format(newConvertCount))
             updateConvertCount(newConvertCount)
             newConvertCount > LIMIT_CONVERT_COUNT
         }
@@ -91,7 +91,7 @@ class DataStoreRepositoryImpl @Inject constructor(
     private fun lastConvertTime(): Flow<String> {
         return dataStore.data
             .catch { exception ->
-                Timber.e("DataStore: %s", exception)
+                Timber.e("DataStore: %s".format(exception))
                 if (exception is IOException) emit(emptyPreferences())
             }
             .map { preferences ->
@@ -102,7 +102,7 @@ class DataStoreRepositoryImpl @Inject constructor(
     private fun convertCount(): Flow<Int> {
         return dataStore.data
             .catch { exception ->
-                Timber.e("DataStore: %s", exception)
+                Timber.e("DataStore: %s".format(exception))
                 if (exception is IOException) emit(emptyPreferences())
             }
             .map { preferences ->
