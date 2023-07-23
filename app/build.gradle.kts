@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.secrets)
     alias(libs.plugins.dokka)
+    alias(libs.plugins.roborazzi)
     jacoco
 }
 jacoco {
@@ -78,6 +79,7 @@ dependencies {
     // Compose
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
+    testImplementation(libs.androidx.compose.ui.test.junit4)
     implementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.compose.ui.tooling.preview)
 
@@ -133,6 +135,11 @@ dependencies {
 
     // Mockk
     testImplementation(libs.mockk)
+
+    // Roborazzi
+    testImplementation(libs.roborazzi)
+    testImplementation(libs.roborazzi.compose)
+    testImplementation(libs.roborazzi.junit4.rule)
 }
 
 // チェック

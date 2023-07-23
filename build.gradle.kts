@@ -9,4 +9,5 @@ plugins {
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.secrets) apply false
     alias(libs.plugins.dokka) apply false
+    alias(libs.plugins.roborazzi) apply false
 }
