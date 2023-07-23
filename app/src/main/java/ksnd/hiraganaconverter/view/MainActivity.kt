@@ -18,11 +18,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import ksnd.hiraganaconverter.BuildConfig
 import ksnd.hiraganaconverter.view.screen.ConverterScreen
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.viewmodel.MainViewModel
-import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -37,9 +35,6 @@ class MainActivity : AppCompatActivity() {
         splashScreen.setKeepOnScreenCondition { isAnimateSplash }
 
         super.onCreate(savedInstanceState)
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        }
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
 

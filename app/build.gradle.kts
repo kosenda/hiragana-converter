@@ -1,5 +1,3 @@
-import com.android.build.api.dsl.JacocoOptions
-
 val ktlint: Configuration by configurations.creating
 
 plugins {
@@ -12,6 +10,8 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.secrets)
     alias(libs.plugins.dokka)
+    alias(libs.plugins.gms)
+    alias(libs.plugins.firebase.crashlytics)
     jacoco
 }
 jacoco {
@@ -133,6 +133,11 @@ dependencies {
 
     // Mockk
     testImplementation(libs.mockk)
+
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
 }
 
 // チェック
@@ -199,6 +204,7 @@ tasks.create<JacocoReport>("jacocoTestReport") {
                     "**/*ResponseData*.*",
                     "**/*RequestData*.*",
                     "**/*ErrorInterceptor*.*",
+                    "**/*Application*.*",
                     "**/view/**",
                 )
             }

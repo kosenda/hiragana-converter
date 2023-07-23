@@ -12,6 +12,9 @@ androidxUi = "1.5.0-beta03"
 coil = "2.4.0"
 coroutines = "1.7.2"
 dokka = "1.8.20"
+gmsPlugin = "4.3.15"
+firebaseBom = "32.2.0"
+firebaseCrashlyticsPlugin = "2.9.7"
 hilt = "2.47"
 junit4 = "4.13.2"
 kotlin = "1.8.20"
@@ -92,6 +95,11 @@ room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "
 # Mockk
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 
+# Firebase
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref="firebaseBom"}
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx"}
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx"}
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
@@ -102,3 +110,5 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 oss-licenses = { id = "com.google.android.gms.oss-licenses-plugin", version.ref = "ossLicensesPlugin" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+gms = { id = "com.google.gms.google-services", version.ref = "gmsPlugin"}
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin"}
