@@ -25,7 +25,9 @@ https://labs.goo.ne.jp/apiusage/
 ## Typical libraries used  
 |Name|Brief description|
 |:--|:--|
+|Analytics|Firebase analytics|
 |Coil|Image loading library|
+|Crashlytics|Firebase crashlytics|
 |Danger|Automatic review|
 |Hilt|Dependency Injection|
 |Interceptor|Create error response|
@@ -34,6 +36,7 @@ https://labs.goo.ne.jp/apiusage/
 |Kotlinx serialization|Serializer / Deserializer|
 |Ktlint|Formatter|
 |Material3|Design|
+|Mockk|Unit test mock|
 |OSS licenses plugin|OSS Licenses|
 |Preferences DataStore|Permanent data|
 |Renovate|Automated project dependency updates|

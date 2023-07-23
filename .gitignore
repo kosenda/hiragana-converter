@@ -13,4 +13,3 @@ output.json
 .idea
 *.jks
 *.keystore
-google-services.json
