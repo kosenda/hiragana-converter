@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.JacocoOptions
+
 val ktlint: Configuration by configurations.creating
 
 plugins {
@@ -61,11 +63,6 @@ android {
     testOptions {
         unitTests.isIncludeAndroidResources = true
         unitTests.isReturnDefaultValues = true
-        // 以下のjvmArgsを指定しないとカバレッジが取得できないぽい
-        // 参考サイト https://github.com/robolectric/robolectric/issues/5428
-        // noverifyは、全てのバイトコードの検証を無効にするオプションぽい
-        // 参考サイト https://docs.oracle.com/javase/jp/8/docs/technotes/tools/windows/java.html
-        unitTests.all { it.jvmArgs("-noverify") }
     }
 }
 
@@ -73,6 +70,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.junit)
+    testImplementation(libs.kotlin.test)
 
     // Accompanist
     implementation(libs.accompanist.systemuicontroller)
@@ -132,6 +130,9 @@ dependencies {
 
     // Splash Screen
     implementation(libs.androidx.core.splashscreen)
+
+    // Mockk
+    testImplementation(libs.mockk)
 }
 
 // チェック
@@ -157,12 +158,20 @@ tasks.create<JavaExec>("ktlintFormatting") {
     jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }
 
+tasks.withType<Test>().configureEach {
+    configure<JacocoTaskExtension> {
+        isIncludeNoLocationClasses = true
+        excludes = listOf("jdk.internal.*")
+    }
+}
+
 tasks.create<JacocoReport>("jacocoTestReport") {
     val testTaskName = "testDebugUnitTest"
     reports {
         html.required.set(true)
         xml.required.set(true)
     }
+
     gradle.afterProject {
         executionData.setFrom(file("$buildDir/jacoco/$testTaskName.exec"))
         sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
@@ -186,6 +195,10 @@ tasks.create<JacocoReport>("jacocoTestReport") {
                     "**/*Drawer*.*",
                     "**/*Navigation*.*",
                     "**/*MainActivity*.*",
+                    "**/*ConvertTextUseCaseError*.*",
+                    "**/*ResponseData*.*",
+                    "**/*RequestData*.*",
+                    "**/*ErrorInterceptor*.*",
                     "**/view/**",
                 )
             }

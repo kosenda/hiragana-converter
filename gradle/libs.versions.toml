@@ -27,6 +27,7 @@ room = "2.5.2"
 secrets = "2.0.1"
 timber = "5.0.1"
 truth = "1.1.5"
+mockk = "1.13.5"
 
 # ** I'm using it, so no deletions allowed. **
 androidxComposeCompiler = "1.4.6"
@@ -48,6 +49,7 @@ androidx-dataStore-preferences = { group = "androidx.datastore", name = "datasto
 androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTestCore" }
 
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
+kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
 
 # Coil
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
@@ -86,6 +88,9 @@ retrofit-kotlinx-serialization-converter = { group = "com.jakewharton.retrofit",
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+
+# Mockk
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

@@ -29,7 +29,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import ksnd.hiraganaconverter.R
 import ksnd.hiraganaconverter.view.CustomFont
-import ksnd.hiraganaconverter.view.ThemeNum
+import ksnd.hiraganaconverter.view.Theme
 import ksnd.hiraganaconverter.view.parts.button.CustomButton
 import ksnd.hiraganaconverter.view.parts.button.CustomFontRadioButton
 import ksnd.hiraganaconverter.view.parts.button.CustomThemeRadioButton
@@ -109,17 +109,17 @@ private fun SettingThemeContent(
 ) {
     val modeRadioResourceTriple: List<Triple<Int, String, Painter>> = listOf(
         Triple(
-            ThemeNum.NIGHT.num,
+            Theme.NIGHT.num,
             stringResource(id = R.string.dark_mode),
             painterResource(id = R.drawable.ic_baseline_brightness_2_24),
         ),
         Triple(
-            ThemeNum.DAY.num,
+            Theme.DAY.num,
             stringResource(id = R.string.light_mode),
             painterResource(id = R.drawable.ic_baseline_brightness_low_24),
         ),
         Triple(
-            ThemeNum.AUTO.num,
+            Theme.AUTO.num,
             stringResource(id = R.string.auto_mode),
             painterResource(id = R.drawable.ic_baseline_brightness_auto_24),
         ),
