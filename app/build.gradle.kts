@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.junit)
+    testImplementation(libs.kotlin.test)
 
     // Accompanist
     implementation(libs.accompanist.systemuicontroller)

@@ -1,8 +1,8 @@
 package ksnd.hiraganaconverter.viewmodel
 
-//@OptIn(ExperimentalCoroutinesApi::class)
-//@RunWith(RobolectricTestRunner::class)
-//class ConvertViewModelImplTest {
+// @OptIn(ExperimentalCoroutinesApi::class)
+// @RunWith(RobolectricTestRunner::class)
+// class ConvertViewModelImplTest {
 //    private val context = ApplicationProvider.getApplicationContext<Context>()
 //    private val testDispatcher = StandardTestDispatcher()
 //    private val viewModelNotReturnErrorResponse = createTestingConvertViewModel(
@@ -153,14 +153,14 @@ package ksnd.hiraganaconverter.viewmodel
 //            assertThat(viewModel.uiState.value.outputText).isNotEqualTo("")
 //        }
 //    }
-//}
+// }
 //
-//private fun createTestingConvertViewModel(
+// private fun createTestingConvertViewModel(
 //    context: Context,
 //    testDispatcher: CoroutineDispatcher,
 //    isErrorResponse: Boolean,
 //    isReachedConvertMaxLimit: Boolean,
-//): ConvertViewModelImpl {
+// ): ConvertViewModelImpl {
 //    return ConvertViewModelImpl(
 //        convertRepository = FakeConverterRepository(context, isErrorResponse),
 //        dataStoreRepository = FakeDataStoreRepositoryImpl(isReachedConvertMaxLimit),
@@ -168,13 +168,13 @@ package ksnd.hiraganaconverter.viewmodel
 //        ioDispatcher = testDispatcher,
 //        defaultDispatcher = testDispatcher,
 //    )
-//}
+// }
 //
-//@OptIn(ExperimentalSerializationApi::class)
-//private class FakeConverterRepository(
+// @OptIn(ExperimentalSerializationApi::class)
+// private class FakeConverterRepository(
 //    context: Context,
 //    isErrorResponse: Boolean,
-//) : ConvertRepository {
+// ) : ConvertRepository {
 //    private val contentType = "application/json".toMediaType()
 //    private val fakeInterceptor = FakeInterceptor(
 //        isErrorResponse = isErrorResponse,
@@ -202,12 +202,12 @@ package ksnd.hiraganaconverter.viewmodel
 //        val body = json.toRequestBody(contentType)
 //        return runBlocking { convertService.requestConvert(body) }
 //    }
-//}
+// }
 //
-//private class FakeInterceptor(
+// private class FakeInterceptor(
 //    private val isErrorResponse: Boolean,
 //    private val context: Context,
-//) : Interceptor {
+// ) : Interceptor {
 //    override fun intercept(chain: Interceptor.Chain): Response {
 //        val request = chain.request()
 //        return Response
@@ -233,21 +233,21 @@ package ksnd.hiraganaconverter.viewmodel
 //            .request(request)
 //            .build()
 //    }
-//}
+// }
 //
-//private class FakeConvertHistoryRepositoryImpl : ConvertHistoryRepository {
+// private class FakeConvertHistoryRepositoryImpl : ConvertHistoryRepository {
 //    override fun insertConvertHistory(beforeText: String, afterText: String, time: String) {}
 //    override fun getAllConvertHistory(): List<ConvertHistoryData> = emptyList()
 //    override fun deleteAllConvertHistory() {}
 //    override fun deleteConvertHistory(id: Long) {}
-//}
+// }
 //
-//private class FakeDataStoreRepositoryImpl(
+// private class FakeDataStoreRepositoryImpl(
 //    private val isReachedConvertMaxLimit: Boolean,
-//) : DataStoreRepository {
+// ) : DataStoreRepository {
 //    override fun selectedThemeNum(): Flow<Int> = flow { }
 //    override fun selectedCustomFont(): Flow<String> = flow { }
 //    override suspend fun updateThemeNum(newThemeNum: Int) {}
 //    override suspend fun updateCustomFont(newCustomFont: CustomFont) {}
 //    override suspend fun checkReachedConvertMaxLimit(today: String) = isReachedConvertMaxLimit
-//}
+// }
