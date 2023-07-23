@@ -1,6 +1,5 @@
 package ksnd.hiraganaconverter.view
 
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -24,7 +23,6 @@ import ksnd.hiraganaconverter.view.screen.ConverterScreen
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.viewmodel.MainViewModel
 import timber.log.Timber
-import java.util.Locale
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -69,19 +67,6 @@ class MainActivity : AppCompatActivity() {
                     ConverterScreen()
                 }
             }
-        }
-    }
-
-    override fun attachBaseContext(base: Context) {
-        // 起動時に言語を設定する
-        val sharedPreferences = base.getSharedPreferences("DataStore", MODE_PRIVATE)
-        val language = sharedPreferences.getString("language", null)
-        if (language != null) {
-            val config = base.resources.configuration
-            config.setLocale(Locale(language))
-            super.attachBaseContext(base.createConfigurationContext(config))
-        } else {
-            super.attachBaseContext(base)
         }
     }
 }
