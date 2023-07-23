@@ -1,6 +1,9 @@
 package ksnd.hiraganaconverter.view
 
 import android.app.Application
+import android.util.Log
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.HiltAndroidApp
 import ksnd.hiraganaconverter.BuildConfig
 import timber.log.Timber
@@ -9,6 +12,26 @@ import timber.log.Timber
 class Application : Application() {
     override fun onCreate() {
         super.onCreate()
-        if (BuildConfig.DEBUG) Timber.plant(tree = Timber.DebugTree())
+        Timber.plant(tree = if (BuildConfig.DEBUG) Timber.DebugTree() else ReleaseTree())
+    }
+}
+
+private class ReleaseTree : Timber.Tree() {
+    override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+        val priorityStr = when (priority) {
+            Log.ERROR -> "E/"
+            Log.WARN -> "W/"
+            Log.INFO -> "I/"
+            Log.DEBUG -> "D/"
+            else -> return
+        }
+        Firebase.crashlytics.log(
+            "%s%s%s".format(
+                priorityStr,
+                tag?.let { "[$it]" } ?: "",
+                message,
+            ),
+        )
+        t?.let { Firebase.crashlytics.recordException(it) }
     }
 }
