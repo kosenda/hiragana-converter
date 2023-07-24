@@ -81,7 +81,7 @@ fun ConverterScreen(convertViewModel: ConvertViewModelImpl = hiltViewModel()) {
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-private fun ConverterScreenContent(viewModel: ConvertViewModel) {
+fun ConverterScreenContent(viewModel: ConvertViewModel) {
     val focusManager = LocalFocusManager.current
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     val timeZone = stringResource(id = R.string.time_zone)
