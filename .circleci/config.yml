@@ -35,6 +35,10 @@ jobs:
           command: ./gradlew testDebug --stacktrace
 
       - run:
+          name: create screenshots
+          command: ./gradlew recordRoborazziDebug
+
+      - run:
           name: jacoco-report
           command: ./gradlew jacocoTestReport
 
