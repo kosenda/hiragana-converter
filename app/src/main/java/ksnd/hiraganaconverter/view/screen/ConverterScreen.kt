@@ -99,7 +99,7 @@ fun ConverterScreenContent(viewModel: ConvertViewModel) {
                 scrollBehavior = scrollBehavior,
             )
         },
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = MaterialTheme.colorScheme.onSurface,
         floatingActionButton = { MoveTopButton(scrollState = scrollState) },
     ) { innerPadding ->
         Column(
