@@ -5,7 +5,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import ksnd.hiraganaconverter.MainDispatcherRule
 import ksnd.hiraganaconverter.model.repository.DataStoreRepositoryImpl
-import ksnd.hiraganaconverter.view.CustomFont
+import ksnd.hiraganaconverter.view.FontType
 import ksnd.hiraganaconverter.view.Theme
 import org.junit.Rule
 import org.junit.Test
@@ -24,42 +24,42 @@ class SettingsViewModelImplTest {
     )
 
     @Test
-    fun isSelectedThemeNum_initial_themeIsAuto() {
+    fun isSelected_initial_themeIsAuto() {
         Theme.values().forEach {
             if (it == Theme.AUTO) {
-                assertThat(viewModel.isSelectedThemeNum(it.num)).isTrue()
+                assertThat(viewModel.isSelectedTheme(it.num)).isTrue()
             } else {
-                assertThat(viewModel.isSelectedThemeNum(it.num)).isFalse()
+                assertThat(viewModel.isSelectedTheme(it.num)).isFalse()
             }
         }
     }
 
     @Test
-    fun isSelectedCustomFont_initial_customFontIsDefault() {
-        CustomFont.values().forEach {
-            if (it == CustomFont.DEFAULT) {
-                assertThat(viewModel.isSelectedFont(it)).isTrue()
+    fun isSelectedFontType_initial_fontTypeIsYuseiMagic() {
+        FontType.values().forEach {
+            if (it == FontType.YUSEI_MAGIC) {
+                assertThat(viewModel.isSelectedFontType(it)).isTrue()
             } else {
-                assertThat(viewModel.isSelectedFont(it)).isFalse()
+                assertThat(viewModel.isSelectedFontType(it)).isFalse()
             }
         }
     }
 
     @Test
-    fun updateThemeNum_newThemeNum_isChanged() = runTest {
-        assertThat(viewModel.isSelectedThemeNum(Theme.AUTO.num)).isTrue()
-        viewModel.updateThemeNum(Theme.NIGHT.num)
-        assertThat(viewModel.isSelectedThemeNum(Theme.NIGHT.num)).isTrue()
-        viewModel.updateThemeNum(Theme.DAY.num)
-        assertThat(viewModel.isSelectedThemeNum(Theme.DAY.num)).isTrue()
+    fun updateTheme_newTheme_isChanged() = runTest {
+        assertThat(viewModel.isSelectedTheme(Theme.AUTO.num)).isTrue()
+        viewModel.updateTheme(Theme.NIGHT.num)
+        assertThat(viewModel.isSelectedTheme(Theme.NIGHT.num)).isTrue()
+        viewModel.updateTheme(Theme.DAY.num)
+        assertThat(viewModel.isSelectedTheme(Theme.DAY.num)).isTrue()
     }
 
     @Test
-    fun updateCustomFont_newCustomFont_isChanged() = runTest {
-        assertThat(viewModel.isSelectedFont(CustomFont.DEFAULT)).isTrue()
-        viewModel.updateCustomFont(CustomFont.BIZ_UDGOTHIC)
-        assertThat(viewModel.isSelectedFont(CustomFont.BIZ_UDGOTHIC)).isTrue()
-        viewModel.updateCustomFont(CustomFont.CORPORATE_LOGO_ROUNDED)
-        assertThat(viewModel.isSelectedFont(CustomFont.CORPORATE_LOGO_ROUNDED)).isTrue()
+    fun updateFontType_newFontType_isChanged() = runTest {
+        assertThat(viewModel.isSelectedFontType(FontType.YUSEI_MAGIC)).isTrue()
+        viewModel.updateFontType(FontType.HACHI_MARU_POP)
+        assertThat(viewModel.isSelectedFontType(FontType.HACHI_MARU_POP)).isTrue()
+        viewModel.updateFontType(FontType.ROCKN_ROLL_ONE)
+        assertThat(viewModel.isSelectedFontType(FontType.ROCKN_ROLL_ONE)).isTrue()
     }
 }

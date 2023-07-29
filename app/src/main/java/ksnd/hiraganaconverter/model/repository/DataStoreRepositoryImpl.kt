@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import ksnd.hiraganaconverter.di.module.IODispatcher
 import ksnd.hiraganaconverter.model.PreferenceKeys
-import ksnd.hiraganaconverter.view.CustomFont
+import ksnd.hiraganaconverter.view.FontType
 import ksnd.hiraganaconverter.view.Theme
 import timber.log.Timber
 import java.io.IOException
@@ -24,31 +24,25 @@ class DataStoreRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : DataStoreRepository {
-    override fun selectedThemeNum(): Flow<Int> {
+    override fun selectedTheme(): Flow<Int> {
         return dataStore.data
             .catch { exception ->
-                Timber.e("DataStore: %s".format(exception))
-                when (exception) {
-                    is IOException -> emit(emptyPreferences())
-                    else -> Theme.AUTO.num
-                }
+                Timber.e("DataStore: %s", exception)
+                if (exception is IOException) emit(emptyPreferences()) else Theme.AUTO.num
             }
             .map { preferences ->
                 preferences[PreferenceKeys.THEME_NUM] ?: Theme.AUTO.num
             }
     }
 
-    override fun selectedCustomFont(): Flow<String> {
+    override fun selectedFontType(): Flow<String> {
         return dataStore.data
             .catch { exception ->
-                Timber.e("DataStore: %s".format(exception))
-                when (exception) {
-                    is IOException -> emit(emptyPreferences())
-                    else -> CustomFont.DEFAULT.name
-                }
+                Timber.e("DataStore: %s", exception)
+                if (exception is IOException) emit(emptyPreferences()) else FontType.YUSEI_MAGIC.fontName
             }
             .map { preferences ->
-                preferences[PreferenceKeys.CUSTOM_FONT] ?: CustomFont.DEFAULT.name
+                preferences[PreferenceKeys.FONT_TYPE] ?: FontType.YUSEI_MAGIC.fontName
             }
     }
 
@@ -56,8 +50,8 @@ class DataStoreRepositoryImpl @Inject constructor(
         dataStore.edit { it[PreferenceKeys.THEME_NUM] = newThemeNum }
     }
 
-    override suspend fun updateCustomFont(newCustomFont: CustomFont) {
-        dataStore.edit { it[PreferenceKeys.CUSTOM_FONT] = newCustomFont.name }
+    override suspend fun updateCustomFont(fontType: FontType) {
+        dataStore.edit { it[PreferenceKeys.FONT_TYPE] = fontType.name }
     }
 
     override suspend fun checkReachedConvertMaxLimit(today: String): Boolean {

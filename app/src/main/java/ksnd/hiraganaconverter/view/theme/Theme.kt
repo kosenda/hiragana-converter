@@ -9,7 +9,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import ksnd.hiraganaconverter.view.CustomFont
+import ksnd.hiraganaconverter.view.FontType
 
 private val LightThemeColors = lightColorScheme()
 private val DarkThemeColors = darkColorScheme()
@@ -18,7 +18,7 @@ private val DarkThemeColors = darkColorScheme()
 fun HiraganaConverterTheme(
     isDarkTheme: Boolean = isSystemInDarkTheme(),
     isDynamicColor: Boolean = true,
-    customFont: String = CustomFont.DEFAULT.name,
+    fontType: FontType = FontType.YUSEI_MAGIC,
     content: @Composable () -> Unit,
 ) {
     val dynamicColor = isDynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
@@ -35,7 +35,7 @@ fun HiraganaConverterTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = typography(customFont = customFont),
+        typography = typography(fontType = fontType),
         content = content,
     )
 }

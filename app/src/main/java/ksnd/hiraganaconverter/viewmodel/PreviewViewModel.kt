@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import ksnd.hiraganaconverter.model.ConvertErrorType
 import ksnd.hiraganaconverter.model.ConvertHistoryData
 import ksnd.hiraganaconverter.model.HiraKanaType
-import ksnd.hiraganaconverter.view.CustomFont
+import ksnd.hiraganaconverter.view.FontType
 import ksnd.hiraganaconverter.view.Theme
 import ksnd.hiraganaconverter.view.uistate.ConvertHistoryUiState
 import ksnd.hiraganaconverter.view.uistate.ConvertUiState
@@ -28,13 +28,13 @@ class PreviewConvertViewModel : ConvertViewModel() {
 }
 
 class PreviewSettingViewModel : SettingsViewModel() {
-    override val customFont: MutableState<String> = mutableStateOf(CustomFont.DEFAULT.name)
-    override val themeNum: MutableState<Int> = mutableIntStateOf(Theme.AUTO.num)
-    override fun updateThemeNum(newThemeNum: Int) {}
-    override fun updateCustomFont(newCustomFont: CustomFont) {}
-    override fun isSelectedThemeNum(index: Int): Boolean = 0 == index
-    override fun isSelectedFont(targetCustomFont: CustomFont): Boolean {
-        return CustomFont.DEFAULT == targetCustomFont
+    override val fontType: MutableState<FontType> = mutableStateOf(FontType.YUSEI_MAGIC)
+    override val theme: MutableState<Int> = mutableIntStateOf(Theme.AUTO.num)
+    override fun updateTheme(newTheme: Int) {}
+    override fun updateFontType(newFontType: FontType) {}
+    override fun isSelectedTheme(index: Int): Boolean = 0 == index
+    override fun isSelectedFontType(targetFontType: FontType): Boolean {
+        return FontType.YUSEI_MAGIC == targetFontType
     }
 }
 

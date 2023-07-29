@@ -3,9 +3,11 @@ package ksnd.hiraganaconverter.view.dialog
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,22 +30,20 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import ksnd.hiraganaconverter.R
-import ksnd.hiraganaconverter.view.CustomFont
+import ksnd.hiraganaconverter.view.FontType
 import ksnd.hiraganaconverter.view.Theme
 import ksnd.hiraganaconverter.view.parts.button.CustomButton
-import ksnd.hiraganaconverter.view.parts.button.CustomFontRadioButton
-import ksnd.hiraganaconverter.view.parts.button.CustomThemeRadioButton
+import ksnd.hiraganaconverter.view.parts.button.CustomRadioButton
 import ksnd.hiraganaconverter.view.parts.card.TitleCard
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
-import ksnd.hiraganaconverter.view.theme.fontFamily
 import ksnd.hiraganaconverter.viewmodel.PreviewSettingViewModel
 import ksnd.hiraganaconverter.viewmodel.SettingsViewModel
 import ksnd.hiraganaconverter.viewmodel.SettingsViewModelImpl
 
 @Composable
 fun SettingDialog(
-    onCloseClick: () -> Unit,
     settingsViewModel: SettingsViewModelImpl = hiltViewModel(),
+    onCloseClick: () -> Unit,
 ) {
     Dialog(
         onDismissRequest = { },
@@ -59,8 +59,8 @@ fun SettingDialog(
 
 @Composable
 private fun SettingDialogContent(
-    onCloseClick: () -> Unit,
     viewModel: SettingsViewModel,
+    onCloseClick: () -> Unit,
 ) {
     val isShowSelectLanguageDialog = rememberSaveable { mutableStateOf(false) }
 
@@ -85,8 +85,8 @@ private fun SettingDialogContent(
             DialogCloseButton(onCloseClick = onCloseClick)
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 SettingThemeContent(
-                    onRadioButtonClick = viewModel::updateThemeNum,
-                    isSelectedNum = viewModel::isSelectedThemeNum,
+                    onRadioButtonClick = viewModel::updateTheme,
+                    isSelectedNum = viewModel::isSelectedTheme,
                 )
                 SettingLanguageContent(
                     onClick = {
@@ -94,9 +94,10 @@ private fun SettingDialogContent(
                     },
                 )
                 SettingFontContent(
-                    updateCustomFont = viewModel::updateCustomFont,
-                    isSelectedFont = viewModel::isSelectedFont,
+                    selectFontType = viewModel.fontType.value,
+                    onClickFontType = { fontType -> viewModel.updateFontType(newFontType = fontType) },
                 )
+                Spacer(modifier = Modifier.height(48.dp))
             }
         }
     }
@@ -137,7 +138,7 @@ private fun SettingThemeContent(
     ) {
         modeRadioResourceTriple.map { resource ->
             val (themeNum, displayThemeName, painter) = resource
-            CustomThemeRadioButton(
+            CustomRadioButton(
                 isSelected = isSelectedNum(themeNum),
                 buttonText = displayThemeName,
                 painter = painter,
@@ -161,32 +162,9 @@ private fun SettingLanguageContent(onClick: () -> Unit) {
 
 @Composable
 private fun SettingFontContent(
-    updateCustomFont: (CustomFont) -> Unit,
-    isSelectedFont: (CustomFont) -> Boolean,
+    selectFontType: FontType,
+    onClickFontType: (FontType) -> Unit,
 ) {
-    val customFontResourcePair: List<Pair<CustomFont, String>> = listOf(
-        Pair(
-            CustomFont.DEFAULT,
-            stringResource(id = R.string.default_font),
-        ),
-        Pair(
-            CustomFont.CORPORATE_LOGO_ROUNDED,
-            stringResource(id = R.string.corporate_logo_rounded_font),
-        ),
-        Pair(
-            CustomFont.CORPORATE_YAWAMIN,
-            stringResource(id = R.string.corporate_yawamin_font),
-        ),
-        Pair(
-            CustomFont.NOSUTARU_DOT_M_PLUS,
-            stringResource(id = R.string.nosutaru_dot_font),
-        ),
-        Pair(
-            CustomFont.BIZ_UDGOTHIC,
-            stringResource(id = R.string.biz_udgothic),
-        ),
-    )
-
     TitleCard(
         text = stringResource(id = R.string.font_setting),
         painterResource(id = R.drawable.ic_baseline_text_fields_24),
@@ -197,14 +175,14 @@ private fun SettingFontContent(
         ),
         modifier = Modifier.padding(vertical = 8.dp),
     ) {
-        customFontResourcePair.map { resource ->
-            val (customFont, displayFontName) = resource
-            CustomFontRadioButton(
-                onClick = { updateCustomFont(customFont) },
-                selected = isSelectedFont(customFont),
-                text = displayFontName,
-                fontFamily = fontFamily(customFont.name),
-            )
+        Column(modifier = Modifier.padding(vertical = 8.dp)) {
+            FontType.values().forEach { fontType ->
+                CustomRadioButton(
+                    isSelected = fontType == selectFontType,
+                    buttonText = fontType.fontName,
+                    onClick = { onClickFontType(fontType) },
+                )
+            }
         }
     }
 }

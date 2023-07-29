@@ -10,6 +10,6 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     dataStoreRepository: DataStoreRepository,
 ) : ViewModel() {
-    val themeNum: Flow<Int> = dataStoreRepository.selectedThemeNum()
-    val customFont: Flow<String> = dataStoreRepository.selectedCustomFont()
+    val theme: Flow<Int> = dataStoreRepository.selectedTheme()
+    val fontType: Flow<String> = dataStoreRepository.selectedFontType()
 }

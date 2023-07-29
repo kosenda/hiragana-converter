@@ -11,7 +11,7 @@ import ksnd.hiraganaconverter.MainDispatcherRule
 import ksnd.hiraganaconverter.R
 import ksnd.hiraganaconverter.model.TimeFormat
 import ksnd.hiraganaconverter.model.getNowTime
-import ksnd.hiraganaconverter.view.CustomFont
+import ksnd.hiraganaconverter.view.FontType
 import ksnd.hiraganaconverter.view.Theme
 import org.junit.Rule
 import org.junit.Test
@@ -33,29 +33,29 @@ class DataStoreRepositoryImplTest {
     )
 
     @Test
-    fun selectedThemeNum_initial_isAutoNum() = runTest {
-        assertThat(dataStoreRepository.selectedThemeNum().first()).isEqualTo(Theme.AUTO.num)
+    fun selectedTheme_initial_isAutoNum() = runTest {
+        assertThat(dataStoreRepository.selectedTheme().first()).isEqualTo(Theme.AUTO.num)
     }
 
     @Test
-    fun selectedCustomFont_initial_isDefault() = runTest {
-        assertThat(dataStoreRepository.selectedCustomFont().first()).isEqualTo(CustomFont.DEFAULT.name)
+    fun selectedFontType_initial_isYuseiMagic() = runTest {
+        assertThat(dataStoreRepository.selectedFontType().first()).isEqualTo(FontType.YUSEI_MAGIC.fontName)
     }
 
     @Test
-    fun updateThemeNum_newThemeNum_isChangedTheme() = runTest {
+    fun updateTheme_newTheme_isChangedTheme() = runTest {
         dataStoreRepository.updateTheme(Theme.DAY.num)
-        assertThat(dataStoreRepository.selectedThemeNum().first()).isEqualTo(Theme.DAY.num)
+        assertThat(dataStoreRepository.selectedTheme().first()).isEqualTo(Theme.DAY.num)
         dataStoreRepository.updateTheme(Theme.NIGHT.num)
-        assertThat(dataStoreRepository.selectedThemeNum().first()).isEqualTo(Theme.NIGHT.num)
+        assertThat(dataStoreRepository.selectedTheme().first()).isEqualTo(Theme.NIGHT.num)
     }
 
     @Test
-    fun updateCustomFont_newCustomFont_isChangedCustomFont() = runTest {
-        dataStoreRepository.updateCustomFont(CustomFont.BIZ_UDGOTHIC)
-        assertThat(dataStoreRepository.selectedCustomFont().first()).isEqualTo(CustomFont.BIZ_UDGOTHIC.name)
-        dataStoreRepository.updateCustomFont(CustomFont.CORPORATE_LOGO_ROUNDED)
-        assertThat(dataStoreRepository.selectedCustomFont().first()).isEqualTo(CustomFont.CORPORATE_LOGO_ROUNDED.name)
+    fun updateFontType_newFontType_isChangedFontType() = runTest {
+        dataStoreRepository.updateCustomFont(FontType.ROCKN_ROLL_ONE)
+        assertThat(dataStoreRepository.selectedFontType().first()).isEqualTo(FontType.ROCKN_ROLL_ONE.name)
+        dataStoreRepository.updateCustomFont(FontType.DEFAULT)
+        assertThat(dataStoreRepository.selectedFontType().first()).isEqualTo(FontType.DEFAULT.name)
     }
 
     @Test

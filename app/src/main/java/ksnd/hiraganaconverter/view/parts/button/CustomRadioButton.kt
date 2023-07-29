@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,86 +24,48 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.R
-import ksnd.hiraganaconverter.view.CustomFont
+import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 
 @Composable
-fun CustomFontRadioButton(
-    onClick: () -> Unit,
-    selected: Boolean,
-    text: String,
-    fontFamily: FontFamily?,
-) {
-    Row(
-        modifier = Modifier
-            .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
-            .fillMaxWidth()
-            .height(40.dp)
-            .clip(shape = RoundedCornerShape(8.dp))
-            .clickable(onClick = onClick),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            text = text,
-            modifier = Modifier
-                .padding(start = 16.dp, end = 8.dp)
-                .weight(1f),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            overflow = TextOverflow.Ellipsis,
-            fontFamily = fontFamily,
-        )
-        RadioButton(
-            selected = selected,
-            colors = RadioButtonDefaults.colors(
-                selectedColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            ),
-            onClick = onClick,
-        )
-    }
-}
-
-@Composable
-fun CustomThemeRadioButton(
+fun CustomRadioButton(
     isSelected: Boolean,
     buttonText: String,
-    painter: Painter,
+    painter: Painter? = null,
     onClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier
-            .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
+            .padding(start = 8.dp, end = 8.dp)
             .fillMaxWidth()
-            .height(40.dp)
+            .height(48.dp)
             .clip(shape = RoundedCornerShape(8.dp))
             .clickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Spacer(modifier = Modifier.width(16.dp))
-        Image(
-            painter = painter,
-            contentDescription = buttonText,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurfaceVariant),
-            contentScale = ContentScale.Fit,
-            modifier = Modifier.size(24.dp),
-        )
+        painter?.let {
+            Image(
+                painter = it,
+                contentDescription = buttonText,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.tertiary),
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.padding(end = 4.dp).size(24.dp),
+            )
+        }
         Text(
             text = buttonText,
             modifier = Modifier
-                .padding(start = 12.dp)
+                .padding(start = 8.dp)
                 .weight(1f),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         RadioButton(
             selected = isSelected,
-            colors = RadioButtonDefaults.colors(
-                selectedColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            ),
+            colors = RadioButtonDefaults.colors(),
             onClick = onClick,
         )
     }
@@ -110,22 +73,30 @@ fun CustomThemeRadioButton(
 
 @Preview
 @Composable
-private fun PreviewCustomFontRadioButton() {
-    CustomFontRadioButton(
-        onClick = {},
-        selected = true,
-        text = CustomFont.DEFAULT.name,
-        fontFamily = FontFamily.Default,
-    )
+private fun PreviewCustomThemeRadioButton_Light() {
+    HiraganaConverterTheme(isDarkTheme = false) {
+        Surface(color = MaterialTheme.colorScheme.surfaceVariant) {
+            CustomRadioButton(
+                buttonText = stringResource(id = R.string.dark_mode),
+                isSelected = true,
+                painter = painterResource(id = R.drawable.ic_baseline_brightness_2_24),
+                onClick = {},
+            )
+        }
+    }
 }
 
 @Preview
 @Composable
-private fun PreviewCustomThemeRadioButton() {
-    CustomThemeRadioButton(
-        buttonText = stringResource(id = R.string.dark_mode),
-        isSelected = true,
-        painter = painterResource(id = R.drawable.ic_baseline_brightness_2_24),
-        onClick = {},
-    )
+private fun PreviewCustomThemeRadioButton_Dark() {
+    HiraganaConverterTheme(isDarkTheme = true) {
+        Surface(color = MaterialTheme.colorScheme.surfaceVariant) {
+            CustomRadioButton(
+                buttonText = stringResource(id = R.string.dark_mode),
+                isSelected = true,
+                painter = painterResource(id = R.drawable.ic_baseline_brightness_2_24),
+                onClick = {},
+            )
+        }
+    }
 }
