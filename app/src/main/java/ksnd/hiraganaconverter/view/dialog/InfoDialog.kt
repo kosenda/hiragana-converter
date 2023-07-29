@@ -48,6 +48,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import ksnd.hiraganaconverter.BuildConfig
 import ksnd.hiraganaconverter.R
+import ksnd.hiraganaconverter.view.content.PrivacyPolicyContent
 import ksnd.hiraganaconverter.view.parts.GooCreditImage
 import ksnd.hiraganaconverter.view.parts.button.CustomButton
 import ksnd.hiraganaconverter.view.parts.button.CustomIconButton
@@ -116,6 +117,7 @@ private fun InfoDialogContent(onCloseClick: () -> Unit) {
                 DeveloperInfoContent()
                 APIInfoContent(onURLClick = { isShowMovesToApiSiteDialog = true })
                 LicensesContent()
+                PrivacyPolicyContent()
                 Spacer(modifier = Modifier.height(40.dp))
             }
         }

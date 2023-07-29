@@ -59,6 +59,9 @@
 
     <string name="licenses_title" translatable="false">Licenses</string>
     <string name="oss_licenses" translatable="false">OSS Licenses</string>
+    <string name="privacy_policy_title" translatable="false">Privacy</string>
+    <string name="privacy_policy_button" translatable="false">Privacy Policy</string>
+    <string name="privacy_policy_url" translatable="false">https://kosenda.github.io/ksnd.github.io/HiraganaConverter.html</string>
 
     <!-- Locale Name -->
     <string name="locale_en" translatable="false">en</string>

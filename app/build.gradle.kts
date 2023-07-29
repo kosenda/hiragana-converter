@@ -75,6 +75,7 @@ dependencies {
 
     // Accompanist
     implementation(libs.accompanist.systemuicontroller)
+    implementation(libs.accompanist.webView)
 
     // Compose
     implementation(libs.androidx.compose.material3)
