@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.di.module.IODispatcher
 import ksnd.hiraganaconverter.model.repository.DataStoreRepository
-import ksnd.hiraganaconverter.view.CustomFont
+import ksnd.hiraganaconverter.view.FontType
 import ksnd.hiraganaconverter.view.Theme
 import javax.inject.Inject
 
@@ -22,19 +22,19 @@ class SettingsViewModelImpl @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : SettingsViewModel() {
 
-    override val themeNum = mutableIntStateOf(Theme.AUTO.num)
-    override val customFont = mutableStateOf(CustomFont.DEFAULT.name)
+    override val theme = mutableIntStateOf(Theme.AUTO.num)
+    override val fontType = mutableStateOf(FontType.YUSEI_MAGIC)
 
-    private val customFontFlow: StateFlow<String> = dataStoreRepository
-        .selectedCustomFont()
+    private val fontTypeFlow: StateFlow<String> = dataStoreRepository
+        .selectedFontType()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
-            initialValue = CustomFont.DEFAULT.name,
+            initialValue = FontType.YUSEI_MAGIC.name,
         )
 
-    private val themeNumFlow: StateFlow<Int> = dataStoreRepository
-        .selectedThemeNum()
+    private val themeFlow: StateFlow<Int> = dataStoreRepository
+        .selectedTheme()
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
@@ -42,29 +42,29 @@ class SettingsViewModelImpl @Inject constructor(
         )
 
     init {
-        themeNum.intValue = themeNumFlow.value
-        customFont.value = customFontFlow.value
+        theme.intValue = themeFlow.value
+        FontType.values().forEach { if (fontTypeFlow.value == it.fontName) fontType.value = it }
     }
 
-    override fun updateThemeNum(newThemeNum: Int) {
-        themeNum.intValue = newThemeNum
+    override fun updateTheme(newTheme: Int) {
+        theme.intValue = newTheme
         CoroutineScope(ioDispatcher).launch {
-            dataStoreRepository.updateTheme(newThemeNum)
+            dataStoreRepository.updateTheme(newTheme)
         }
     }
 
-    override fun updateCustomFont(newCustomFont: CustomFont) {
-        customFont.value = newCustomFont.name
+    override fun updateFontType(newFontType: FontType) {
+        fontType.value = newFontType
         CoroutineScope(ioDispatcher).launch {
-            dataStoreRepository.updateCustomFont(newCustomFont)
+            dataStoreRepository.updateCustomFont(newFontType)
         }
     }
 
-    override fun isSelectedThemeNum(index: Int): Boolean {
-        return themeNum.intValue == index
+    override fun isSelectedTheme(index: Int): Boolean {
+        return theme.intValue == index
     }
 
-    override fun isSelectedFont(targetCustomFont: CustomFont): Boolean {
-        return customFont.value == targetCustomFont.name
+    override fun isSelectedFontType(targetFontType: FontType): Boolean {
+        return fontType.value == targetFontType
     }
 }

@@ -34,7 +34,7 @@ class DataStoreRepositoryImplTest {
 
     @Test
     fun selectedThemeNum_initial_isAutoNum() = runTest {
-        assertThat(dataStoreRepository.selectedThemeNum().first()).isEqualTo(Theme.AUTO.num)
+        assertThat(dataStoreRepository.selectedTheme().first()).isEqualTo(Theme.AUTO.num)
     }
 
     @Test
@@ -45,9 +45,9 @@ class DataStoreRepositoryImplTest {
     @Test
     fun updateThemeNum_newThemeNum_isChangedTheme() = runTest {
         dataStoreRepository.updateTheme(Theme.DAY.num)
-        assertThat(dataStoreRepository.selectedThemeNum().first()).isEqualTo(Theme.DAY.num)
+        assertThat(dataStoreRepository.selectedTheme().first()).isEqualTo(Theme.DAY.num)
         dataStoreRepository.updateTheme(Theme.NIGHT.num)
-        assertThat(dataStoreRepository.selectedThemeNum().first()).isEqualTo(Theme.NIGHT.num)
+        assertThat(dataStoreRepository.selectedTheme().first()).isEqualTo(Theme.NIGHT.num)
     }
 
     @Test

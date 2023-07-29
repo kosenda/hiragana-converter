@@ -2,13 +2,13 @@ package ksnd.hiraganaconverter.viewmodel
 
 import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
-import ksnd.hiraganaconverter.view.CustomFont
+import ksnd.hiraganaconverter.view.FontType
 
 abstract class SettingsViewModel : ViewModel() {
-    protected abstract val customFont: MutableState<String>
-    protected abstract val themeNum: MutableState<Int>
-    abstract fun updateThemeNum(newThemeNum: Int)
-    abstract fun updateCustomFont(newCustomFont: CustomFont)
-    abstract fun isSelectedThemeNum(index: Int): Boolean
-    abstract fun isSelectedFont(targetCustomFont: CustomFont): Boolean
+    abstract val fontType: MutableState<FontType>
+    abstract val theme: MutableState<Int>
+    abstract fun updateTheme(newTheme: Int)
+    abstract fun updateFontType(newFontType: FontType)
+    abstract fun isSelectedTheme(index: Int): Boolean
+    abstract fun isSelectedFontType(targetFontType: FontType): Boolean
 }

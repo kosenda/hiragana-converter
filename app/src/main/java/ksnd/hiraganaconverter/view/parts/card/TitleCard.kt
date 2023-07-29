@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.R
@@ -50,9 +51,10 @@ fun TitleCard(text: String, painter: Painter) {
             )
             Text(
                 text = text,
-                style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(start = 8.dp),
                 color = MaterialTheme.colorScheme.onTertiaryContainer,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.bodyLarge,
             )
         }
     }
@@ -62,7 +64,7 @@ fun TitleCard(text: String, painter: Painter) {
 @Composable
 private fun PreviewTitleCard_Light() {
     HiraganaConverterTheme(isDarkTheme = false) {
-        TitleCard(text = "タイトル", painter = painterResource(id = R.drawable.ic_outline_info_24))
+        TitleCard(text = "Title", painter = painterResource(id = R.drawable.ic_outline_info_24))
     }
 }
 
@@ -70,6 +72,6 @@ private fun PreviewTitleCard_Light() {
 @Composable
 private fun PreviewTitleCard_Dark() {
     HiraganaConverterTheme(isDarkTheme = true) {
-        TitleCard(text = "タイトル", painter = painterResource(id = R.drawable.ic_outline_info_24))
+        TitleCard(text = "Title", painter = painterResource(id = R.drawable.ic_outline_info_24))
     }
 }
