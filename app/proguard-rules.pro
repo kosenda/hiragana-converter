@@ -50,7 +50,7 @@
 }
 # アプリ固有のもの
 # Change here com.yourcompany.yourpackage
--keepclassmembers @kotlinx.serialization.Serializable class ksnd.open.hiraganaconverter.model.** {
+-keepclassmembers @kotlinx.serialization.Serializable class ksnd.hiraganaconverter.model.** {
     # lookup for plugin generated serializable classes
     *** Companion;
     # lookup for serializable objects
@@ -58,7 +58,7 @@
     kotlinx.serialization.KSerializer serializer(...);
 }
 # lookup for plugin generated serializable classes
--if @kotlinx.serialization.Serializable class ksnd.open.hiraganaconverter.model.**
--keepclassmembers class ksnd.open.hiraganaconverter.model.<1>$Companion {
+-if @kotlinx.serialization.Serializable class ksnd.hiraganaconverter.model.**
+-keepclassmembers class ksnd.hiraganaconverter.model.<1>$Companion {
     kotlinx.serialization.KSerializer serializer(...);
 }
