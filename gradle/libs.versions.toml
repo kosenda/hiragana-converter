@@ -40,6 +40,7 @@ jacoco = "0.8.9"
 [libraries]
 # Accompanist
 accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist" }
+accompanist-webView = { group = "com.google.accompanist", name = "accompanist-webview", version.ref = "accompanist" }
 
 # Androidx
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppCompat" }
