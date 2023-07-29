@@ -35,9 +35,9 @@ class SettingsViewModelImplTest {
     }
 
     @Test
-    fun isSelectedFontType_initial_customFontIsDefault() {
+    fun isSelectedFontType_initial_fontTypeIsYuseiMagic() {
         FontType.values().forEach {
-            if (it == FontType.DEFAULT) {
+            if (it == FontType.YUSEI_MAGIC) {
                 assertThat(viewModel.isSelectedFontType(it)).isTrue()
             } else {
                 assertThat(viewModel.isSelectedFontType(it)).isFalse()
@@ -46,7 +46,7 @@ class SettingsViewModelImplTest {
     }
 
     @Test
-    fun updateTheme_newThemeNum_isChanged() = runTest {
+    fun updateTheme_newTheme_isChanged() = runTest {
         assertThat(viewModel.isSelectedTheme(Theme.AUTO.num)).isTrue()
         viewModel.updateTheme(Theme.NIGHT.num)
         assertThat(viewModel.isSelectedTheme(Theme.NIGHT.num)).isTrue()
@@ -55,8 +55,8 @@ class SettingsViewModelImplTest {
     }
 
     @Test
-    fun updateCustomFont_newCustomFont_isChanged() = runTest {
-        assertThat(viewModel.isSelectedFontType(FontType.DEFAULT)).isTrue()
+    fun updateFontType_newFontType_isChanged() = runTest {
+        assertThat(viewModel.isSelectedFontType(FontType.YUSEI_MAGIC)).isTrue()
         viewModel.updateFontType(FontType.HACHI_MARU_POP)
         assertThat(viewModel.isSelectedFontType(FontType.HACHI_MARU_POP)).isTrue()
         viewModel.updateFontType(FontType.ROCKN_ROLL_ONE)
