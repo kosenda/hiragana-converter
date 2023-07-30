@@ -77,13 +77,18 @@ private fun SettingDialogContent(
             .border(width = 4.dp, color = MaterialTheme.colorScheme.surfaceVariant, shape = RoundedCornerShape(16.dp))
             .clip(RoundedCornerShape(16.dp)),
     ) {
-        Column(
-            modifier = Modifier
-                .padding(all = 16.dp)
-                .fillMaxSize(),
-        ) {
-            DialogCloseButton(onCloseClick = onCloseClick)
-            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            DialogCloseButton(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 16.dp),
+                onCloseClick = onCloseClick,
+            )
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp),
+            ) {
                 SettingThemeContent(
                     onRadioButtonClick = viewModel::updateTheme,
                     isSelectedNum = viewModel::isSelectedTheme,

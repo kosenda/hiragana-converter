@@ -30,6 +30,7 @@ import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 
 @Composable
 fun ConvertHistoryCard(
+    modifier: Modifier = Modifier,
     beforeText: String,
     time: String,
     onClick: () -> Unit,
@@ -37,7 +38,7 @@ fun ConvertHistoryCard(
 ) {
     val buttonScaleState = rememberButtonScaleState()
     Card(
-        modifier = Modifier
+        modifier = modifier
             .padding(top = 8.dp)
             .wrapContentHeight()
             .fillMaxWidth()

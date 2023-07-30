@@ -13,11 +13,12 @@ import ksnd.hiraganaconverter.view.parts.button.CustomIconButton
 
 @Composable
 fun DialogCloseButton(
+    modifier: Modifier = Modifier,
     leftContent: @Composable () -> Unit = {},
     onCloseClick: () -> Unit,
 ) {
     Row(
-        modifier = Modifier.padding(bottom = 8.dp),
+        modifier = modifier.padding(bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         leftContent()

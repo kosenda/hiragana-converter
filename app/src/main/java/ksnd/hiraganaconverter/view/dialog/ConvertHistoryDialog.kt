@@ -83,12 +83,11 @@ private fun ConvertHistoryDialogContent(
             }
         }
 
-        Column(
-            modifier = Modifier
-                .padding(all = 16.dp)
-                .fillMaxSize(),
-        ) {
+        Column(modifier = Modifier.fillMaxSize()) {
             DialogCloseButton(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 16.dp),
                 leftContent = {
                     if (convertHistoryUiState.convertHistories.isNotEmpty()) {
                         DeleteButton(onClick = viewModel::deleteAllConvertHistory)
@@ -105,6 +104,7 @@ private fun ConvertHistoryDialogContent(
                         key = { history -> history.id },
                     ) { history ->
                         ConvertHistoryCard(
+                            modifier = Modifier.padding(horizontal = 16.dp),
                             beforeText = history.before,
                             time = history.time,
                             onClick = {

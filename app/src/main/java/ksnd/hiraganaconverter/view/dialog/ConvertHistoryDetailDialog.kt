@@ -15,7 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -86,10 +86,10 @@ private fun ConvertHistoryDetailDialogContent(
                     isBefore = true,
                     clipboardManager = clipboardManager,
                 )
-                Divider(
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 48.dp),
                     thickness = 1.dp,
                     color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 48.dp),
                 )
                 BeforeOrAfterText(
                     historyData = historyData,
@@ -189,8 +189,8 @@ private fun PreviewConvertHistoryDetailDialogContent_Dark() {
                 historyData = ConvertHistoryData(
                     id = 0,
                     time = "2022/11/26 22:25",
-                    before = "変換前はこんな感じ",
-                    after = "へんかんごはこんなかんじ",
+                    before = "変換",
+                    after = "へんかん",
                 ),
                 onCloseClick = {},
             )
