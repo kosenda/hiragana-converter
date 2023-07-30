@@ -47,23 +47,6 @@ https://labs.goo.ne.jp/apiusage/
 |Truth|Assertions used in testing|
 |Timber|Log output library|
 
-## About fonts
-
-#### [Corporate Logo (Round) ver3](https://logotype.jp/font-corpmaru.html)
-- Free "Corporate Logo (Round) ver3" font DL recommended for cute occasions. 
-- かわいい場面におすすめの「コーポレート・ロゴ（ラウンド）ver3」フォント無料DL 
-
-#### [Corporate Yawa Akira ver3](https://logotype.jp/corp-yawamin.html)
-- Free download of the rounded "Corporate Yawa Akira ver3" font
-- 丸く加工した「コーポレートやわ明ver3」フォントの無料ダウンロード  
-  
-#### [Nostal Dot (M+)](https://logotype.jp/nosutaru-dot.html)
-- 「Nostal Dot (M+)」 font DL  
-- 「ノスタルドット（M+）」フォントDL  
-  
-#### [BIZ UDGothic](https://fonts.google.com/specimen/BIZ+UDGothic)
-- a universal design typeface designed to be easy to read and ideal for education and business documentation
-
 ## Image
 |Conversion screen(Light)|Conversion screen(Dark)|
 |:-:|:-:|
