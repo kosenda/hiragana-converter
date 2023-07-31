@@ -28,13 +28,6 @@
     <string name="network_error">通信に失敗しました。</string>
     <string name="internal_server_error">APIで障害が発生しました。</string>
 
-    <!-- Font -->
-    <string name="default_font">デフォルト</string>
-    <string name="corporate_logo_rounded_font">コーポレート・ロゴ（ラウンド）</string>
-    <string name="corporate_yawamin_font">コーポレートやわ明</string>
-    <string name="nosutaru_dot_font">ノスタルドット（M+）</string>
-    <string name="biz_udgothic">BIZ UDGothic</string>
-
     <string-array name="conversion_type">
         <item>ひらがな</item>
         <item>カタカナ</item>

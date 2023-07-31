@@ -56,7 +56,7 @@ class SettingsViewModelImpl @Inject constructor(
     override fun updateFontType(newFontType: FontType) {
         fontType.value = newFontType
         CoroutineScope(ioDispatcher).launch {
-            dataStoreRepository.updateCustomFont(newFontType)
+            dataStoreRepository.updateFontType(newFontType)
         }
     }
 
