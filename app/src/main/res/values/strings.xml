@@ -28,13 +28,6 @@
     <string name="network_error">Network error.</string>
     <string name="internal_server_error">Failure occurred in the API.</string>
 
-    <!-- Font -->
-    <string name="default_font">Default</string>
-    <string name="corporate_logo_rounded_font">Corporate Logo Rounded</string>
-    <string name="corporate_yawamin_font">Corporate Yawamin</string>
-    <string name="nosutaru_dot_font">Nosutaru Dot M Plus</string>
-    <string name="biz_udgothic">BIZ UDGothic</string>
-
     <string-array name="conversion_type">
         <item>ひらがな</item>
         <item>カタカナ</item>

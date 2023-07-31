@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
             val mainViewModel: MainViewModel = hiltViewModel()
 
             val theme: State<Int> = mainViewModel.theme.collectAsState(initial = Theme.AUTO.num)
-            val customFont: State<String> = mainViewModel.fontType.collectAsState(initial = FontType.YUSEI_MAGIC.name)
+            val fontType: State<String> = mainViewModel.fontType.collectAsState(initial = FontType.YUSEI_MAGIC.fontName)
 
             val isDarkTheme = when (theme.value) {
                 Theme.NIGHT.num -> true
@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
             ) {
                 HiraganaConverterTheme(
                     isDarkTheme = isDarkTheme,
-                    fontType = FontType.values().firstOrNull { it.name == customFont.value } ?: FontType.YUSEI_MAGIC,
+                    fontType = FontType.values().firstOrNull { it.fontName == fontType.value } ?: FontType.YUSEI_MAGIC,
                 ) {
                     ConverterScreen()
                 }

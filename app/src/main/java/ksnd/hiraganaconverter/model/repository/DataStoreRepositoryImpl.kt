@@ -50,8 +50,8 @@ class DataStoreRepositoryImpl @Inject constructor(
         dataStore.edit { it[PreferenceKeys.THEME_NUM] = newThemeNum }
     }
 
-    override suspend fun updateCustomFont(fontType: FontType) {
-        dataStore.edit { it[PreferenceKeys.FONT_TYPE] = fontType.name }
+    override suspend fun updateFontType(fontType: FontType) {
+        dataStore.edit { it[PreferenceKeys.FONT_TYPE] = fontType.fontName }
     }
 
     override suspend fun checkReachedConvertMaxLimit(today: String): Boolean {
