@@ -63,13 +63,16 @@ private fun ConvertHistoryDetailDialogContent(
 
     Surface(
         modifier = Modifier
-            .fillMaxHeight(0.90f)
-            .fillMaxWidth(0.90f)
+            .fillMaxHeight(0.95f)
+            .fillMaxWidth(0.95f)
             .border(width = 4.dp, color = MaterialTheme.colorScheme.surfaceVariant, shape = RoundedCornerShape(16.dp))
             .clip(RoundedCornerShape(16.dp)),
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             DialogCloseButton(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 16.dp),
                 leftContent = {
                     Text(
                         text = historyData.time,
