@@ -53,9 +53,9 @@ class DataStoreRepositoryImplTest {
     @Test
     fun updateFontType_newFontType_isChangedFontType() = runTest {
         dataStoreRepository.updateFontType(FontType.ROCKN_ROLL_ONE)
-        assertThat(dataStoreRepository.selectedFontType().first()).isEqualTo(FontType.ROCKN_ROLL_ONE.name)
+        assertThat(dataStoreRepository.selectedFontType().first()).isEqualTo(FontType.ROCKN_ROLL_ONE.fontName)
         dataStoreRepository.updateFontType(FontType.DEFAULT)
-        assertThat(dataStoreRepository.selectedFontType().first()).isEqualTo(FontType.DEFAULT.name)
+        assertThat(dataStoreRepository.selectedFontType().first()).isEqualTo(FontType.DEFAULT.fontName)
     }
 
     @Test
