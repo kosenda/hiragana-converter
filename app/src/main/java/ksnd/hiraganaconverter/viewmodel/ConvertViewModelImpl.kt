@@ -33,6 +33,7 @@ class ConvertViewModelImpl @Inject constructor(
         if (uiState.value.isChangedInputText().not()) return
 
         CoroutineScope(ioDispatcher).launch {
+            _uiState.update { it.copy(isConverting = true) }
             runCatching {
                 convertTextUseCase(uiState.value.inputText, timeZone, uiState.value.selectedTextType)
             }.onSuccess { outputText ->
@@ -63,6 +64,7 @@ class ConvertViewModelImpl @Inject constructor(
                     )
                 }
             }
+            _uiState.update { it.copy(isConverting = false) }
         }
     }
 

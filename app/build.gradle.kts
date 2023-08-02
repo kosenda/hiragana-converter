@@ -107,6 +107,9 @@ dependencies {
         }
     }
 
+    // Lottie
+    implementation(libs.lottie)
+
     // ROOM
     implementation(libs.room.runtime)
     annotationProcessor(libs.room.compiler)

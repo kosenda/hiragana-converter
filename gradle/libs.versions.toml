@@ -21,6 +21,7 @@ kotlin = "1.8.20"
 kotlinxSerializationJson = "1.5.1"
 ksp = "1.8.20-1.0.11"
 ktlint = "0.50.0"
+lottie = "6.1.0"
 ossLicenses = "17.0.1"
 ossLicensesPlugin = "0.10.6"
 retrofit = "2.9.0"
@@ -66,6 +67,9 @@ junit = { group = "junit", name = "junit", version.ref = "junit4" }
 
 # kotlinx-serialization
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+
+# Lottie
+lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
 
 # Play Services
 play-oss-licenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "ossLicenses" }

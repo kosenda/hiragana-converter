@@ -1,6 +1,9 @@
 package ksnd.hiraganaconverter.view.screen
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -49,6 +52,10 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ksnd.hiraganaconverter.R
 import ksnd.hiraganaconverter.model.ConvertErrorType
@@ -91,6 +98,10 @@ fun ConverterScreenContent(viewModel: ConvertViewModel) {
 
     val scrollState = rememberScrollState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+
+    val composition by rememberLottieComposition(
+        spec = LottieCompositionSpec.RawRes(R.raw.animation_loading),
+    )
 
     Scaffold(
         topBar = {
@@ -179,6 +190,18 @@ fun ConverterScreenContent(viewModel: ConvertViewModel) {
 
             Spacer(modifier = Modifier.height(120.dp))
         }
+    }
+
+    AnimatedVisibility(
+        visible = convertUiState.isConverting,
+        enter = fadeIn(),
+        exit = fadeOut(),
+    ) {
+        LottieAnimation(
+            composition = composition,
+            modifier = Modifier.fillMaxSize(),
+            iterations = LottieConstants.IterateForever,
+        )
     }
 }
 
