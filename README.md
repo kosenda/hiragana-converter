@@ -47,6 +47,9 @@ https://labs.goo.ne.jp/apiusage/
 |Truth|Assertions used in testing|
 |Timber|Log output library|
 
+## Animation
+https://lottiefiles.com/animations/loading-lottie-animation-7xyTDwuIwc
+
 ## Image
 |Conversion screen(Light)|Conversion screen(Dark)|
 |:-:|:-:|
@@ -64,5 +67,3 @@ https://labs.goo.ne.jp/apiusage/
 |:-:|:-:|
 |<img width="320" alt="convert_screen" src="https://user-images.githubusercontent.com/60963155/210052030-5425ffc2-3f1f-4a72-94c9-b52b33144654.PNG">|<img width="320" alt="convert_screen" src="https://user-images.githubusercontent.com/60963155/210052039-eaf98871-e8db-439e-98e6-4c80124ada5b.PNG">|
 
-## Animation
-https://lottiefiles.com/animations/loading-lottie-animation-7xyTDwuIwc
