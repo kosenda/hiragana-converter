@@ -4,16 +4,23 @@ import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -46,6 +53,7 @@ import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -95,6 +103,7 @@ fun ConverterScreenContent(viewModel: ConvertViewModel) {
     val convertUiState by viewModel.uiState.collectAsState()
     val density = LocalDensity.current.density
     var topBarHeight by remember { mutableIntStateOf(0) }
+    val layoutDirection = LocalLayoutDirection.current
 
     val scrollState = rememberScrollState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
@@ -104,6 +113,16 @@ fun ConverterScreenContent(viewModel: ConvertViewModel) {
     )
 
     Scaffold(
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(
+                start = WindowInsets.displayCutout.asPaddingValues().calculateStartPadding(layoutDirection),
+                end = WindowInsets.displayCutout.asPaddingValues().calculateEndPadding(layoutDirection),
+            )
+            .padding(
+                start = WindowInsets.navigationBars.asPaddingValues().calculateStartPadding(layoutDirection),
+                end = WindowInsets.navigationBars.asPaddingValues().calculateEndPadding(layoutDirection),
+            ),
         topBar = {
             TopBar(
                 modifier = Modifier.onSizeChanged { topBarHeight = it.height },
