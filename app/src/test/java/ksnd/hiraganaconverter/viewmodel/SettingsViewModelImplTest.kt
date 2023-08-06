@@ -1,7 +1,9 @@
 package ksnd.hiraganaconverter.viewmodel
 
 import com.google.common.truth.Truth.assertThat
+import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import ksnd.hiraganaconverter.MainDispatcherRule
 import ksnd.hiraganaconverter.model.repository.DataStoreRepositoryImpl
@@ -24,42 +26,40 @@ class SettingsViewModelImplTest {
     )
 
     @Test
-    fun isSelected_initial_themeIsAuto() {
+    fun isSelected_initial_themeIsAuto() = runTest {
+        val theme = viewModel.theme.first()
         Theme.values().forEach {
             if (it == Theme.AUTO) {
-                assertThat(viewModel.isSelectedTheme(it.num)).isTrue()
+                assertThat(theme).isEqualTo(it)
             } else {
-                assertThat(viewModel.isSelectedTheme(it.num)).isFalse()
+                assertThat(theme).isNotEqualTo(it)
             }
         }
     }
 
     @Test
-    fun isSelectedFontType_initial_fontTypeIsYuseiMagic() {
+    fun isSelectedFontType_initial_fontTypeIsYuseiMagic() = runTest {
+        val fontType = viewModel.fontType.first()
         FontType.values().forEach {
             if (it == FontType.YUSEI_MAGIC) {
-                assertThat(viewModel.isSelectedFontType(it)).isTrue()
+                assertThat(fontType).isEqualTo(it)
             } else {
-                assertThat(viewModel.isSelectedFontType(it)).isFalse()
+                assertThat(fontType).isNotEqualTo(it)
             }
         }
     }
 
     @Test
-    fun updateTheme_newTheme_isChanged() = runTest {
-        assertThat(viewModel.isSelectedTheme(Theme.AUTO.num)).isTrue()
-        viewModel.updateTheme(Theme.NIGHT.num)
-        assertThat(viewModel.isSelectedTheme(Theme.NIGHT.num)).isTrue()
-        viewModel.updateTheme(Theme.DAY.num)
-        assertThat(viewModel.isSelectedTheme(Theme.DAY.num)).isTrue()
+    fun updateTheme_newTheme_isCalledUpdateTheme() = runTest {
+        val newTheme = Theme.DAY
+        viewModel.updateTheme(newTheme)
+        coEvery { dataStoreRepository.updateTheme(newTheme) }
     }
 
     @Test
-    fun updateFontType_newFontType_isChanged() = runTest {
-        assertThat(viewModel.isSelectedFontType(FontType.YUSEI_MAGIC)).isTrue()
-        viewModel.updateFontType(FontType.HACHI_MARU_POP)
-        assertThat(viewModel.isSelectedFontType(FontType.HACHI_MARU_POP)).isTrue()
-        viewModel.updateFontType(FontType.ROCKN_ROLL_ONE)
-        assertThat(viewModel.isSelectedFontType(FontType.ROCKN_ROLL_ONE)).isTrue()
+    fun updateFontType_newFontType_isCalledUpdateFontType() = runTest {
+        val newFontType = FontType.HACHI_MARU_POP
+        viewModel.updateFontType(newFontType)
+        coEvery { dataStoreRepository.updateFontType(newFontType) }
     }
 }

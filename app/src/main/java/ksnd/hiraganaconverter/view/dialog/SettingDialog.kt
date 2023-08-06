@@ -17,6 +17,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -63,6 +65,8 @@ private fun SettingDialogContent(
     onCloseClick: () -> Unit,
 ) {
     val isShowSelectLanguageDialog = rememberSaveable { mutableStateOf(false) }
+    val theme by viewModel.theme.collectAsState()
+    val fontType by viewModel.fontType.collectAsState()
 
     if (isShowSelectLanguageDialog.value) {
         SelectLanguageDialog(
@@ -91,7 +95,7 @@ private fun SettingDialogContent(
             ) {
                 SettingThemeContent(
                     onRadioButtonClick = viewModel::updateTheme,
-                    isSelectedNum = viewModel::isSelectedTheme,
+                    isSelectedTheme = theme,
                 )
                 SettingLanguageContent(
                     onClick = {
@@ -99,7 +103,7 @@ private fun SettingDialogContent(
                     },
                 )
                 SettingFontContent(
-                    selectFontType = viewModel.fontType.value,
+                    selectFontType = fontType,
                     onClickFontType = { fontType -> viewModel.updateFontType(newFontType = fontType) },
                 )
                 Spacer(modifier = Modifier.height(48.dp))
@@ -110,22 +114,22 @@ private fun SettingDialogContent(
 
 @Composable
 private fun SettingThemeContent(
-    onRadioButtonClick: (Int) -> Unit,
-    isSelectedNum: (Int) -> Boolean,
+    isSelectedTheme: Theme,
+    onRadioButtonClick: (Theme) -> Unit,
 ) {
-    val modeRadioResourceTriple: List<Triple<Int, String, Painter>> = listOf(
+    val modeRadioResourceTriple: List<Triple<Theme, String, Painter>> = listOf(
         Triple(
-            Theme.NIGHT.num,
+            Theme.NIGHT,
             stringResource(id = R.string.dark_mode),
             painterResource(id = R.drawable.ic_baseline_brightness_2_24),
         ),
         Triple(
-            Theme.DAY.num,
+            Theme.DAY,
             stringResource(id = R.string.light_mode),
             painterResource(id = R.drawable.ic_baseline_brightness_low_24),
         ),
         Triple(
-            Theme.AUTO.num,
+            Theme.AUTO,
             stringResource(id = R.string.auto_mode),
             painterResource(id = R.drawable.ic_baseline_brightness_auto_24),
         ),
@@ -142,12 +146,12 @@ private fun SettingThemeContent(
         modifier = Modifier.padding(vertical = 8.dp),
     ) {
         modeRadioResourceTriple.map { resource ->
-            val (themeNum, displayThemeName, painter) = resource
+            val (theme, displayThemeName, painter) = resource
             CustomRadioButton(
-                isSelected = isSelectedNum(themeNum),
+                isSelected = theme == isSelectedTheme,
                 buttonText = displayThemeName,
                 painter = painter,
-                onClick = { onRadioButtonClick(themeNum) },
+                onClick = { onRadioButtonClick(theme) },
             )
         }
     }

@@ -2,11 +2,12 @@ package ksnd.hiraganaconverter.model.repository
 
 import kotlinx.coroutines.flow.Flow
 import ksnd.hiraganaconverter.view.FontType
+import ksnd.hiraganaconverter.view.Theme
 
 interface DataStoreRepository {
-    fun selectedTheme(): Flow<Int>
-    fun selectedFontType(): Flow<String>
-    suspend fun updateTheme(newThemeNum: Int)
+    fun selectedTheme(): Flow<Theme>
+    fun selectedFontType(): Flow<FontType>
+    suspend fun updateTheme(newTheme: Theme)
     suspend fun updateFontType(fontType: FontType)
     suspend fun checkReachedConvertMaxLimit(today: String): Boolean
 }

@@ -1,14 +1,10 @@
 package ksnd.hiraganaconverter.viewmodel
 
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.di.module.IODispatcher
 import ksnd.hiraganaconverter.model.repository.DataStoreRepository
@@ -21,33 +17,15 @@ class SettingsViewModelImpl @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : SettingsViewModel() {
-
-    override val theme = mutableIntStateOf(Theme.AUTO.num)
-    override val fontType = mutableStateOf(FontType.YUSEI_MAGIC)
-
-    private val fontTypeFlow: StateFlow<String> = dataStoreRepository
-        .selectedFontType()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Eagerly,
-            initialValue = FontType.YUSEI_MAGIC.name,
-        )
-
-    private val themeFlow: StateFlow<Int> = dataStoreRepository
-        .selectedTheme()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Eagerly,
-            initialValue = Theme.AUTO.num,
-        )
+    override val theme = MutableStateFlow(Theme.AUTO)
+    override val fontType = MutableStateFlow(FontType.YUSEI_MAGIC)
 
     init {
-        theme.intValue = themeFlow.value
-        FontType.values().forEach { if (fontTypeFlow.value == it.fontName) fontType.value = it }
+        collectTheme()
+        collectFontType()
     }
 
-    override fun updateTheme(newTheme: Int) {
-        theme.intValue = newTheme
+    override fun updateTheme(newTheme: Theme) {
         CoroutineScope(ioDispatcher).launch {
             dataStoreRepository.updateTheme(newTheme)
         }
@@ -60,11 +38,17 @@ class SettingsViewModelImpl @Inject constructor(
         }
     }
 
-    override fun isSelectedTheme(index: Int): Boolean {
-        return theme.intValue == index
+    private fun collectTheme() {
+        viewModelScope.launch {
+            dataStoreRepository.selectedTheme().collect { theme.value = it }
+        }
     }
 
-    override fun isSelectedFontType(targetFontType: FontType): Boolean {
-        return fontType.value == targetFontType
+    private fun collectFontType() {
+        viewModelScope.launch {
+            dataStoreRepository.selectedTheme().collect {
+                fontType.value = FontType.values().firstOrNull { fontType.value.fontName == it.fontName } ?: FontType.YUSEI_MAGIC
+            }
+        }
     }
 }

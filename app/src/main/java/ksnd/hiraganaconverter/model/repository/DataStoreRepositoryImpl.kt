@@ -24,30 +24,30 @@ class DataStoreRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : DataStoreRepository {
-    override fun selectedTheme(): Flow<Int> {
+    override fun selectedTheme(): Flow<Theme> {
         return dataStore.data
             .catch { exception ->
                 Timber.e("DataStore: %s", exception)
-                if (exception is IOException) emit(emptyPreferences()) else Theme.AUTO.num
+                if (exception is IOException) emit(emptyPreferences()) else Theme.AUTO
             }
             .map { preferences ->
-                preferences[PreferenceKeys.THEME_NUM] ?: Theme.AUTO.num
+                Theme.values().firstOrNull { it.num == preferences[PreferenceKeys.THEME_NUM] } ?: Theme.AUTO
             }
     }
 
-    override fun selectedFontType(): Flow<String> {
+    override fun selectedFontType(): Flow<FontType> {
         return dataStore.data
             .catch { exception ->
                 Timber.e("DataStore: %s", exception)
-                if (exception is IOException) emit(emptyPreferences()) else FontType.YUSEI_MAGIC.fontName
+                if (exception is IOException) emit(emptyPreferences()) else FontType.YUSEI_MAGIC
             }
             .map { preferences ->
-                preferences[PreferenceKeys.FONT_TYPE] ?: FontType.YUSEI_MAGIC.fontName
+                FontType.values().firstOrNull { it.fontName == preferences[PreferenceKeys.FONT_TYPE] } ?: FontType.YUSEI_MAGIC
             }
     }
 
-    override suspend fun updateTheme(newThemeNum: Int) {
-        dataStore.edit { it[PreferenceKeys.THEME_NUM] = newThemeNum }
+    override suspend fun updateTheme(newTheme: Theme) {
+        dataStore.edit { it[PreferenceKeys.THEME_NUM] = newTheme.num }
     }
 
     override suspend fun updateFontType(fontType: FontType) {
