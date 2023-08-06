@@ -5,7 +5,6 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,12 +40,12 @@ class MainActivity : AppCompatActivity() {
         setContent {
             val mainViewModel: MainViewModel = hiltViewModel()
 
-            val theme: State<Int> = mainViewModel.theme.collectAsState(initial = Theme.AUTO.num)
-            val fontType: State<String> = mainViewModel.fontType.collectAsState(initial = FontType.YUSEI_MAGIC.fontName)
+            val theme by mainViewModel.theme.collectAsState(initial = Theme.AUTO)
+            val fontType by mainViewModel.fontType.collectAsState(initial = FontType.YUSEI_MAGIC)
 
-            val isDarkTheme = when (theme.value) {
-                Theme.NIGHT.num -> true
-                Theme.DAY.num -> false
+            val isDarkTheme = when (theme) {
+                Theme.NIGHT -> true
+                Theme.DAY -> false
                 else -> isSystemInDarkTheme()
             }
 
@@ -55,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             ) {
                 HiraganaConverterTheme(
                     isDarkTheme = isDarkTheme,
-                    fontType = FontType.values().firstOrNull { it.fontName == fontType.value } ?: FontType.YUSEI_MAGIC,
+                    fontType = fontType,
                 ) {
                     ConverterScreen()
                 }

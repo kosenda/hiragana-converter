@@ -1,8 +1,5 @@
 package ksnd.hiraganaconverter.viewmodel
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,14 +25,10 @@ class PreviewConvertViewModel : ConvertViewModel() {
 }
 
 class PreviewSettingViewModel : SettingsViewModel() {
-    override val fontType: MutableState<FontType> = mutableStateOf(FontType.YUSEI_MAGIC)
-    override val theme: MutableState<Int> = mutableIntStateOf(Theme.AUTO.num)
-    override fun updateTheme(newTheme: Int) {}
+    override val fontType = MutableStateFlow(FontType.YUSEI_MAGIC)
+    override val theme = MutableStateFlow(Theme.AUTO)
+    override fun updateTheme(newTheme: Theme) {}
     override fun updateFontType(newFontType: FontType) {}
-    override fun isSelectedTheme(index: Int): Boolean = 0 == index
-    override fun isSelectedFontType(targetFontType: FontType): Boolean {
-        return FontType.YUSEI_MAGIC == targetFontType
-    }
 }
 
 class PreviewConvertHistoryViewModel(isNoData: Boolean = false) : ConvertHistoryViewModel() {
