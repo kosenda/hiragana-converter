@@ -6,7 +6,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import ksnd.hiraganaconverter.MainDispatcherRule
-import ksnd.hiraganaconverter.model.repository.DataStoreRepositoryImpl
+import ksnd.hiraganaconverter.model.repository.DataStoreRepository
 import ksnd.hiraganaconverter.view.FontType
 import ksnd.hiraganaconverter.view.Theme
 import org.junit.Rule
@@ -19,7 +19,7 @@ class SettingsViewModelImplTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    private val dataStoreRepository = mockk<DataStoreRepositoryImpl>(relaxed = true)
+    private val dataStoreRepository = mockk<DataStoreRepository>(relaxed = true)
     private val viewModel = SettingsViewModelImpl(
         dataStoreRepository = dataStoreRepository,
         ioDispatcher = mainDispatcherRule.testDispatcher,
