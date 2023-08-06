@@ -57,7 +57,10 @@ class ConvertViewModelImpl @Inject constructor(
                                 ConvertErrorType.CONVERSION_FAILED.name -> ConvertErrorType.CONVERSION_FAILED
                                 ConvertErrorType.INTERNAL_SERVER.name -> ConvertErrorType.INTERNAL_SERVER
                                 ConvertErrorType.NETWORK.name -> ConvertErrorType.NETWORK
-                                else -> throw IllegalStateException("Not defined ConvertErrorType!")
+                                else -> {
+                                    Timber.w("InterceptorError: %s".format(throwable.message))
+                                    ConvertErrorType.CONVERSION_FAILED
+                                }
                             }
                             else -> throw IllegalStateException("Not defined ConvertTextUseCaseException!")
                         },
