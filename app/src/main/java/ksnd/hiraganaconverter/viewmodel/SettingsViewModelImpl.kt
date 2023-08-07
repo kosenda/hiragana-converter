@@ -5,6 +5,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.di.module.IODispatcher
 import ksnd.hiraganaconverter.model.repository.DataStoreRepository
@@ -17,8 +18,10 @@ class SettingsViewModelImpl @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : SettingsViewModel() {
-    override val theme = MutableStateFlow(Theme.AUTO)
-    override val fontType = MutableStateFlow(FontType.YUSEI_MAGIC)
+    private val _theme = MutableStateFlow(Theme.AUTO)
+    override val theme = _theme.asStateFlow()
+    private val _fontType = MutableStateFlow(FontType.YUSEI_MAGIC)
+    override val fontType = _fontType.asStateFlow()
 
     init {
         collectTheme()
@@ -32,7 +35,6 @@ class SettingsViewModelImpl @Inject constructor(
     }
 
     override fun updateFontType(newFontType: FontType) {
-        fontType.value = newFontType
         CoroutineScope(ioDispatcher).launch {
             dataStoreRepository.updateFontType(newFontType)
         }
@@ -40,15 +42,13 @@ class SettingsViewModelImpl @Inject constructor(
 
     private fun collectTheme() {
         viewModelScope.launch {
-            dataStoreRepository.selectedTheme().collect { theme.value = it }
+            dataStoreRepository.selectedTheme().collect { _theme.value = it }
         }
     }
 
     private fun collectFontType() {
         viewModelScope.launch {
-            dataStoreRepository.selectedTheme().collect {
-                fontType.value = FontType.values().firstOrNull { fontType.value.fontName == it.fontName } ?: FontType.YUSEI_MAGIC
-            }
+            dataStoreRepository.selectedFontType().collect { _fontType.value = it }
         }
     }
 }
