@@ -48,7 +48,7 @@ https://labs.goo.ne.jp/apiusage/
 |Timber|Log output library|
 
 ## Animation
-https://lottiefiles.com/animations/loading-lottie-animation-7xyTDwuIwc
+https://lottiefiles.com/animations/loading-Y3Pt36IpkJ
 
 ## Image
 |Conversion screen(Light)|Conversion screen(Dark)|
