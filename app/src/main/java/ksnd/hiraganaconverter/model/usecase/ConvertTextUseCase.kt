@@ -2,8 +2,6 @@ package ksnd.hiraganaconverter.model.usecase
 
 import ksnd.hiraganaconverter.BuildConfig
 import ksnd.hiraganaconverter.model.HiraKanaType
-import ksnd.hiraganaconverter.model.TimeFormat
-import ksnd.hiraganaconverter.model.getNowTime
 import ksnd.hiraganaconverter.model.repository.ConvertHistoryRepository
 import ksnd.hiraganaconverter.model.repository.ConvertRepository
 import ksnd.hiraganaconverter.model.repository.DataStoreRepository
@@ -15,10 +13,8 @@ class ConvertTextUseCase @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
     private val convertHistoryRepository: ConvertHistoryRepository,
 ) {
-    suspend operator fun invoke(inputText: String, timeZone: String, selectedTextType: HiraKanaType): String {
-        val isReachedConvertMaxLimit = dataStoreRepository.checkReachedConvertMaxLimit(
-            today = getNowTime(timeZone = timeZone, format = TimeFormat.YEAR_MONTH_DATE),
-        )
+    suspend operator fun invoke(inputText: String, selectedTextType: HiraKanaType): String {
+        val isReachedConvertMaxLimit = dataStoreRepository.checkIsExceedingMaxLimit()
         if (isReachedConvertMaxLimit) throw IsReachedConvertMaxLimitException
 
         val response = convertRepository.requestConvert(
@@ -35,7 +31,6 @@ class ConvertTextUseCase @Inject constructor(
                 convertHistoryRepository.insertConvertHistory(
                     beforeText = inputText,
                     afterText = outputText,
-                    time = getNowTime(timeZone = timeZone, format = TimeFormat.YEAR_MONTH_DATE_HOUR_MINUTE),
                 )
                 return outputText
             }

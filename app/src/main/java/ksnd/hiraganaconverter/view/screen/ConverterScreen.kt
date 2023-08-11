@@ -99,7 +99,6 @@ fun ConverterScreen(convertViewModel: ConvertViewModelImpl = hiltViewModel()) {
 fun ConverterScreenContent(viewModel: ConvertViewModel) {
     val focusManager = LocalFocusManager.current
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
-    val timeZone = stringResource(id = R.string.time_zone)
     val convertUiState by viewModel.uiState.collectAsState()
     val density = LocalDensity.current.density
     var topBarHeight by remember { mutableIntStateOf(0) }
@@ -167,7 +166,7 @@ fun ConverterScreenContent(viewModel: ConvertViewModel) {
                     convertDescription = stringResource(id = R.string.conversion),
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    onClick = { viewModel.convert(timeZone = timeZone) },
+                    onClick = viewModel::convert,
                 )
             }
 

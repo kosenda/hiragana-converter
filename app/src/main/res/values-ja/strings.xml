@@ -18,7 +18,6 @@
     <string name="language_setting">言語</string>
     <string name="font_setting">フォント</string>
     <string name="delete_all">すべて削除</string>
-    <string name="time_zone">Asia/Tokyo</string>
     <string name="top">Top</string>
 
     <string name="conversion_failed">変換に失敗しました。</string>

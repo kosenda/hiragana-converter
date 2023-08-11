@@ -7,7 +7,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import ksnd.hiraganaconverter.di.module.IODispatcher
@@ -16,6 +16,7 @@ import ksnd.hiraganaconverter.view.FontType
 import ksnd.hiraganaconverter.view.Theme
 import timber.log.Timber
 import java.io.IOException
+import java.time.LocalDate
 import javax.inject.Inject
 
 const val LIMIT_CONVERT_COUNT = 200
@@ -46,50 +47,14 @@ class DataStoreRepositoryImpl @Inject constructor(
             }
     }
 
-    override suspend fun updateTheme(newTheme: Theme) {
-        dataStore.edit { it[PreferenceKeys.THEME_NUM] = newTheme.num }
-    }
-
-    override suspend fun updateFontType(fontType: FontType) {
-        dataStore.edit { it[PreferenceKeys.FONT_TYPE] = fontType.fontName }
-    }
-
-    override suspend fun checkReachedConvertMaxLimit(today: String): Boolean {
-        val oldConvertCount: Int = try {
-            convertCount().first()
-        } catch (e: NoSuchElementException) {
-            0
-        }
-        val oldLastConvertTime: String = try {
-            lastConvertTime().first()
-        } catch (e: NoSuchElementException) {
-            ""
-        }
-        Timber.i("old_convert_count: %d".format(oldConvertCount))
-        Timber.i("old_convert_time: %s".format(oldLastConvertTime))
-
-        return if (today != oldLastConvertTime) {
-            updateLastConvertTime(today)
-            updateConvertCount(1)
-            Timber.i("new_convert_count: 1")
-            Timber.i("new_convert_time: %s".format(today))
-            false
-        } else {
-            val newConvertCount = oldConvertCount + 1
-            Timber.i("new_convert_count: %d".format(newConvertCount))
-            updateConvertCount(newConvertCount)
-            newConvertCount > LIMIT_CONVERT_COUNT
-        }
-    }
-
-    private fun lastConvertTime(): Flow<String> {
+    private fun lastConvertTime(): Flow<LocalDate?> {
         return dataStore.data
             .catch { exception ->
                 Timber.e("DataStore: %s".format(exception))
                 if (exception is IOException) emit(emptyPreferences())
             }
             .map { preferences ->
-                preferences[PreferenceKeys.LAST_CONVERT_TIME] ?: ""
+                preferences[PreferenceKeys.LAST_CONVERT_DATE]?.let { LocalDate.parse(it) }
             }
     }
 
@@ -104,8 +69,29 @@ class DataStoreRepositoryImpl @Inject constructor(
             }
     }
 
-    private suspend fun updateLastConvertTime(lastConvertTime: String) = withContext(ioDispatcher) {
-        dataStore.edit { it[PreferenceKeys.LAST_CONVERT_TIME] = lastConvertTime }
+    override suspend fun updateTheme(newTheme: Theme) {
+        dataStore.edit { it[PreferenceKeys.THEME_NUM] = newTheme.num }
+    }
+
+    override suspend fun updateFontType(fontType: FontType) {
+        dataStore.edit { it[PreferenceKeys.FONT_TYPE] = fontType.fontName }
+    }
+
+    override suspend fun checkIsExceedingMaxLimit(): Boolean {
+        val today = LocalDate.now()
+        return if (today == lastConvertTime().firstOrNull()) {
+            val newConvertCount = (convertCount().firstOrNull() ?: 0) + 1
+            updateConvertCount(newConvertCount)
+            newConvertCount > LIMIT_CONVERT_COUNT
+        } else {
+            updateLastConvertTime(today)
+            updateConvertCount(1)
+            false
+        }
+    }
+
+    private suspend fun updateLastConvertTime(convertDate: LocalDate) = withContext(ioDispatcher) {
+        dataStore.edit { it[PreferenceKeys.LAST_CONVERT_DATE] = convertDate.toString() }
     }
 
     private suspend fun updateConvertCount(convertCount: Int) = withContext(ioDispatcher) {

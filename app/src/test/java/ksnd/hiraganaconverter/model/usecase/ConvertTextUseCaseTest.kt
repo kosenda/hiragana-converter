@@ -36,44 +36,43 @@ class ConvertTextUseCaseTest {
 
     @Test
     fun invoke_overConvertForReachedConvert_isReachedConvertMaxLimitException() = runTest {
-        coEvery { dataStoreRepository.checkReachedConvertMaxLimit(any()) } returns true
+        coEvery { dataStoreRepository.checkIsExceedingMaxLimit() } returns true
         assertFailsWith<IsReachedConvertMaxLimitException> {
-            useCase(inputText = INPUT_TXT, timeZone = TIME_ZONE, selectedTextType = SELECTED_TYPE)
+            useCase(inputText = INPUT_TXT, selectedTextType = SELECTED_TYPE)
         }
-        coVerify(exactly = 1) { dataStoreRepository.checkReachedConvertMaxLimit(any()) }
+        coVerify(exactly = 1) { dataStoreRepository.checkIsExceedingMaxLimit() }
     }
 
     @Test
     fun invoke_responseIsNothing_conversionFailedException() = runTest {
-        coEvery { dataStoreRepository.checkReachedConvertMaxLimit(any()) } returns false
+        coEvery { dataStoreRepository.checkIsExceedingMaxLimit() } returns false
         coEvery { convertRepository.requestConvert(any(), any(), any()) } returns null
         assertFailsWith<ConversionFailedException> {
-            useCase(inputText = INPUT_TXT, timeZone = TIME_ZONE, selectedTextType = SELECTED_TYPE)
+            useCase(inputText = INPUT_TXT, selectedTextType = SELECTED_TYPE)
         }
         coVerify(exactly = 1) { convertRepository.requestConvert(any(), any(), any()) }
     }
 
     @Test
     fun invoke_error413_conversionFailedException() = runTest {
-        coEvery { dataStoreRepository.checkReachedConvertMaxLimit(any()) } returns false
+        coEvery { dataStoreRepository.checkIsExceedingMaxLimit() } returns false
         coEvery { convertRepository.requestConvert(any(), any(), any()) } returns errorResponse
         assertFailsWith<InterceptorError> {
-            useCase(inputText = INPUT_TXT, timeZone = TIME_ZONE, selectedTextType = SELECTED_TYPE)
+            useCase(inputText = INPUT_TXT, selectedTextType = SELECTED_TYPE)
         }
         coVerify(exactly = 1) { convertRepository.requestConvert(any(), any(), any()) }
     }
 
     @Test
     fun invoke_relaxed_outputConverted() = runTest {
-        coEvery { dataStoreRepository.checkReachedConvertMaxLimit(any()) } returns false
+        coEvery { dataStoreRepository.checkIsExceedingMaxLimit() } returns false
         coEvery { convertRepository.requestConvert(any(), any(), any()) } returns successResponse
-        assertThat(useCase(inputText = INPUT_TXT, timeZone = TIME_ZONE, selectedTextType = SELECTED_TYPE)).isNotEmpty()
+        assertThat(useCase(inputText = INPUT_TXT, selectedTextType = SELECTED_TYPE)).isNotEmpty()
         coVerify(exactly = 1) { convertRepository.requestConvert(any(), any(), any()) }
     }
 
     companion object {
         private const val INPUT_TXT = "漢字"
-        private const val TIME_ZONE = "Asia/Tokyo"
         private val SELECTED_TYPE = HiraKanaType.HIRAGANA
         private const val error413Json = """{"error": {"code": 413, "message": "TOO_MANY_CHARACTER"}"""
         private val errorResponse: Response<ResponseData> = Response.error(413, error413Json.toResponseBody("application/json".toMediaType()))
