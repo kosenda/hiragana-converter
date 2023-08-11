@@ -25,7 +25,7 @@ android {
 
     defaultConfig {
         applicationId = "ksnd.hiraganaconverter"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 33
         versionCode = 32
         versionName = "1.21"

@@ -28,14 +28,14 @@ class ConvertViewModelImpl @Inject constructor(
     private val _uiState = MutableStateFlow(ConvertUiState())
     override val uiState: StateFlow<ConvertUiState> = _uiState.asStateFlow()
 
-    override fun convert(timeZone: String) {
+    override fun convert() {
         // If input has not changed since the last time, it will not be converted.
         if (uiState.value.isChangedInputText().not()) return
 
         CoroutineScope(ioDispatcher).launch {
             _uiState.update { it.copy(isConverting = true) }
             runCatching {
-                convertTextUseCase(uiState.value.inputText, timeZone, uiState.value.selectedTextType)
+                convertTextUseCase(uiState.value.inputText, uiState.value.selectedTextType)
             }.onSuccess { outputText ->
                 _uiState.update {
                     it.copy(

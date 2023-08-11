@@ -42,39 +42,39 @@ class ConvertViewModelImplTest {
     @Test
     fun convert_notChangedText_notCalledUseCase() = runTest {
         assertThat(viewModel.uiState.value.inputText).isEqualTo("")
-        viewModel.convert(timeZone = TIME_ZONE)
-        coVerify(exactly = 0) { convertTextUseCase(any(), any(), any()) }
+        viewModel.convert()
+        coVerify(exactly = 0) { convertTextUseCase(any(), any()) }
     }
 
     @Test
     fun convert_firstInputText_updateTexts() = runTest {
         val inputText = "漢字"
         val outputText = "かんじ"
-        coEvery { convertTextUseCase(any(), any(), any()) } returns outputText
+        coEvery { convertTextUseCase(any(), any()) } returns outputText
         viewModel.updateInputText(inputText)
-        viewModel.convert(timeZone = TIME_ZONE)
+        viewModel.convert()
         assertThat(viewModel.uiState.value.outputText).isEqualTo(outputText)
         assertThat(viewModel.uiState.value.previousInputText).isEqualTo(inputText)
         assertThat(viewModel.uiState.value.convertErrorType).isNull()
-        coVerify(exactly = 1) { convertTextUseCase(any(), any(), any()) }
+        coVerify(exactly = 1) { convertTextUseCase(any(), any()) }
     }
 
     @Test
     fun convert_throwException_updateErrorType() = runTest {
-        coEvery { convertTextUseCase(any(), any(), any()) } throws ConversionFailedException
+        coEvery { convertTextUseCase(any(), any()) } throws ConversionFailedException
         viewModel.updateInputText("漢字")
         assertThat(viewModel.uiState.value.convertErrorType).isNull()
-        viewModel.convert(timeZone = TIME_ZONE)
+        viewModel.convert()
         assertThat(viewModel.uiState.value.convertErrorType).isNotNull()
-        coVerify(exactly = 1) { convertTextUseCase(any(), any(), any()) }
+        coVerify(exactly = 1) { convertTextUseCase(any(), any()) }
     }
 
     @Test
     fun changeHiraKanaType_differentType_isUpdatedAndClearPrevieous() = runTest {
         assertThat(viewModel.uiState.value.selectedTextType).isEqualTo(HiraKanaType.HIRAGANA)
         viewModel.updateInputText("漢字")
-        coEvery { convertTextUseCase(any(), any(), HiraKanaType.HIRAGANA) } returns "かんじ"
-        viewModel.convert(timeZone = TIME_ZONE)
+        coEvery { convertTextUseCase(any(), HiraKanaType.HIRAGANA) } returns "かんじ"
+        viewModel.convert()
         assertThat(viewModel.uiState.value.previousInputText).isEqualTo("漢字")
         viewModel.changeHiraKanaType(HiraKanaType.KATAKANA)
         assertThat(viewModel.uiState.value.selectedTextType).isEqualTo(HiraKanaType.KATAKANA)
@@ -83,9 +83,9 @@ class ConvertViewModelImplTest {
 
     @Test
     fun clearConvertErrorType_once_isEmpty() = runTest {
-        coEvery { convertTextUseCase(any(), any(), any()) } throws ConversionFailedException
+        coEvery { convertTextUseCase(any(), any()) } throws ConversionFailedException
         viewModel.updateInputText("漢字")
-        viewModel.convert(timeZone = TIME_ZONE)
+        viewModel.convert()
         assertThat(viewModel.uiState.value.convertErrorType).isNotNull()
         viewModel.clearConvertErrorType()
         assertThat(viewModel.uiState.value.convertErrorType).isNull()
@@ -93,10 +93,10 @@ class ConvertViewModelImplTest {
 
     @Test
     fun clearAllText_once_isAllEmpty() = runTest {
-        coEvery { convertTextUseCase(any(), any(), any()) } throws ConversionFailedException
+        coEvery { convertTextUseCase(any(), any()) } throws ConversionFailedException
         viewModel.updateInputText("漢字")
         viewModel.updateOutputText("カンジ")
-        viewModel.convert(timeZone = TIME_ZONE)
+        viewModel.convert()
         assertThat(viewModel.uiState.value.inputText).isNotEmpty()
         assertThat(viewModel.uiState.value.outputText).isNotEmpty()
         assertThat(viewModel.uiState.value.convertErrorType).isNotNull()

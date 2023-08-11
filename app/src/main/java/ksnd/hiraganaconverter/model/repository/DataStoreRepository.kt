@@ -9,5 +9,5 @@ interface DataStoreRepository {
     fun selectedFontType(): Flow<FontType>
     suspend fun updateTheme(newTheme: Theme)
     suspend fun updateFontType(fontType: FontType)
-    suspend fun checkReachedConvertMaxLimit(today: String): Boolean
+    suspend fun checkIsExceedingMaxLimit(): Boolean
 }

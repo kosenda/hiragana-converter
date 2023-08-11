@@ -24,21 +24,21 @@ class ConvertHistoryRepositoryImplTest {
 
     @Test
     fun insertConvertHistory_addHistoryOnce_size1() {
-        convertHistoryRepositoryImpl.insertConvertHistory(beforeText = BEFORE_TEXT, afterText = AFTER_TEXT, time = TEST_DATE)
+        convertHistoryRepositoryImpl.insertConvertHistory(beforeText = BEFORE_TEXT, afterText = AFTER_TEXT)
         assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().size).isEqualTo(1)
         verify(exactly = 1) { convertHistoryDao.insertConvertHistory(any()) }
     }
 
     @Test
     fun insertConvertHistory_add3Histories_size3() {
-        repeat(3) { convertHistoryRepositoryImpl.insertConvertHistory(beforeText = BEFORE_TEXT, afterText = AFTER_TEXT, time = TEST_DATE) }
+        repeat(3) { convertHistoryRepositoryImpl.insertConvertHistory(beforeText = BEFORE_TEXT, afterText = AFTER_TEXT) }
         assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().size).isEqualTo(3)
         verify(exactly = 3) { convertHistoryDao.insertConvertHistory(any()) }
     }
 
     @Test
     fun deleteAllConvertHistory_exist3Histories_isEmpty() {
-        repeat(3) { convertHistoryRepositoryImpl.insertConvertHistory(beforeText = BEFORE_TEXT, afterText = AFTER_TEXT, time = TEST_DATE) }
+        repeat(3) { convertHistoryRepositoryImpl.insertConvertHistory(beforeText = BEFORE_TEXT, afterText = AFTER_TEXT) }
         convertHistoryRepositoryImpl.deleteAllConvertHistory()
         assertThat(convertHistoryRepositoryImpl.getAllConvertHistory()).isEmpty()
         verify(exactly = 1) { convertHistoryDao.deleteAllConvertHistory() }
@@ -46,7 +46,7 @@ class ConvertHistoryRepositoryImplTest {
 
     @Test
     fun convertHistoryRepository_deleteOnce_sizeMinus1() {
-        repeat(3) { convertHistoryRepositoryImpl.insertConvertHistory(beforeText = BEFORE_TEXT, afterText = AFTER_TEXT, time = TEST_DATE) }
+        repeat(3) { convertHistoryRepositoryImpl.insertConvertHistory(beforeText = BEFORE_TEXT, afterText = AFTER_TEXT) }
         assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().size).isEqualTo(3)
         val deleteHistoryId = convertHistoryRepositoryImpl.getAllConvertHistory().first().id
         convertHistoryRepositoryImpl.deleteConvertHistory(id = deleteHistoryId)
@@ -56,7 +56,6 @@ class ConvertHistoryRepositoryImplTest {
     companion object {
         private const val BEFORE_TEXT = "A"
         private const val AFTER_TEXT = "えー"
-        private const val TEST_DATE = "2022/12/20 22:10"
     }
 }
 

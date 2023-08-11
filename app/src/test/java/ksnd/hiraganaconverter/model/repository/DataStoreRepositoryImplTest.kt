@@ -8,9 +8,6 @@ import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import ksnd.hiraganaconverter.MainDispatcherRule
-import ksnd.hiraganaconverter.R
-import ksnd.hiraganaconverter.model.TimeFormat
-import ksnd.hiraganaconverter.model.getNowTime
 import ksnd.hiraganaconverter.view.FontType
 import ksnd.hiraganaconverter.view.Theme
 import org.junit.Rule
@@ -59,15 +56,13 @@ class DataStoreRepositoryImplTest {
     }
 
     @Test
-    fun checkReachedConvertMaxLimit_first_isFalse() = runTest {
-        val today = getNowTime(timeZone = context.getString(R.string.time_zone), format = TimeFormat.YEAR_MONTH_DATE)
-        assertThat(dataStoreRepository.checkReachedConvertMaxLimit(today)).isFalse()
+    fun checkIsExceedingMaxLimit_first_isFalse() = runTest {
+        assertThat(dataStoreRepository.checkIsExceedingMaxLimit()).isFalse()
     }
 
     @Test
-    fun checkReachedConvertMaxLimit_convertToReachedConvertMaxLimitPlus1_isTrue() = runTest {
-        val today = getNowTime(timeZone = context.getString(R.string.time_zone), format = TimeFormat.YEAR_MONTH_DATE)
-        repeat(LIMIT_CONVERT_COUNT) { assertThat(dataStoreRepository.checkReachedConvertMaxLimit(today)).isFalse() }
-        assertThat(dataStoreRepository.checkReachedConvertMaxLimit(today)).isTrue()
+    fun checkIsExceedingMaxLimit_convertToReachedConvertMaxLimitPlus1_isTrue() = runTest {
+        repeat(LIMIT_CONVERT_COUNT) { assertThat(dataStoreRepository.checkIsExceedingMaxLimit()).isFalse() }
+        assertThat(dataStoreRepository.checkIsExceedingMaxLimit()).isTrue()
     }
 }
