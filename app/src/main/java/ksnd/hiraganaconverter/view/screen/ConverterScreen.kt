@@ -1,9 +1,6 @@
 package ksnd.hiraganaconverter.view.screen
 
 import android.widget.Toast
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
@@ -60,16 +57,13 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ksnd.hiraganaconverter.R
 import ksnd.hiraganaconverter.model.ConvertErrorType
 import ksnd.hiraganaconverter.model.repository.LIMIT_CONVERT_COUNT
 import ksnd.hiraganaconverter.view.LocalIsDark
 import ksnd.hiraganaconverter.view.parts.TopBar
+import ksnd.hiraganaconverter.view.parts.button.ConvertButton
 import ksnd.hiraganaconverter.view.parts.button.CustomButtonWithBackground
 import ksnd.hiraganaconverter.view.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.view.parts.button.MoveTopButton
@@ -106,10 +100,6 @@ fun ConverterScreenContent(viewModel: ConvertViewModel) {
 
     val scrollState = rememberScrollState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
-
-    val composition by rememberLottieComposition(
-        spec = LottieCompositionSpec.RawRes(R.raw.animation_loading),
-    )
 
     Scaffold(
         modifier = Modifier
@@ -160,9 +150,10 @@ fun ConverterScreenContent(viewModel: ConvertViewModel) {
                     contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                     onClick = viewModel::clearAllText,
                 )
-                CustomButtonWithBackground(
+                ConvertButton(
                     modifier = Modifier.padding(start = 4.dp),
                     id = R.drawable.ic_baseline_compare_arrows_24,
+                    isConverting = convertUiState.isConverting,
                     convertDescription = stringResource(id = R.string.conversion),
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -208,18 +199,6 @@ fun ConverterScreenContent(viewModel: ConvertViewModel) {
 
             Spacer(modifier = Modifier.height(120.dp))
         }
-    }
-
-    AnimatedVisibility(
-        visible = convertUiState.isConverting,
-        enter = fadeIn(),
-        exit = fadeOut(),
-    ) {
-        LottieAnimation(
-            composition = composition,
-            modifier = Modifier.fillMaxSize(),
-            iterations = LottieConstants.IterateForever,
-        )
     }
 }
 
