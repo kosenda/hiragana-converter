@@ -39,7 +39,7 @@ fun ConvertButton(
                 .size(size = 56.dp)
                 .clip(CircleShape)
                 .background(containerColor),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             LottieAnimation(
                 composition = composition,
