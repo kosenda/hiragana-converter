@@ -7,50 +7,62 @@ import androidx.compose.runtime.setValue
 import com.google.common.truth.Truth.assertThat
 import io.mockk.spyk
 import io.mockk.verify
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.runTest
+import ksnd.hiraganaconverter.MainDispatcherRule
 import ksnd.hiraganaconverter.model.ConvertHistoryDao
 import ksnd.hiraganaconverter.model.ConvertHistoryData
+import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 
+@RunWith(RobolectricTestRunner::class)
 class ConvertHistoryRepositoryImplTest {
+    @get: Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
     private var convertHistoryDao = spyk<FakeConvertHistoryDao>()
     private val convertHistoryRepositoryImpl = ConvertHistoryRepositoryImpl(convertHistoryDao = convertHistoryDao)
 
     @Test
-    fun getAllConvertHistory_initial_isEmpty() {
-        assertThat(convertHistoryRepositoryImpl.getAllConvertHistory()).isEmpty()
+    fun getAllConvertHistory_initial_isEmpty() = runTest {
+        assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().firstOrNull()).isEmpty()
         verify(exactly = 1) { convertHistoryDao.getAllConvertHistory() }
     }
 
     @Test
-    fun insertConvertHistory_addHistoryOnce_size1() {
+    fun insertConvertHistory_addHistoryOnce_size1() = runTest {
         convertHistoryRepositoryImpl.insertConvertHistory(beforeText = BEFORE_TEXT, afterText = AFTER_TEXT)
-        assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().size).isEqualTo(1)
+        assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().first().size).isEqualTo(1)
         verify(exactly = 1) { convertHistoryDao.insertConvertHistory(any()) }
     }
 
     @Test
-    fun insertConvertHistory_add3Histories_size3() {
+    fun insertConvertHistory_add3Histories_size3() = runTest {
         repeat(3) { convertHistoryRepositoryImpl.insertConvertHistory(beforeText = BEFORE_TEXT, afterText = AFTER_TEXT) }
-        assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().size).isEqualTo(3)
+        assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().first().size).isEqualTo(3)
         verify(exactly = 3) { convertHistoryDao.insertConvertHistory(any()) }
     }
 
     @Test
-    fun deleteAllConvertHistory_exist3Histories_isEmpty() {
+    fun deleteAllConvertHistory_exist3Histories_isEmpty() = runTest {
         repeat(3) { convertHistoryRepositoryImpl.insertConvertHistory(beforeText = BEFORE_TEXT, afterText = AFTER_TEXT) }
         convertHistoryRepositoryImpl.deleteAllConvertHistory()
-        assertThat(convertHistoryRepositoryImpl.getAllConvertHistory()).isEmpty()
+        assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().firstOrNull()).isEmpty()
         verify(exactly = 1) { convertHistoryDao.deleteAllConvertHistory() }
     }
 
     @Test
-    fun convertHistoryRepository_deleteOnce_sizeMinus1() {
+    fun convertHistoryRepository_deleteOnce_sizeMinus1() = runTest {
         repeat(3) { convertHistoryRepositoryImpl.insertConvertHistory(beforeText = BEFORE_TEXT, afterText = AFTER_TEXT) }
-        assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().size).isEqualTo(3)
-        val deleteHistoryId = convertHistoryRepositoryImpl.getAllConvertHistory().first().id
+        assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().first().size).isEqualTo(3)
+        val deleteHistoryId = convertHistoryRepositoryImpl.getAllConvertHistory().first().first().id
         convertHistoryRepositoryImpl.deleteConvertHistory(id = deleteHistoryId)
-        assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().size).isEqualTo(2)
+        assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().first().size).isEqualTo(2)
     }
 
     companion object {
@@ -71,8 +83,8 @@ private class FakeConvertHistoryDao : ConvertHistoryDao {
         convertHistoryDataList.add(changedIdConvertHistoryData)
     }
 
-    override fun getAllConvertHistory(): List<ConvertHistoryData> {
-        return convertHistoryDataList
+    override fun getAllConvertHistory(): Flow<List<ConvertHistoryData>> {
+        return flowOf(convertHistoryDataList)
     }
 
     override fun deleteAllConvertHistory() {

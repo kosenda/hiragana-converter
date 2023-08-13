@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ConvertHistoryDao {
@@ -13,7 +14,7 @@ interface ConvertHistoryDao {
 
     // ■ READ
     @Query("select * from convert_history")
-    fun getAllConvertHistory(): List<ConvertHistoryData>
+    fun getAllConvertHistory(): Flow<List<ConvertHistoryData>>
 
     // ■ DELETE
     @Query("delete from convert_history")
