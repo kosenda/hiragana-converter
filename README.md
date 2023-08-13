@@ -26,6 +26,7 @@ https://labs.goo.ne.jp/apiusage/
 |Name|Brief description|
 |:--|:--|
 |Analytics|Firebase analytics|
+|App Update|In App Update|
 |Coil|Image loading library|
 |Crashlytics|Firebase crashlytics|
 |Danger|Automatic review|
