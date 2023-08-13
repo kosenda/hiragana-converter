@@ -2,6 +2,7 @@ package ksnd.hiraganaconverter.viewmodel
 
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -53,13 +54,20 @@ class SettingsViewModelImplTest {
     fun updateTheme_newTheme_isCalledUpdateTheme() = runTest {
         val newTheme = Theme.DAY
         viewModel.updateTheme(newTheme)
-        coEvery { dataStoreRepository.updateTheme(newTheme) }
+        coVerify { dataStoreRepository.updateTheme(newTheme) }
     }
 
     @Test
     fun updateFontType_newFontType_isCalledUpdateFontType() = runTest {
         val newFontType = FontType.HACHI_MARU_POP
         viewModel.updateFontType(newFontType)
-        coEvery { dataStoreRepository.updateFontType(newFontType) }
+        coVerify { dataStoreRepository.updateFontType(newFontType) }
+    }
+
+    @Test
+    fun updateUseInAppUpdate_false_isCaledUpdateUseInAppUpdate() = runTest {
+        val isEnabled = false
+        viewModel.updateUseInAppUpdate(isEnabled)
+        coVerify { dataStoreRepository.updateUseInAppUpdate(isEnabled) }
     }
 }
