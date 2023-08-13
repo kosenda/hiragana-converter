@@ -15,8 +15,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import javax.inject.Inject
 
-// const val DAYS_FOR_FLEXIBLE_UPDATE = 2L
-const val DAYS_FOR_FLEXIBLE_UPDATE = -2L
+const val DAYS_FOR_FLEXIBLE_UPDATE = 2L
 
 class InAppUpdateManagerImpl @Inject constructor(
     @ApplicationContext context: Context,
