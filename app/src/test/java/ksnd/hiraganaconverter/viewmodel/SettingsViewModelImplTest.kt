@@ -1,7 +1,6 @@
 package ksnd.hiraganaconverter.viewmodel
 
 import com.google.common.truth.Truth.assertThat
-import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first

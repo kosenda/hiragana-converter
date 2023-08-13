@@ -44,7 +44,6 @@ class DataStoreRepositoryImplTest {
         assertThat(dataStoreRepository.enableInAppUpdate().first()).isTrue()
     }
 
-
     @Test
     fun updateTheme_newTheme_isChangedTheme() = runTest {
         dataStoreRepository.updateTheme(Theme.DAY)
