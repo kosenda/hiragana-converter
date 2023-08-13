@@ -1,5 +1,6 @@
 package ksnd.hiraganaconverter.model.repository
 
+import kotlinx.coroutines.flow.Flow
 import ksnd.hiraganaconverter.model.ConvertHistoryDao
 import ksnd.hiraganaconverter.model.ConvertHistoryData
 import ksnd.hiraganaconverter.model.TimeFormat
@@ -20,7 +21,7 @@ class ConvertHistoryRepositoryImpl @Inject constructor(
         )
     }
 
-    override fun getAllConvertHistory(): List<ConvertHistoryData> =
+    override fun getAllConvertHistory(): Flow<List<ConvertHistoryData>> =
         convertHistoryDao.getAllConvertHistory()
 
     override fun deleteAllConvertHistory() =

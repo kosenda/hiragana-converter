@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOf
+import ksnd.hiraganaconverter.MockConvertHistories
 import ksnd.hiraganaconverter.model.ConvertErrorType
 import ksnd.hiraganaconverter.model.ConvertHistoryData
 import ksnd.hiraganaconverter.model.HiraKanaType
@@ -42,26 +43,12 @@ class PreviewConvertHistoryViewModel(isNoData: Boolean = false) : ConvertHistory
             if (isNoData) {
                 emptyList()
             } else {
-                listOf(
-                    ConvertHistoryData(
-                        id = 0,
-                        time = "2022/11/26 21:34",
-                        before = "漢字漢字漢字ひらがなひらがなひらがなカタカナカタカナカタカナEnglishEnglishEnglish",
-                        after = "ここはつかわれない",
-                    ),
-                    ConvertHistoryData(
-                        id = 1,
-                        time = "2022/11/27 11:42",
-                        before = "漢字漢字漢字",
-                        after = "ここはつかわれない",
-                    ),
-                )
+                MockConvertHistories().data
             },
         ),
     ).asStateFlow()
     override fun deleteAllConvertHistory() {}
     override fun deleteConvertHistory(historyData: ConvertHistoryData) {}
-    override fun getAllConvertHistory() {}
     override fun closeConvertHistoryDetailDialog() {}
     override fun showConvertHistoryDetailDialog(historyData: ConvertHistoryData) {}
 }

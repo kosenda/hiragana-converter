@@ -9,7 +9,6 @@ abstract class ConvertHistoryViewModel : ViewModel() {
     abstract val uiState: StateFlow<ConvertHistoryUiState>
     abstract fun deleteAllConvertHistory()
     abstract fun deleteConvertHistory(historyData: ConvertHistoryData)
-    abstract fun getAllConvertHistory()
     abstract fun closeConvertHistoryDetailDialog()
     abstract fun showConvertHistoryDetailDialog(historyData: ConvertHistoryData)
 }
