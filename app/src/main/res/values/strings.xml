@@ -27,6 +27,13 @@
     <string name="network_error">Network error.</string>
     <string name="internal_server_error">Failure occurred in the API.</string>
 
+    <!-- App Update -->
+    <string name="in_app_update_downloading_snackbar_title">"Downloading…   %1$d %%"</string>
+    <string name="in_app_update_downloaded_snackbar_title">Ready for update</string>
+    <string name="in_app_update_downloaded_action_label">Update</string>
+    <string name="in_app_update_setting">In app update</string>
+    <string name="in_app_update_show_update">Show update</string>
+
     <string-array name="conversion_type">
         <item>ひらがな</item>
         <item>カタカナ</item>

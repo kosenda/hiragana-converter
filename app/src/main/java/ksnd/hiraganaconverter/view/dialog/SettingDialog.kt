@@ -34,6 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ksnd.hiraganaconverter.R
 import ksnd.hiraganaconverter.view.FontType
 import ksnd.hiraganaconverter.view.Theme
+import ksnd.hiraganaconverter.view.content.SettingInAppUpdateContent
 import ksnd.hiraganaconverter.view.parts.button.CustomButton
 import ksnd.hiraganaconverter.view.parts.button.CustomRadioButton
 import ksnd.hiraganaconverter.view.parts.card.TitleCard
@@ -67,6 +68,7 @@ private fun SettingDialogContent(
     val isShowSelectLanguageDialog = rememberSaveable { mutableStateOf(false) }
     val theme by viewModel.theme.collectAsState()
     val fontType by viewModel.fontType.collectAsState()
+    val enableInAppUpdate by viewModel.enableInAppUpdate.collectAsState(true)
 
     if (isShowSelectLanguageDialog.value) {
         SelectLanguageDialog(
@@ -105,6 +107,10 @@ private fun SettingDialogContent(
                 SettingFontContent(
                     selectFontType = fontType,
                     onClickFontType = { fontType -> viewModel.updateFontType(newFontType = fontType) },
+                )
+                SettingInAppUpdateContent(
+                    enableInAppUpdate = enableInAppUpdate,
+                    onCheckedChange = viewModel::updateUseInAppUpdate,
                 )
                 Spacer(modifier = Modifier.height(48.dp))
             }
