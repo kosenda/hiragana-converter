@@ -22,6 +22,7 @@ class SettingsViewModelImpl @Inject constructor(
     override val theme = _theme.asStateFlow()
     private val _fontType = MutableStateFlow(FontType.YUSEI_MAGIC)
     override val fontType = _fontType.asStateFlow()
+    override val enableInAppUpdate = dataStoreRepository.enableInAppUpdate()
 
     init {
         collectTheme()
@@ -37,6 +38,12 @@ class SettingsViewModelImpl @Inject constructor(
     override fun updateFontType(newFontType: FontType) {
         CoroutineScope(ioDispatcher).launch {
             dataStoreRepository.updateFontType(newFontType)
+        }
+    }
+
+    override fun updateUseInAppUpdate(isEnabled: Boolean) {
+        CoroutineScope(ioDispatcher).launch {
+            dataStoreRepository.updateUseInAppUpdate(isEnabled)
         }
     }
 

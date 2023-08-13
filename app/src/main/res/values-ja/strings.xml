@@ -27,6 +27,13 @@
     <string name="network_error">通信に失敗しました。</string>
     <string name="internal_server_error">APIで障害が発生しました。</string>
 
+    <!-- App Update -->
+    <string name="in_app_update_downloading_snackbar_title">"ダウンロード中…   %1$d %%"</string>
+    <string name="in_app_update_downloaded_snackbar_title">アプリ更新の準備ができました</string>
+    <string name="in_app_update_downloaded_action_label">更新</string>
+    <string name="in_app_update_setting">アプリ内アップデート</string>
+    <string name="in_app_update_show_update">アップデートを表示する</string>
+
     <string-array name="conversion_type">
         <item>ひらがな</item>
         <item>カタカナ</item>

@@ -69,6 +69,17 @@ class DataStoreRepositoryImpl @Inject constructor(
             }
     }
 
+    override fun enableInAppUpdate(): Flow<Boolean> {
+        return dataStore.data
+            .catch { exception ->
+                Timber.e("DataStore: %s", exception)
+                if (exception is IOException) emit(emptyPreferences())
+            }
+            .map { preferences ->
+                preferences[PreferenceKeys.ENABLE_IN_APP_UPDATE] ?: true
+            }
+    }
+
     override suspend fun updateTheme(newTheme: Theme) {
         dataStore.edit { it[PreferenceKeys.THEME_NUM] = newTheme.num }
     }
@@ -88,6 +99,10 @@ class DataStoreRepositoryImpl @Inject constructor(
             updateConvertCount(1)
             false
         }
+    }
+
+    override suspend fun updateUseInAppUpdate(isUsed: Boolean) {
+        dataStore.edit { it[PreferenceKeys.ENABLE_IN_APP_UPDATE] = isUsed }
     }
 
     private suspend fun updateLastConvertTime(convertDate: LocalDate) = withContext(ioDispatcher) {

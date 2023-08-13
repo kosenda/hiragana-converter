@@ -27,6 +27,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
@@ -56,7 +58,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ksnd.hiraganaconverter.R
 import ksnd.hiraganaconverter.model.ConvertErrorType
@@ -75,7 +76,11 @@ import ksnd.hiraganaconverter.viewmodel.ConvertViewModelImpl
 import ksnd.hiraganaconverter.viewmodel.PreviewConvertViewModel
 
 @Composable
-fun ConverterScreen(convertViewModel: ConvertViewModelImpl = hiltViewModel()) {
+fun ConverterScreen(
+    modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState,
+    convertViewModel: ConvertViewModelImpl,
+) {
     val systemUiController = rememberSystemUiController()
     val isDarkTheme = LocalIsDark.current
 
@@ -84,13 +89,19 @@ fun ConverterScreen(convertViewModel: ConvertViewModelImpl = hiltViewModel()) {
     }
 
     ConverterScreenContent(
+        modifier = modifier,
         viewModel = convertViewModel,
+        snackbarHostState = snackbarHostState,
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-fun ConverterScreenContent(viewModel: ConvertViewModel) {
+fun ConverterScreenContent(
+    modifier: Modifier = Modifier,
+    viewModel: ConvertViewModel,
+    snackbarHostState: SnackbarHostState,
+) {
     val focusManager = LocalFocusManager.current
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     val convertUiState by viewModel.uiState.collectAsState()
@@ -102,7 +113,7 @@ fun ConverterScreenContent(viewModel: ConvertViewModel) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
-        modifier = Modifier
+        modifier = modifier
             .background(MaterialTheme.colorScheme.surface)
             .padding(
                 start = WindowInsets.displayCutout.asPaddingValues().calculateStartPadding(layoutDirection),
@@ -118,6 +129,7 @@ fun ConverterScreenContent(viewModel: ConvertViewModel) {
                 scrollBehavior = scrollBehavior,
             )
         },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         containerColor = MaterialTheme.colorScheme.surface,
         floatingActionButton = { MoveTopButton(scrollState = scrollState) },
     ) { innerPadding ->
@@ -279,6 +291,7 @@ private fun PreviewConverterScreenContent_Light() {
     HiraganaConverterTheme(isDarkTheme = false) {
         ConverterScreenContent(
             viewModel = PreviewConvertViewModel(),
+            snackbarHostState = remember { SnackbarHostState() },
         )
     }
 }
@@ -289,6 +302,7 @@ private fun PreviewConverterScreenContent_Dark() {
     HiraganaConverterTheme(isDarkTheme = true) {
         ConverterScreenContent(
             viewModel = PreviewConvertViewModel(),
+            snackbarHostState = remember { SnackbarHostState() },
         )
     }
 }

@@ -40,6 +40,11 @@ class DataStoreRepositoryImplTest {
     }
 
     @Test
+    fun enableInAppUpdate_initial_isTrue() = runTest {
+        assertThat(dataStoreRepository.enableInAppUpdate().first()).isTrue()
+    }
+
+    @Test
     fun updateTheme_newTheme_isChangedTheme() = runTest {
         dataStoreRepository.updateTheme(Theme.DAY)
         assertThat(dataStoreRepository.selectedTheme().first()).isEqualTo(Theme.DAY)
@@ -64,5 +69,12 @@ class DataStoreRepositoryImplTest {
     fun checkIsExceedingMaxLimit_convertToReachedConvertMaxLimitPlus1_isTrue() = runTest {
         repeat(LIMIT_CONVERT_COUNT) { assertThat(dataStoreRepository.checkIsExceedingMaxLimit()).isFalse() }
         assertThat(dataStoreRepository.checkIsExceedingMaxLimit()).isTrue()
+    }
+
+    @Test
+    fun updateUseInAppUpdate_false_isFalse() = runTest {
+        assertThat(dataStoreRepository.enableInAppUpdate().first()).isTrue()
+        dataStoreRepository.updateUseInAppUpdate(false)
+        assertThat(dataStoreRepository.enableInAppUpdate().first()).isFalse()
     }
 }

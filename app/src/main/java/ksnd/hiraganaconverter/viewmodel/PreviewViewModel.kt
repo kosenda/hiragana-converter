@@ -1,8 +1,10 @@
 package ksnd.hiraganaconverter.viewmodel
 
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOf
 import ksnd.hiraganaconverter.model.ConvertErrorType
 import ksnd.hiraganaconverter.model.ConvertHistoryData
 import ksnd.hiraganaconverter.model.HiraKanaType
@@ -27,8 +29,10 @@ class PreviewConvertViewModel : ConvertViewModel() {
 class PreviewSettingViewModel : SettingsViewModel() {
     override val fontType = MutableStateFlow(FontType.YUSEI_MAGIC)
     override val theme = MutableStateFlow(Theme.AUTO)
+    override val enableInAppUpdate: Flow<Boolean> = flowOf(true)
     override fun updateTheme(newTheme: Theme) {}
     override fun updateFontType(newFontType: FontType) {}
+    override fun updateUseInAppUpdate(isEnabled: Boolean) {}
 }
 
 class PreviewConvertHistoryViewModel(isNoData: Boolean = false) : ConvertHistoryViewModel() {
