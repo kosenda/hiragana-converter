@@ -33,7 +33,7 @@ secrets = "2.0.1"
 timber = "5.0.1"
 truth = "1.1.5"
 mockk = "1.13.5"
-roborazzi = "1.4.0-rc-1"
+roborazzi = "1.4.0"
 
 # ** I'm using it, so no deletions allowed. **
 androidxComposeCompiler = "1.4.6"
