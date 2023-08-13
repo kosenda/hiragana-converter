@@ -26,7 +26,7 @@ class PreviewConvertViewModel : ConvertViewModel() {
     override fun changeHiraKanaType(type: HiraKanaType) {}
 }
 
-class PreviewSettingViewModel() : SettingsViewModel() {
+class PreviewSettingViewModel : SettingsViewModel() {
     override val fontType = MutableStateFlow(FontType.YUSEI_MAGIC)
     override val theme = MutableStateFlow(Theme.AUTO)
     override val enableInAppUpdate: Flow<Boolean> = flowOf(true)
