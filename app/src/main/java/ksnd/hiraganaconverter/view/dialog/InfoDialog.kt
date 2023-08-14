@@ -6,6 +6,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -181,6 +183,7 @@ private fun AppInfoContent(onURLClick: () -> Unit) {
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun DeveloperInfoContent() {
     val uriHandler = LocalUriHandler.current
@@ -209,7 +212,8 @@ private fun DeveloperInfoContent() {
                     text = stringResource(id = R.string.developer_name_title),
                     modifier = Modifier.padding(bottom = 4.dp),
                 )
-                Row {
+
+                FlowRow {
                     BodyMedium(text = stringResource(id = R.string.developer_name))
                     CustomIconButton(
                         contentDescription = "",

@@ -3,11 +3,10 @@ package ksnd.hiraganaconverter.view.parts.button
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -36,7 +35,7 @@ fun DeleteButton(
     Button(
         modifier = modifier
             .padding(vertical = 8.dp)
-            .height(48.dp)
+            .defaultMinSize(minHeight = 48.dp)
             .scale(scale = buttonScaleState.animationScale.value),
         onClick = onClick,
         interactionSource = buttonScaleState.interactionSource,
@@ -45,9 +44,7 @@ fun DeleteButton(
         ),
     ) {
         Row(
-            modifier = Modifier
-                .wrapContentWidth()
-                .fillMaxHeight(),
+            modifier = Modifier.wrapContentSize(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
         ) {

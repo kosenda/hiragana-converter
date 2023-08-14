@@ -21,8 +21,10 @@ fun DialogCloseButton(
         modifier = modifier.padding(bottom = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        leftContent()
-        Spacer(modifier = Modifier.weight(1f))
+        Row(modifier = Modifier.weight(1f)) {
+            leftContent()
+            Spacer(modifier = Modifier.weight(1f))
+        }
         CustomIconButton(
             modifier = Modifier.padding(end = 8.dp),
             contentDescription = "",
