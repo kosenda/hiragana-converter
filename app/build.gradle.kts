@@ -27,8 +27,8 @@ android {
         applicationId = "ksnd.hiraganaconverter"
         minSdk = 26
         targetSdk = 33
-        versionCode = 32
-        versionName = "1.21"
+        versionCode = 33
+        versionName = "1.22"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
