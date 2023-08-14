@@ -23,6 +23,11 @@ android {
     namespace = "ksnd.hiraganaconverter"
     compileSdk = 34
 
+    androidResources {
+        @Suppress("UnstableApiUsage")
+        generateLocaleConfig = true
+    }
+
     defaultConfig {
         applicationId = "ksnd.hiraganaconverter"
         minSdk = 26
@@ -61,6 +66,7 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    @Suppress("UnstableApiUsage")
     testOptions {
         unitTests.isIncludeAndroidResources = true
         unitTests.isReturnDefaultValues = true
@@ -101,6 +107,7 @@ dependencies {
     implementation(libs.androidx.dataStore.preferences)
 
     // ktlint
+    @Suppress("UnstableApiUsage")
     ktlint(libs.ktlint) {
         attributes {
             attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
