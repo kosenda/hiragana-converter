@@ -68,7 +68,6 @@ private fun ConversionTypeSpinnerCardContent(selectedTextType: HiraKanaType) {
                 HiraKanaType.KATAKANA -> stringArrayResource(id = R.array.conversion_type)[1]
             },
             style = MaterialTheme.typography.bodyMedium,
-            maxLines = 1,
             color = MaterialTheme.colorScheme.onTertiaryContainer,
         )
     }

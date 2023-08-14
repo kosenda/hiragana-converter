@@ -1,9 +1,9 @@
 package ksnd.hiraganaconverter.view.parts.button
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -39,7 +39,7 @@ fun CustomButton(
         ),
         modifier = modifier
             .padding(vertical = 8.dp)
-            .height(56.dp)
+            .height(IntrinsicSize.Min)
             .scale(scale = buttonScaleState.animationScale.value)
             .noRippleClickable(
                 interactionSource = buttonScaleState.interactionSource,
@@ -47,23 +47,25 @@ fun CustomButton(
             ),
     ) {
         Row(
-            modifier = Modifier
-                .padding(all = 8.dp)
-                .fillMaxSize(),
+            modifier = Modifier.padding(all = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(
-                text = text,
-                modifier = Modifier.padding(start = 16.dp),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            Spacer(modifier = Modifier.weight(1f))
+            Row(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = text,
+                    modifier = Modifier.padding(start = 16.dp),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Spacer(modifier = Modifier.weight(1f))
+            }
             Image(
                 painter = painterResource(id = R.drawable.baseline_chevron_right_24),
                 contentDescription = "move screen",
                 colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onSurfaceVariant),
-                modifier = Modifier.padding(end = 8.dp).size(32.dp),
+                modifier = Modifier
+                    .padding(end = 8.dp)
+                    .size(32.dp),
             )
         }
     }
