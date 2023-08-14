@@ -32,7 +32,7 @@ room = "2.5.2"
 secrets = "2.0.1"
 timber = "5.0.1"
 truth = "1.1.5"
-mockk = "1.13.5"
+mockk = "1.13.7"
 roborazzi = "1.4.0"
 
 # ** I'm using it, so no deletions allowed. **
