@@ -3,6 +3,7 @@ package ksnd.hiraganaconverter.view.screen
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
@@ -56,7 +57,6 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import ksnd.hiraganaconverter.R
@@ -70,6 +70,7 @@ import ksnd.hiraganaconverter.view.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.view.parts.button.MoveTopButton
 import ksnd.hiraganaconverter.view.parts.card.ConversionTypeCard
 import ksnd.hiraganaconverter.view.parts.card.ErrorCard
+import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.viewmodel.ConvertViewModel
 import ksnd.hiraganaconverter.viewmodel.ConvertViewModelImpl
@@ -285,21 +286,10 @@ private fun BeforeOrAfterTextField(
     )
 }
 
-@Preview
+@UiModeAndLocalePreview
 @Composable
-private fun PreviewConverterScreenContent_Light() {
-    HiraganaConverterTheme(isDarkTheme = false) {
-        ConverterScreenContent(
-            viewModel = PreviewConvertViewModel(),
-            snackbarHostState = remember { SnackbarHostState() },
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun PreviewConverterScreenContent_Dark() {
-    HiraganaConverterTheme(isDarkTheme = true) {
+private fun PreviewConverterScreenContent() {
+    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         ConverterScreenContent(
             viewModel = PreviewConvertViewModel(),
             snackbarHostState = remember { SnackbarHostState() },

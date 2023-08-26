@@ -1,6 +1,7 @@
 package ksnd.hiraganaconverter.view.parts.card
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,10 +17,10 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.R
 import ksnd.hiraganaconverter.view.extension.noRippleClickable
+import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.view.rememberButtonScaleState
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 
@@ -62,18 +63,10 @@ fun ErrorCard(
     }
 }
 
-@Preview
+@UiModeAndLocalePreview
 @Composable
-private fun PreviewErrorCard_Light() {
-    HiraganaConverterTheme(isDarkTheme = false) {
+private fun PreviewErrorCard() {
+    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         ErrorCard(errorText = stringResource(id = R.string.limit_exceeded), onClick = {})
-    }
-}
-
-@Preview
-@Composable
-private fun PreviewErrorCard_Dark() {
-    HiraganaConverterTheme(isDarkTheme = true) {
-        ErrorCard(errorText = stringResource(id = R.string.conversion_failed), onClick = {})
     }
 }

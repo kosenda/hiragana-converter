@@ -3,6 +3,7 @@ package ksnd.hiraganaconverter.view.dialog
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -27,7 +28,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -35,6 +35,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ksnd.hiraganaconverter.R
 import ksnd.hiraganaconverter.view.parts.button.DeleteButton
 import ksnd.hiraganaconverter.view.parts.card.ConvertHistoryCard
+import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.viewmodel.ConvertHistoryViewModel
 import ksnd.hiraganaconverter.viewmodel.ConvertHistoryViewModelImpl
@@ -146,10 +147,10 @@ private fun EmptyHistoryImage() {
     }
 }
 
-@Preview
+@UiModeAndLocalePreview
 @Composable
-private fun PreviewConvertHistoryDialogContent_Dark() {
-    HiraganaConverterTheme(isDarkTheme = true) {
+private fun PreviewConvertHistoryDialogContent() {
+    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(
             color = MaterialTheme.colorScheme.surface,
             modifier = Modifier.fillMaxSize(),
@@ -157,54 +158,6 @@ private fun PreviewConvertHistoryDialogContent_Dark() {
             ConvertHistoryDialogContent(
                 onCloseClick = {},
                 viewModel = PreviewConvertHistoryViewModel(),
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun PreviewConvertHistoryDialogContent_Light() {
-    HiraganaConverterTheme(isDarkTheme = false) {
-        Surface(
-            color = MaterialTheme.colorScheme.surface,
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            ConvertHistoryDialogContent(
-                onCloseClick = {},
-                viewModel = PreviewConvertHistoryViewModel(),
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun PreviewConvertHistoryDialogContent_NoData_Dark() {
-    HiraganaConverterTheme(isDarkTheme = true) {
-        Surface(
-            color = MaterialTheme.colorScheme.surface,
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            ConvertHistoryDialogContent(
-                onCloseClick = {},
-                viewModel = PreviewConvertHistoryViewModel(isNoData = true),
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun PreviewConvertHistoryDialogContent_NoData_Light() {
-    HiraganaConverterTheme(isDarkTheme = false) {
-        Surface(
-            color = MaterialTheme.colorScheme.surface,
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            ConvertHistoryDialogContent(
-                onCloseClick = {},
-                viewModel = PreviewConvertHistoryViewModel(isNoData = true),
             )
         }
     }

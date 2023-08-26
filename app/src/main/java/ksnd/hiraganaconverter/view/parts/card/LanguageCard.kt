@@ -1,5 +1,6 @@
 package ksnd.hiraganaconverter.view.parts.card
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,10 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.R
 import ksnd.hiraganaconverter.view.extension.noRippleClickable
+import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.view.rememberButtonScaleState
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 
@@ -62,24 +63,10 @@ fun LanguageCard(
     }
 }
 
-@Preview
+@UiModeAndLocalePreview
 @Composable
-private fun PreviewLanguageCard_Light() {
-    HiraganaConverterTheme(isDarkTheme = false) {
-        Column(Modifier.fillMaxWidth()) {
-            LanguageCard(
-                displayLanguage = stringResource(id = R.string.display_en),
-                isSelected = true,
-                onClick = {},
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun PreviewLanguageCard_Dark() {
-    HiraganaConverterTheme(isDarkTheme = true) {
+private fun PreviewLanguageCard() {
+    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Column(Modifier.fillMaxWidth()) {
             LanguageCard(
                 displayLanguage = stringResource(id = R.string.display_en),

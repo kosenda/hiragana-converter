@@ -20,13 +20,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.R
 import ksnd.hiraganaconverter.view.dialog.ConvertHistoryDialog
 import ksnd.hiraganaconverter.view.dialog.InfoDialog
 import ksnd.hiraganaconverter.view.dialog.SettingDialog
 import ksnd.hiraganaconverter.view.parts.button.CustomIconButton
+import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -98,7 +98,7 @@ fun TopBar(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
+@UiModeAndLocalePreview
 @Composable
 private fun PreviewTopBar() {
     TopBar(
