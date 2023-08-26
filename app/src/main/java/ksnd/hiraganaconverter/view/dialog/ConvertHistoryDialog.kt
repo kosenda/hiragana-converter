@@ -162,3 +162,19 @@ private fun PreviewConvertHistoryDialogContent() {
         }
     }
 }
+
+@UiModeAndLocalePreview
+@Composable
+private fun PreviewConvertHistoryDialogContent_NoData() {
+    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+        Surface(
+            color = MaterialTheme.colorScheme.surface,
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            ConvertHistoryDialogContent(
+                onCloseClick = {},
+                viewModel = PreviewConvertHistoryViewModel(isNoData = true),
+            )
+        }
+    }
+}
