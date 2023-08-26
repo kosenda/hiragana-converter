@@ -32,7 +32,7 @@ class DataStoreRepositoryImpl @Inject constructor(
                 if (exception is IOException) emit(emptyPreferences()) else Theme.AUTO
             }
             .map { preferences ->
-                Theme.values().firstOrNull { it.num == preferences[PreferenceKeys.THEME_NUM] } ?: Theme.AUTO
+                Theme.entries.firstOrNull { it.num == preferences[PreferenceKeys.THEME_NUM] } ?: Theme.AUTO
             }
     }
 
@@ -43,7 +43,7 @@ class DataStoreRepositoryImpl @Inject constructor(
                 if (exception is IOException) emit(emptyPreferences()) else FontType.YUSEI_MAGIC
             }
             .map { preferences ->
-                FontType.values().firstOrNull { it.fontName == preferences[PreferenceKeys.FONT_TYPE] } ?: FontType.YUSEI_MAGIC
+                FontType.entries.firstOrNull { it.fontName == preferences[PreferenceKeys.FONT_TYPE] } ?: FontType.YUSEI_MAGIC
             }
     }
 
