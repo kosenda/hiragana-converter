@@ -3,6 +3,7 @@ package ksnd.hiraganaconverter.view.dialog
 import androidx.activity.compose.BackHandler
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -22,13 +23,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.os.LocaleListCompat
 import ksnd.hiraganaconverter.R
 import ksnd.hiraganaconverter.view.parts.card.LanguageCard
+import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 
 @Composable
@@ -88,22 +89,10 @@ private fun SelectLanguageDialogContent(
     }
 }
 
-@Preview
+@UiModeAndLocalePreview
 @Composable
-private fun PreviewSelectLanguageDialogContent_Light() {
-    HiraganaConverterTheme(isDarkTheme = false) {
-        Surface(modifier = Modifier.fillMaxSize()) {
-            SelectLanguageDialogContent(
-                onCloseClick = {},
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun PreviewSelectLanguageDialogContent_Dark() {
-    HiraganaConverterTheme(isDarkTheme = true) {
+private fun PreviewSelectLanguageDialogContent() {
+    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(modifier = Modifier.fillMaxSize()) {
             SelectLanguageDialogContent(
                 onCloseClick = {},

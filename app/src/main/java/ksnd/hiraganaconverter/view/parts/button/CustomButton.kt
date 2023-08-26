@@ -1,6 +1,7 @@
 package ksnd.hiraganaconverter.view.parts.button
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,10 +20,10 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.R
 import ksnd.hiraganaconverter.view.extension.noRippleClickable
+import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.view.rememberButtonScaleState
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 
@@ -71,20 +72,10 @@ fun CustomButton(
     }
 }
 
-@Preview
+@UiModeAndLocalePreview
 @Composable
-fun PreviewCustomButton_Light() {
-    HiraganaConverterTheme(isDarkTheme = false) {
-        Surface(color = MaterialTheme.colorScheme.surface) {
-            CustomButton(text = stringResource(R.string.oss_licenses), onClick = {})
-        }
-    }
-}
-
-@Preview
-@Composable
-fun PreviewCustomButton_Dark() {
-    HiraganaConverterTheme(isDarkTheme = true) {
+fun PreviewCustomButton() {
+    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(color = MaterialTheme.colorScheme.surface) {
             CustomButton(text = stringResource(R.string.oss_licenses), onClick = {})
         }

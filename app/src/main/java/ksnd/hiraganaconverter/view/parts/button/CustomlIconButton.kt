@@ -1,6 +1,7 @@
 package ksnd.hiraganaconverter.view.parts.button
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -14,9 +15,9 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.R
+import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.view.rememberButtonScaleState
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.view.theme.contentBrush
@@ -60,24 +61,10 @@ fun CustomIconButton(
     }
 }
 
-@Preview
+@UiModeAndLocalePreview
 @Composable
-private fun PreviewConvertButton_Light() {
-    HiraganaConverterTheme(isDarkTheme = false) {
-        Surface(color = MaterialTheme.colorScheme.surface) {
-            CustomIconButton(
-                contentDescription = "",
-                painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
-                onClick = {},
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun PreviewConvertButton_Dark() {
-    HiraganaConverterTheme(isDarkTheme = true) {
+private fun PreviewConvertButton() {
+    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(color = MaterialTheme.colorScheme.surface) {
             CustomIconButton(
                 contentDescription = "",

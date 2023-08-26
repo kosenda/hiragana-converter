@@ -3,6 +3,7 @@ package ksnd.hiraganaconverter.view.dialog
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,13 +29,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import ksnd.hiraganaconverter.R
 import ksnd.hiraganaconverter.model.ConvertHistoryData
 import ksnd.hiraganaconverter.view.parts.button.CustomIconButton
+import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 
 @Composable
@@ -165,10 +166,10 @@ private fun BeforeOrAfterText(
     }
 }
 
-@Preview
+@UiModeAndLocalePreview
 @Composable
-private fun PreviewConvertHistoryDetailDialogContent_Light() {
-    HiraganaConverterTheme(isDarkTheme = false) {
+private fun PreviewConvertHistoryDetailDialogContent() {
+    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Box(modifier = Modifier.fillMaxSize()) {
             ConvertHistoryDetailDialogContent(
                 historyData = ConvertHistoryData(
@@ -176,24 +177,6 @@ private fun PreviewConvertHistoryDetailDialogContent_Light() {
                     time = "2022/11/26 22:25",
                     before = "変換前はこんな感じ",
                     after = "へんかんごはこんなかんじ",
-                ),
-                onCloseClick = {},
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun PreviewConvertHistoryDetailDialogContent_Dark() {
-    HiraganaConverterTheme(isDarkTheme = true) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            ConvertHistoryDetailDialogContent(
-                historyData = ConvertHistoryData(
-                    id = 0,
-                    time = "2022/11/26 22:25",
-                    before = "変換",
-                    after = "へんかん",
                 ),
                 onCloseClick = {},
             )

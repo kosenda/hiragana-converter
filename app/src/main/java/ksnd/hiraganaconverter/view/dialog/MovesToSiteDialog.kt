@@ -1,12 +1,13 @@
 package ksnd.hiraganaconverter.view.dialog
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import ksnd.hiraganaconverter.R
+import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 
 @Composable
@@ -32,22 +33,10 @@ fun MovesToSiteDialog(onDismissRequest: () -> Unit, onClick: () -> Unit, url: St
     )
 }
 
-@Preview
+@UiModeAndLocalePreview
 @Composable
-private fun PreviewMovesToSiteDialog_Light() {
-    HiraganaConverterTheme(isDarkTheme = false) {
-        MovesToSiteDialog(
-            onDismissRequest = {},
-            onClick = {},
-            url = "架空のURL",
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun PreviewMovesToSiteDialog_Dark() {
-    HiraganaConverterTheme(isDarkTheme = true) {
+private fun PreviewMovesToSiteDialog() {
+    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         MovesToSiteDialog(
             onDismissRequest = {},
             onClick = {},

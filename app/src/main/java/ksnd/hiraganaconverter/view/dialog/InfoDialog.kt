@@ -5,6 +5,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -42,7 +43,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -55,6 +55,7 @@ import ksnd.hiraganaconverter.view.parts.GooCreditImage
 import ksnd.hiraganaconverter.view.parts.button.CustomButton
 import ksnd.hiraganaconverter.view.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.view.parts.card.TitleCard
+import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.view.theme.urlColor
 
@@ -335,20 +336,10 @@ private fun UrlText(url: String, onURLClick: () -> Unit) {
     )
 }
 
-@Preview
+@UiModeAndLocalePreview
 @Composable
-private fun PreviewInfoDialogContent_Light() {
-    HiraganaConverterTheme(isDarkTheme = false) {
-        Surface(modifier = Modifier.fillMaxSize()) {
-            InfoDialogContent(onCloseClick = {})
-        }
-    }
-}
-
-@Preview
-@Composable
-private fun PreviewInfoDialogContent_Dark() {
-    HiraganaConverterTheme(isDarkTheme = true) {
+private fun PreviewInfoDialogContent() {
+    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(modifier = Modifier.fillMaxSize()) {
             InfoDialogContent(onCloseClick = {})
         }

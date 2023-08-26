@@ -2,6 +2,7 @@ package ksnd.hiraganaconverter.view.dialog
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -26,7 +27,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -38,6 +38,7 @@ import ksnd.hiraganaconverter.view.content.SettingInAppUpdateContent
 import ksnd.hiraganaconverter.view.parts.button.CustomButton
 import ksnd.hiraganaconverter.view.parts.button.CustomRadioButton
 import ksnd.hiraganaconverter.view.parts.card.TitleCard
+import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.viewmodel.PreviewSettingViewModel
 import ksnd.hiraganaconverter.viewmodel.SettingsViewModel
@@ -202,25 +203,10 @@ private fun SettingFontContent(
     }
 }
 
-@Preview
+@UiModeAndLocalePreview
 @Composable
-fun PreviewSettingDialogContent_Light() {
-    HiraganaConverterTheme(isDarkTheme = false) {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            SettingDialogContent(
-                onCloseClick = {},
-                viewModel = PreviewSettingViewModel(),
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-fun PreviewSettingDialogContent_Dark() {
-    HiraganaConverterTheme(isDarkTheme = true) {
+fun PreviewSettingDialogContent() {
+    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(
             modifier = Modifier.fillMaxSize(),
         ) {

@@ -1,6 +1,7 @@
 package ksnd.hiraganaconverter.view.parts.card
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
@@ -19,9 +20,9 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.R
+import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.view.theme.contentBrush
 import ksnd.hiraganaconverter.view.theme.primaryBrush
@@ -60,18 +61,10 @@ fun TitleCard(text: String, painter: Painter) {
     }
 }
 
-@Preview
+@UiModeAndLocalePreview
 @Composable
-private fun PreviewTitleCard_Light() {
-    HiraganaConverterTheme(isDarkTheme = false) {
-        TitleCard(text = "Title", painter = painterResource(id = R.drawable.ic_outline_info_24))
-    }
-}
-
-@Preview
-@Composable
-private fun PreviewTitleCard_Dark() {
-    HiraganaConverterTheme(isDarkTheme = true) {
+private fun PreviewTitleCard() {
+    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         TitleCard(text = "Title", painter = painterResource(id = R.drawable.ic_outline_info_24))
     }
 }
