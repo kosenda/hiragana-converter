@@ -191,7 +191,7 @@ private fun SettingFontContent(
         modifier = Modifier.padding(vertical = 8.dp),
     ) {
         Column(modifier = Modifier.padding(vertical = 8.dp)) {
-            FontType.values().forEach { fontType ->
+            FontType.entries.forEach { fontType ->
                 CustomRadioButton(
                     isSelected = fontType == selectFontType,
                     buttonText = fontType.fontName,

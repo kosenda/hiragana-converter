@@ -28,7 +28,7 @@ class SettingsViewModelImplTest {
     @Test
     fun isSelected_initial_themeIsAuto() = runTest {
         val theme = viewModel.theme.first()
-        Theme.values().forEach {
+        Theme.entries.forEach {
             if (it == Theme.AUTO) {
                 assertThat(theme).isEqualTo(it)
             } else {
@@ -40,7 +40,7 @@ class SettingsViewModelImplTest {
     @Test
     fun isSelectedFontType_initial_fontTypeIsYuseiMagic() = runTest {
         val fontType = viewModel.fontType.first()
-        FontType.values().forEach {
+        FontType.entries.forEach {
             if (it == FontType.YUSEI_MAGIC) {
                 assertThat(fontType).isEqualTo(it)
             } else {
