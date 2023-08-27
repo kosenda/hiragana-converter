@@ -55,17 +55,17 @@ https://labs.goo.ne.jp/apiusage/
 ## Image
 |Conversion screen(Light)|Conversion screen(Dark)|
 |:-:|:-:|
-|<img width="320" alt="convert_screen" src="https://user-images.githubusercontent.com/60963155/210051987-be80696a-8bad-4b68-b9ae-72ddf2097b1e.PNG">|<img width="320" alt="convert_screen" src="https://user-images.githubusercontent.com/60963155/210051997-1f7f02d2-ea72-4768-a696-1db928339cb4.PNG">|
+|<img width="320" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/af920334-fd73-40b4-803c-525d0cc64f21">|<img width="320" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/9a67591f-cd1e-4184-9d79-79a3f69f69af">|
 
 |Setting screen(Light)|Setting screen(Dark)|
 |:-:|:-:|
-|<img width="320" alt="convert_screen" src="https://user-images.githubusercontent.com/60963155/210052008-847e6dca-9961-4a0b-83a0-c0a48e964180.PNG">|<img width="320" alt="convert_screen" src="https://user-images.githubusercontent.com/60963155/210052014-e5bea46c-10af-4b92-b346-12e97cab3572.PNG">|
+|<img width="320" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/2ad5a49f-eaed-425d-8b66-83ec84223582">|<img width="320" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/d8d47e0e-06ea-4131-be83-cb11c2e5dcc3">|
 
 |History screen(Light)|History screen(Dark)|
 |:-:|:-:|
-|<img width="320" alt="convert_screen" src="https://user-images.githubusercontent.com/60963155/210052019-3b9c0f74-f874-4258-9eee-e29d2488d52b.PNG">|<img width="320" alt="convert_screen" src="https://user-images.githubusercontent.com/60963155/210052028-29f8d902-2aed-47c8-a164-f90aa2b1d9b4.PNG">|
+|<img width="320" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/24908a61-184b-4768-adfa-c3361d365549">|<img width="320" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/a7a3ef8f-cbdd-4b27-b17e-c8f7f2a3af79">|
 
 |Info screen(Light)|Info screen(Dark)|
 |:-:|:-:|
-|<img width="320" alt="convert_screen" src="https://user-images.githubusercontent.com/60963155/210052030-5425ffc2-3f1f-4a72-94c9-b52b33144654.PNG">|<img width="320" alt="convert_screen" src="https://user-images.githubusercontent.com/60963155/210052039-eaf98871-e8db-439e-98e6-4c80124ada5b.PNG">|
+|<img width="320" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/708f10fb-d93c-4d28-91d1-7b5a25c543ec">|<img width="320" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/718a2722-3ab9-48f7-95be-65efe6a9112c">|
 
