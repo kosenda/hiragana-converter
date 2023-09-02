@@ -1,7 +1,9 @@
 package ksnd.hiraganaconverter.view
 
 import android.os.Bundle
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -12,7 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -20,8 +22,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -64,7 +67,7 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        enableEdgeToEdge()
 
         setContent {
             val theme by mainViewModel.theme.collectAsState(initial = Theme.AUTO)
@@ -76,6 +79,22 @@ class MainActivity : AppCompatActivity() {
                 Theme.NIGHT -> true
                 Theme.DAY -> false
                 else -> isSystemInDarkTheme()
+            }
+
+            DisposableEffect(isDarkTheme) {
+                enableEdgeToEdge(
+                    statusBarStyle = SystemBarStyle.auto(
+                        lightScrim = Color.Transparent.toArgb(),
+                        darkScrim = Color.Transparent.toArgb(),
+                        detectDarkMode = { isDarkTheme },
+                    ),
+                    navigationBarStyle = SystemBarStyle.auto(
+                        lightScrim = Color.Transparent.toArgb(),
+                        darkScrim = Color.Transparent.toArgb(),
+                        detectDarkMode = { isDarkTheme },
+                    ),
+                )
+                onDispose { }
             }
 
             LaunchedEffect(inAppUpdateState) {
@@ -95,31 +114,27 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            CompositionLocalProvider(
-                LocalIsDark provides isDarkTheme,
+            HiraganaConverterTheme(
+                isDarkTheme = isDarkTheme,
+                fontType = fontType,
             ) {
-                HiraganaConverterTheme(
-                    isDarkTheme = isDarkTheme,
-                    fontType = fontType,
-                ) {
-                    // Because the state changes before the animation ends
-                    val downloadPercentage = if (inAppUpdateState is InAppUpdateState.Downloading) {
-                        (inAppUpdateState as InAppUpdateState.Downloading).percentage
-                    } else {
-                        100
-                    }
+                // Because the state changes before the animation ends
+                val downloadPercentage = if (inAppUpdateState is InAppUpdateState.Downloading) {
+                    (inAppUpdateState as InAppUpdateState.Downloading).percentage
+                } else {
+                    100
+                }
 
-                    Column {
-                        InAppUpdateDownloadingContent(
-                            text = this@MainActivity.getString(R.string.in_app_update_downloading_snackbar_title, downloadPercentage),
-                            isVisible = inAppUpdateState is InAppUpdateState.Downloading,
-                        )
-                        ConverterScreen(
-                            modifier = Modifier.weight(1f),
-                            snackbarHostState = snackbarHostState,
-                            convertViewModel = hiltViewModel(),
-                        )
-                    }
+                Column {
+                    InAppUpdateDownloadingContent(
+                        text = this@MainActivity.getString(R.string.in_app_update_downloading_snackbar_title, downloadPercentage),
+                        isVisible = inAppUpdateState is InAppUpdateState.Downloading,
+                    )
+                    ConverterScreen(
+                        modifier = Modifier.weight(1f),
+                        snackbarHostState = snackbarHostState,
+                        convertViewModel = hiltViewModel(),
+                    )
                 }
             }
         }

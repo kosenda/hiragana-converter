@@ -73,13 +73,13 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.junit)
     testImplementation(libs.kotlin.test)
 
     // Accompanist
-    implementation(libs.accompanist.systemuicontroller)
     implementation(libs.accompanist.webView)
 
     // Compose
@@ -169,7 +169,7 @@ tasks.create<JavaExec>("ktlintCheck") {
     mainClass.set("com.pinterest.ktlint.Main")
     args = listOf(
         "src/**/*.kt",
-        "--reporter=checkstyle,output=${buildDir}/reports/ktlint/ktlint-result.xml",
+        "--reporter=checkstyle,output=${layout.buildDirectory.get()}/reports/ktlint/ktlint-result.xml",
     )
     isIgnoreExitValue = true
 }
@@ -200,10 +200,10 @@ tasks.create<JacocoReport>("jacocoTestReport") {
     }
 
     gradle.afterProject {
-        executionData.setFrom(file("$buildDir/jacoco/$testTaskName.exec"))
+        executionData.setFrom(file("${layout.buildDirectory.get()}/jacoco/$testTaskName.exec"))
         sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
         classDirectories.setFrom(
-            fileTree("$buildDir/tmp/kotlin-classes/debug") {
+            fileTree("${layout.buildDirectory.get()}/tmp/kotlin-classes/debug") {
                 exclude(
                     "**/R.class",
                     "**/R\$*.class",
