@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity() {
                         detectDarkMode = { isDarkTheme },
                     ),
                 )
-                onDispose {  }
+                onDispose { }
             }
 
             LaunchedEffect(inAppUpdateState) {
