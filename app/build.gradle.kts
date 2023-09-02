@@ -169,7 +169,7 @@ tasks.create<JavaExec>("ktlintCheck") {
     mainClass.set("com.pinterest.ktlint.Main")
     args = listOf(
         "src/**/*.kt",
-        "--reporter=checkstyle,output${layout.buildDirectory.get()}/reports/ktlint/ktlint-result.xml",
+        "--reporter=checkstyle,output=${layout.buildDirectory.get()}/reports/ktlint/ktlint-result.xml",
     )
     isIgnoreExitValue = true
 }
