@@ -1,5 +1,6 @@
 package ksnd.hiraganaconverter.view.parts.card
 
+import android.view.HapticFeedbackConstants
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -14,6 +15,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -30,6 +32,7 @@ fun ConversionTypeCard(
 ) {
     var selectedTextType by rememberSaveable { mutableStateOf(HiraKanaType.HIRAGANA) }
     val buttonScaleState = rememberButtonScaleState()
+    val localView = LocalView.current
 
     Card(
         modifier = Modifier
@@ -38,6 +41,7 @@ fun ConversionTypeCard(
             .noRippleClickable(
                 interactionSource = buttonScaleState.interactionSource,
                 onClick = {
+                    localView.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
                     selectedTextType = when (selectedTextType) {
                         HiraKanaType.HIRAGANA -> HiraKanaType.KATAKANA
                         HiraKanaType.KATAKANA -> HiraKanaType.HIRAGANA

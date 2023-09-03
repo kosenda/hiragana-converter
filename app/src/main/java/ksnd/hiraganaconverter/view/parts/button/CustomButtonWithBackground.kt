@@ -1,5 +1,6 @@
 package ksnd.hiraganaconverter.view.parts.button
 
+import android.view.HapticFeedbackConstants.CONTEXT_CLICK
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -14,6 +15,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -32,12 +34,16 @@ fun CustomButtonWithBackground(
     onClick: () -> Unit,
 ) {
     val buttonScaleState = rememberButtonScaleState()
+    val localView = LocalView.current
     IconButton(
         modifier = modifier
             .padding(all = 8.dp)
             .size(size = 56.dp)
             .scale(scale = buttonScaleState.animationScale.value),
-        onClick = onClick,
+        onClick = {
+            localView.performHapticFeedback(CONTEXT_CLICK)
+            onClick()
+        },
         colors = IconButtonDefaults.iconButtonColors(containerColor = containerColor),
         interactionSource = buttonScaleState.interactionSource,
     ) {
