@@ -5,7 +5,7 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import ksnd.hiraganaconverter.MainDispatcherRule
-import ksnd.hiraganaconverter.MockConvertHistories
+import ksnd.hiraganaconverter.mock.data.MockConvertHistories
 import ksnd.hiraganaconverter.model.repository.ConvertHistoryRepository
 import org.junit.Rule
 import org.junit.Test

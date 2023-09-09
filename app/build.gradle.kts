@@ -44,6 +44,24 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro", "shrinker-rules.pro")
         }
     }
+    flavorDimensions += "env"
+    productFlavors {
+        create("prod") {
+            isDefault = true
+            dimension = "env"
+        }
+        create("mock") {
+            dimension = "env"
+        }
+    }
+    sourceSets {
+        getByName("prod") {
+            java.srcDirs("src/prod/java")
+        }
+        getByName("mock") {
+            java.srcDirs("src/mock/java")
+        }
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -193,7 +211,7 @@ tasks.withType<Test>().configureEach {
 }
 
 tasks.create<JacocoReport>("jacocoTestReport") {
-    val testTaskName = "testDebugUnitTest"
+    val testTaskName = "testProdDebugUnitTest"
     reports {
         html.required.set(true)
         xml.required.set(true)
@@ -203,7 +221,7 @@ tasks.create<JacocoReport>("jacocoTestReport") {
         executionData.setFrom(file("${layout.buildDirectory.get()}/jacoco/$testTaskName.exec"))
         sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
         classDirectories.setFrom(
-            fileTree("${layout.buildDirectory.get()}/tmp/kotlin-classes/debug") {
+            fileTree("${layout.buildDirectory.get()}/tmp/kotlin-classes/prodDebug") {
                 exclude(
                     "**/R.class",
                     "**/R\$*.class",
@@ -228,6 +246,8 @@ tasks.create<JacocoReport>("jacocoTestReport") {
                     "**/*ErrorInterceptor*.*",
                     "**/*Application*.*",
                     "**/view/**",
+                    "**/mock/**",
+                    "**/*Mock*.*",
                 )
             }
         )
