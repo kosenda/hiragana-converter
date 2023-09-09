@@ -211,7 +211,7 @@ tasks.withType<Test>().configureEach {
 }
 
 tasks.create<JacocoReport>("jacocoTestReport") {
-    val testTaskName = "testDebugUnitTest"
+    val testTaskName = "testProdDebugUnitTest"
     reports {
         html.required.set(true)
         xml.required.set(true)
