@@ -221,7 +221,7 @@ tasks.create<JacocoReport>("jacocoTestReport") {
         executionData.setFrom(file("${layout.buildDirectory.get()}/jacoco/$testTaskName.exec"))
         sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
         classDirectories.setFrom(
-            fileTree("${layout.buildDirectory.get()}/tmp/kotlin-classes/debug") {
+            fileTree("${layout.buildDirectory.get()}/tmp/kotlin-classes/prodDebug") {
                 exclude(
                     "**/R.class",
                     "**/R\$*.class",
