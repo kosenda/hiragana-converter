@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter
+package ksnd.hiraganaconverter.mock.data
 
 import ksnd.hiraganaconverter.model.ConvertHistoryData
 

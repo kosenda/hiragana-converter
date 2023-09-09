@@ -44,6 +44,24 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro", "shrinker-rules.pro")
         }
     }
+    flavorDimensions += "env"
+    productFlavors {
+        create("prod") {
+            isDefault = true
+            dimension = "env"
+        }
+        create("mock") {
+            dimension = "env"
+        }
+    }
+    sourceSets {
+        getByName("prod") {
+            java.srcDirs("src/prod/java")
+        }
+        getByName("mock") {
+            java.srcDirs("src/mock/java")
+        }
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17

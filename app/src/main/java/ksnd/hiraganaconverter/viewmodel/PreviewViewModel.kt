@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOf
-import ksnd.hiraganaconverter.MockConvertHistories
+import ksnd.hiraganaconverter.mock.data.MockConvertHistories
 import ksnd.hiraganaconverter.model.ConvertErrorType
 import ksnd.hiraganaconverter.model.ConvertHistoryData
 import ksnd.hiraganaconverter.model.HiraKanaType

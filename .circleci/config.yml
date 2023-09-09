@@ -32,7 +32,7 @@ jobs:
 
       - run:
           name: test
-          command: ./gradlew testDebug --stacktrace
+          command: ./gradlew testProdDebug --stacktrace
 
       - run:
           name: jacoco-report
