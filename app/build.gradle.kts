@@ -246,6 +246,8 @@ tasks.create<JacocoReport>("jacocoTestReport") {
                     "**/*ErrorInterceptor*.*",
                     "**/*Application*.*",
                     "**/view/**",
+                    "**/mock/**",
+                    "**/*Mock*.*",
                 )
             }
         )
