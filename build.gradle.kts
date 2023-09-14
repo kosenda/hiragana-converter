@@ -11,4 +11,5 @@ plugins {
     alias(libs.plugins.roborazzi) apply false
     alias(libs.plugins.gms) apply false
     alias(libs.plugins.firebase.crashlytics) apply false
+    alias(libs.plugins.androidLibrary) apply false
 }

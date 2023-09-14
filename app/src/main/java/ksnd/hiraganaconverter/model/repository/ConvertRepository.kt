@@ -1,6 +1,6 @@
 package ksnd.hiraganaconverter.model.repository
 
-import ksnd.hiraganaconverter.model.ResponseData
+import ksnd.hiraganaconverter.core.model.ResponseData
 import retrofit2.Response
 
 interface ConvertRepository {

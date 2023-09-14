@@ -91,6 +91,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:model"))
+
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)

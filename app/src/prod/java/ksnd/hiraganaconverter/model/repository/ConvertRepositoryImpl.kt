@@ -4,8 +4,8 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ksnd.hiraganaconverter.model.ConvertApiClient
-import ksnd.hiraganaconverter.model.RequestData
-import ksnd.hiraganaconverter.model.ResponseData
+import ksnd.hiraganaconverter.core.model.RequestData
+import ksnd.hiraganaconverter.core.model.ResponseData
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull

@@ -39,6 +39,9 @@ roborazzi = "1.4.0"
 # ** I'm using it, so no deletions allowed. **
 androidxComposeCompiler = "1.5.0"
 jacoco = "0.8.9"
+junit = "1.1.5"
+espresso-core = "3.5.1"
+material = "1.9.0"
 
 [libraries]
 # Accompanist
@@ -118,6 +121,9 @@ firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics
 # App Update
 app-update = { group = "com.google.android.play", name = "app-update", version.ref = "appUpdate" }
 app-update-ktx = { group = "com.google.android.play", name = "app-update-ktx", version.ref = "appUpdate" }
+androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -131,3 +137,4 @@ dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 gms = { id = "com.google.gms.google-services", version.ref = "gmsPlugin"}
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin"}
+androidLibrary = { id = "com.android.library", version.ref = "androidGradlePlugin" }
