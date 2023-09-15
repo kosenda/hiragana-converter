@@ -91,6 +91,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:model"))
+
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
@@ -216,40 +218,7 @@ tasks.create<JacocoReport>("jacocoTestReport") {
         html.required.set(true)
         xml.required.set(true)
     }
-
-    gradle.afterProject {
-        executionData.setFrom(file("${layout.buildDirectory.get()}/jacoco/$testTaskName.exec"))
-        sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
-        classDirectories.setFrom(
-            fileTree("${layout.buildDirectory.get()}/tmp/kotlin-classes/prodDebug") {
-                exclude(
-                    "**/R.class",
-                    "**/R\$*.class",
-                    "**/*Fake*.*",
-                    "**/*Preview*.*",
-                    "**/BuildConfig.*",
-                    "**/*Manifest*.*",
-                    "**/*Test*.*",
-                    "**/*Hilt*.*",
-                    "**/*Factory*.*",
-                    "**/*Module*.*",
-                    "**/*Key*.*",
-                    "**/*Screen*.*",
-                    "**/*Content*.*",
-                    "**/*Dialog*.*",
-                    "**/*Drawer*.*",
-                    "**/*Navigation*.*",
-                    "**/*MainActivity*.*",
-                    "**/*ConvertTextUseCaseError*.*",
-                    "**/*ResponseData*.*",
-                    "**/*RequestData*.*",
-                    "**/*ErrorInterceptor*.*",
-                    "**/*Application*.*",
-                    "**/view/**",
-                    "**/mock/**",
-                    "**/*Mock*.*",
-                )
-            }
-        )
-    }
+    executionData.from.add(fileTree("${layout.buildDirectory.get()}/jacoco/$testTaskName.exec"))
+    sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
+    classDirectories.setFrom(fileTree("${layout.buildDirectory.get()}/tmp/kotlin-classes/prodDebug"))
 }

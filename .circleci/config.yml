@@ -39,6 +39,10 @@ jobs:
           command: ./gradlew jacocoTestReport
 
       - run:
+          name: merge-jacoco
+          command: ./gradlew jacocoTestReport
+
+      - run:
           name: run-danger-file
           command: bundle exec danger --verbose
 
