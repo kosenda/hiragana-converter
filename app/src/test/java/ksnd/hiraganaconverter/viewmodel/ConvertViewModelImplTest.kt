@@ -70,7 +70,7 @@ class ConvertViewModelImplTest {
     }
 
     @Test
-    fun changeHiraKanaType_differentType_isUpdatedAndClearPrevieous() = runTest {
+    fun changeHiraKanaType_differentType_isUpdatedAndClearPrevious() = runTest {
         assertThat(viewModel.uiState.value.selectedTextType).isEqualTo(HiraKanaType.HIRAGANA)
         viewModel.updateInputText("漢字")
         coEvery { convertTextUseCase(any(), HiraKanaType.HIRAGANA) } returns "かんじ"

@@ -40,7 +40,7 @@ jobs:
 
       - run:
           name: merge-jacoco
-          command: ./gradlew jacocoTestReport
+          command: ./gradlew mergeJacoco
 
       - run:
           name: run-danger-file
