@@ -20,13 +20,12 @@ tasks.create<JacocoReport>("mergeJacoco") {
         html.required.set(true)
         xml.required.set(true)
     }
-
-    if (project.rootProject != project &&
-        (project.plugins.hasPlugin("hiraganaconverter.android.application.jacoco") ||
-            project.plugins.hasPlugin("hiraganaconverter.android.library.jacoco")
-        )
-    ) {
-        gradle.afterProject {
+    gradle.afterProject {
+        if (project.rootProject != this.project &&
+            (project.plugins.hasPlugin("hiraganaconverter.android.application.jacoco") ||
+                project.plugins.hasPlugin("hiraganaconverter.android.library.jacoco")
+            )
+        ) {
             executionData.from.add(fileTree("${project.layout.buildDirectory.get()}/jacoco"))
             sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
             classDirectories.setFrom(
