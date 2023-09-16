@@ -42,7 +42,7 @@ internal fun Project.configureJacoco() {
         }
         classDirectories.setFrom(fileTree("${layout.buildDirectory.get()}/tmp/kotlin-classes/prodDebug"))
         sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
-        executionData.setFrom(file("${layout.buildDirectory.get()}/jacoco/$testTaskName.exec"))
+        executionData.from.add(fileTree("${layout.buildDirectory.get()}/jacoco/$testTaskName.exec"))
     }
     jacocoTestReport.dependsOn(reportTask)
     tasks.withType<Test>().configureEach {
