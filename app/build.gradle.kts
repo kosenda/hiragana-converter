@@ -1,8 +1,8 @@
 val ktlint: Configuration by configurations.creating
 
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    id("hiraganaconverter.android.application")
+    id("hiraganaconverter.android.application.jacoco")
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.oss.licenses)
@@ -12,10 +12,6 @@ plugins {
     alias(libs.plugins.roborazzi)
     alias(libs.plugins.gms)
     alias(libs.plugins.firebase.crashlytics)
-    jacoco
-}
-jacoco {
-    toolVersion = libs.versions.jacoco.get()
 }
 
 android {
@@ -25,16 +21,6 @@ android {
     androidResources {
         @Suppress("UnstableApiUsage")
         generateLocaleConfig = true
-    }
-
-    defaultConfig {
-        applicationId = "ksnd.hiraganaconverter"
-        minSdk = 26
-        targetSdk = 33
-        versionCode = 34
-        versionName = "1.23"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -62,15 +48,8 @@ android {
             java.srcDirs("src/mock/java")
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
     ksp {
         arg("room.schemaLocation", "$projectDir/schemas")
-    }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
     }
     buildFeatures {
         compose = true
@@ -210,15 +189,4 @@ tasks.withType<Test>().configureEach {
         isIncludeNoLocationClasses = true
         excludes = listOf("jdk.internal.*")
     }
-}
-
-tasks.create<JacocoReport>("jacocoTestReport") {
-    val testTaskName = "testProdDebugUnitTest"
-    reports {
-        html.required.set(true)
-        xml.required.set(true)
-    }
-    executionData.from.add(fileTree("${layout.buildDirectory.get()}/jacoco/$testTaskName.exec"))
-    sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
-    classDirectories.setFrom(fileTree("${layout.buildDirectory.get()}/tmp/kotlin-classes/prodDebug"))
 }
