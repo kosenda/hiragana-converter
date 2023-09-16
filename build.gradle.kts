@@ -1,5 +1,6 @@
 plugins {
     // apply false: only load
+    jacoco
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.ksp) apply false
@@ -15,18 +16,21 @@ plugins {
 }
 
 tasks.create<JacocoReport>("mergeJacoco") {
-    val testTaskName = "testProdDebugUnitTest"
     reports {
         html.required.set(true)
         xml.required.set(true)
     }
 
-    if (project.rootProject != project && project.plugins.hasPlugin("jacoco")) {
+    if (project.rootProject != project &&
+        (project.plugins.hasPlugin("hiraganaconverter.android.application.jacoco") ||
+            project.plugins.hasPlugin("hiraganaconverter.android.library.jacoco")
+        )
+    ) {
         gradle.afterProject {
-            executionData.from.add(fileTree("${layout.buildDirectory.get()}/jacoco/$testTaskName.exec"))
+            executionData.from.add(fileTree("${project.layout.buildDirectory.get()}/jacoco"))
             sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
             classDirectories.setFrom(
-                fileTree("${layout.buildDirectory.get()}/tmp/kotlin-classes/prodDebug") {
+                fileTree("${project.layout.buildDirectory.get()}/tmp/kotlin-classes/prodDebug") {
                     exclude(
                         "**/R.class",
                         "**/R\$*.class",
