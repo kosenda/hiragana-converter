@@ -10,6 +10,8 @@ local.properties
 *.log
 *.apk
 output.json
-.idea
+/.idea/*
+!/.idea/codeStyles/
+!/.idea/dictionaries/
 *.jks
 *.keystore
