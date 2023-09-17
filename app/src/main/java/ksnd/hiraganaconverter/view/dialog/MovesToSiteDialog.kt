@@ -6,7 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import ksnd.hiraganaconverter.R
+import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 

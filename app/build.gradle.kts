@@ -71,6 +71,7 @@ android {
 
 dependencies {
     implementation(project(":core:model"))
+    implementation(project(":core:resource"))
 
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)

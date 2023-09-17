@@ -8,7 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import ksnd.hiraganaconverter.R
+import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.view.parts.button.CustomIconButton
 
 @Composable

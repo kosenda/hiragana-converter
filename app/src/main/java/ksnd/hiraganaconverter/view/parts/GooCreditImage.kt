@@ -5,7 +5,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import ksnd.hiraganaconverter.R
+import ksnd.hiraganaconverter.core.resource.R
 
 @Composable
 fun GooCreditImage() {
