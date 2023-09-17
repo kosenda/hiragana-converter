@@ -3,9 +3,9 @@ package ksnd.hiraganaconverter.model.repository
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import ksnd.hiraganaconverter.model.ConvertApiClient
 import ksnd.hiraganaconverter.core.model.RequestData
 import ksnd.hiraganaconverter.core.model.ResponseData
+import ksnd.hiraganaconverter.model.ConvertApiClient
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull

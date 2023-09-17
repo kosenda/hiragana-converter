@@ -6,8 +6,8 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import ksnd.hiraganaconverter.MainDispatcherRule
-import ksnd.hiraganaconverter.model.HiraKanaType
 import ksnd.hiraganaconverter.core.model.ResponseData
+import ksnd.hiraganaconverter.model.HiraKanaType
 import ksnd.hiraganaconverter.model.repository.ConvertHistoryRepository
 import ksnd.hiraganaconverter.model.repository.ConvertRepository
 import ksnd.hiraganaconverter.model.repository.DataStoreRepository
