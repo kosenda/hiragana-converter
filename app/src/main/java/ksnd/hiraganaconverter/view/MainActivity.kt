@@ -31,7 +31,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import ksnd.hiraganaconverter.R
+import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.model.InAppUpdateState
 import ksnd.hiraganaconverter.view.content.InAppUpdateDownloadingContent
 import ksnd.hiraganaconverter.view.screen.ConverterScreen

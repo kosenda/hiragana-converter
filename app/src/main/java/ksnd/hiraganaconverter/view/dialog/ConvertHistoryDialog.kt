@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
-import ksnd.hiraganaconverter.R
+import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.view.parts.button.DeleteButton
 import ksnd.hiraganaconverter.view.parts.card.ConvertHistoryCard
 import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview

@@ -40,7 +40,7 @@ import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewNavigator
 import com.google.accompanist.web.rememberWebViewState
 import kotlinx.coroutines.launch
-import ksnd.hiraganaconverter.R
+import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.view.parts.button.CustomButton
 import ksnd.hiraganaconverter.view.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.view.parts.card.TitleCard

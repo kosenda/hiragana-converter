@@ -49,7 +49,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import ksnd.hiraganaconverter.BuildConfig
-import ksnd.hiraganaconverter.R
+import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.view.content.PrivacyPolicyContent
 import ksnd.hiraganaconverter.view.parts.GooCreditImage
 import ksnd.hiraganaconverter.view.parts.button.CustomButton

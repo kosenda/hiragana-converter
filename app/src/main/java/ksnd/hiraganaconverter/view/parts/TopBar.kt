@@ -21,7 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import ksnd.hiraganaconverter.R
+import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.view.dialog.ConvertHistoryDialog
 import ksnd.hiraganaconverter.view.dialog.InfoDialog
 import ksnd.hiraganaconverter.view.dialog.SettingDialog
