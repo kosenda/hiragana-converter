@@ -1,10 +1,10 @@
-package ksnd.hiraganaconverter.model.usecase
+package ksnd.hiraganaconverter.core.domain.usecase
 
-import ksnd.hiraganaconverter.BuildConfig
-import ksnd.hiraganaconverter.model.HiraKanaType
-import ksnd.hiraganaconverter.model.repository.ConvertHistoryRepository
-import ksnd.hiraganaconverter.model.repository.ConvertRepository
-import ksnd.hiraganaconverter.model.repository.DataStoreRepository
+import ksnd.hiraganaconverter.core.domain.repository.ConvertHistoryRepository
+import ksnd.hiraganaconverter.core.domain.repository.ConvertRepository
+import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
+import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
+import ksnd.hiraganaconverter.core.resource.AppConfig
 import java.util.Locale
 import javax.inject.Inject
 
@@ -12,6 +12,7 @@ class ConvertTextUseCase @Inject constructor(
     private val convertRepository: ConvertRepository,
     private val dataStoreRepository: DataStoreRepository,
     private val convertHistoryRepository: ConvertHistoryRepository,
+    private val appConfig: AppConfig,
 ) {
     suspend operator fun invoke(inputText: String, selectedTextType: HiraKanaType): String {
         val isReachedConvertMaxLimit = dataStoreRepository.checkIsExceedingMaxLimit()
@@ -20,7 +21,7 @@ class ConvertTextUseCase @Inject constructor(
         val response = convertRepository.requestConvert(
             sentence = inputText,
             type = selectedTextType.name.lowercase(Locale.ENGLISH),
-            appId = BuildConfig.apiKey,
+            appId = appConfig.apiKey,
         )
 
         when {

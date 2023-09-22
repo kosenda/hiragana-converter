@@ -1,7 +1,7 @@
 package ksnd.hiraganaconverter.view.uistate
 
 import ksnd.hiraganaconverter.model.ConvertErrorType
-import ksnd.hiraganaconverter.model.HiraKanaType
+import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
 
 data class ConvertUiState(
     val inputText: String = "",

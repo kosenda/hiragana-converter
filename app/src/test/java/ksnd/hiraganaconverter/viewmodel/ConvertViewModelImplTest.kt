@@ -6,9 +6,9 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import ksnd.hiraganaconverter.MainDispatcherRule
-import ksnd.hiraganaconverter.model.HiraKanaType
-import ksnd.hiraganaconverter.model.usecase.ConversionFailedException
-import ksnd.hiraganaconverter.model.usecase.ConvertTextUseCase
+import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
+import ksnd.hiraganaconverter.core.domain.usecase.ConversionFailedException
+import ksnd.hiraganaconverter.core.domain.usecase.ConvertTextUseCase
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

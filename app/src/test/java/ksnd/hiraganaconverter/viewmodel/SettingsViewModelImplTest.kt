@@ -6,9 +6,9 @@ import io.mockk.mockk
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import ksnd.hiraganaconverter.MainDispatcherRule
-import ksnd.hiraganaconverter.model.repository.DataStoreRepository
-import ksnd.hiraganaconverter.view.FontType
-import ksnd.hiraganaconverter.view.Theme
+import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
+import ksnd.hiraganaconverter.core.model.ui.FontType
+import ksnd.hiraganaconverter.core.model.ui.Theme
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

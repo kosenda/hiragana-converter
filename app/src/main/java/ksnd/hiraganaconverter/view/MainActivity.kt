@@ -31,6 +31,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import ksnd.hiraganaconverter.core.model.ui.FontType
+import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.model.InAppUpdateState
 import ksnd.hiraganaconverter.view.content.InAppUpdateDownloadingContent

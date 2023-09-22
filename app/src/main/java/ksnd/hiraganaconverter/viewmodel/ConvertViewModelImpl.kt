@@ -10,11 +10,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.di.module.IODispatcher
 import ksnd.hiraganaconverter.model.ConvertErrorType
-import ksnd.hiraganaconverter.model.HiraKanaType
-import ksnd.hiraganaconverter.model.usecase.ConversionFailedException
-import ksnd.hiraganaconverter.model.usecase.ConvertTextUseCase
-import ksnd.hiraganaconverter.model.usecase.InterceptorError
-import ksnd.hiraganaconverter.model.usecase.IsReachedConvertMaxLimitException
+import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
+import ksnd.hiraganaconverter.core.domain.usecase.ConversionFailedException
+import ksnd.hiraganaconverter.core.domain.usecase.ConvertTextUseCase
+import ksnd.hiraganaconverter.core.domain.usecase.InterceptorError
+import ksnd.hiraganaconverter.core.domain.usecase.IsReachedConvertMaxLimitException
 import ksnd.hiraganaconverter.view.uistate.ConvertUiState
 import timber.log.Timber
 import javax.inject.Inject

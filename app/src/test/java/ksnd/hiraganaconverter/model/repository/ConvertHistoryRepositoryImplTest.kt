@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import ksnd.hiraganaconverter.MainDispatcherRule
 import ksnd.hiraganaconverter.model.ConvertHistoryDao
-import ksnd.hiraganaconverter.model.ConvertHistoryData
+import ksnd.hiraganaconverter.core.model.ConvertHistoryData
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

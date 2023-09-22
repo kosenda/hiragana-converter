@@ -1,5 +1,6 @@
 plugins {
     id("hiraganaconverter.android.library")
+    id("hiraganaconverter.android.room")
     alias(libs.plugins.kotlin.serialization)
 }
 

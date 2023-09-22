@@ -1,6 +1,6 @@
 package ksnd.hiraganaconverter.mock.data
 
-import ksnd.hiraganaconverter.model.ConvertHistoryData
+import ksnd.hiraganaconverter.core.model.ConvertHistoryData
 
 class MockConvertHistories {
     val data: List<ConvertHistoryData> = listOf(

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import ksnd.hiraganaconverter.core.model.ConvertHistoryData
 
 @Database(entities = [ConvertHistoryData::class], version = 1, exportSchema = true)
 abstract class ConvertHistoryDatabase : RoomDatabase() {

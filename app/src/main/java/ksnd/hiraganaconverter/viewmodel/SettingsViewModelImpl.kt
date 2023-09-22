@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.di.module.IODispatcher
-import ksnd.hiraganaconverter.model.repository.DataStoreRepository
-import ksnd.hiraganaconverter.view.FontType
-import ksnd.hiraganaconverter.view.Theme
+import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
+import ksnd.hiraganaconverter.core.model.ui.FontType
+import ksnd.hiraganaconverter.core.model.ui.Theme
 import javax.inject.Inject
 
 @HiltViewModel

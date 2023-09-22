@@ -2,7 +2,7 @@ package ksnd.hiraganaconverter.viewmodel
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.StateFlow
-import ksnd.hiraganaconverter.model.HiraKanaType
+import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
 import ksnd.hiraganaconverter.view.uistate.ConvertUiState
 
 abstract class ConvertViewModel : ViewModel() {

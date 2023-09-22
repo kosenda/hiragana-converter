@@ -1,6 +1,6 @@
 package ksnd.hiraganaconverter.view.uistate
 
-import ksnd.hiraganaconverter.model.ConvertHistoryData
+import ksnd.hiraganaconverter.core.model.ConvertHistoryData
 
 data class ConvertHistoryUiState(
     val convertHistories: List<ConvertHistoryData> = emptyList(),

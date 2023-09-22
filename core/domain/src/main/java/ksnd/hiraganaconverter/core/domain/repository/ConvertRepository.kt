@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.model.repository
+package ksnd.hiraganaconverter.core.domain.repository
 
 import ksnd.hiraganaconverter.core.model.ResponseData
 import retrofit2.Response

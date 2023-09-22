@@ -3,6 +3,7 @@ package ksnd.hiraganaconverter.model.repository
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import ksnd.hiraganaconverter.core.domain.repository.ConvertRepository
 import ksnd.hiraganaconverter.core.model.RequestData
 import ksnd.hiraganaconverter.core.model.ResponseData
 import ksnd.hiraganaconverter.model.ConvertApiClient
@@ -49,7 +50,7 @@ class ConvertRepositoryImpl @Inject constructor(
             )
             val response: Response<ResponseData> = convertService.requestConvert(body)
             if (response.isSuccessful.not()) {
-                Timber.w("response message: %s".format(response.raw().message))
+                Timber.w("response message: %s".format(response.raw()))
             }
             Timber.i("response raw: %s".format(response.raw()))
             return response

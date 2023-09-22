@@ -7,7 +7,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.compose.ui.unit.sp
 import ksnd.hiraganaconverter.core.resource.R
-import ksnd.hiraganaconverter.view.FontType
+import ksnd.hiraganaconverter.core.model.ui.FontType
 
 val provider = GoogleFont.Provider(
     providerAuthority = "com.google.android.gms.fonts",
