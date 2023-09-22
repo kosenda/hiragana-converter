@@ -9,7 +9,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import ksnd.hiraganaconverter.view.FontType
+import ksnd.hiraganaconverter.core.model.ui.FontType
 
 private val LightThemeColors = lightColorScheme()
 private val DarkThemeColors = darkColorScheme()

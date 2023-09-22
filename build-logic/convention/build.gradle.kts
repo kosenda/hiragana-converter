@@ -33,5 +33,13 @@ gradlePlugin {
             id = "hiraganaconverter.android.library"
             implementationClass = "ksnd.hiraganaconverter.AndroidLibraryPlugin"
         }
+        register("androidRoom") {
+            id = "hiraganaconverter.android.room"
+            implementationClass = "ksnd.hiraganaconverter.AndroidRoomPlugin"
+        }
+        register("androidHilt") {
+            id = "hiraganaconverter.android.hilt"
+            implementationClass = "ksnd.hiraganaconverter.AndroidHiltPlugin"
+        }
     }
 }

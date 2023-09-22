@@ -1,7 +1,7 @@
-package ksnd.hiraganaconverter.model.repository
+package ksnd.hiraganaconverter.core.domain.repository
 
 import kotlinx.coroutines.flow.Flow
-import ksnd.hiraganaconverter.model.ConvertHistoryData
+import ksnd.hiraganaconverter.core.model.ConvertHistoryData
 
 interface ConvertHistoryRepository {
     fun insertConvertHistory(beforeText: String, afterText: String)

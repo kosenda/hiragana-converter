@@ -10,10 +10,11 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
 import ksnd.hiraganaconverter.di.module.IODispatcher
 import ksnd.hiraganaconverter.model.PreferenceKeys
-import ksnd.hiraganaconverter.view.FontType
-import ksnd.hiraganaconverter.view.Theme
+import ksnd.hiraganaconverter.core.model.ui.FontType
+import ksnd.hiraganaconverter.core.model.ui.Theme
 import timber.log.Timber
 import java.io.IOException
 import java.time.LocalDate

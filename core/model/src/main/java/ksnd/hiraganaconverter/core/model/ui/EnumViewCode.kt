@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view
+package ksnd.hiraganaconverter.core.model.ui
 
 enum class Theme(val num: Int) {
     NIGHT(num = 0),

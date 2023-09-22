@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
+import ksnd.hiraganaconverter.core.model.ConvertHistoryData
 
 @Dao
 interface ConvertHistoryDao {

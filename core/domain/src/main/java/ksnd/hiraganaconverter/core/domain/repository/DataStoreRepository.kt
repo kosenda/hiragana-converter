@@ -1,8 +1,8 @@
-package ksnd.hiraganaconverter.model.repository
+package ksnd.hiraganaconverter.core.domain.repository
 
 import kotlinx.coroutines.flow.Flow
-import ksnd.hiraganaconverter.view.FontType
-import ksnd.hiraganaconverter.view.Theme
+import ksnd.hiraganaconverter.core.model.ui.FontType
+import ksnd.hiraganaconverter.core.model.ui.Theme
 
 interface DataStoreRepository {
     fun selectedTheme(): Flow<Theme>

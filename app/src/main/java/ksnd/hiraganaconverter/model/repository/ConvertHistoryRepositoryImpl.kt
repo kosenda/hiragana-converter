@@ -1,8 +1,9 @@
 package ksnd.hiraganaconverter.model.repository
 
 import kotlinx.coroutines.flow.Flow
+import ksnd.hiraganaconverter.core.domain.repository.ConvertHistoryRepository
 import ksnd.hiraganaconverter.model.ConvertHistoryDao
-import ksnd.hiraganaconverter.model.ConvertHistoryData
+import ksnd.hiraganaconverter.core.model.ConvertHistoryData
 import ksnd.hiraganaconverter.model.TimeFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

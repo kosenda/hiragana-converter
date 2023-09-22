@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.model
+package ksnd.hiraganaconverter.core.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
