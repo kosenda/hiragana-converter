@@ -1,6 +1,5 @@
 plugins {
     id("hiraganaconverter.android.library")
-    id("hiraganaconverter.android.library.jacoco")
     id("hiraganaconverter.android.hilt")
 }
 
