@@ -50,7 +50,7 @@ class ConvertRepositoryImpl @Inject constructor(
             )
             val response: Response<ResponseData> = convertService.requestConvert(body)
             if (response.isSuccessful.not()) {
-                Timber.w("response message: %s".format(response.raw().message()))
+                Timber.w("response message: %s".format(response.raw()))
             }
             Timber.i("response raw: %s".format(response.raw()))
             return response

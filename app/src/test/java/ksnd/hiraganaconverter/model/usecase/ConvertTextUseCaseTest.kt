@@ -36,6 +36,7 @@ class ConvertTextUseCaseTest {
         convertRepository = convertRepository,
         dataStoreRepository = dataStoreRepository,
         convertHistoryRepository = convertHistoryRepository,
+        appConfig = mockk(relaxed = true),
     )
 
     @Test
