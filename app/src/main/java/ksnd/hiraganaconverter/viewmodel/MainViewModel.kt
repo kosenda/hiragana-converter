@@ -11,11 +11,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
-import ksnd.hiraganaconverter.model.InAppUpdateManager
-import ksnd.hiraganaconverter.model.InAppUpdateState
 import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
 import ksnd.hiraganaconverter.core.model.ui.FontType
 import ksnd.hiraganaconverter.core.model.ui.Theme
+import ksnd.hiraganaconverter.model.InAppUpdateManager
+import ksnd.hiraganaconverter.model.InAppUpdateState
 import timber.log.Timber
 import javax.inject.Inject
 

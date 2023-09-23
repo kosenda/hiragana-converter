@@ -19,8 +19,8 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
+import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.view.extension.noRippleClickable
 import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.view.rememberButtonScaleState
