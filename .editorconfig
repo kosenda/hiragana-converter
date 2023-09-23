@@ -1,0 +1,8 @@
+root = true
+
+[*.{kt,kts}]
+max_line_length = 150
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+ktlint_standard_no-wildcard-imports = disabled
