@@ -27,8 +27,8 @@ tasks.create<JacocoReport>("mergeJacoco") {
             )
         ) {
             executionData.from.add(fileTree("${project.layout.buildDirectory.get()}/jacoco"))
-            sourceDirectories.setFrom(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
-            classDirectories.setFrom(
+            sourceDirectories.from.add(files("$projectDir/src/main/java", "$projectDir/src/main/kotlin"))
+            classDirectories.from.add(
                 fileTree("${project.layout.buildDirectory.get()}/tmp/kotlin-classes/prodDebug") {
                     exclude(
                         "**/R.class",
