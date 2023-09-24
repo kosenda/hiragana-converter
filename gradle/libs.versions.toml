@@ -25,6 +25,7 @@ kotlinxSerializationJson = "1.6.0"
 ksp = "1.9.10-1.0.13"
 ktlint = "0.50.0"
 lottie = "6.1.0"
+okhttp3 = "4.11.0"
 ossLicenses = "17.0.1"
 ossLicensesPlugin = "0.10.6"
 retrofit = "2.9.0"
@@ -120,6 +121,10 @@ firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics
 # App Update
 app-update = { group = "com.google.android.play", name = "app-update", version.ref = "appUpdate" }
 app-update-ktx = { group = "com.google.android.play", name = "app-update-ktx", version.ref = "appUpdate" }
+
+# okhttp3
+okhttp3 = { group = "com.squareup.okhttp3", name = "okhttp", version = "okhttp3" }
+okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp3" }
 
 # Plugin
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }

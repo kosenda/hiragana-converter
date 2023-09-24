@@ -73,6 +73,8 @@ dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:resource"))
     implementation(project(":core:domain"))
+    implementation(project(":core:data"))
+    testImplementation(project(":core:testing"))
 
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)

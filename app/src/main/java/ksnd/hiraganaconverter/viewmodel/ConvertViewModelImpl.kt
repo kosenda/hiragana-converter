@@ -13,7 +13,7 @@ import ksnd.hiraganaconverter.core.domain.usecase.ConvertTextUseCase
 import ksnd.hiraganaconverter.core.domain.usecase.InterceptorError
 import ksnd.hiraganaconverter.core.domain.usecase.IsReachedConvertMaxLimitException
 import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
-import ksnd.hiraganaconverter.di.module.IODispatcher
+import ksnd.hiraganaconverter.core.resource.di.IODispatcher
 import ksnd.hiraganaconverter.model.ConvertErrorType
 import ksnd.hiraganaconverter.view.uistate.ConvertUiState
 import timber.log.Timber

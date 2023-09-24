@@ -57,8 +57,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.core.resource.R
+import ksnd.hiraganaconverter.data.repository.LIMIT_CONVERT_COUNT
 import ksnd.hiraganaconverter.model.ConvertErrorType
-import ksnd.hiraganaconverter.model.repository.LIMIT_CONVERT_COUNT
 import ksnd.hiraganaconverter.view.parts.TopBar
 import ksnd.hiraganaconverter.view.parts.button.ConvertButton
 import ksnd.hiraganaconverter.view.parts.button.CustomButtonWithBackground
@@ -171,7 +171,10 @@ fun ConverterScreenContent(
                         ConvertErrorType.CONVERSION_FAILED -> stringResource(id = R.string.conversion_failed)
                         ConvertErrorType.INTERNAL_SERVER -> stringResource(id = R.string.internal_server_error)
                         ConvertErrorType.NETWORK -> stringResource(id = R.string.network_error)
-                        ConvertErrorType.REACHED_CONVERT_MAX_LIMIT -> stringResource(id = R.string.limit_local_count, LIMIT_CONVERT_COUNT)
+                        ConvertErrorType.REACHED_CONVERT_MAX_LIMIT -> stringResource(
+                            id = R.string.limit_local_count,
+                            LIMIT_CONVERT_COUNT,
+                        )
                     },
                     onClick = viewModel::clearConvertErrorType,
                 )
