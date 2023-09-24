@@ -22,7 +22,7 @@ fun SettingInAppUpdateContent(
     enableInAppUpdate: Boolean,
     onCheckedChange: (Boolean) -> Unit,
 ) {
-    ksnd.hiraganaconverter.core.ui.parts.card.TitleCard(
+    TitleCard(
         text = stringResource(id = R.string.in_app_update_setting),
         painter = painterResource(id = R.drawable.baseline_system_update_24),
     )
