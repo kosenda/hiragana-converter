@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.model
+package ksnd.hiraganaconverter.data.inappupdate
 
 import android.content.Context
 import androidx.activity.result.ActivityResultLauncher
@@ -12,6 +12,7 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
 import com.google.android.play.core.ktx.requestAppUpdateInfo
 import dagger.hilt.android.qualifiers.ApplicationContext
+import ksnd.hiraganaconverter.core.domain.inappupdate.InAppUpdateManager
 import timber.log.Timber
 import javax.inject.Inject
 

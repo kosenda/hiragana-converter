@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.model
+package ksnd.hiraganaconverter.core.model.ui
 
 enum class ConvertErrorType {
     TOO_MANY_CHARACTER,

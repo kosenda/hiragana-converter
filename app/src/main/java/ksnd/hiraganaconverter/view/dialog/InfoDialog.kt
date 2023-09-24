@@ -134,7 +134,7 @@ private fun InfoDialogContent(onCloseClick: () -> Unit) {
 
 @Composable
 private fun AppInfoContent(onURLClick: () -> Unit) {
-    ksnd.hiraganaconverter.core.ui.parts.card.TitleCard(
+    TitleCard(
         text = stringResource(id = R.string.app_info_title),
         painter = painterResource(id = R.drawable.ic_outline_info_24),
     )
@@ -216,14 +216,14 @@ private fun DeveloperInfoContent() {
 
                 FlowRow {
                     BodyMedium(text = stringResource(id = R.string.developer_name))
-                    ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton(
+                    CustomIconButton(
                         contentDescription = "",
                         painter = painterResource(id = R.drawable.ic_github_logo),
                         contentColor = null,
                         containerColor = Color.White,
                         onClick = { uriHandler.openUri(uri = "https://github.com/kosenda") },
                     )
-                    ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton(
+                    CustomIconButton(
                         modifier = Modifier.padding(start = 8.dp),
                         contentDescription = "",
                         painter = painterResource(id = R.drawable.ic_twitter_logo),
@@ -239,7 +239,7 @@ private fun DeveloperInfoContent() {
 
 @Composable
 private fun APIInfoContent(onURLClick: () -> Unit) {
-    ksnd.hiraganaconverter.core.ui.parts.card.TitleCard(
+    TitleCard(
         text = stringResource(id = R.string.api_info_title),
         painter = painterResource(id = R.drawable.ic_outline_info_24),
     )
@@ -257,7 +257,7 @@ private fun APIInfoContent(onURLClick: () -> Unit) {
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.Start,
         ) {
-            ksnd.hiraganaconverter.core.ui.parts.GooCreditImage()
+            GooCreditImage()
         }
         Column(
             modifier = Modifier.padding(vertical = 16.dp),
@@ -284,11 +284,11 @@ private fun APIInfoContent(onURLClick: () -> Unit) {
 private fun LicensesContent() {
     val context = LocalContext.current
     val buttonText = stringResource(id = R.string.oss_licenses)
-    ksnd.hiraganaconverter.core.ui.parts.card.TitleCard(
+    TitleCard(
         text = stringResource(id = R.string.licenses_title),
         painter = painterResource(id = R.drawable.ic_outline_info_24),
     )
-    ksnd.hiraganaconverter.core.ui.parts.button.CustomButton(
+    CustomButton(
         text = buttonText,
         onClick = {
             val intent = Intent(context, OssLicensesMenuActivity::class.java)
@@ -325,7 +325,7 @@ private fun UrlText(url: String, onURLClick: () -> Unit) {
     Text(
         text = url,
         style = MaterialTheme.typography.bodyLarge,
-        color = ksnd.hiraganaconverter.core.ui.theme.urlColor,
+        color = urlColor,
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .clickable(onClick = onURLClick),
@@ -336,10 +336,10 @@ private fun UrlText(url: String, onURLClick: () -> Unit) {
     )
 }
 
-@ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+@UiModeAndLocalePreview
 @Composable
 private fun PreviewInfoDialogContent() {
-    ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(modifier = Modifier.fillMaxSize()) {
             InfoDialogContent(onCloseClick = {})
         }

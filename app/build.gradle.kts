@@ -40,14 +40,6 @@ android {
             dimension = "env"
         }
     }
-    sourceSets {
-        getByName("prod") {
-            java.srcDirs("src/prod/java")
-        }
-        getByName("mock") {
-            java.srcDirs("src/mock/java")
-        }
-    }
     ksp {
         arg("room.schemaLocation", "$projectDir/schemas")
     }
@@ -126,18 +118,8 @@ dependencies {
     ksp(libs.room.compiler)
     implementation(libs.room.ktx)
 
-    // Robolectric environment
-    testImplementation(libs.androidx.test.core)
-    testImplementation(libs.robolectric)
-
     // kotlinx serialization
     implementation(libs.kotlinx.serialization.json)
-
-    // Kotlin Coroutine Test
-    testImplementation(libs.kotlinx.coroutines.test)
-
-    // Truth
-    testImplementation(libs.truth)
 
     // Timber
     implementation(libs.timber)
@@ -163,7 +145,6 @@ dependencies {
 
     // App Update
     implementation(libs.app.update)
-    implementation(libs.app.update.ktx)
 }
 
 // チェック

@@ -1,10 +1,10 @@
-package ksnd.hiraganaconverter.di.module
+package ksnd.hiraganaconverter.core.domain.di
 
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import ksnd.hiraganaconverter.model.ErrorInterceptor
+import ksnd.hiraganaconverter.core.domain.interceptor.ErrorInterceptor
 import okhttp3.Interceptor
 import javax.inject.Singleton
 

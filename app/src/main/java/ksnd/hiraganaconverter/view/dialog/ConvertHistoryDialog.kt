@@ -88,7 +88,7 @@ private fun ConvertHistoryDialogContent(
                     .padding(top = 16.dp),
                 leftContent = {
                     if (convertHistoryUiState.convertHistories.isNotEmpty()) {
-                        ksnd.hiraganaconverter.core.ui.parts.button.DeleteButton(onClick = viewModel::deleteAllConvertHistory)
+                        DeleteButton(onClick = viewModel::deleteAllConvertHistory)
                     }
                 },
                 onCloseClick = onCloseClick,
@@ -101,7 +101,7 @@ private fun ConvertHistoryDialogContent(
                         items = convertHistoryUiState.convertHistories,
                         key = { history -> history.id },
                     ) { history ->
-                        ksnd.hiraganaconverter.core.ui.parts.card.ConvertHistoryCard(
+                        ConvertHistoryCard(
                             modifier = Modifier.padding(horizontal = 16.dp),
                             beforeText = history.before,
                             time = history.time,
@@ -147,10 +147,10 @@ private fun EmptyHistoryImage() {
     }
 }
 
-@ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+@UiModeAndLocalePreview
 @Composable
 private fun PreviewConvertHistoryDialogContent() {
-    ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(
             color = MaterialTheme.colorScheme.surface,
             modifier = Modifier.fillMaxSize(),
@@ -163,10 +163,10 @@ private fun PreviewConvertHistoryDialogContent() {
     }
 }
 
-@ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+@UiModeAndLocalePreview
 @Composable
 private fun PreviewConvertHistoryDialogContent_NoData() {
-    ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(
             color = MaterialTheme.colorScheme.surface,
             modifier = Modifier.fillMaxSize(),

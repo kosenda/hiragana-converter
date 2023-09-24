@@ -27,4 +27,6 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.okhttp3)
     implementation(libs.okhttp3.logging.interceptor)
+    implementation(libs.timber)
+    implementation(libs.app.update)
 }

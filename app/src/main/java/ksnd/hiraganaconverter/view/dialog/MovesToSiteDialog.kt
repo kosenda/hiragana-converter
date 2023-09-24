@@ -33,10 +33,10 @@ fun MovesToSiteDialog(onDismissRequest: () -> Unit, onClick: () -> Unit, url: St
     )
 }
 
-@ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+@UiModeAndLocalePreview
 @Composable
 private fun PreviewMovesToSiteDialog() {
-    ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         MovesToSiteDialog(
             onDismissRequest = {},
             onClick = {},

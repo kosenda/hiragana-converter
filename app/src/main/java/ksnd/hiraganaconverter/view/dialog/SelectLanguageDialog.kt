@@ -78,7 +78,7 @@ private fun SelectLanguageDialogContent(
         ) {
             DialogCloseButton(onCloseClick = onCloseClick)
             languagePair.forEach { (locale, displayLanguage) ->
-                ksnd.hiraganaconverter.core.ui.parts.card.LanguageCard(
+                LanguageCard(
                     modifier = Modifier.weight(1f),
                     displayLanguage = displayLanguage,
                     isSelected = settingLocale == locale,
@@ -89,10 +89,10 @@ private fun SelectLanguageDialogContent(
     }
 }
 
-@ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+@UiModeAndLocalePreview
 @Composable
 private fun PreviewSelectLanguageDialogContent() {
-    ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(modifier = Modifier.fillMaxSize()) {
             SelectLanguageDialogContent(
                 onCloseClick = {},
