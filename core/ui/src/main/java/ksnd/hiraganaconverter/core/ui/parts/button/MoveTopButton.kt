@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view.parts.button
+package ksnd.hiraganaconverter.core.ui.parts.button
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
@@ -28,8 +28,8 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.resource.R
-import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview
-import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
+import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
 @Composable
 fun MoveTopButton(scrollState: ScrollState) {

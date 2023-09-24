@@ -59,15 +59,7 @@ import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.data.repository.LIMIT_CONVERT_COUNT
 import ksnd.hiraganaconverter.model.ConvertErrorType
-import ksnd.hiraganaconverter.view.parts.TopBar
-import ksnd.hiraganaconverter.view.parts.button.ConvertButton
-import ksnd.hiraganaconverter.view.parts.button.CustomButtonWithBackground
-import ksnd.hiraganaconverter.view.parts.button.CustomIconButton
-import ksnd.hiraganaconverter.view.parts.button.MoveTopButton
-import ksnd.hiraganaconverter.view.parts.card.ConversionTypeCard
-import ksnd.hiraganaconverter.view.parts.card.ErrorCard
-import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview
-import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
+import ksnd.hiraganaconverter.view.TopBar
 import ksnd.hiraganaconverter.viewmodel.ConvertViewModel
 import ksnd.hiraganaconverter.viewmodel.ConvertViewModelImpl
 import ksnd.hiraganaconverter.viewmodel.PreviewConvertViewModel
@@ -121,7 +113,7 @@ fun ConverterScreenContent(
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         containerColor = MaterialTheme.colorScheme.surface,
-        floatingActionButton = { MoveTopButton(scrollState = scrollState) },
+        floatingActionButton = { ksnd.hiraganaconverter.core.ui.parts.button.MoveTopButton(scrollState = scrollState) },
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -143,16 +135,16 @@ fun ConverterScreenContent(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Row(modifier = Modifier.weight(1f)) {
-                    ConversionTypeCard(onSelectedChange = viewModel::changeHiraKanaType)
+                    ksnd.hiraganaconverter.core.ui.parts.card.ConversionTypeCard(onSelectedChange = viewModel::changeHiraKanaType)
                 }
-                CustomButtonWithBackground(
+                ksnd.hiraganaconverter.core.ui.parts.button.CustomButtonWithBackground(
                     id = R.drawable.ic_reset,
                     convertDescription = "reset",
                     containerColor = MaterialTheme.colorScheme.surfaceVariant,
                     contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                     onClick = viewModel::clearAllText,
                 )
-                ConvertButton(
+                ksnd.hiraganaconverter.core.ui.parts.button.ConvertButton(
                     modifier = Modifier.padding(start = 4.dp),
                     id = R.drawable.ic_baseline_compare_arrows_24,
                     isConverting = convertUiState.isConverting,
@@ -164,7 +156,7 @@ fun ConverterScreenContent(
             }
 
             convertUiState.convertErrorType?.let {
-                ErrorCard(
+                ksnd.hiraganaconverter.core.ui.parts.card.ErrorCard(
                     errorText = when (it) {
                         ConvertErrorType.TOO_MANY_CHARACTER -> stringResource(id = R.string.request_too_large)
                         ConvertErrorType.RATE_LIMIT_EXCEEDED -> stringResource(id = R.string.limit_exceeded)
@@ -232,7 +224,7 @@ private fun BeforeOrAfterTextField(
             color = MaterialTheme.colorScheme.onSurface,
         )
 
-        CustomIconButton(
+        ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton(
             modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
             contentDescription = "copyText",
             painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
@@ -278,10 +270,10 @@ private fun BeforeOrAfterTextField(
     )
 }
 
-@UiModeAndLocalePreview
+@ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
 @Composable
 private fun PreviewConverterScreenContent() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         ConverterScreenContent(
             viewModel = PreviewConvertViewModel(),
             snackbarHostState = remember { SnackbarHostState() },

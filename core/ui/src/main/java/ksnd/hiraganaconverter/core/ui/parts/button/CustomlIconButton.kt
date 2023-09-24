@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view.parts.button
+package ksnd.hiraganaconverter.core.ui.parts.button
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -17,11 +17,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.core.resource.R
-import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview
-import ksnd.hiraganaconverter.view.rememberButtonScaleState
-import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
-import ksnd.hiraganaconverter.view.theme.contentBrush
-import ksnd.hiraganaconverter.view.theme.secondaryBrush
+import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+import ksnd.hiraganaconverter.core.ui.rememberButtonScaleState
+import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
+import ksnd.hiraganaconverter.core.ui.theme.contentBrush
+import ksnd.hiraganaconverter.core.ui.theme.secondaryBrush
 
 @Composable
 fun CustomIconButton(

@@ -33,10 +33,10 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import ksnd.hiraganaconverter.core.resource.R
-import ksnd.hiraganaconverter.view.parts.button.DeleteButton
-import ksnd.hiraganaconverter.view.parts.card.ConvertHistoryCard
-import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview
-import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
+import ksnd.hiraganaconverter.core.ui.parts.button.DeleteButton
+import ksnd.hiraganaconverter.core.ui.parts.card.ConvertHistoryCard
+import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.viewmodel.ConvertHistoryViewModel
 import ksnd.hiraganaconverter.viewmodel.ConvertHistoryViewModelImpl
 import ksnd.hiraganaconverter.viewmodel.PreviewConvertHistoryViewModel
@@ -88,7 +88,7 @@ private fun ConvertHistoryDialogContent(
                     .padding(top = 16.dp),
                 leftContent = {
                     if (convertHistoryUiState.convertHistories.isNotEmpty()) {
-                        DeleteButton(onClick = viewModel::deleteAllConvertHistory)
+                        ksnd.hiraganaconverter.core.ui.parts.button.DeleteButton(onClick = viewModel::deleteAllConvertHistory)
                     }
                 },
                 onCloseClick = onCloseClick,
@@ -101,7 +101,7 @@ private fun ConvertHistoryDialogContent(
                         items = convertHistoryUiState.convertHistories,
                         key = { history -> history.id },
                     ) { history ->
-                        ConvertHistoryCard(
+                        ksnd.hiraganaconverter.core.ui.parts.card.ConvertHistoryCard(
                             modifier = Modifier.padding(horizontal = 16.dp),
                             beforeText = history.before,
                             time = history.time,
@@ -147,10 +147,10 @@ private fun EmptyHistoryImage() {
     }
 }
 
-@UiModeAndLocalePreview
+@ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
 @Composable
 private fun PreviewConvertHistoryDialogContent() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(
             color = MaterialTheme.colorScheme.surface,
             modifier = Modifier.fillMaxSize(),
@@ -163,10 +163,10 @@ private fun PreviewConvertHistoryDialogContent() {
     }
 }
 
-@UiModeAndLocalePreview
+@ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
 @Composable
 private fun PreviewConvertHistoryDialogContent_NoData() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(
             color = MaterialTheme.colorScheme.surface,
             modifier = Modifier.fillMaxSize(),

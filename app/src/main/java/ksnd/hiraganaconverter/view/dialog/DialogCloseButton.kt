@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.core.resource.R
-import ksnd.hiraganaconverter.view.parts.button.CustomIconButton
+import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 
 @Composable
 fun DialogCloseButton(
@@ -25,7 +25,7 @@ fun DialogCloseButton(
             leftContent()
             Spacer(modifier = Modifier.weight(1f))
         }
-        CustomIconButton(
+        ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton(
             modifier = Modifier.padding(end = 8.dp),
             contentDescription = "",
             painter = painterResource(id = R.drawable.baseline_close_24),

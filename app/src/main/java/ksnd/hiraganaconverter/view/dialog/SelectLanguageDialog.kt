@@ -28,9 +28,9 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.os.LocaleListCompat
 import ksnd.hiraganaconverter.core.resource.R
-import ksnd.hiraganaconverter.view.parts.card.LanguageCard
-import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview
-import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
+import ksnd.hiraganaconverter.core.ui.parts.card.LanguageCard
+import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
 @Composable
 fun SelectLanguageDialog(
@@ -78,7 +78,7 @@ private fun SelectLanguageDialogContent(
         ) {
             DialogCloseButton(onCloseClick = onCloseClick)
             languagePair.forEach { (locale, displayLanguage) ->
-                LanguageCard(
+                ksnd.hiraganaconverter.core.ui.parts.card.LanguageCard(
                     modifier = Modifier.weight(1f),
                     displayLanguage = displayLanguage,
                     isSelected = settingLocale == locale,
@@ -89,10 +89,10 @@ private fun SelectLanguageDialogContent(
     }
 }
 
-@UiModeAndLocalePreview
+@ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
 @Composable
 private fun PreviewSelectLanguageDialogContent() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(modifier = Modifier.fillMaxSize()) {
             SelectLanguageDialogContent(
                 onCloseClick = {},

@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view.theme
+package ksnd.hiraganaconverter.core.ui.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

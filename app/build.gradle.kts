@@ -74,6 +74,7 @@ dependencies {
     implementation(project(":core:resource"))
     implementation(project(":core:domain"))
     implementation(project(":core:data"))
+    implementation(project(":core:ui"))
     testImplementation(project(":core:testing"))
 
     implementation(libs.androidx.activity)

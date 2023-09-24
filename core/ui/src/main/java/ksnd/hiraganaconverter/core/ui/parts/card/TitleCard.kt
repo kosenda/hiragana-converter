@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view.parts.card
+package ksnd.hiraganaconverter.core.ui.parts.card
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -22,10 +22,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.core.resource.R
-import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview
-import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
-import ksnd.hiraganaconverter.view.theme.contentBrush
-import ksnd.hiraganaconverter.view.theme.primaryBrush
+import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
+import ksnd.hiraganaconverter.core.ui.theme.contentBrush
+import ksnd.hiraganaconverter.core.ui.theme.primaryBrush
 
 @Composable
 fun TitleCard(text: String, painter: Painter) {
