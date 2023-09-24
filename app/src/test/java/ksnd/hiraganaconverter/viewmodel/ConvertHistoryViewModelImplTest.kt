@@ -4,8 +4,8 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import ksnd.hiraganaconverter.MainDispatcherRule
 import ksnd.hiraganaconverter.core.domain.repository.ConvertHistoryRepository
+import ksnd.hiraganaconverter.core.testing.MainDispatcherRule
 import ksnd.hiraganaconverter.mock.data.MockConvertHistories
 import org.junit.Rule
 import org.junit.Test

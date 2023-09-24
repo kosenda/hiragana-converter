@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
 import ksnd.hiraganaconverter.core.model.ui.FontType
 import ksnd.hiraganaconverter.core.model.ui.Theme
-import ksnd.hiraganaconverter.di.module.IODispatcher
+import ksnd.hiraganaconverter.core.resource.di.IODispatcher
 import javax.inject.Inject
 
 @HiltViewModel

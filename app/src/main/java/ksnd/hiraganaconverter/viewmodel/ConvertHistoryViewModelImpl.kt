@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.domain.repository.ConvertHistoryRepository
 import ksnd.hiraganaconverter.core.model.ConvertHistoryData
-import ksnd.hiraganaconverter.di.module.IODispatcher
+import ksnd.hiraganaconverter.core.resource.di.IODispatcher
 import ksnd.hiraganaconverter.view.uistate.ConvertHistoryUiState
 import javax.inject.Inject
 

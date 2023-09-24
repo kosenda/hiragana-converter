@@ -5,10 +5,10 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import ksnd.hiraganaconverter.MainDispatcherRule
 import ksnd.hiraganaconverter.core.domain.usecase.ConversionFailedException
 import ksnd.hiraganaconverter.core.domain.usecase.ConvertTextUseCase
 import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
+import ksnd.hiraganaconverter.core.testing.MainDispatcherRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -104,9 +104,5 @@ class ConvertViewModelImplTest {
         assertThat(viewModel.uiState.value.inputText).isEmpty()
         assertThat(viewModel.uiState.value.outputText).isEmpty()
         assertThat(viewModel.uiState.value.convertErrorType).isNull()
-    }
-
-    companion object {
-        const val TIME_ZONE = "Asia/Tokyo"
     }
 }
