@@ -6,7 +6,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import ksnd.hiraganaconverter.core.domain.repository.ConvertHistoryRepository
 import ksnd.hiraganaconverter.core.testing.MainDispatcherRule
-import ksnd.hiraganaconverter.mock.data.MockConvertHistories
+import ksnd.hiraganaconverter.data.mock.MockConvertHistories
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
