@@ -5,8 +5,8 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import com.github.takahirom.roborazzi.captureRoboImage
+import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.view.MainActivity
-import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.viewmodel.PreviewConvertViewModel
 import org.junit.Rule
 import org.junit.Test
@@ -24,7 +24,7 @@ class ConverterScreenTest {
     @Test
     fun converterScreen_light() {
         captureRoboImage {
-            HiraganaConverterTheme(isDarkTheme = false) {
+            ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme(isDarkTheme = false) {
                 ConverterScreenContent(viewModel = PreviewConvertViewModel(), snackbarHostState = SnackbarHostState())
             }
         }
@@ -33,7 +33,7 @@ class ConverterScreenTest {
     @Test
     fun converterScreen_dark() {
         captureRoboImage {
-            HiraganaConverterTheme(isDarkTheme = true) {
+            ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme(isDarkTheme = true) {
                 ConverterScreenContent(viewModel = PreviewConvertViewModel(), snackbarHostState = SnackbarHostState())
             }
         }

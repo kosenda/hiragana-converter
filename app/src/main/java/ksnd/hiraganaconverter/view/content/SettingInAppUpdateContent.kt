@@ -15,14 +15,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.core.resource.R
-import ksnd.hiraganaconverter.view.parts.card.TitleCard
+import ksnd.hiraganaconverter.core.ui.parts.card.TitleCard
 
 @Composable
 fun SettingInAppUpdateContent(
     enableInAppUpdate: Boolean,
     onCheckedChange: (Boolean) -> Unit,
 ) {
-    TitleCard(
+    ksnd.hiraganaconverter.core.ui.parts.card.TitleCard(
         text = stringResource(id = R.string.in_app_update_setting),
         painter = painterResource(id = R.drawable.baseline_system_update_24),
     )

@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view.parts
+package ksnd.hiraganaconverter.view
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -22,11 +22,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.core.resource.R
+import ksnd.hiraganaconverter.core.ui.parts.GooCreditImage
+import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
+import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.view.dialog.ConvertHistoryDialog
 import ksnd.hiraganaconverter.view.dialog.InfoDialog
 import ksnd.hiraganaconverter.view.dialog.SettingDialog
-import ksnd.hiraganaconverter.view.parts.button.CustomIconButton
-import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

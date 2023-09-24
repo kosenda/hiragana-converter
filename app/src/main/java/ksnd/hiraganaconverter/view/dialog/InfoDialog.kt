@@ -50,14 +50,14 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import ksnd.hiraganaconverter.BuildConfig
 import ksnd.hiraganaconverter.core.resource.R
+import ksnd.hiraganaconverter.core.ui.parts.GooCreditImage
+import ksnd.hiraganaconverter.core.ui.parts.button.CustomButton
+import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
+import ksnd.hiraganaconverter.core.ui.parts.card.TitleCard
+import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
+import ksnd.hiraganaconverter.core.ui.theme.urlColor
 import ksnd.hiraganaconverter.view.content.PrivacyPolicyContent
-import ksnd.hiraganaconverter.view.parts.GooCreditImage
-import ksnd.hiraganaconverter.view.parts.button.CustomButton
-import ksnd.hiraganaconverter.view.parts.button.CustomIconButton
-import ksnd.hiraganaconverter.view.parts.card.TitleCard
-import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview
-import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
-import ksnd.hiraganaconverter.view.theme.urlColor
 
 @Composable
 fun InfoDialog(onCloseClick: () -> Unit) {
@@ -134,7 +134,7 @@ private fun InfoDialogContent(onCloseClick: () -> Unit) {
 
 @Composable
 private fun AppInfoContent(onURLClick: () -> Unit) {
-    TitleCard(
+    ksnd.hiraganaconverter.core.ui.parts.card.TitleCard(
         text = stringResource(id = R.string.app_info_title),
         painter = painterResource(id = R.drawable.ic_outline_info_24),
     )
@@ -216,14 +216,14 @@ private fun DeveloperInfoContent() {
 
                 FlowRow {
                     BodyMedium(text = stringResource(id = R.string.developer_name))
-                    CustomIconButton(
+                    ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton(
                         contentDescription = "",
                         painter = painterResource(id = R.drawable.ic_github_logo),
                         contentColor = null,
                         containerColor = Color.White,
                         onClick = { uriHandler.openUri(uri = "https://github.com/kosenda") },
                     )
-                    CustomIconButton(
+                    ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton(
                         modifier = Modifier.padding(start = 8.dp),
                         contentDescription = "",
                         painter = painterResource(id = R.drawable.ic_twitter_logo),
@@ -239,7 +239,7 @@ private fun DeveloperInfoContent() {
 
 @Composable
 private fun APIInfoContent(onURLClick: () -> Unit) {
-    TitleCard(
+    ksnd.hiraganaconverter.core.ui.parts.card.TitleCard(
         text = stringResource(id = R.string.api_info_title),
         painter = painterResource(id = R.drawable.ic_outline_info_24),
     )
@@ -257,7 +257,7 @@ private fun APIInfoContent(onURLClick: () -> Unit) {
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.Start,
         ) {
-            GooCreditImage()
+            ksnd.hiraganaconverter.core.ui.parts.GooCreditImage()
         }
         Column(
             modifier = Modifier.padding(vertical = 16.dp),
@@ -284,11 +284,11 @@ private fun APIInfoContent(onURLClick: () -> Unit) {
 private fun LicensesContent() {
     val context = LocalContext.current
     val buttonText = stringResource(id = R.string.oss_licenses)
-    TitleCard(
+    ksnd.hiraganaconverter.core.ui.parts.card.TitleCard(
         text = stringResource(id = R.string.licenses_title),
         painter = painterResource(id = R.drawable.ic_outline_info_24),
     )
-    CustomButton(
+    ksnd.hiraganaconverter.core.ui.parts.button.CustomButton(
         text = buttonText,
         onClick = {
             val intent = Intent(context, OssLicensesMenuActivity::class.java)
@@ -325,7 +325,7 @@ private fun UrlText(url: String, onURLClick: () -> Unit) {
     Text(
         text = url,
         style = MaterialTheme.typography.bodyLarge,
-        color = urlColor,
+        color = ksnd.hiraganaconverter.core.ui.theme.urlColor,
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .clickable(onClick = onURLClick),
@@ -336,10 +336,10 @@ private fun UrlText(url: String, onURLClick: () -> Unit) {
     )
 }
 
-@UiModeAndLocalePreview
+@ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
 @Composable
 private fun PreviewInfoDialogContent() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(modifier = Modifier.fillMaxSize()) {
             InfoDialogContent(onCloseClick = {})
         }

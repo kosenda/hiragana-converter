@@ -34,12 +34,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ksnd.hiraganaconverter.core.model.ui.FontType
 import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.resource.R
+import ksnd.hiraganaconverter.core.ui.parts.button.CustomButton
+import ksnd.hiraganaconverter.core.ui.parts.button.CustomRadioButton
+import ksnd.hiraganaconverter.core.ui.parts.card.TitleCard
+import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.view.content.SettingInAppUpdateContent
-import ksnd.hiraganaconverter.view.parts.button.CustomButton
-import ksnd.hiraganaconverter.view.parts.button.CustomRadioButton
-import ksnd.hiraganaconverter.view.parts.card.TitleCard
-import ksnd.hiraganaconverter.view.preview.UiModeAndLocalePreview
-import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.viewmodel.PreviewSettingViewModel
 import ksnd.hiraganaconverter.viewmodel.SettingsViewModel
 import ksnd.hiraganaconverter.viewmodel.SettingsViewModelImpl
@@ -142,7 +142,7 @@ private fun SettingThemeContent(
         ),
     )
 
-    TitleCard(
+    ksnd.hiraganaconverter.core.ui.parts.card.TitleCard(
         text = stringResource(id = R.string.theme_setting),
         painter = painterResource(id = R.drawable.ic_baseline_brightness_4_24),
     )
@@ -154,7 +154,7 @@ private fun SettingThemeContent(
     ) {
         modeRadioResourceTriple.map { resource ->
             val (theme, displayThemeName, painter) = resource
-            CustomRadioButton(
+            ksnd.hiraganaconverter.core.ui.parts.button.CustomRadioButton(
                 isSelected = theme == isSelectedTheme,
                 buttonText = displayThemeName,
                 painter = painter,
@@ -166,11 +166,11 @@ private fun SettingThemeContent(
 
 @Composable
 private fun SettingLanguageContent(onClick: () -> Unit) {
-    TitleCard(
+    ksnd.hiraganaconverter.core.ui.parts.card.TitleCard(
         text = stringResource(id = R.string.language_setting),
         painter = painterResource(id = R.drawable.ic_baseline_language_24),
     )
-    CustomButton(
+    ksnd.hiraganaconverter.core.ui.parts.button.CustomButton(
         text = stringResource(id = R.string.select_language),
         onClick = onClick,
     )
@@ -181,7 +181,7 @@ private fun SettingFontContent(
     selectFontType: FontType,
     onClickFontType: (FontType) -> Unit,
 ) {
-    TitleCard(
+    ksnd.hiraganaconverter.core.ui.parts.card.TitleCard(
         text = stringResource(id = R.string.font_setting),
         painterResource(id = R.drawable.ic_baseline_text_fields_24),
     )
@@ -193,7 +193,7 @@ private fun SettingFontContent(
     ) {
         Column(modifier = Modifier.padding(vertical = 8.dp)) {
             FontType.entries.forEach { fontType ->
-                CustomRadioButton(
+                ksnd.hiraganaconverter.core.ui.parts.button.CustomRadioButton(
                     isSelected = fontType == selectFontType,
                     buttonText = fontType.fontName,
                     onClick = { onClickFontType(fontType) },
@@ -203,10 +203,10 @@ private fun SettingFontContent(
     }
 }
 
-@UiModeAndLocalePreview
+@ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
 @Composable
 fun PreviewSettingDialogContent() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(
             modifier = Modifier.fillMaxSize(),
         ) {

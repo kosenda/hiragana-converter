@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view.extension
+package ksnd.hiraganaconverter.core.ui.extension
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

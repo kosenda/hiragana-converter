@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view.parts
+package ksnd.hiraganaconverter.core.ui.parts
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext

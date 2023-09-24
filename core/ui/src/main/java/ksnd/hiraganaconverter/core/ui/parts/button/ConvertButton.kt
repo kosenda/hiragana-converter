@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view.parts.button
+package ksnd.hiraganaconverter.core.ui.parts.button
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background

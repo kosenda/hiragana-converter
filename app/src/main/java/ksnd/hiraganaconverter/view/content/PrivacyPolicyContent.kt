@@ -41,9 +41,9 @@ import com.google.accompanist.web.rememberWebViewNavigator
 import com.google.accompanist.web.rememberWebViewState
 import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.resource.R
-import ksnd.hiraganaconverter.view.parts.button.CustomButton
-import ksnd.hiraganaconverter.view.parts.button.CustomIconButton
-import ksnd.hiraganaconverter.view.parts.card.TitleCard
+import ksnd.hiraganaconverter.core.ui.parts.button.CustomButton
+import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
+import ksnd.hiraganaconverter.core.ui.parts.card.TitleCard
 
 private const val FLOATING_PADDING = 16
 
@@ -61,12 +61,12 @@ fun PrivacyPolicyContent() {
     val scrollState = rememberScrollState()
     val isScrollTop by remember(scrollState.value) { derivedStateOf { scrollState.value == 0 } }
 
-    TitleCard(
+    ksnd.hiraganaconverter.core.ui.parts.card.TitleCard(
         text = stringResource(id = R.string.privacy_policy_title),
         painter = painterResource(id = R.drawable.ic_outline_info_24),
     )
 
-    CustomButton(
+    ksnd.hiraganaconverter.core.ui.parts.button.CustomButton(
         text = stringResource(id = R.string.privacy_policy_button),
         onClick = { isShowWebView = true },
     )
@@ -83,7 +83,7 @@ fun PrivacyPolicyContent() {
                 ) {
                     BottomSheetDefaults.DragHandle()
                     Row {
-                        CustomIconButton(
+                        ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton(
                             painter = painterResource(R.drawable.baseline_keyboard_arrow_left_24),
                             contentDescription = "",
                             contentColor = if (navigator.canGoBack) {
@@ -94,7 +94,7 @@ fun PrivacyPolicyContent() {
                             containerColor = Color.Transparent,
                             onClick = navigator::navigateBack,
                         )
-                        CustomIconButton(
+                        ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton(
                             painter = painterResource(R.drawable.baseline_keyboard_arrow_right_24),
                             contentDescription = "",
                             contentColor = if (navigator.canGoForward) {

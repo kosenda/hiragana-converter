@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view.preview
+package ksnd.hiraganaconverter.core.ui.preview
 
 import android.content.res.Configuration
 import androidx.compose.ui.tooling.preview.Preview

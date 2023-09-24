@@ -34,10 +34,10 @@ import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.model.ui.FontType
 import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.resource.R
+import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.model.InAppUpdateState
 import ksnd.hiraganaconverter.view.content.InAppUpdateDownloadingContent
 import ksnd.hiraganaconverter.view.screen.ConverterScreen
-import ksnd.hiraganaconverter.view.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.viewmodel.MainViewModel
 import timber.log.Timber
 
@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            HiraganaConverterTheme(
+            ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme(
                 isDarkTheme = isDarkTheme,
                 fontType = fontType,
             ) {

@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view
+package ksnd.hiraganaconverter.core.ui
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
