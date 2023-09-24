@@ -25,7 +25,7 @@ fun DialogCloseButton(
             leftContent()
             Spacer(modifier = Modifier.weight(1f))
         }
-        ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton(
+        CustomIconButton(
             modifier = Modifier.padding(end = 8.dp),
             contentDescription = "",
             painter = painterResource(id = R.drawable.baseline_close_24),

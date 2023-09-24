@@ -125,7 +125,7 @@ private fun BeforeOrAfterText(
                 .weight(1f),
             color = MaterialTheme.colorScheme.onSurface,
         )
-        ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton(
+        CustomIconButton(
             modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
             contentDescription = "copyText",
             painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
@@ -166,10 +166,10 @@ private fun BeforeOrAfterText(
     }
 }
 
-@ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+@UiModeAndLocalePreview
 @Composable
 private fun PreviewConvertHistoryDetailDialogContent() {
-    ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Box(modifier = Modifier.fillMaxSize()) {
             ConvertHistoryDetailDialogContent(
                 historyData = ConvertHistoryData(

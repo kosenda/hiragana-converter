@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.model
+package ksnd.hiraganaconverter.core.domain.inappupdate
 
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest

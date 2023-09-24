@@ -56,9 +56,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
+import ksnd.hiraganaconverter.core.model.ui.ConvertErrorType
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.data.repository.LIMIT_CONVERT_COUNT
-import ksnd.hiraganaconverter.model.ConvertErrorType
 import ksnd.hiraganaconverter.view.TopBar
 import ksnd.hiraganaconverter.viewmodel.ConvertViewModel
 import ksnd.hiraganaconverter.viewmodel.ConvertViewModelImpl

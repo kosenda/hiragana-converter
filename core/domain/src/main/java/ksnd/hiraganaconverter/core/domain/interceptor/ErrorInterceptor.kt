@@ -1,5 +1,6 @@
-package ksnd.hiraganaconverter.model
+package ksnd.hiraganaconverter.core.domain.interceptor
 
+import ksnd.hiraganaconverter.core.model.ui.ConvertErrorType
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.Protocol

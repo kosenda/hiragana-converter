@@ -1,11 +1,11 @@
-package ksnd.hiraganaconverter.di.module
+package ksnd.hiraganaconverter.data.di
 
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import ksnd.hiraganaconverter.model.InAppUpdateManager
-import ksnd.hiraganaconverter.model.InAppUpdateManagerImpl
+import ksnd.hiraganaconverter.core.domain.inappupdate.InAppUpdateManager
+import ksnd.hiraganaconverter.data.inappupdate.InAppUpdateManagerImpl
 import javax.inject.Singleton
 
 @Module

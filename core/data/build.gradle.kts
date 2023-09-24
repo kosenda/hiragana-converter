@@ -42,4 +42,8 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.okhttp3)
     implementation(libs.okhttp3.logging.interceptor)
+
+    // App Update
+    implementation(libs.app.update)
+    implementation(libs.app.update.ktx)
 }

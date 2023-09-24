@@ -6,11 +6,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOf
 import ksnd.hiraganaconverter.core.model.ConvertHistoryData
+import ksnd.hiraganaconverter.core.model.ui.ConvertErrorType
 import ksnd.hiraganaconverter.core.model.ui.FontType
 import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
 import ksnd.hiraganaconverter.core.model.ui.Theme
-import ksnd.hiraganaconverter.mock.data.MockConvertHistories
-import ksnd.hiraganaconverter.model.ConvertErrorType
+import ksnd.hiraganaconverter.data.mock.MockConvertHistories
 import ksnd.hiraganaconverter.view.uistate.ConvertHistoryUiState
 import ksnd.hiraganaconverter.view.uistate.ConvertUiState
 

@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.model
+package ksnd.hiraganaconverter.data.inappupdate
 
 sealed class InAppUpdateState {
     object Requesting : InAppUpdateState()

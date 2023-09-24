@@ -61,12 +61,12 @@ fun PrivacyPolicyContent() {
     val scrollState = rememberScrollState()
     val isScrollTop by remember(scrollState.value) { derivedStateOf { scrollState.value == 0 } }
 
-    ksnd.hiraganaconverter.core.ui.parts.card.TitleCard(
+    TitleCard(
         text = stringResource(id = R.string.privacy_policy_title),
         painter = painterResource(id = R.drawable.ic_outline_info_24),
     )
 
-    ksnd.hiraganaconverter.core.ui.parts.button.CustomButton(
+    CustomButton(
         text = stringResource(id = R.string.privacy_policy_button),
         onClick = { isShowWebView = true },
     )
@@ -83,7 +83,7 @@ fun PrivacyPolicyContent() {
                 ) {
                     BottomSheetDefaults.DragHandle()
                     Row {
-                        ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton(
+                        CustomIconButton(
                             painter = painterResource(R.drawable.baseline_keyboard_arrow_left_24),
                             contentDescription = "",
                             contentColor = if (navigator.canGoBack) {
@@ -94,7 +94,7 @@ fun PrivacyPolicyContent() {
                             containerColor = Color.Transparent,
                             onClick = navigator::navigateBack,
                         )
-                        ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton(
+                        CustomIconButton(
                             painter = painterResource(R.drawable.baseline_keyboard_arrow_right_24),
                             contentDescription = "",
                             contentColor = if (navigator.canGoForward) {

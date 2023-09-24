@@ -34,8 +34,7 @@ import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.model.ui.FontType
 import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.resource.R
-import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
-import ksnd.hiraganaconverter.model.InAppUpdateState
+import ksnd.hiraganaconverter.data.inappupdate.InAppUpdateState
 import ksnd.hiraganaconverter.view.content.InAppUpdateDownloadingContent
 import ksnd.hiraganaconverter.view.screen.ConverterScreen
 import ksnd.hiraganaconverter.viewmodel.MainViewModel
