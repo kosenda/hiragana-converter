@@ -41,5 +41,9 @@ gradlePlugin {
             id = "hiraganaconverter.android.hilt"
             implementationClass = "ksnd.hiraganaconverter.AndroidHiltPlugin"
         }
+        register("androidLibraryCompose") {
+            id = "hiraganaconverter.android.library.compose"
+            implementationClass = "ksnd.hiraganaconverter.AndroidLibraryComposePlugin"
+        }
     }
 }
