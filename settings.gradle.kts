@@ -22,6 +22,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = "hiraganaconverter"
 include(":app")
+include(":feature:converter")
 include(":core:model")
 include(":core:resource")
 include(":core:domain")

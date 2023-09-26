@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view.screen
+package ksnd.hiraganaconverter.feature.converter
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -32,20 +32,18 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
@@ -57,23 +55,32 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.core.model.ui.ConvertErrorType
+import ksnd.hiraganaconverter.core.resource.LIMIT_CONVERT_COUNT
 import ksnd.hiraganaconverter.core.resource.R
-import ksnd.hiraganaconverter.data.repository.LIMIT_CONVERT_COUNT
-import ksnd.hiraganaconverter.view.TopBar
-import ksnd.hiraganaconverter.viewmodel.ConvertViewModel
-import ksnd.hiraganaconverter.viewmodel.ConvertViewModelImpl
-import ksnd.hiraganaconverter.viewmodel.PreviewConvertViewModel
+import ksnd.hiraganaconverter.core.ui.parts.button.ConvertButton
+import ksnd.hiraganaconverter.core.ui.parts.button.CustomButtonWithBackground
+import ksnd.hiraganaconverter.core.ui.parts.card.ConversionTypeCard
+import ksnd.hiraganaconverter.core.ui.parts.card.ErrorCard
+import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConverterScreen(
     modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState,
     convertViewModel: ConvertViewModelImpl,
+    topBar: @Composable () -> Unit,
+    topBarHeight: Int,
+    scrollBehavior: TopAppBarScrollBehavior,
 ) {
     ConverterScreenContent(
         modifier = modifier,
         viewModel = convertViewModel,
         snackbarHostState = snackbarHostState,
+        topBar = topBar,
+        topBarHeight = topBarHeight,
+        scrollBehavior = scrollBehavior,
     )
 }
 
@@ -83,34 +90,37 @@ fun ConverterScreenContent(
     modifier: Modifier = Modifier,
     viewModel: ConvertViewModel,
     snackbarHostState: SnackbarHostState,
+    topBar: @Composable () -> Unit,
+    topBarHeight: Int,
+    scrollBehavior: TopAppBarScrollBehavior,
 ) {
     val focusManager = LocalFocusManager.current
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     val convertUiState by viewModel.uiState.collectAsState()
     val density = LocalDensity.current.density
-    var topBarHeight by remember { mutableIntStateOf(0) }
     val layoutDirection = LocalLayoutDirection.current
-
     val scrollState = rememberScrollState()
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
         modifier = modifier
             .background(MaterialTheme.colorScheme.surface)
             .padding(
-                start = WindowInsets.displayCutout.asPaddingValues().calculateStartPadding(layoutDirection),
-                end = WindowInsets.displayCutout.asPaddingValues().calculateEndPadding(layoutDirection),
+                start = WindowInsets.displayCutout
+                    .asPaddingValues()
+                    .calculateStartPadding(layoutDirection),
+                end = WindowInsets.displayCutout
+                    .asPaddingValues()
+                    .calculateEndPadding(layoutDirection),
             )
             .padding(
-                start = WindowInsets.navigationBars.asPaddingValues().calculateStartPadding(layoutDirection),
-                end = WindowInsets.navigationBars.asPaddingValues().calculateEndPadding(layoutDirection),
+                start = WindowInsets.navigationBars
+                    .asPaddingValues()
+                    .calculateStartPadding(layoutDirection),
+                end = WindowInsets.navigationBars
+                    .asPaddingValues()
+                    .calculateEndPadding(layoutDirection),
             ),
-        topBar = {
-            TopBar(
-                modifier = Modifier.onSizeChanged { topBarHeight = it.height },
-                scrollBehavior = scrollBehavior,
-            )
-        },
+        topBar = topBar,
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         containerColor = MaterialTheme.colorScheme.surface,
         floatingActionButton = { ksnd.hiraganaconverter.core.ui.parts.button.MoveTopButton(scrollState = scrollState) },
@@ -135,16 +145,16 @@ fun ConverterScreenContent(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Row(modifier = Modifier.weight(1f)) {
-                    ksnd.hiraganaconverter.core.ui.parts.card.ConversionTypeCard(onSelectedChange = viewModel::changeHiraKanaType)
+                    ConversionTypeCard(onSelectedChange = viewModel::changeHiraKanaType)
                 }
-                ksnd.hiraganaconverter.core.ui.parts.button.CustomButtonWithBackground(
+                CustomButtonWithBackground(
                     id = R.drawable.ic_reset,
                     convertDescription = "reset",
                     containerColor = MaterialTheme.colorScheme.surfaceVariant,
                     contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                     onClick = viewModel::clearAllText,
                 )
-                ksnd.hiraganaconverter.core.ui.parts.button.ConvertButton(
+                ConvertButton(
                     modifier = Modifier.padding(start = 4.dp),
                     id = R.drawable.ic_baseline_compare_arrows_24,
                     isConverting = convertUiState.isConverting,
@@ -156,7 +166,7 @@ fun ConverterScreenContent(
             }
 
             convertUiState.convertErrorType?.let {
-                ksnd.hiraganaconverter.core.ui.parts.card.ErrorCard(
+                ErrorCard(
                     errorText = when (it) {
                         ConvertErrorType.TOO_MANY_CHARACTER -> stringResource(id = R.string.request_too_large)
                         ConvertErrorType.RATE_LIMIT_EXCEEDED -> stringResource(id = R.string.limit_exceeded)
@@ -270,13 +280,17 @@ private fun BeforeOrAfterTextField(
     )
 }
 
-@ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+@OptIn(ExperimentalMaterial3Api::class)
+@UiModeAndLocalePreview
 @Composable
 private fun PreviewConverterScreenContent() {
-    ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         ConverterScreenContent(
             viewModel = PreviewConvertViewModel(),
             snackbarHostState = remember { SnackbarHostState() },
+            topBar = { },
+            topBarHeight = 0,
+            scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
         )
     }
 }

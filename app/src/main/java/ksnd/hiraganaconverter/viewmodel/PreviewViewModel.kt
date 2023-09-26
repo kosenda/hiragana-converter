@@ -6,26 +6,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOf
 import ksnd.hiraganaconverter.core.model.ConvertHistoryData
-import ksnd.hiraganaconverter.core.model.ui.ConvertErrorType
 import ksnd.hiraganaconverter.core.model.ui.FontType
-import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
 import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.data.mock.MockConvertHistories
 import ksnd.hiraganaconverter.view.uistate.ConvertHistoryUiState
-import ksnd.hiraganaconverter.view.uistate.ConvertUiState
-
-class PreviewConvertViewModel : ConvertViewModel() {
-    override val uiState: StateFlow<ConvertUiState> = MutableStateFlow(
-        ConvertUiState(convertErrorType = ConvertErrorType.CONVERSION_FAILED),
-    ).asStateFlow()
-    override fun convert() {}
-    override fun updateInputText(inputText: String) {}
-    override fun updateOutputText(outputText: String) {}
-    override fun clearConvertErrorType() {}
-    override fun clearAllText() {}
-
-    override fun changeHiraKanaType(type: HiraKanaType) {}
-}
 
 class PreviewSettingViewModel : SettingsViewModel() {
     override val fontType = MutableStateFlow(FontType.YUSEI_MAGIC)

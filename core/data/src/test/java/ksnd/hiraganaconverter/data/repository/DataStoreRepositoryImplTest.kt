@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import ksnd.hiraganaconverter.core.model.ui.FontType
 import ksnd.hiraganaconverter.core.model.ui.Theme
+import ksnd.hiraganaconverter.core.resource.LIMIT_CONVERT_COUNT
 import ksnd.hiraganaconverter.core.testing.MainDispatcherRule
 import org.junit.Rule
 import org.junit.Test
@@ -24,7 +25,7 @@ class DataStoreRepositoryImplTest {
     private val dataStore = PreferenceDataStoreFactory.create(
         produceFile = { context.preferencesDataStoreFile("TestDataStore") },
     )
-    private val dataStoreRepository = ksnd.hiraganaconverter.data.repository.DataStoreRepositoryImpl(
+    private val dataStoreRepository = DataStoreRepositoryImpl(
         dataStore = dataStore,
         ioDispatcher = mainDispatcherRule.testDispatcher,
     )
@@ -67,7 +68,7 @@ class DataStoreRepositoryImplTest {
 
     @Test
     fun checkIsExceedingMaxLimit_convertToReachedConvertMaxLimitPlus1_isTrue() = runTest {
-        repeat(ksnd.hiraganaconverter.data.repository.LIMIT_CONVERT_COUNT) { assertThat(dataStoreRepository.checkIsExceedingMaxLimit()).isFalse() }
+        repeat(LIMIT_CONVERT_COUNT) { assertThat(dataStoreRepository.checkIsExceedingMaxLimit()).isFalse() }
         assertThat(dataStoreRepository.checkIsExceedingMaxLimit()).isTrue()
     }
 
