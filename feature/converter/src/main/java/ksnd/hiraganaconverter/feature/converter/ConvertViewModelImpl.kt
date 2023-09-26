@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.viewmodel
+package ksnd.hiraganaconverter.feature.converter
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -15,7 +15,6 @@ import ksnd.hiraganaconverter.core.domain.usecase.IsReachedConvertMaxLimitExcept
 import ksnd.hiraganaconverter.core.model.ui.ConvertErrorType
 import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
 import ksnd.hiraganaconverter.core.resource.di.IODispatcher
-import ksnd.hiraganaconverter.view.uistate.ConvertUiState
 import timber.log.Timber
 import javax.inject.Inject
 

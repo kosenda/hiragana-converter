@@ -13,14 +13,13 @@ import kotlinx.coroutines.withContext
 import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
 import ksnd.hiraganaconverter.core.model.ui.FontType
 import ksnd.hiraganaconverter.core.model.ui.Theme
+import ksnd.hiraganaconverter.core.resource.LIMIT_CONVERT_COUNT
 import ksnd.hiraganaconverter.core.resource.di.IODispatcher
 import ksnd.hiraganaconverter.data.PreferenceKeys
 import timber.log.Timber
 import java.io.IOException
 import java.time.LocalDate
 import javax.inject.Inject
-
-const val LIMIT_CONVERT_COUNT = 200
 
 class DataStoreRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>,

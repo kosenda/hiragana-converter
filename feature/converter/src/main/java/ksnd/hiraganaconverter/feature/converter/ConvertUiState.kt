@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view.uistate
+package ksnd.hiraganaconverter.feature.converter
 
 import ksnd.hiraganaconverter.core.model.ui.ConvertErrorType
 import ksnd.hiraganaconverter.core.model.ui.HiraKanaType

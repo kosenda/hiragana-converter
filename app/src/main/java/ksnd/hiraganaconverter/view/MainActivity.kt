@@ -11,19 +11,24 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,9 +39,10 @@ import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.model.ui.FontType
 import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.resource.R
+import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.data.inappupdate.InAppUpdateState
+import ksnd.hiraganaconverter.feature.converter.ConverterScreen
 import ksnd.hiraganaconverter.view.content.InAppUpdateDownloadingContent
-import ksnd.hiraganaconverter.view.screen.ConverterScreen
 import ksnd.hiraganaconverter.viewmodel.MainViewModel
 import timber.log.Timber
 
@@ -57,6 +63,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         var isAnimateSplash by mutableStateOf(true)
         CoroutineScope(Dispatchers.Default).launch {
@@ -75,6 +82,9 @@ class MainActivity : AppCompatActivity() {
             val fontType by mainViewModel.fontType.collectAsState(initial = FontType.YUSEI_MAGIC)
             val inAppUpdateState by mainViewModel.inAppUpdateState.collectAsState(initial = InAppUpdateState.Requesting)
             val snackbarHostState = remember { SnackbarHostState() }
+
+            var topBarHeight by remember { mutableIntStateOf(0) }
+            val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
             val isDarkTheme = when (theme) {
                 Theme.NIGHT -> true
@@ -115,7 +125,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme(
+            HiraganaConverterTheme(
                 isDarkTheme = isDarkTheme,
                 fontType = fontType,
             ) {
@@ -135,6 +145,14 @@ class MainActivity : AppCompatActivity() {
                         modifier = Modifier.weight(1f),
                         snackbarHostState = snackbarHostState,
                         convertViewModel = hiltViewModel(),
+                        topBar = {
+                            TopBar(
+                                modifier = Modifier.onSizeChanged { topBarHeight = it.height },
+                                scrollBehavior = scrollBehavior,
+                            )
+                        },
+                        topBarHeight = topBarHeight,
+                        scrollBehavior = scrollBehavior,
                     )
                 }
             }

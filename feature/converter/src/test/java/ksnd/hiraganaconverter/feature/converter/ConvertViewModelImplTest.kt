@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.viewmodel
+package ksnd.hiraganaconverter.feature.converter
 
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
