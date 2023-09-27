@@ -1,9 +1,8 @@
-package ksnd.hiraganaconverter.viewmodel
+package ksnd.hiraganaconverter.feature.history
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.StateFlow
 import ksnd.hiraganaconverter.core.model.ConvertHistoryData
-import ksnd.hiraganaconverter.view.uistate.ConvertHistoryUiState
 
 abstract class ConvertHistoryViewModel : ViewModel() {
     abstract val uiState: StateFlow<ConvertHistoryUiState>

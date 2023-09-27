@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view.dialog
+package ksnd.hiraganaconverter.feature.history
 
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -35,6 +35,7 @@ import androidx.compose.ui.window.DialogProperties
 import ksnd.hiraganaconverter.core.model.ConvertHistoryData
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
+import ksnd.hiraganaconverter.core.ui.parts.dialog.DialogCloseButton
 import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 

@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view.dialog
+package ksnd.hiraganaconverter.feature.history
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -35,11 +35,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.button.DeleteButton
 import ksnd.hiraganaconverter.core.ui.parts.card.ConvertHistoryCard
+import ksnd.hiraganaconverter.core.ui.parts.dialog.DialogCloseButton
 import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
-import ksnd.hiraganaconverter.viewmodel.ConvertHistoryViewModel
-import ksnd.hiraganaconverter.viewmodel.ConvertHistoryViewModelImpl
-import ksnd.hiraganaconverter.viewmodel.PreviewConvertHistoryViewModel
 
 @Composable
 fun ConvertHistoryDialog(

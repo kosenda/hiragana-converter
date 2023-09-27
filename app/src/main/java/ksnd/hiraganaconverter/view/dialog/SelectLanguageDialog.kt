@@ -29,6 +29,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.core.os.LocaleListCompat
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.card.LanguageCard
+import ksnd.hiraganaconverter.core.ui.parts.dialog.DialogCloseButton
 import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 

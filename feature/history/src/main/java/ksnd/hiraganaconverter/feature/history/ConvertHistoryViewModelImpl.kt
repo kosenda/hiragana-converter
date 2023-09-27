@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.viewmodel
+package ksnd.hiraganaconverter.feature.history
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,7 +12,6 @@ import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.domain.repository.ConvertHistoryRepository
 import ksnd.hiraganaconverter.core.model.ConvertHistoryData
 import ksnd.hiraganaconverter.core.resource.di.IODispatcher
-import ksnd.hiraganaconverter.view.uistate.ConvertHistoryUiState
 import javax.inject.Inject
 
 @HiltViewModel
@@ -62,3 +61,4 @@ class ConvertHistoryViewModelImpl @Inject constructor(
         }
     }
 }
+
