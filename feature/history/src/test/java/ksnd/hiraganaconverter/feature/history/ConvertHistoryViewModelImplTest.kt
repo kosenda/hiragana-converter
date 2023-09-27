@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.viewmodel
+package ksnd.hiraganaconverter.feature.history
 
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coVerify
@@ -6,7 +6,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import ksnd.hiraganaconverter.core.domain.repository.ConvertHistoryRepository
 import ksnd.hiraganaconverter.core.testing.MainDispatcherRule
-import ksnd.hiraganaconverter.data.mock.MockConvertHistories
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

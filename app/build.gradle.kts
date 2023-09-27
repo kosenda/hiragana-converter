@@ -63,6 +63,7 @@ android {
 
 dependencies {
     implementation(project(":feature:converter"))
+    implementation(project(":feature:history"))
     implementation(project(":core:model"))
     implementation(project(":core:resource"))
     implementation(project(":core:domain"))

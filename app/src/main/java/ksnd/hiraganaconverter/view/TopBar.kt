@@ -25,7 +25,7 @@ import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.GooCreditImage
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
-import ksnd.hiraganaconverter.view.dialog.ConvertHistoryDialog
+import ksnd.hiraganaconverter.feature.history.ConvertHistoryDialog
 import ksnd.hiraganaconverter.view.dialog.InfoDialog
 import ksnd.hiraganaconverter.view.dialog.SettingDialog
 

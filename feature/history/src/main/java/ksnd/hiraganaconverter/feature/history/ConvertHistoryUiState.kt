@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view.uistate
+package ksnd.hiraganaconverter.feature.history
 
 import ksnd.hiraganaconverter.core.model.ConvertHistoryData
 
