@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.viewmodel
+package ksnd.hiraganaconverter.feature.setting
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.Flow
