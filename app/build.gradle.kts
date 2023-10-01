@@ -3,8 +3,7 @@ val ktlint: Configuration by configurations.creating
 plugins {
     id("hiraganaconverter.android.application")
     id("hiraganaconverter.android.application.jacoco")
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
+    id("hiraganaconverter.android.hilt")
     alias(libs.plugins.oss.licenses)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.secrets)
@@ -16,17 +15,15 @@ plugins {
 
 android {
     namespace = "ksnd.hiraganaconverter"
-    compileSdk = 34
 
     androidResources {
-        @Suppress("UnstableApiUsage")
         generateLocaleConfig = true
     }
 
     buildTypes {
         release {
-            isShrinkResources = true // リソースの圧縮
-            isMinifyEnabled = true   // コードの圧縮
+            isShrinkResources = true
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro", "shrinker-rules.pro")
         }
     }
@@ -54,7 +51,6 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-    @Suppress("UnstableApiUsage")
     testOptions {
         unitTests.isIncludeAndroidResources = true
         unitTests.isReturnDefaultValues = true
@@ -75,38 +71,16 @@ dependencies {
 
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.junit)
-    testImplementation(libs.kotlin.test)
-
-    // Accompanist
-    implementation(libs.accompanist.webView)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     // Compose
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.google.fonts)
-    testImplementation(libs.androidx.compose.ui.test.junit4)
     implementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.compose.ui.tooling.preview)
 
-    // COIL
-    implementation(libs.coil)
-
-    // Retrofit
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.kotlinx.serialization.converter)
-
-    // Hilt
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
-    implementation(libs.androidx.hilt.navigation.compose)
-
-    // dataStore preferences
-    implementation(libs.androidx.dataStore.preferences)
-
     // ktlint
-    @Suppress("UnstableApiUsage")
     ktlint(libs.ktlint) {
         attributes {
             attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
@@ -116,28 +90,14 @@ dependencies {
     // Lottie
     implementation(libs.lottie)
 
-    // ROOM
-    implementation(libs.room.runtime)
-    annotationProcessor(libs.room.compiler)
-    ksp(libs.room.compiler)
-    implementation(libs.room.ktx)
-
-    // kotlinx serialization
-    implementation(libs.kotlinx.serialization.json)
-
     // Timber
     implementation(libs.timber)
 
+    // OSS Licenses
+    implementation(libs.play.oss.licenses)
+
     // Splash Screen
     implementation(libs.androidx.core.splashscreen)
-
-    // Mockk
-    testImplementation(libs.mockk)
-
-    // Roborazzi
-    testImplementation(libs.roborazzi)
-    testImplementation(libs.roborazzi.compose)
-    testImplementation(libs.roborazzi.junit4.rule)
 
     // Firebase
     implementation(platform(libs.firebase.bom))
@@ -148,7 +108,6 @@ dependencies {
     implementation(libs.app.update)
 }
 
-// チェック
 tasks.create<JavaExec>("ktlintCheck") {
     description = "Check Kotlin code style."
     classpath = ktlint
@@ -160,15 +119,11 @@ tasks.create<JavaExec>("ktlintCheck") {
     isIgnoreExitValue = true
 }
 
-// フォーマット
-// jvmArgsは以下のサイトを参考にした（入れないと失敗してしまう）
-// https://github.com/pinterest/ktlint/issues/1195#issuecomment-1009027802
 tasks.create<JavaExec>("ktlintFormatting") {
     description = "Fix Kotlin code style deviations."
     classpath = ktlint
     mainClass.set("com.pinterest.ktlint.Main")
     args("-F", "src/**/*.kt")
-    jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }
 
 tasks.withType<Test>().configureEach {

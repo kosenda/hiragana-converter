@@ -30,7 +30,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import ksnd.hiraganaconverter.core.resource.R
 
 @Composable
-fun InAppUpdateDownloadingContent(text: String, isVisible: Boolean) {
+fun InAppUpdateDownloadingCard(text: String, isVisible: Boolean) {
     val composition by rememberLottieComposition(
         spec = LottieCompositionSpec.RawRes(R.raw.animation_downloading),
     )
