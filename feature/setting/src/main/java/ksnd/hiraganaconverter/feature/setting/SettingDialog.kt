@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view.dialog
+package ksnd.hiraganaconverter.feature.setting
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.border
@@ -40,10 +40,6 @@ import ksnd.hiraganaconverter.core.ui.parts.card.TitleCard
 import ksnd.hiraganaconverter.core.ui.parts.dialog.DialogCloseButton
 import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
-import ksnd.hiraganaconverter.view.content.SettingInAppUpdateContent
-import ksnd.hiraganaconverter.viewmodel.PreviewSettingViewModel
-import ksnd.hiraganaconverter.viewmodel.SettingsViewModel
-import ksnd.hiraganaconverter.viewmodel.SettingsViewModelImpl
 
 @Composable
 fun SettingDialog(

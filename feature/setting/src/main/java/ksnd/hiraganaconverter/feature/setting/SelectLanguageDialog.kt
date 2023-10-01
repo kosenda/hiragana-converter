@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view.dialog
+package ksnd.hiraganaconverter.feature.setting
 
 import androidx.activity.compose.BackHandler
 import androidx.appcompat.app.AppCompatDelegate

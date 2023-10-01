@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view.content
+package ksnd.hiraganaconverter.feature.setting
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize

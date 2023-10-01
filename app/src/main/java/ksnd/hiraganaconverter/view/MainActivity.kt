@@ -42,7 +42,6 @@ import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.data.inappupdate.InAppUpdateState
 import ksnd.hiraganaconverter.feature.converter.ConverterScreen
-import ksnd.hiraganaconverter.view.content.InAppUpdateDownloadingContent
 import ksnd.hiraganaconverter.viewmodel.MainViewModel
 import timber.log.Timber
 

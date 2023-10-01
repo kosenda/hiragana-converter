@@ -28,7 +28,7 @@ import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.feature.history.ConvertHistoryDialog
 import ksnd.hiraganaconverter.feature.info.InfoDialog
-import ksnd.hiraganaconverter.view.dialog.SettingDialog
+import ksnd.hiraganaconverter.feature.setting.SettingDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
