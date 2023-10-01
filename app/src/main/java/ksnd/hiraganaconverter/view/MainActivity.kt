@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 Column {
-                    InAppUpdateDownloadingContent(
+                    InAppUpdateDownloadingCard(
                         text = this@MainActivity.getString(R.string.in_app_update_downloading_snackbar_title, downloadPercentage),
                         isVisible = inAppUpdateState is InAppUpdateState.Downloading,
                     )
