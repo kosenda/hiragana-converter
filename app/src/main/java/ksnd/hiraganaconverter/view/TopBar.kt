@@ -21,12 +21,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.GooCreditImage
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.feature.history.ConvertHistoryDialog
-import ksnd.hiraganaconverter.view.dialog.InfoDialog
+import ksnd.hiraganaconverter.feature.info.InfoDialog
 import ksnd.hiraganaconverter.view.dialog.SettingDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,6 +47,7 @@ fun TopBar(
     }
     if (isShowInfoDialog) {
         InfoDialog(
+            viewModel = hiltViewModel(),
             onCloseClick = { isShowInfoDialog = false },
         )
     }

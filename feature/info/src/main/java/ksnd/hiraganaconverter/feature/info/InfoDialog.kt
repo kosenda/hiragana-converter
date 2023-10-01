@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view.dialog
+package ksnd.hiraganaconverter.feature.info
 
 import android.content.Intent
 import androidx.activity.compose.BackHandler
@@ -48,7 +48,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.ContextCompat
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
-import ksnd.hiraganaconverter.BuildConfig
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.GooCreditImage
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomButton
@@ -59,21 +58,26 @@ import ksnd.hiraganaconverter.core.ui.parts.dialog.MovesToSiteDialog
 import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.core.ui.theme.urlColor
-import ksnd.hiraganaconverter.view.content.PrivacyPolicyContent
 
 @Composable
-fun InfoDialog(onCloseClick: () -> Unit) {
+fun InfoDialog(
+    viewModel: InfoViewModel,
+    onCloseClick: () -> Unit,
+) {
     Dialog(
         onDismissRequest = { },
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         BackHandler(onBack = onCloseClick)
-        InfoDialogContent(onCloseClick = onCloseClick)
+        InfoDialogContent(versionName = viewModel.appConfig.versionName, onCloseClick = onCloseClick)
     }
 }
 
 @Composable
-private fun InfoDialogContent(onCloseClick: () -> Unit) {
+private fun InfoDialogContent(
+    versionName: String,
+    onCloseClick: () -> Unit,
+) {
     val urlHandler = LocalUriHandler.current
     val context = LocalContext.current
     var isShowMovesToAppSiteDialog by remember { mutableStateOf(false) }
@@ -123,7 +127,7 @@ private fun InfoDialogContent(onCloseClick: () -> Unit) {
                     .verticalScroll(rememberScrollState())
                     .padding(horizontal = 16.dp),
             ) {
-                AppInfoContent(onURLClick = { isShowMovesToAppSiteDialog = true })
+                AppInfoContent(versionName = versionName, onURLClick = { isShowMovesToAppSiteDialog = true })
                 DeveloperInfoContent()
                 APIInfoContent(onURLClick = { isShowMovesToApiSiteDialog = true })
                 LicensesContent()
@@ -135,7 +139,7 @@ private fun InfoDialogContent(onCloseClick: () -> Unit) {
 }
 
 @Composable
-private fun AppInfoContent(onURLClick: () -> Unit) {
+private fun AppInfoContent(versionName: String, onURLClick: () -> Unit) {
     TitleCard(
         text = stringResource(id = R.string.app_info_title),
         painter = painterResource(id = R.drawable.ic_outline_info_24),
@@ -171,7 +175,7 @@ private fun AppInfoContent(onURLClick: () -> Unit) {
                     text = stringResource(id = R.string.version_title),
                     modifier = Modifier.padding(bottom = 4.dp, top = 16.dp),
                 )
-                BodyMedium(text = BuildConfig.VERSION_NAME)
+                BodyMedium(text = versionName)
 
                 ItemTitle(
                     text = stringResource(id = R.string.google_play),
@@ -343,7 +347,10 @@ private fun UrlText(url: String, onURLClick: () -> Unit) {
 private fun PreviewInfoDialogContent() {
     HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(modifier = Modifier.fillMaxSize()) {
-            InfoDialogContent(onCloseClick = {})
+            InfoDialogContent(
+                versionName = "1.0.0",
+                onCloseClick = {},
+            )
         }
     }
 }
