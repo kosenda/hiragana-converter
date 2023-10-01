@@ -64,6 +64,7 @@ android {
 dependencies {
     implementation(project(":feature:converter"))
     implementation(project(":feature:history"))
+    implementation(project(":feature:info"))
     implementation(project(":core:model"))
     implementation(project(":core:resource"))
     implementation(project(":core:domain"))
@@ -125,9 +126,6 @@ dependencies {
 
     // Timber
     implementation(libs.timber)
-
-    // OSS Licenses
-    implementation(libs.play.oss.licenses)
 
     // Splash Screen
     implementation(libs.androidx.core.splashscreen)

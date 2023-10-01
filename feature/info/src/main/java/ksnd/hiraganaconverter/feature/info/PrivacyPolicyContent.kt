@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view.content
+package ksnd.hiraganaconverter.feature.info
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image

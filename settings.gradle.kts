@@ -24,6 +24,7 @@ rootProject.name = "hiraganaconverter"
 include(":app")
 include(":feature:converter")
 include(":feature:history")
+include(":feature:info")
 include(":core:model")
 include(":core:resource")
 include(":core:domain")
