@@ -55,7 +55,7 @@ class MainActivityViewModelTest {
             override fun enableInAppUpdate(): Flow<Boolean> = flowOf(false)
             override suspend fun updateTheme(newTheme: Theme) {}
             override suspend fun updateFontType(fontType: FontType) {}
-            override suspend fun checkIsExceedingMaxLimit(): Boolean  = false
+            override suspend fun checkIsExceedingMaxLimit(): Boolean = false
             override suspend fun updateUseInAppUpdate(isUsed: Boolean) {}
             suspend fun emit(theme: Theme) { this.theme.emit(theme) }
             suspend fun emit(fontType: FontType) { this.fontType.emit(fontType) }
