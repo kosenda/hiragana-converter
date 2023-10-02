@@ -42,13 +42,13 @@ import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.data.inappupdate.InAppUpdateState
 import ksnd.hiraganaconverter.feature.converter.ConverterScreen
-import ksnd.hiraganaconverter.viewmodel.MainViewModel
+import ksnd.hiraganaconverter.viewmodel.MainActivityViewModel
 import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val mainViewModel: MainViewModel by viewModels()
+    private val mainViewModel: MainActivityViewModel by viewModels()
     private val updateFlowResultLauncher: ActivityResultLauncher<IntentSenderRequest> = registerForActivityResult(
         ActivityResultContracts.StartIntentSenderForResult(),
     ) { result ->
