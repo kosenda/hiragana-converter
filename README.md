@@ -49,8 +49,9 @@ https://labs.goo.ne.jp/apiusage/
 |Robolectric|Unit Test Framework|
 |Room|Database|
 |Secrets gradle plugin|Reading API keys from `local.properties`|
-|Truth|Assertions used in testing|
 |Timber|Log output library|
+|Truth|Assertions used in testing|
+|Turbine|testing library for kotlinx.coroutines Flow|
 
 ## Animation ( Lottie )
 - https://lottiefiles.com/animations/loading-Y3Pt36IpkJ
