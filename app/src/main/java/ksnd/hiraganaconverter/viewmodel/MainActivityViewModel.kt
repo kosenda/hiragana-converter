@@ -10,25 +10,32 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
 import ksnd.hiraganaconverter.core.domain.inappupdate.InAppUpdateManager
 import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
-import ksnd.hiraganaconverter.core.model.ui.FontType
-import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.data.inappupdate.InAppUpdateState
+import ksnd.hiraganaconverter.view.MainActivityUiState
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class MainActivityViewModel @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
     private val inAppUpdateManager: InAppUpdateManager,
 ) : ViewModel(), InstallStateUpdatedListener {
     private val _inAppUpdateState: MutableStateFlow<InAppUpdateState> = MutableStateFlow(InAppUpdateState.Requesting)
     val inAppUpdateState: Flow<InAppUpdateState> = _inAppUpdateState.asStateFlow()
 
-    val theme: Flow<Theme> = dataStoreRepository.selectedTheme()
-    val fontType: Flow<FontType> = dataStoreRepository.selectedFontType()
+    val uiState = combine(
+        dataStoreRepository.selectedTheme(),
+        dataStoreRepository.selectedFontType(),
+    ) { theme, fontType ->
+        MainActivityUiState(
+            theme = theme,
+            fontType = fontType,
+        )
+    }
 
     init {
         inAppUpdateManager.registerListener(this)
