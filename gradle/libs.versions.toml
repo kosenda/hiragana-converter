@@ -36,15 +36,13 @@ room = "2.5.2"
 secrets = "2.0.1"
 timber = "5.0.1"
 truth = "1.1.5"
+turbine = "1.0.0"
 mockk = "1.13.8"
 roborazzi = "1.5.0"
 
 # ** I'm using it, so no deletions allowed. **
 androidxComposeCompiler = "1.5.0"
 jacoco = "0.8.9"
-junit = "1.1.5"
-espresso-core = "3.5.1"
-material = "1.9.0"
 
 [libraries]
 # Accompanist
@@ -131,12 +129,12 @@ app-update-ktx = { group = "com.google.android.play", name = "app-update-ktx", v
 okhttp3 = { group = "com.squareup.okhttp3", name = "okhttp", version = "okhttp3" }
 okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp3" }
 
+# Turbine
+turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
+
 # Plugin
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
-androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

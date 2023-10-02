@@ -20,6 +20,9 @@ dependencies {
     // Truth
     api(libs.truth)
 
+    // Turbine
+    api(libs.turbine)
+
     // Mockk
     api(libs.mockk)
 
