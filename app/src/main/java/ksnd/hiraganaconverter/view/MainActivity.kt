@@ -36,7 +36,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import ksnd.hiraganaconverter.core.model.ui.FontType
 import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
@@ -77,15 +76,14 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
 
         setContent {
-            val theme by mainViewModel.theme.collectAsState(initial = Theme.AUTO)
-            val fontType by mainViewModel.fontType.collectAsState(initial = FontType.YUSEI_MAGIC)
+            val uiState by mainViewModel.uiState.collectAsState(initial = MainActivityUiState())
             val inAppUpdateState by mainViewModel.inAppUpdateState.collectAsState(initial = InAppUpdateState.Requesting)
             val snackbarHostState = remember { SnackbarHostState() }
 
             var topBarHeight by remember { mutableIntStateOf(0) }
             val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
-            val isDarkTheme = when (theme) {
+            val isDarkTheme = when (uiState.theme) {
                 Theme.NIGHT -> true
                 Theme.DAY -> false
                 else -> isSystemInDarkTheme()
@@ -126,7 +124,7 @@ class MainActivity : AppCompatActivity() {
 
             HiraganaConverterTheme(
                 isDarkTheme = isDarkTheme,
-                fontType = fontType,
+                fontType = uiState.fontType,
             ) {
                 // Because the state changes before the animation ends
                 val downloadPercentage = if (inAppUpdateState is InAppUpdateState.Downloading) {
