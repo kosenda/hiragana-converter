@@ -30,7 +30,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.hilt.navigation.compose.hiltViewModel
 import ksnd.hiraganaconverter.core.model.ui.FontType
 import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.resource.R
@@ -43,30 +42,35 @@ import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
 @Composable
 fun SettingDialog(
-    settingsViewModel: SettingsViewModelImpl = hiltViewModel(),
+    viewModel: SettingsViewModel,
     onCloseClick: () -> Unit,
 ) {
+    val uiState by viewModel.uiState.collectAsState(initial = SettingsUiState())
+
     Dialog(
         onDismissRequest = { },
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         BackHandler(onBack = onCloseClick)
         SettingDialogContent(
+            uiState = uiState,
+            updateTheme = viewModel::updateTheme,
+            updateFontType = viewModel::updateFontType,
+            updateUseInAppUpdate = viewModel::updateUseInAppUpdate,
             onCloseClick = onCloseClick,
-            viewModel = settingsViewModel,
         )
     }
 }
 
 @Composable
 private fun SettingDialogContent(
-    viewModel: SettingsViewModel,
+    uiState: SettingsUiState,
+    updateTheme: (Theme) -> Unit,
+    updateFontType: (FontType) -> Unit,
+    updateUseInAppUpdate: (Boolean) -> Unit,
     onCloseClick: () -> Unit,
 ) {
     val isShowSelectLanguageDialog = rememberSaveable { mutableStateOf(false) }
-    val theme by viewModel.theme.collectAsState()
-    val fontType by viewModel.fontType.collectAsState()
-    val enableInAppUpdate by viewModel.enableInAppUpdate.collectAsState(true)
 
     if (isShowSelectLanguageDialog.value) {
         SelectLanguageDialog(
@@ -94,8 +98,8 @@ private fun SettingDialogContent(
                     .padding(horizontal = 16.dp),
             ) {
                 SettingThemeContent(
-                    onRadioButtonClick = viewModel::updateTheme,
-                    isSelectedTheme = theme,
+                    onRadioButtonClick = updateTheme,
+                    isSelectedTheme = uiState.theme,
                 )
                 SettingLanguageContent(
                     onClick = {
@@ -103,12 +107,12 @@ private fun SettingDialogContent(
                     },
                 )
                 SettingFontContent(
-                    selectFontType = fontType,
-                    onClickFontType = { fontType -> viewModel.updateFontType(newFontType = fontType) },
+                    selectFontType = uiState.fontType,
+                    onClickFontType = { fontType -> updateFontType(fontType) },
                 )
                 SettingInAppUpdateContent(
-                    enableInAppUpdate = enableInAppUpdate,
-                    onCheckedChange = viewModel::updateUseInAppUpdate,
+                    enableInAppUpdate = uiState.enableInAppUpdate,
+                    onCheckedChange = updateUseInAppUpdate,
                 )
                 Spacer(modifier = Modifier.height(48.dp))
             }
@@ -208,8 +212,11 @@ fun PreviewSettingDialogContent() {
             modifier = Modifier.fillMaxSize(),
         ) {
             SettingDialogContent(
+                uiState = SettingsUiState(),
+                updateTheme = {},
+                updateFontType = {},
+                updateUseInAppUpdate = {},
                 onCloseClick = {},
-                viewModel = PreviewSettingViewModel(),
             )
         }
     }

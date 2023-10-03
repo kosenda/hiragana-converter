@@ -42,6 +42,7 @@ fun TopBar(
 
     if (isShowSettingDialog) {
         SettingDialog(
+            viewModel = hiltViewModel(),
             onCloseClick = { isShowSettingDialog = false },
         )
     }
