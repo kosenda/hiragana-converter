@@ -54,6 +54,7 @@ fun TopBar(
     }
     if (isShowConvertHistoryDialog) {
         ConvertHistoryDialog(
+            viewModel = hiltViewModel(),
             onCloseClick = { isShowConvertHistoryDialog = false },
         )
     }

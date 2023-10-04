@@ -12,12 +12,12 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ConvertHistoryViewModelImplTest {
+class ConvertHistoryViewModelTest {
     @get: Rule
     val mainDispatcherRule = MainDispatcherRule()
 
     private val convertHistoryRepository = mockk<ConvertHistoryRepository>(relaxed = true)
-    private val viewModel = ConvertHistoryViewModelImpl(
+    private val viewModel = ConvertHistoryViewModel(
         convertHistoryRepository = convertHistoryRepository,
         ioDispatcher = mainDispatcherRule.testDispatcher,
     )
