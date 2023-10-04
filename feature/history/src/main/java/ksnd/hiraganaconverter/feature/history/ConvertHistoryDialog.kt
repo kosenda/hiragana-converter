@@ -31,7 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import androidx.hilt.navigation.compose.hiltViewModel
+import ksnd.hiraganaconverter.core.model.ConvertHistoryData
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.button.DeleteButton
 import ksnd.hiraganaconverter.core.ui.parts.card.ConvertHistoryCard
@@ -42,27 +42,35 @@ import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 @Composable
 fun ConvertHistoryDialog(
     onCloseClick: () -> Unit,
-    convertHistoryViewModel: ConvertHistoryViewModelImpl = hiltViewModel(),
+    viewModel: ConvertHistoryViewModel,
 ) {
+    val uiState by viewModel.uiState.collectAsState(ConvertHistoryUiState())
+
     Dialog(
         onDismissRequest = { },
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         BackHandler(onBack = onCloseClick)
         ConvertHistoryDialogContent(
+            state = uiState,
             onCloseClick = onCloseClick,
-            viewModel = convertHistoryViewModel,
+            closeConvertHistoryDetailDialog = viewModel::closeConvertHistoryDetailDialog,
+            deleteAllConvertHistory = viewModel::deleteAllConvertHistory,
+            showConvertHistoryDetailDialog = viewModel::showConvertHistoryDetailDialog,
+            deleteConvertHistory = viewModel::deleteConvertHistory,
         )
     }
 }
 
 @Composable
 private fun ConvertHistoryDialogContent(
+    state: ConvertHistoryUiState,
     onCloseClick: () -> Unit,
-    viewModel: ConvertHistoryViewModel,
+    closeConvertHistoryDetailDialog: () -> Unit,
+    deleteAllConvertHistory: () -> Unit,
+    showConvertHistoryDetailDialog: (ConvertHistoryData) -> Unit,
+    deleteConvertHistory: (ConvertHistoryData) -> Unit,
 ) {
-    val convertHistoryUiState by viewModel.uiState.collectAsState()
-
     Surface(
         modifier = Modifier
             .fillMaxHeight(0.95f)
@@ -70,10 +78,10 @@ private fun ConvertHistoryDialogContent(
             .border(width = 4.dp, color = MaterialTheme.colorScheme.surfaceVariant, shape = RoundedCornerShape(16.dp))
             .clip(RoundedCornerShape(16.dp)),
     ) {
-        if (convertHistoryUiState.isShowDetailDialog) {
-            convertHistoryUiState.usedHistoryDataByDetail?.let {
+        if (state.isShowDetailDialog) {
+            state.usedHistoryDataByDetail?.let {
                 ConvertHistoryDetailDialog(
-                    onCloseClick = viewModel::closeConvertHistoryDetailDialog,
+                    onCloseClick = closeConvertHistoryDetailDialog,
                     historyData = it,
                 )
             }
@@ -85,30 +93,26 @@ private fun ConvertHistoryDialogContent(
                     .padding(horizontal = 16.dp)
                     .padding(top = 16.dp),
                 leftContent = {
-                    if (convertHistoryUiState.convertHistories.isNotEmpty()) {
-                        DeleteButton(onClick = viewModel::deleteAllConvertHistory)
+                    if (state.convertHistories.isNotEmpty()) {
+                        DeleteButton(onClick = deleteAllConvertHistory)
                     }
                 },
                 onCloseClick = onCloseClick,
             )
-            if (convertHistoryUiState.convertHistories.isEmpty()) {
+            if (state.convertHistories.isEmpty()) {
                 EmptyHistoryImage()
             } else {
                 LazyColumn {
                     items(
-                        items = convertHistoryUiState.convertHistories,
+                        items = state.convertHistories,
                         key = { history -> history.id },
                     ) { history ->
                         ConvertHistoryCard(
                             modifier = Modifier.padding(horizontal = 16.dp),
                             beforeText = history.before,
                             time = history.time,
-                            onClick = {
-                                viewModel.showConvertHistoryDetailDialog(history)
-                            },
-                            onDeleteClick = {
-                                viewModel.deleteConvertHistory(history)
-                            },
+                            onClick = { showConvertHistoryDetailDialog(history) },
+                            onDeleteClick = { deleteConvertHistory(history) },
                         )
                     }
                     item { Spacer(modifier = Modifier.height(16.dp)) }
@@ -154,8 +158,12 @@ private fun PreviewConvertHistoryDialogContent() {
             modifier = Modifier.fillMaxSize(),
         ) {
             ConvertHistoryDialogContent(
+                state = ConvertHistoryUiState(convertHistories = MockConvertHistories().data),
                 onCloseClick = {},
-                viewModel = PreviewConvertHistoryViewModel(),
+                closeConvertHistoryDetailDialog = {},
+                deleteAllConvertHistory = {},
+                showConvertHistoryDetailDialog = {},
+                deleteConvertHistory = {},
             )
         }
     }
@@ -170,8 +178,12 @@ private fun PreviewConvertHistoryDialogContent_NoData() {
             modifier = Modifier.fillMaxSize(),
         ) {
             ConvertHistoryDialogContent(
+                state = ConvertHistoryUiState(),
                 onCloseClick = {},
-                viewModel = PreviewConvertHistoryViewModel(isNoData = true),
+                closeConvertHistoryDetailDialog = {},
+                deleteAllConvertHistory = {},
+                showConvertHistoryDetailDialog = {},
+                deleteConvertHistory = {},
             )
         }
     }
