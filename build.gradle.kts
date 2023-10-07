@@ -47,7 +47,7 @@ tasks.create<JacocoReport>("mergeJacoco") {
                         "**/*Dialog*.*",
                         "**/*Drawer*.*",
                         "**/*Navigation*.*",
-                        "**/*MainActivity*.*",
+                        "**/*MainActivity.*",
                         "**/*ConvertTextUseCaseError*.*",
                         "**/*ResponseData*.*",
                         "**/*RequestData*.*",
