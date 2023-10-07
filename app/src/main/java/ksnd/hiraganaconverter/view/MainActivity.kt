@@ -141,7 +141,7 @@ class MainActivity : AppCompatActivity() {
                     ConverterScreen(
                         modifier = Modifier.weight(1f),
                         snackbarHostState = snackbarHostState,
-                        convertViewModel = hiltViewModel(),
+                        viewModel = hiltViewModel(),
                         topBar = {
                             TopBar(
                                 modifier = Modifier.onSizeChanged { topBarHeight = it.height },

@@ -55,6 +55,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.core.model.ui.ConvertErrorType
+import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
 import ksnd.hiraganaconverter.core.resource.LIMIT_CONVERT_COUNT
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.button.ConvertButton
@@ -69,18 +70,26 @@ import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 fun ConverterScreen(
     modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState,
-    convertViewModel: ConvertViewModelImpl,
+    viewModel: ConvertViewModelImpl,
     topBar: @Composable () -> Unit,
     topBarHeight: Int,
     scrollBehavior: TopAppBarScrollBehavior,
 ) {
+    val uiState by viewModel.uiState.collectAsState(ConvertUiState())
+
     ConverterScreenContent(
         modifier = modifier,
-        viewModel = convertViewModel,
+        uiState = uiState,
         snackbarHostState = snackbarHostState,
         topBar = topBar,
         topBarHeight = topBarHeight,
         scrollBehavior = scrollBehavior,
+        changeHiraKanaType = viewModel::changeHiraKanaType,
+        clearAllText = viewModel::clearAllText,
+        convert = viewModel::convert,
+        clearConvertErrorType = viewModel::clearConvertErrorType,
+        updateInputText = viewModel::updateInputText,
+        updateOutputText = viewModel::updateOutputText,
     )
 }
 
@@ -88,15 +97,20 @@ fun ConverterScreen(
 @Composable
 fun ConverterScreenContent(
     modifier: Modifier = Modifier,
-    viewModel: ConvertViewModel,
+    uiState: ConvertUiState,
     snackbarHostState: SnackbarHostState,
     topBar: @Composable () -> Unit,
     topBarHeight: Int,
     scrollBehavior: TopAppBarScrollBehavior,
+    changeHiraKanaType: (HiraKanaType) -> Unit,
+    clearAllText: () -> Unit,
+    convert: () -> Unit,
+    clearConvertErrorType: () -> Unit,
+    updateInputText: (String) -> Unit,
+    updateOutputText: (String) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
-    val convertUiState by viewModel.uiState.collectAsState()
     val density = LocalDensity.current.density
     val layoutDirection = LocalLayoutDirection.current
     val scrollState = rememberScrollState()
@@ -145,27 +159,27 @@ fun ConverterScreenContent(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Row(modifier = Modifier.weight(1f)) {
-                    ConversionTypeCard(onSelectedChange = viewModel::changeHiraKanaType)
+                    ConversionTypeCard(onSelectedChange = changeHiraKanaType)
                 }
                 CustomButtonWithBackground(
                     id = R.drawable.ic_reset,
                     convertDescription = "reset",
                     containerColor = MaterialTheme.colorScheme.surfaceVariant,
                     contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    onClick = viewModel::clearAllText,
+                    onClick = clearAllText,
                 )
                 ConvertButton(
                     modifier = Modifier.padding(start = 4.dp),
                     id = R.drawable.ic_baseline_compare_arrows_24,
-                    isConverting = convertUiState.isConverting,
+                    isConverting = uiState.isConverting,
                     convertDescription = stringResource(id = R.string.conversion),
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    onClick = viewModel::convert,
+                    onClick = convert,
                 )
             }
 
-            convertUiState.convertErrorType?.let {
+            uiState.convertErrorType?.let {
                 ErrorCard(
                     errorText = when (it) {
                         ConvertErrorType.TOO_MANY_CHARACTER -> stringResource(id = R.string.request_too_large)
@@ -178,16 +192,16 @@ fun ConverterScreenContent(
                             LIMIT_CONVERT_COUNT,
                         )
                     },
-                    onClick = viewModel::clearConvertErrorType,
+                    onClick = clearConvertErrorType,
                 )
             }
 
             BeforeOrAfterTextField(
                 isBefore = true,
-                text = convertUiState.inputText,
+                text = uiState.inputText,
                 clipboardManager = clipboardManager,
                 focusManager = focusManager,
-                onValueChange = viewModel::updateInputText,
+                onValueChange = updateInputText,
             )
 
             HorizontalDivider(
@@ -198,10 +212,10 @@ fun ConverterScreenContent(
 
             BeforeOrAfterTextField(
                 isBefore = false,
-                text = convertUiState.outputText,
+                text = uiState.outputText,
                 clipboardManager = clipboardManager,
                 focusManager = focusManager,
-                onValueChange = viewModel::updateOutputText,
+                onValueChange = updateOutputText,
             )
 
             Spacer(modifier = Modifier.height(120.dp))
@@ -286,11 +300,19 @@ private fun BeforeOrAfterTextField(
 private fun PreviewConverterScreenContent() {
     HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         ConverterScreenContent(
-            viewModel = PreviewConvertViewModel(),
+            uiState = ConvertUiState(
+                convertErrorType = ConvertErrorType.CONVERSION_FAILED,
+            ),
             snackbarHostState = remember { SnackbarHostState() },
             topBar = { },
             topBarHeight = 0,
-            scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+            scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState()),
+            changeHiraKanaType = {},
+            clearAllText = {},
+            convert = {},
+            clearConvertErrorType = {},
+            updateInputText = {},
+            updateOutputText = {},
         )
     }
 }
