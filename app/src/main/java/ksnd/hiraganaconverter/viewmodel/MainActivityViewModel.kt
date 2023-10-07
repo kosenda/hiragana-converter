@@ -3,15 +3,18 @@ package ksnd.hiraganaconverter.viewmodel
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.android.play.core.install.InstallState
 import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.InstallStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.stateIn
 import ksnd.hiraganaconverter.core.domain.inappupdate.InAppUpdateManager
 import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
 import ksnd.hiraganaconverter.data.inappupdate.InAppUpdateState
@@ -35,7 +38,11 @@ class MainActivityViewModel @Inject constructor(
             theme = theme,
             fontType = fontType,
         )
-    }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = MainActivityUiState(),
+    )
 
     init {
         inAppUpdateManager.registerListener(this)
