@@ -15,10 +15,12 @@ import ksnd.hiraganaconverter.core.model.ui.FontType
 import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.testing.MainDispatcherRule
 import ksnd.hiraganaconverter.view.MainActivityUiState
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 class MainActivityViewModelTest {
+
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
@@ -26,10 +28,20 @@ class MainActivityViewModelTest {
 
     private val inAppUpdateManager = mockk<InAppUpdateManager>(relaxed = true)
 
-    private val viewModel = MainActivityViewModel(
-        dataStoreRepository = dataStoreRepository,
-        inAppUpdateManager = inAppUpdateManager,
-    )
+    private lateinit var viewModel: MainActivityViewModel
+
+    @Before
+    fun setUp() {
+        viewModel = MainActivityViewModel(
+            dataStoreRepository = dataStoreRepository,
+            inAppUpdateManager = inAppUpdateManager,
+        )
+    }
+
+    @Test
+    fun viewModel_init_calledRegisterListener() {
+        verify(exactly = 1) { inAppUpdateManager.registerListener(viewModel) }
+    }
 
     @Test
     fun mainActivityViewModel_collect_changeUiState() = runTest {
