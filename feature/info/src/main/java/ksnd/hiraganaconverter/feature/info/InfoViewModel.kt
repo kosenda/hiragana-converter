@@ -9,6 +9,6 @@ import javax.inject.Inject
 class InfoViewModel @Inject constructor(
     appConfig: AppConfig,
 ) : ViewModel() {
-    var appConfig = appConfig
+    var versionName = appConfig.versionName
         private set
 }

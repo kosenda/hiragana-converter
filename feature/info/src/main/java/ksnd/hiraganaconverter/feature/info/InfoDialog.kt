@@ -69,7 +69,7 @@ fun InfoDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         BackHandler(onBack = onCloseClick)
-        InfoDialogContent(versionName = viewModel.appConfig.versionName, onCloseClick = onCloseClick)
+        InfoDialogContent(versionName = viewModel.versionName, onCloseClick = onCloseClick)
     }
 }
 
