@@ -1,12 +1,17 @@
 package ksnd.hiraganaconverter.feature.setting
 
+import app.cash.turbine.test
+import com.google.common.truth.Truth.assertThat
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
 import ksnd.hiraganaconverter.core.model.ui.FontType
 import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.testing.MainDispatcherRule
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -18,13 +23,32 @@ class SettingsViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private val dataStoreRepository = mockk<DataStoreRepository>(relaxed = true)
-    private val viewModel = SettingsViewModel(
-        dataStoreRepository = dataStoreRepository,
-        ioDispatcher = mainDispatcherRule.testDispatcher,
-    )
+    private lateinit var viewModel : SettingsViewModel
+
+    @Before
+    fun setUp() {
+        // Test with different default values for UiState and initial values for the test.
+        assertThat(FIRST_SAVED_THEME).isNotEqualTo(SettingsUiState().theme)
+        assertThat(FIRST_SAVED_FONT_TYPE).isNotEqualTo(SettingsUiState().fontType)
+        assertThat(FIRST_SAVED_ENABLE_IN_APP_UPDATE).isNotEqualTo(SettingsUiState().enableInAppUpdate)
+
+        every { dataStoreRepository.selectedTheme() } returns flowOf(FIRST_SAVED_THEME)
+        every { dataStoreRepository.selectedFontType() } returns flowOf(FIRST_SAVED_FONT_TYPE)
+        every { dataStoreRepository.enableInAppUpdate() } returns flowOf(FIRST_SAVED_ENABLE_IN_APP_UPDATE)
+        viewModel = SettingsViewModel(
+            dataStoreRepository = dataStoreRepository,
+            ioDispatcher = mainDispatcherRule.testDispatcher,
+        )
+    }
 
     @Test
-    fun uiState_isCalledCombine() = runTest {
+    fun uiState_initial_settingUiState() = runTest {
+        viewModel.uiState.test {
+            val uiState = awaitItem()
+            assertThat(uiState.theme).isEqualTo(FIRST_SAVED_THEME)
+            assertThat(uiState.fontType).isEqualTo(FIRST_SAVED_FONT_TYPE)
+            assertThat(uiState.enableInAppUpdate).isEqualTo(FIRST_SAVED_ENABLE_IN_APP_UPDATE)
+        }
         coVerify(exactly = 1) { dataStoreRepository.selectedTheme() }
         coVerify(exactly = 1) { dataStoreRepository.selectedFontType() }
         coVerify(exactly = 1) { dataStoreRepository.enableInAppUpdate() }
@@ -39,15 +63,21 @@ class SettingsViewModelTest {
 
     @Test
     fun updateFontType_newFontType_isCalledUpdateFontType() = runTest {
-        val newFontType = FontType.HACHI_MARU_POP
+        val newFontType = FontType.DELA_GOTHIC_ONE
         viewModel.updateFontType(newFontType)
         coVerify(exactly = 1) { dataStoreRepository.updateFontType(newFontType) }
     }
 
     @Test
-    fun updateUseInAppUpdate_false_isCaledUpdateUseInAppUpdate() = runTest {
+    fun updateUseInAppUpdate_false_isCalledUpdateUseInAppUpdate() = runTest {
         val isEnabled = false
         viewModel.updateUseInAppUpdate(isEnabled)
         coVerify(exactly = 1) { dataStoreRepository.updateUseInAppUpdate(isEnabled) }
+    }
+
+    companion object {
+        private val FIRST_SAVED_THEME = Theme.NIGHT
+        private val FIRST_SAVED_FONT_TYPE = FontType.HACHI_MARU_POP
+        private const val FIRST_SAVED_ENABLE_IN_APP_UPDATE = true
     }
 }
