@@ -15,8 +15,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import com.github.takahirom.roborazzi.captureRoboImage
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
+import ksnd.hiraganaconverter.feature.converter.ConvertUiState
 import ksnd.hiraganaconverter.feature.converter.ConverterScreenContent
-import ksnd.hiraganaconverter.feature.converter.PreviewConvertViewModel
 import ksnd.hiraganaconverter.view.MainActivity
 import ksnd.hiraganaconverter.view.TopBar
 import org.junit.Rule
@@ -40,7 +40,7 @@ class ConverterScreenTest {
             val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
             HiraganaConverterTheme(isDarkTheme = false) {
                 ConverterScreenContent(
-                    viewModel = PreviewConvertViewModel(),
+                    uiState = ConvertUiState(),
                     snackbarHostState = SnackbarHostState(),
                     topBar = {
                         TopBar(
@@ -50,6 +50,12 @@ class ConverterScreenTest {
                     },
                     topBarHeight = topBarHeight,
                     scrollBehavior = scrollBehavior,
+                    changeHiraKanaType = {},
+                    clearAllText = {},
+                    convert = {},
+                    clearConvertErrorType = {},
+                    updateInputText = {},
+                    updateOutputText = {},
                 )
             }
         }
@@ -62,7 +68,7 @@ class ConverterScreenTest {
             val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
             HiraganaConverterTheme(isDarkTheme = true) {
                 ConverterScreenContent(
-                    viewModel = PreviewConvertViewModel(),
+                    uiState = ConvertUiState(),
                     snackbarHostState = SnackbarHostState(),
                     topBar = {
                         TopBar(
@@ -72,6 +78,12 @@ class ConverterScreenTest {
                     },
                     topBarHeight = topBarHeight,
                     scrollBehavior = scrollBehavior,
+                    changeHiraKanaType = {},
+                    clearAllText = {},
+                    convert = {},
+                    clearConvertErrorType = {},
+                    updateInputText = {},
+                    updateOutputText = {},
                 )
             }
         }
