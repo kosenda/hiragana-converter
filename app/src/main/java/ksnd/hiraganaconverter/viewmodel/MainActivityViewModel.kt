@@ -31,8 +31,8 @@ class MainActivityViewModel @Inject constructor(
     val inAppUpdateState: Flow<InAppUpdateState> = _inAppUpdateState.asStateFlow()
 
     val uiState = combine(
-        dataStoreRepository.selectedTheme(),
-        dataStoreRepository.selectedFontType(),
+        dataStoreRepository.theme(),
+        dataStoreRepository.fontType(),
     ) { theme, fontType ->
         MainActivityUiState(
             theme = theme,

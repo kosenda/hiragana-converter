@@ -54,16 +54,16 @@ class MainActivityViewModelTest {
             dataStoreRepository.emit(nextFontType)
             assertThat(awaitItem().fontType).isEqualTo(nextFontType)
         }
-        verify(exactly = 1) { dataStoreRepository.selectedTheme() }
-        verify(exactly = 1) { dataStoreRepository.selectedFontType() }
+        verify(exactly = 1) { dataStoreRepository.theme() }
+        verify(exactly = 1) { dataStoreRepository.fontType() }
     }
 
     companion object {
         class FakeDataStoreRepository : DataStoreRepository {
             private val theme = MutableStateFlow(MainActivityUiState().theme)
             private val fontType = MutableStateFlow(MainActivityUiState().fontType)
-            override fun selectedTheme(): Flow<Theme> = theme
-            override fun selectedFontType(): Flow<FontType> = fontType
+            override fun theme(): Flow<Theme> = theme
+            override fun fontType(): Flow<FontType> = fontType
             override fun enableInAppUpdate(): Flow<Boolean> = flowOf(false)
             override suspend fun updateTheme(newTheme: Theme) {}
             override suspend fun updateFontType(fontType: FontType) {}

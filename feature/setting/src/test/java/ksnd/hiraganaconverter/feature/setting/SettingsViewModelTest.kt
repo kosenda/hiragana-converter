@@ -32,8 +32,8 @@ class SettingsViewModelTest {
         assertThat(FIRST_SAVED_FONT_TYPE).isNotEqualTo(SettingsUiState().fontType)
         assertThat(FIRST_SAVED_ENABLE_IN_APP_UPDATE).isNotEqualTo(SettingsUiState().enableInAppUpdate)
 
-        every { dataStoreRepository.selectedTheme() } returns flowOf(FIRST_SAVED_THEME)
-        every { dataStoreRepository.selectedFontType() } returns flowOf(FIRST_SAVED_FONT_TYPE)
+        every { dataStoreRepository.theme() } returns flowOf(FIRST_SAVED_THEME)
+        every { dataStoreRepository.fontType() } returns flowOf(FIRST_SAVED_FONT_TYPE)
         every { dataStoreRepository.enableInAppUpdate() } returns flowOf(FIRST_SAVED_ENABLE_IN_APP_UPDATE)
         viewModel = SettingsViewModel(
             dataStoreRepository = dataStoreRepository,
@@ -49,8 +49,8 @@ class SettingsViewModelTest {
             assertThat(uiState.fontType).isEqualTo(FIRST_SAVED_FONT_TYPE)
             assertThat(uiState.enableInAppUpdate).isEqualTo(FIRST_SAVED_ENABLE_IN_APP_UPDATE)
         }
-        coVerify(exactly = 1) { dataStoreRepository.selectedTheme() }
-        coVerify(exactly = 1) { dataStoreRepository.selectedFontType() }
+        coVerify(exactly = 1) { dataStoreRepository.theme() }
+        coVerify(exactly = 1) { dataStoreRepository.fontType() }
         coVerify(exactly = 1) { dataStoreRepository.enableInAppUpdate() }
     }
 

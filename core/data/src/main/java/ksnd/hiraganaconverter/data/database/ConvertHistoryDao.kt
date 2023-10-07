@@ -15,7 +15,7 @@ interface ConvertHistoryDao {
 
     // ■ READ
     @Query("select * from convert_history")
-    fun getAllConvertHistory(): Flow<List<ConvertHistoryData>>
+    fun observeAllConvertHistory(): Flow<List<ConvertHistoryData>>
 
     // ■ DELETE
     @Query("delete from convert_history")

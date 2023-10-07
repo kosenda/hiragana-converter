@@ -25,7 +25,7 @@ class ConvertHistoryViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            convertHistoryRepository.getAllConvertHistory().collect { convertHistories ->
+            convertHistoryRepository.observeAllConvertHistory().collect { convertHistories ->
                 _uiState.update { it.copy(convertHistories = convertHistories.sortedByDescending { data -> data.id }) }
             }
         }

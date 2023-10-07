@@ -22,8 +22,8 @@ class ConvertHistoryRepositoryImpl @Inject constructor(
         )
     }
 
-    override fun getAllConvertHistory(): Flow<List<ConvertHistoryData>> =
-        convertHistoryDao.getAllConvertHistory()
+    override fun observeAllConvertHistory(): Flow<List<ConvertHistoryData>> =
+        convertHistoryDao.observeAllConvertHistory()
 
     override fun deleteAllConvertHistory() =
         convertHistoryDao.deleteAllConvertHistory()
