@@ -5,8 +5,8 @@ import ksnd.hiraganaconverter.core.model.ui.FontType
 import ksnd.hiraganaconverter.core.model.ui.Theme
 
 interface DataStoreRepository {
-    fun selectedTheme(): Flow<Theme>
-    fun selectedFontType(): Flow<FontType>
+    fun theme(): Flow<Theme>
+    fun fontType(): Flow<FontType>
     fun enableInAppUpdate(): Flow<Boolean>
     suspend fun updateTheme(newTheme: Theme)
     suspend fun updateFontType(fontType: FontType)

@@ -22,8 +22,8 @@ class SettingsViewModel @Inject constructor(
 ) : ViewModel() {
 
     val uiState = combine(
-        dataStoreRepository.selectedTheme(),
-        dataStoreRepository.selectedFontType(),
+        dataStoreRepository.theme(),
+        dataStoreRepository.fontType(),
         dataStoreRepository.enableInAppUpdate(),
     ) { theme, fontType, enableInAppUpdate ->
         SettingsUiState(

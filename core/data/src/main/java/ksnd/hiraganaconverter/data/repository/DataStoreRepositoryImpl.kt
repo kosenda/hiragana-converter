@@ -25,7 +25,7 @@ class DataStoreRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : DataStoreRepository {
-    override fun selectedTheme(): Flow<Theme> {
+    override fun theme(): Flow<Theme> {
         return dataStore.data
             .catch { exception ->
                 Timber.e("DataStore: %s", exception)
@@ -36,7 +36,7 @@ class DataStoreRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun selectedFontType(): Flow<FontType> {
+    override fun fontType(): Flow<FontType> {
         return dataStore.data
             .catch { exception ->
                 Timber.e("DataStore: %s", exception)

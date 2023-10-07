@@ -31,13 +31,13 @@ class DataStoreRepositoryImplTest {
     )
 
     @Test
-    fun selectedTheme_initial_isAutoNum() = runTest {
-        assertThat(dataStoreRepository.selectedTheme().first()).isEqualTo(Theme.AUTO)
+    fun theme_initial_isAutoNum() = runTest {
+        assertThat(dataStoreRepository.theme().first()).isEqualTo(Theme.AUTO)
     }
 
     @Test
-    fun selectedFontType_initial_isYuseiMagic() = runTest {
-        assertThat(dataStoreRepository.selectedFontType().first()).isEqualTo(FontType.YUSEI_MAGIC)
+    fun fontType_initial_isYuseiMagic() = runTest {
+        assertThat(dataStoreRepository.fontType().first()).isEqualTo(FontType.YUSEI_MAGIC)
     }
 
     @Test
@@ -48,17 +48,17 @@ class DataStoreRepositoryImplTest {
     @Test
     fun updateTheme_newTheme_isChangedTheme() = runTest {
         dataStoreRepository.updateTheme(Theme.DAY)
-        assertThat(dataStoreRepository.selectedTheme().first()).isEqualTo(Theme.DAY)
+        assertThat(dataStoreRepository.theme().first()).isEqualTo(Theme.DAY)
         dataStoreRepository.updateTheme(Theme.NIGHT)
-        assertThat(dataStoreRepository.selectedTheme().first()).isEqualTo(Theme.NIGHT)
+        assertThat(dataStoreRepository.theme().first()).isEqualTo(Theme.NIGHT)
     }
 
     @Test
     fun updateFontType_newFontType_isChangedFontType() = runTest {
         dataStoreRepository.updateFontType(FontType.ROCKN_ROLL_ONE)
-        assertThat(dataStoreRepository.selectedFontType().first()).isEqualTo(FontType.ROCKN_ROLL_ONE)
+        assertThat(dataStoreRepository.fontType().first()).isEqualTo(FontType.ROCKN_ROLL_ONE)
         dataStoreRepository.updateFontType(FontType.DEFAULT)
-        assertThat(dataStoreRepository.selectedFontType().first()).isEqualTo(FontType.DEFAULT)
+        assertThat(dataStoreRepository.fontType().first()).isEqualTo(FontType.DEFAULT)
     }
 
     @Test

@@ -99,7 +99,7 @@ private fun SettingDialogContent(
             ) {
                 SettingThemeContent(
                     onRadioButtonClick = updateTheme,
-                    isSelectedTheme = uiState.theme,
+                    selectedTheme = uiState.theme,
                 )
                 SettingLanguageContent(
                     onClick = {
@@ -122,7 +122,7 @@ private fun SettingDialogContent(
 
 @Composable
 private fun SettingThemeContent(
-    isSelectedTheme: Theme,
+    selectedTheme: Theme,
     onRadioButtonClick: (Theme) -> Unit,
 ) {
     val modeRadioResourceTriple: List<Triple<Theme, String, Painter>> = listOf(
@@ -156,7 +156,7 @@ private fun SettingThemeContent(
         modeRadioResourceTriple.map { resource ->
             val (theme, displayThemeName, painter) = resource
             CustomRadioButton(
-                isSelected = theme == isSelectedTheme,
+                isSelected = theme == selectedTheme,
                 buttonText = displayThemeName,
                 painter = painter,
                 onClick = { onRadioButtonClick(theme) },

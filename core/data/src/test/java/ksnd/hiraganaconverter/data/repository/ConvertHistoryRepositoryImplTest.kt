@@ -30,22 +30,22 @@ class ConvertHistoryRepositoryImplTest {
     private val convertHistoryRepositoryImpl = ConvertHistoryRepositoryImpl(convertHistoryDao = convertHistoryDao)
 
     @Test
-    fun getAllConvertHistory_initial_isEmpty() = runTest {
-        assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().firstOrNull()).isEmpty()
-        verify(exactly = 1) { convertHistoryDao.getAllConvertHistory() }
+    fun observeAllConvertHistory_initial_isEmpty() = runTest {
+        assertThat(convertHistoryRepositoryImpl.observeAllConvertHistory().firstOrNull()).isEmpty()
+        verify(exactly = 1) { convertHistoryDao.observeAllConvertHistory() }
     }
 
     @Test
     fun insertConvertHistory_addHistoryOnce_size1() = runTest {
         convertHistoryRepositoryImpl.insertConvertHistory(beforeText = BEFORE_TEXT, afterText = AFTER_TEXT)
-        assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().first().size).isEqualTo(1)
+        assertThat(convertHistoryRepositoryImpl.observeAllConvertHistory().first().size).isEqualTo(1)
         verify(exactly = 1) { convertHistoryDao.insertConvertHistory(any()) }
     }
 
     @Test
     fun insertConvertHistory_add3Histories_size3() = runTest {
         repeat(3) { convertHistoryRepositoryImpl.insertConvertHistory(beforeText = BEFORE_TEXT, afterText = AFTER_TEXT) }
-        assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().first().size).isEqualTo(3)
+        assertThat(convertHistoryRepositoryImpl.observeAllConvertHistory().first().size).isEqualTo(3)
         verify(exactly = 3) { convertHistoryDao.insertConvertHistory(any()) }
     }
 
@@ -53,17 +53,17 @@ class ConvertHistoryRepositoryImplTest {
     fun deleteAllConvertHistory_exist3Histories_isEmpty() = runTest {
         repeat(3) { convertHistoryRepositoryImpl.insertConvertHistory(beforeText = BEFORE_TEXT, afterText = AFTER_TEXT) }
         convertHistoryRepositoryImpl.deleteAllConvertHistory()
-        assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().firstOrNull()).isEmpty()
+        assertThat(convertHistoryRepositoryImpl.observeAllConvertHistory().firstOrNull()).isEmpty()
         verify(exactly = 1) { convertHistoryDao.deleteAllConvertHistory() }
     }
 
     @Test
     fun convertHistoryRepository_deleteOnce_sizeMinus1() = runTest {
         repeat(3) { convertHistoryRepositoryImpl.insertConvertHistory(beforeText = BEFORE_TEXT, afterText = AFTER_TEXT) }
-        assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().first().size).isEqualTo(3)
-        val deleteHistoryId = convertHistoryRepositoryImpl.getAllConvertHistory().first().first().id
+        assertThat(convertHistoryRepositoryImpl.observeAllConvertHistory().first().size).isEqualTo(3)
+        val deleteHistoryId = convertHistoryRepositoryImpl.observeAllConvertHistory().first().first().id
         convertHistoryRepositoryImpl.deleteConvertHistory(id = deleteHistoryId)
-        assertThat(convertHistoryRepositoryImpl.getAllConvertHistory().first().size).isEqualTo(2)
+        assertThat(convertHistoryRepositoryImpl.observeAllConvertHistory().first().size).isEqualTo(2)
     }
 
     companion object {
@@ -84,7 +84,7 @@ private class FakeConvertHistoryDao : ConvertHistoryDao {
         convertHistoryDataList.add(changedIdConvertHistoryData)
     }
 
-    override fun getAllConvertHistory(): Flow<List<ConvertHistoryData>> {
+    override fun observeAllConvertHistory(): Flow<List<ConvertHistoryData>> {
         return flowOf(convertHistoryDataList)
     }
 
