@@ -1,20 +1,15 @@
 package ksnd.hiraganaconverter.data.repository
 
-import android.annotation.SuppressLint
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import io.mockk.spyk
 import io.mockk.verify
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import ksnd.hiraganaconverter.core.model.ConvertHistoryData
 import ksnd.hiraganaconverter.core.testing.MainDispatcherRule
 import ksnd.hiraganaconverter.data.database.ConvertHistoryDao
+import ksnd.hiraganaconverter.data.database.RoomRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,7 +20,10 @@ class ConvertHistoryRepositoryImplTest {
     @get: Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    private val convertHistoryDao = spyk<FakeConvertHistoryDao>()
+    @get: Rule
+    val roomRule = RoomRule(context = ApplicationProvider.getApplicationContext())
+
+    private val convertHistoryDao = spyk<ConvertHistoryDao>(roomRule.dao)
 
     private val convertHistoryRepositoryImpl = ConvertHistoryRepositoryImpl(convertHistoryDao = convertHistoryDao)
 
@@ -69,30 +67,5 @@ class ConvertHistoryRepositoryImplTest {
     companion object {
         private const val BEFORE_TEXT = "A"
         private const val AFTER_TEXT = "えー"
-    }
-}
-
-@SuppressLint("MutableCollectionMutableState")
-private class FakeConvertHistoryDao : ConvertHistoryDao {
-    private var historyCount by mutableStateOf(0L)
-    private var convertHistoryDataList by mutableStateOf(mutableListOf<ConvertHistoryData>())
-
-    override fun insertConvertHistory(convertHistoryData: ConvertHistoryData) {
-        // Do not duplicate id
-        historyCount++
-        val changedIdConvertHistoryData = convertHistoryData.copy(id = historyCount)
-        convertHistoryDataList.add(changedIdConvertHistoryData)
-    }
-
-    override fun observeAllConvertHistory(): Flow<List<ConvertHistoryData>> {
-        return flowOf(convertHistoryDataList)
-    }
-
-    override fun deleteAllConvertHistory() {
-        convertHistoryDataList.clear()
-    }
-
-    override fun deleteConvertHistory(id: Long) {
-        convertHistoryDataList.removeIf { it.id == id }
     }
 }
