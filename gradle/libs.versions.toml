@@ -41,7 +41,7 @@ mockk = "1.13.8"
 roborazzi = "1.5.0"
 
 # ** I'm using it, so no deletions allowed. **
-androidxComposeCompiler = "1.5.0"
+androidxComposeCompiler = "1.5.3"
 jacoco = "0.8.9"
 
 [libraries]
