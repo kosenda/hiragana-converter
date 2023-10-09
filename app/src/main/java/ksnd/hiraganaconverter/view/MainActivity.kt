@@ -29,17 +29,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.core.app.ShareCompat
+import androidx.core.os.bundleOf
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.DEFAULT_ARGS_KEY
+import androidx.lifecycle.viewmodel.MutableCreationExtras
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import ksnd.hiraganaconverter.core.domain.NavKey
 import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.data.inappupdate.InAppUpdateState
+import ksnd.hiraganaconverter.feature.converter.ConvertViewModelImpl
 import ksnd.hiraganaconverter.feature.converter.ConverterScreen
 import ksnd.hiraganaconverter.viewmodel.MainActivityViewModel
 import timber.log.Timber
@@ -63,6 +68,11 @@ class MainActivity : AppCompatActivity() {
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val intentReader = ShareCompat.IntentReader(this, intent)
+        val receivedText = if (intentReader.isShareIntent) intentReader.text else null
+
         var isAnimateSplash by mutableStateOf(true)
         CoroutineScope(Dispatchers.Default).launch {
             delay(800L)
@@ -71,7 +81,6 @@ class MainActivity : AppCompatActivity() {
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition { isAnimateSplash }
 
-        super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
 
@@ -133,6 +142,15 @@ class MainActivity : AppCompatActivity() {
                     100
                 }
 
+                // Ref: https://github.com/google/dagger/issues/2287#issuecomment-1459123240
+                val convertViewModel by viewModels<ConvertViewModelImpl>(
+                    extrasProducer = {
+                        MutableCreationExtras(defaultViewModelCreationExtras).apply {
+                            set(DEFAULT_ARGS_KEY, bundleOf(NavKey.RECEIVED_TEXT to receivedText))
+                        }
+                    }
+                )
+
                 Column {
                     InAppUpdateDownloadingCard(
                         text = this@MainActivity.getString(R.string.in_app_update_downloading_snackbar_title, downloadPercentage),
@@ -141,7 +159,7 @@ class MainActivity : AppCompatActivity() {
                     ConverterScreen(
                         modifier = Modifier.weight(1f),
                         snackbarHostState = snackbarHostState,
-                        viewModel = hiltViewModel(),
+                        viewModel = convertViewModel,
                         topBar = {
                             TopBar(
                                 modifier = Modifier.onSizeChanged { topBarHeight = it.height },
