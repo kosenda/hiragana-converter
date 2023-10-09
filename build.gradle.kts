@@ -56,6 +56,7 @@ tasks.create<JacocoReport>("mergeJacoco") {
                         "**/view/**",
                         "**/mock/**",
                         "**/*Mock*.*",
+                        "**/*Navigation*.*",
                     )
                 }
             )
