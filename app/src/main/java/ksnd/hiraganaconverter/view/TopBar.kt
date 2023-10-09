@@ -26,7 +26,6 @@ import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.GooCreditImage
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
-import ksnd.hiraganaconverter.feature.history.ConvertHistoryDialog
 import ksnd.hiraganaconverter.feature.info.InfoDialog
 import ksnd.hiraganaconverter.feature.setting.SettingDialog
 
@@ -35,10 +34,10 @@ import ksnd.hiraganaconverter.feature.setting.SettingDialog
 fun TopBar(
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior,
+    transitionHistory: () -> Unit,
 ) {
     var isShowSettingDialog by rememberSaveable { mutableStateOf(false) }
     var isShowInfoDialog by rememberSaveable { mutableStateOf(false) }
-    var isShowConvertHistoryDialog by rememberSaveable { mutableStateOf(false) }
 
     if (isShowSettingDialog) {
         SettingDialog(
@@ -50,12 +49,6 @@ fun TopBar(
         InfoDialog(
             viewModel = hiltViewModel(),
             onCloseClick = { isShowInfoDialog = false },
-        )
-    }
-    if (isShowConvertHistoryDialog) {
-        ConvertHistoryDialog(
-            viewModel = hiltViewModel(),
-            onCloseClick = { isShowConvertHistoryDialog = false },
         )
     }
 
@@ -92,7 +85,7 @@ fun TopBar(
                 CustomIconButton(
                     contentDescription = "history",
                     painter = painterResource(id = R.drawable.ic_baseline_history_24),
-                    onClick = { isShowConvertHistoryDialog = true },
+                    onClick = transitionHistory,
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 GooCreditImage()
@@ -108,5 +101,6 @@ fun TopBar(
 private fun PreviewTopBar() {
     TopBar(
         scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState()),
+        transitionHistory = {},
     )
 }

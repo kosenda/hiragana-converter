@@ -15,7 +15,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
@@ -26,6 +28,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import ksnd.hiraganaconverter.core.domain.NavKey
 import ksnd.hiraganaconverter.feature.converter.ConverterScreen
+import ksnd.hiraganaconverter.feature.history.ConvertHistoryScreen
 import ksnd.hiraganaconverter.view.TopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,8 +39,18 @@ fun Navigation(
     receivedText: CharSequence?,
 ) {
     val navController = rememberNavController()
+    val lifecycleOwner = LocalLifecycleOwner.current
     var topBarHeight by remember { mutableIntStateOf(0) }
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+
+    // Ignore click events when you've started navigating to another screen
+    // https://stackoverflow.com/a/76386604/4339442
+    fun navigateUp() {
+        val currentState = lifecycleOwner.lifecycle.currentState
+        if (currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+            navController.navigateUp()
+        }
+    }
 
     fun NavGraphBuilder.fadeComposable(
         route: String,
@@ -72,10 +85,17 @@ fun Navigation(
                     TopBar(
                         modifier = Modifier.onSizeChanged { topBarHeight = it.height },
                         scrollBehavior = scrollBehavior,
+                        transitionHistory = { navController.navigate(NavRoute.History.route) },
                     )
                 },
                 topBarHeight = topBarHeight,
                 scrollBehavior = scrollBehavior,
+            )
+        }
+        fadeComposable(route = NavRoute.History.route) {
+            ConvertHistoryScreen(
+                viewModel = hiltViewModel(),
+                onBackPressed = ::navigateUp,
             )
         }
     }
