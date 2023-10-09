@@ -1,13 +1,9 @@
 package ksnd.hiraganaconverter.view.navigation
 
 import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.core.EaseInExpo
 import androidx.compose.animation.core.EaseInOutQuart
-import androidx.compose.animation.core.EaseInOutQuint
-import androidx.compose.animation.core.EaseOutCubic
 import androidx.compose.animation.core.EaseOutQuad
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -93,7 +89,7 @@ fun Navigation(
                 )
             },
             exitTransition = {
-                slideOutVertically (
+                slideOutVertically(
                     animationSpec = tween(durationMillis = 400, easing = EaseInOutQuart),
                     targetOffsetY = { fullHeight -> fullHeight * 8 / 10 },
                 ) + fadeOut(
