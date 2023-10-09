@@ -1,5 +1,6 @@
 package ksnd.hiraganaconverter.feature.converter
 
+import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -8,6 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ksnd.hiraganaconverter.core.domain.NavKey
 import ksnd.hiraganaconverter.core.domain.usecase.ConversionFailedException
 import ksnd.hiraganaconverter.core.domain.usecase.ConvertTextUseCase
 import ksnd.hiraganaconverter.core.domain.usecase.InterceptorError
@@ -22,10 +24,17 @@ import javax.inject.Inject
 class ConvertViewModelImpl @Inject constructor(
     private val convertTextUseCase: ConvertTextUseCase,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
+    savedStateHandle: SavedStateHandle,
 ) : ConvertViewModel() {
+    private val receivedText = savedStateHandle.get<String>(NavKey.RECEIVED_TEXT) ?: ""
 
     private val _uiState = MutableStateFlow(ConvertUiState())
     override val uiState: StateFlow<ConvertUiState> = _uiState.asStateFlow()
+
+    init {
+        if (receivedText.isNotEmpty()) _uiState.update { it.copy(inputText = receivedText) }
+        savedStateHandle.remove<String>(NavKey.RECEIVED_TEXT)
+    }
 
     override fun convert() {
         // If input has not changed since the last time, it will not be converted.
