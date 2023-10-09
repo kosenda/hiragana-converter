@@ -106,6 +106,9 @@ dependencies {
 
     // App Update
     implementation(libs.app.update)
+
+    // Navigation
+    implementation(libs.androidx.navigation.compose)
 }
 
 tasks.create<JavaExec>("ktlintCheck") {
