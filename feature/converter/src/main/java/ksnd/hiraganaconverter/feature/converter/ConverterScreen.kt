@@ -54,12 +54,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ShareCompat
 import ksnd.hiraganaconverter.core.model.ui.ConvertErrorType
 import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
 import ksnd.hiraganaconverter.core.resource.LIMIT_CONVERT_COUNT
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.button.ConvertButton
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomButtonWithBackground
+import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.parts.card.ConversionTypeCard
 import ksnd.hiraganaconverter.core.ui.parts.card.ErrorCard
 import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
@@ -248,7 +250,23 @@ private fun BeforeOrAfterTextField(
             color = MaterialTheme.colorScheme.onSurface,
         )
 
-        ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton(
+        if (isBefore.not()) {
+            CustomIconButton(
+                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
+                contentDescription = "share",
+                painter = painterResource(id = R.drawable.baseline_share_24),
+                onClick = {
+                    context.startActivity(
+                        ShareCompat.IntentBuilder(context)
+                            .setType("text/plain")
+                            .setText(text)
+                            .createChooserIntent(),
+                    )
+                },
+            )
+        }
+
+        CustomIconButton(
             modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
             contentDescription = "copyText",
             painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
