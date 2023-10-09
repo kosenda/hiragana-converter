@@ -81,7 +81,6 @@ class MainActivity : AppCompatActivity() {
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition { isAnimateSplash }
 
-
         enableEdgeToEdge()
 
         setContent {
@@ -148,7 +147,7 @@ class MainActivity : AppCompatActivity() {
                         MutableCreationExtras(defaultViewModelCreationExtras).apply {
                             set(DEFAULT_ARGS_KEY, bundleOf(NavKey.RECEIVED_TEXT to receivedText))
                         }
-                    }
+                    },
                 )
 
                 Column {
