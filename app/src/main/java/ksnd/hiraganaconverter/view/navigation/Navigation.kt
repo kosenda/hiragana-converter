@@ -58,6 +58,10 @@ fun Navigation(
         }
     }
 
+    fun transitionScreen(navRoute: NavRoute) {
+        navController.navigate(navRoute.route) { launchSingleTop = true }
+    }
+
     fun NavGraphBuilder.fadeComposable(
         route: String,
         arguments: List<NamedNavArgument> = emptyList(),
@@ -121,9 +125,9 @@ fun Navigation(
                     TopBar(
                         modifier = Modifier.onSizeChanged { topBarHeight = it.height },
                         scrollBehavior = scrollBehavior,
-                        transitionHistory = { navController.navigate(NavRoute.History.route) },
-                        transitionSetting = { navController.navigate(NavRoute.Setting.route) },
-                        transitionInfo = { navController.navigate(NavRoute.Info.route) },
+                        transitionHistory = { transitionScreen(NavRoute.History) },
+                        transitionSetting = { transitionScreen(NavRoute.Setting) },
+                        transitionInfo = { transitionScreen(NavRoute.Info) },
                     )
                 },
                 topBarHeight = topBarHeight,
