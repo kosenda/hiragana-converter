@@ -11,24 +11,19 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.core.app.ShareCompat
 import androidx.core.os.bundleOf
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -45,7 +40,7 @@ import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.data.inappupdate.InAppUpdateState
 import ksnd.hiraganaconverter.feature.converter.ConvertViewModelImpl
-import ksnd.hiraganaconverter.feature.converter.ConverterScreen
+import ksnd.hiraganaconverter.view.navigation.Navigation
 import ksnd.hiraganaconverter.viewmodel.MainActivityViewModel
 import timber.log.Timber
 
@@ -66,7 +61,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -87,9 +81,6 @@ class MainActivity : AppCompatActivity() {
             val uiState by mainViewModel.uiState.collectAsState(initial = MainActivityUiState())
             val inAppUpdateState by mainViewModel.inAppUpdateState.collectAsState(initial = InAppUpdateState.Requesting)
             val snackbarHostState = remember { SnackbarHostState() }
-
-            var topBarHeight by remember { mutableIntStateOf(0) }
-            val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
             val isDarkTheme = when (uiState.theme) {
                 Theme.NIGHT -> true
@@ -141,32 +132,15 @@ class MainActivity : AppCompatActivity() {
                     100
                 }
 
-                // Ref: https://github.com/google/dagger/issues/2287#issuecomment-1459123240
-                val convertViewModel by viewModels<ConvertViewModelImpl>(
-                    extrasProducer = {
-                        MutableCreationExtras(defaultViewModelCreationExtras).apply {
-                            set(DEFAULT_ARGS_KEY, bundleOf(NavKey.RECEIVED_TEXT to receivedText))
-                        }
-                    },
-                )
-
                 Column {
                     InAppUpdateDownloadingCard(
                         text = this@MainActivity.getString(R.string.in_app_update_downloading_snackbar_title, downloadPercentage),
                         isVisible = inAppUpdateState is InAppUpdateState.Downloading,
                     )
-                    ConverterScreen(
+                    Navigation(
                         modifier = Modifier.weight(1f),
                         snackbarHostState = snackbarHostState,
-                        viewModel = convertViewModel,
-                        topBar = {
-                            TopBar(
-                                modifier = Modifier.onSizeChanged { topBarHeight = it.height },
-                                scrollBehavior = scrollBehavior,
-                            )
-                        },
-                        topBarHeight = topBarHeight,
-                        scrollBehavior = scrollBehavior,
+                        receivedText = receivedText,
                     )
                 }
             }
