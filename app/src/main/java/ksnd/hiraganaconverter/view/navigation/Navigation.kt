@@ -1,9 +1,17 @@
 package ksnd.hiraganaconverter.view.navigation
 
 import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.core.EaseInExpo
+import androidx.compose.animation.core.EaseInOutQuart
+import androidx.compose.animation.core.EaseInOutQuint
+import androidx.compose.animation.core.EaseOutCubic
+import androidx.compose.animation.core.EaseOutQuad
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
@@ -68,6 +76,34 @@ fun Navigation(
         )
     }
 
+    fun NavGraphBuilder.pushComposable(
+        route: String,
+        arguments: List<NamedNavArgument> = emptyList(),
+        content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit,
+    ) {
+        composable(
+            route = route,
+            arguments = arguments,
+            enterTransition = {
+                slideInVertically(
+                    animationSpec = tween(durationMillis = 400, easing = EaseInOutQuart),
+                    initialOffsetY = { fullHeight -> fullHeight * 8 / 10 },
+                ) + fadeIn(
+                    animationSpec = tween(durationMillis = 400, easing = EaseOutQuad),
+                )
+            },
+            exitTransition = {
+                slideOutVertically (
+                    animationSpec = tween(durationMillis = 400, easing = EaseInOutQuart),
+                    targetOffsetY = { fullHeight -> fullHeight * 8 / 10 },
+                ) + fadeOut(
+                    animationSpec = tween(durationMillis = 400, easing = EaseOutQuad),
+                )
+            },
+            content = content,
+        )
+    }
+
     NavHost(
         navController = navController,
         startDestination = "%s/{%s}".format(NavRoute.Converter.route, NavKey.RECEIVED_TEXT),
@@ -98,19 +134,19 @@ fun Navigation(
                 scrollBehavior = scrollBehavior,
             )
         }
-        fadeComposable(route = NavRoute.History.route) {
+        pushComposable(route = NavRoute.History.route) {
             ConvertHistoryScreen(
                 viewModel = hiltViewModel(),
                 onBackPressed = ::navigateUp,
             )
         }
-        fadeComposable(route = NavRoute.Setting.route) {
+        pushComposable(route = NavRoute.Setting.route) {
             SettingScreen(
                 viewModel = hiltViewModel(),
                 onBackPressed = ::navigateUp,
             )
         }
-        fadeComposable(route = NavRoute.Info.route) {
+        pushComposable(route = NavRoute.Info.route) {
             InfoScreen(
                 viewModel = hiltViewModel(),
                 onBackPressed = ::navigateUp,
