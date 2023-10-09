@@ -46,6 +46,9 @@ class ConverterScreenTest {
                         TopBar(
                             modifier = Modifier.onSizeChanged { topBarHeight = it.height },
                             scrollBehavior = scrollBehavior,
+                            transitionHistory = {},
+                            transitionSetting = {},
+                            transitionInfo = {},
                         )
                     },
                     topBarHeight = topBarHeight,
@@ -74,6 +77,9 @@ class ConverterScreenTest {
                         TopBar(
                             modifier = Modifier.onSizeChanged { topBarHeight = it.height },
                             scrollBehavior = scrollBehavior,
+                            transitionHistory = {},
+                            transitionSetting = {},
+                            transitionInfo = {},
                         )
                     },
                     topBarHeight = topBarHeight,
