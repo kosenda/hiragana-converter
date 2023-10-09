@@ -14,19 +14,14 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.GooCreditImage
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
-import ksnd.hiraganaconverter.feature.info.InfoDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,16 +30,8 @@ fun TopBar(
     scrollBehavior: TopAppBarScrollBehavior,
     transitionHistory: () -> Unit,
     transitionSetting: () -> Unit,
+    transitionInfo: () -> Unit,
 ) {
-    var isShowInfoDialog by rememberSaveable { mutableStateOf(false) }
-
-    if (isShowInfoDialog) {
-        InfoDialog(
-            viewModel = hiltViewModel(),
-            onCloseClick = { isShowInfoDialog = false },
-        )
-    }
-
     val isShowTopBar by remember(scrollBehavior.state.collapsedFraction) {
         derivedStateOf { scrollBehavior.state.collapsedFraction != 1.toFloat() }
     }
@@ -67,7 +54,7 @@ fun TopBar(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     contentDescription = "info",
                     painter = painterResource(id = R.drawable.ic_outline_info_24),
-                    onClick = { isShowInfoDialog = true },
+                    onClick = transitionInfo,
                 )
                 CustomIconButton(
                     modifier = Modifier.padding(end = 8.dp),
@@ -96,5 +83,6 @@ private fun PreviewTopBar() {
         scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState()),
         transitionHistory = {},
         transitionSetting = {},
+        transitionInfo = {},
     )
 }
