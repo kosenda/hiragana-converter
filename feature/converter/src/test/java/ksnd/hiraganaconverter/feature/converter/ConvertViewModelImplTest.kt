@@ -1,10 +1,12 @@
 package ksnd.hiraganaconverter.feature.converter
 
+import androidx.lifecycle.SavedStateHandle
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
+import ksnd.hiraganaconverter.core.domain.NavKey
 import ksnd.hiraganaconverter.core.domain.usecase.ConversionFailedException
 import ksnd.hiraganaconverter.core.domain.usecase.ConvertTextUseCase
 import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
@@ -23,7 +25,19 @@ class ConvertViewModelImplTest {
     private val viewModel = ConvertViewModelImpl(
         convertTextUseCase = convertTextUseCase,
         ioDispatcher = mainDispatcherRule.testDispatcher,
+        savedStateHandle = SavedStateHandle(),
     )
+
+    @Test
+    fun init_receivedText_isUpdated() {
+        val receivedText = "漢字"
+        val viewModel = ConvertViewModelImpl(
+            convertTextUseCase = convertTextUseCase,
+            ioDispatcher = mainDispatcherRule.testDispatcher,
+            savedStateHandle = SavedStateHandle().apply { set(NavKey.RECEIVED_TEXT, receivedText) },
+        )
+        assertThat(viewModel.uiState.value.inputText).isEqualTo(receivedText)
+    }
 
     @Test
     fun updateInputText_newInputText_isUpdated() {
