@@ -75,10 +75,12 @@ fun Navigation(
     ) {
         fadeComposable(
             route = "%s/{%s}".format(NavRoute.Converter.route, NavKey.RECEIVED_TEXT),
-            arguments = listOf(navArgument(NavKey.RECEIVED_TEXT) {
-                type = NavType.StringType
-                defaultValue = receivedText?.toString() ?: ""
-            }),
+            arguments = listOf(
+                navArgument(NavKey.RECEIVED_TEXT) {
+                    type = NavType.StringType
+                    defaultValue = receivedText?.toString() ?: ""
+                },
+            ),
         ) {
             ConverterScreen(
                 snackbarHostState = snackbarHostState,
