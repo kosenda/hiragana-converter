@@ -1,75 +1,68 @@
 package ksnd.hiraganaconverter.feature.setting
 
-import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import ksnd.hiraganaconverter.core.model.ui.FontType
 import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.resource.R
+import ksnd.hiraganaconverter.core.ui.parts.BackTopBar
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomButton
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomRadioButton
 import ksnd.hiraganaconverter.core.ui.parts.card.TitleCard
-import ksnd.hiraganaconverter.core.ui.parts.dialog.DialogCloseButton
 import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
 @Composable
-fun SettingDialog(
+fun SettingScreen(
     viewModel: SettingsViewModel,
-    onCloseClick: () -> Unit,
+    onBackPressed: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsState(initial = SettingsUiState())
 
-    Dialog(
-        onDismissRequest = { },
-        properties = DialogProperties(usePlatformDefaultWidth = false),
-    ) {
-        BackHandler(onBack = onCloseClick)
-        SettingDialogContent(
-            uiState = uiState,
-            updateTheme = viewModel::updateTheme,
-            updateFontType = viewModel::updateFontType,
-            updateUseInAppUpdate = viewModel::updateUseInAppUpdate,
-            onCloseClick = onCloseClick,
-        )
-    }
+    SettingScreenContent(
+        uiState = uiState,
+        updateTheme = viewModel::updateTheme,
+        updateFontType = viewModel::updateFontType,
+        updateUseInAppUpdate = viewModel::updateUseInAppUpdate,
+        onBackPressed = onBackPressed,
+    )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SettingDialogContent(
+private fun SettingScreenContent(
     uiState: SettingsUiState,
     updateTheme: (Theme) -> Unit,
     updateFontType: (FontType) -> Unit,
     updateUseInAppUpdate: (Boolean) -> Unit,
-    onCloseClick: () -> Unit,
+    onBackPressed: () -> Unit,
 ) {
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val isShowSelectLanguageDialog = rememberSaveable { mutableStateOf(false) }
 
     if (isShowSelectLanguageDialog.value) {
@@ -78,44 +71,37 @@ private fun SettingDialogContent(
         )
     }
 
-    Surface(
-        modifier = Modifier
-            .fillMaxHeight(0.95f)
-            .fillMaxWidth(0.95f)
-            .border(width = 4.dp, color = MaterialTheme.colorScheme.surfaceVariant, shape = RoundedCornerShape(16.dp))
-            .clip(RoundedCornerShape(16.dp)),
-    ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            DialogCloseButton(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 16.dp),
-                onCloseClick = onCloseClick,
+    Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = {
+            BackTopBar(scrollBehavior = scrollBehavior, onBackPressed = onBackPressed)
+        },
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp),
+        ) {
+            SettingThemeContent(
+                onRadioButtonClick = updateTheme,
+                selectedTheme = uiState.theme,
             )
-            Column(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = 16.dp),
-            ) {
-                SettingThemeContent(
-                    onRadioButtonClick = updateTheme,
-                    selectedTheme = uiState.theme,
-                )
-                SettingLanguageContent(
-                    onClick = {
-                        isShowSelectLanguageDialog.value = true
-                    },
-                )
-                SettingFontContent(
-                    selectFontType = uiState.fontType,
-                    onClickFontType = { fontType -> updateFontType(fontType) },
-                )
-                SettingInAppUpdateContent(
-                    enableInAppUpdate = uiState.enableInAppUpdate,
-                    onCheckedChange = updateUseInAppUpdate,
-                )
-                Spacer(modifier = Modifier.height(48.dp))
-            }
+            SettingLanguageContent(
+                onClick = {
+                    isShowSelectLanguageDialog.value = true
+                },
+            )
+            SettingFontContent(
+                selectFontType = uiState.fontType,
+                onClickFontType = { fontType -> updateFontType(fontType) },
+            )
+            SettingInAppUpdateContent(
+                enableInAppUpdate = uiState.enableInAppUpdate,
+                onCheckedChange = updateUseInAppUpdate,
+            )
+            Spacer(modifier = Modifier.height(48.dp))
         }
     }
 }
@@ -206,17 +192,17 @@ private fun SettingFontContent(
 
 @UiModeAndLocalePreview
 @Composable
-fun PreviewSettingDialogContent() {
+fun PreviewSettingScreenContent() {
     HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(
             modifier = Modifier.fillMaxSize(),
         ) {
-            SettingDialogContent(
+            SettingScreenContent(
                 uiState = SettingsUiState(),
                 updateTheme = {},
                 updateFontType = {},
                 updateUseInAppUpdate = {},
-                onCloseClick = {},
+                onBackPressed = {},
             )
         }
     }

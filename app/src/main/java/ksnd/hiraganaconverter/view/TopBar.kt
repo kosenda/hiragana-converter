@@ -27,7 +27,6 @@ import ksnd.hiraganaconverter.core.ui.parts.GooCreditImage
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.feature.info.InfoDialog
-import ksnd.hiraganaconverter.feature.setting.SettingDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,16 +34,10 @@ fun TopBar(
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior,
     transitionHistory: () -> Unit,
+    transitionSetting: () -> Unit,
 ) {
-    var isShowSettingDialog by rememberSaveable { mutableStateOf(false) }
     var isShowInfoDialog by rememberSaveable { mutableStateOf(false) }
 
-    if (isShowSettingDialog) {
-        SettingDialog(
-            viewModel = hiltViewModel(),
-            onCloseClick = { isShowSettingDialog = false },
-        )
-    }
     if (isShowInfoDialog) {
         InfoDialog(
             viewModel = hiltViewModel(),
@@ -80,7 +73,7 @@ fun TopBar(
                     modifier = Modifier.padding(end = 8.dp),
                     contentDescription = "settings",
                     painter = painterResource(id = R.drawable.ic_outline_settings_24),
-                    onClick = { isShowSettingDialog = true },
+                    onClick = transitionSetting,
                 )
                 CustomIconButton(
                     contentDescription = "history",
@@ -102,5 +95,6 @@ private fun PreviewTopBar() {
     TopBar(
         scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState()),
         transitionHistory = {},
+        transitionSetting = {},
     )
 }

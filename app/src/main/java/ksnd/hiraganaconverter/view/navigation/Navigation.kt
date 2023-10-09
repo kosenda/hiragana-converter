@@ -29,6 +29,7 @@ import androidx.navigation.navArgument
 import ksnd.hiraganaconverter.core.domain.NavKey
 import ksnd.hiraganaconverter.feature.converter.ConverterScreen
 import ksnd.hiraganaconverter.feature.history.ConvertHistoryScreen
+import ksnd.hiraganaconverter.feature.setting.SettingScreen
 import ksnd.hiraganaconverter.view.TopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -86,6 +87,7 @@ fun Navigation(
                         modifier = Modifier.onSizeChanged { topBarHeight = it.height },
                         scrollBehavior = scrollBehavior,
                         transitionHistory = { navController.navigate(NavRoute.History.route) },
+                        transitionSetting = { navController.navigate(NavRoute.Setting.route) },
                     )
                 },
                 topBarHeight = topBarHeight,
@@ -94,6 +96,12 @@ fun Navigation(
         }
         fadeComposable(route = NavRoute.History.route) {
             ConvertHistoryScreen(
+                viewModel = hiltViewModel(),
+                onBackPressed = ::navigateUp,
+            )
+        }
+        fadeComposable(route = NavRoute.Setting.route) {
+            SettingScreen(
                 viewModel = hiltViewModel(),
                 onBackPressed = ::navigateUp,
             )

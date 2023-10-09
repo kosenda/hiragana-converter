@@ -149,7 +149,7 @@ private fun EmptyHistoryImage() {
 
 @UiModeAndLocalePreview
 @Composable
-private fun PreviewConvertHistoryDialogContent() {
+private fun PreviewConvertHistoryScreeContent() {
     HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(
             color = MaterialTheme.colorScheme.surface,
@@ -169,7 +169,7 @@ private fun PreviewConvertHistoryDialogContent() {
 
 @UiModeAndLocalePreview
 @Composable
-private fun PreviewConvertHistoryDialogContent_NoData() {
+private fun PreviewConvertHistoryScreenContent_NoData() {
     HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(
             color = MaterialTheme.colorScheme.surface,
