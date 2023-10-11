@@ -39,14 +39,12 @@ fun CustomRadioButton(
 ) {
     Row(
         modifier = Modifier
-            .padding(start = 8.dp, end = 8.dp)
             .fillMaxWidth()
-            .defaultMinSize(minHeight = 48.dp)
-            .clip(shape = RoundedCornerShape(8.dp))
+            .defaultMinSize(minHeight = 56.dp)
             .clickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Spacer(modifier = Modifier.width(16.dp))
+        Spacer(modifier = Modifier.width(24.dp))
         painter?.let {
             Image(
                 painter = it,
