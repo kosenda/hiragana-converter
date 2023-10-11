@@ -41,7 +41,7 @@ import com.google.accompanist.web.rememberWebViewNavigator
 import com.google.accompanist.web.rememberWebViewState
 import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.resource.R
-import ksnd.hiraganaconverter.core.ui.parts.button.CustomButton
+import ksnd.hiraganaconverter.core.ui.parts.button.TransitionButton
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.parts.card.TitleCard
 
@@ -66,7 +66,7 @@ fun PrivacyPolicyContent() {
         painter = painterResource(id = R.drawable.ic_outline_info_24),
     )
 
-    CustomButton(
+    TransitionButton(
         text = stringResource(id = R.string.privacy_policy_button),
         onClick = { isShowWebView = true },
     )

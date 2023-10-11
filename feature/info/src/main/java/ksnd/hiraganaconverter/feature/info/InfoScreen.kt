@@ -50,7 +50,7 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.BackTopBar
 import ksnd.hiraganaconverter.core.ui.parts.GooCreditImage
-import ksnd.hiraganaconverter.core.ui.parts.button.CustomButton
+import ksnd.hiraganaconverter.core.ui.parts.button.TransitionButton
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.parts.card.TitleCard
 import ksnd.hiraganaconverter.core.ui.parts.dialog.MovesToSiteDialog
@@ -286,7 +286,7 @@ private fun LicensesContent() {
         text = stringResource(id = R.string.licenses_title),
         painter = painterResource(id = R.drawable.ic_outline_info_24),
     )
-    CustomButton(
+    TransitionButton(
         text = buttonText,
         onClick = {
             val intent = Intent(context, OssLicensesMenuActivity::class.java)
