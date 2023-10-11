@@ -2,10 +2,8 @@ package ksnd.hiraganaconverter.core.ui.parts.button
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
@@ -28,7 +26,7 @@ import ksnd.hiraganaconverter.core.ui.rememberButtonScaleState
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
 @Composable
-fun CustomButton(
+fun TransitionButton(
     modifier: Modifier = Modifier,
     text: String,
     onClick: () -> Unit,
@@ -40,7 +38,6 @@ fun CustomButton(
         ),
         modifier = modifier
             .padding(vertical = 8.dp)
-            .height(IntrinsicSize.Min)
             .scale(scale = buttonScaleState.animationScale.value)
             .noRippleClickable(
                 interactionSource = buttonScaleState.interactionSource,
@@ -48,18 +45,15 @@ fun CustomButton(
             ),
     ) {
         Row(
-            modifier = Modifier.padding(all = 8.dp),
+            modifier = Modifier.defaultMinSize(minHeight = 56.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Row(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = text,
-                    modifier = Modifier.padding(start = 16.dp),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-                Spacer(modifier = Modifier.weight(1f))
-            }
+            Text(
+                text = text,
+                modifier = Modifier.padding(start = 16.dp).weight(1f),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
             Image(
                 painter = painterResource(id = R.drawable.baseline_chevron_right_24),
                 contentDescription = "move screen",
@@ -74,10 +68,10 @@ fun CustomButton(
 
 @UiModeAndLocalePreview
 @Composable
-fun PreviewCustomButton() {
+fun TransitionButton() {
     HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(color = MaterialTheme.colorScheme.surface) {
-            CustomButton(text = stringResource(R.string.oss_licenses), onClick = {})
+            TransitionButton(text = stringResource(R.string.oss_licenses), onClick = {})
         }
     }
 }

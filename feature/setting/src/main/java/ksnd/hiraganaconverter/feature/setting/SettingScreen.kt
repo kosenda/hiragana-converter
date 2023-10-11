@@ -31,7 +31,7 @@ import ksnd.hiraganaconverter.core.model.ui.FontType
 import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.BackTopBar
-import ksnd.hiraganaconverter.core.ui.parts.button.CustomButton
+import ksnd.hiraganaconverter.core.ui.parts.button.TransitionButton
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomRadioButton
 import ksnd.hiraganaconverter.core.ui.parts.card.TitleCard
 import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
@@ -157,7 +157,7 @@ private fun SettingLanguageContent(onClick: () -> Unit) {
         text = stringResource(id = R.string.language_setting),
         painter = painterResource(id = R.drawable.ic_baseline_language_24),
     )
-    CustomButton(
+    TransitionButton(
         text = stringResource(id = R.string.select_language),
         onClick = onClick,
     )
