@@ -23,8 +23,8 @@ class AndroidApplicationPlugin : Plugin<Project> {
                     applicationId = "ksnd.hiraganaconverter"
                     minSdk = 26
                     targetSdk = 33
-                    versionCode = 34
-                    versionName = "1.23"
+                    versionCode = 35
+                    versionName = "1.24"
                     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                 }
                 compileOptions {
