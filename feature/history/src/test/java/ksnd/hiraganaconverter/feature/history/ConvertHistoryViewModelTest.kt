@@ -23,6 +23,12 @@ class ConvertHistoryViewModelTest {
     )
 
     @Test
+    fun deleteAllConvertHistory_once_isCalledDeleteAllConvertHistory() = runTest {
+        viewModel.deleteAllConvertHistory()
+        coVerify(exactly = 1) { convertHistoryRepository.deleteAllConvertHistory() }
+    }
+
+    @Test
     fun deleteConvertHistory_once_isCalledDeleteConvertHistory() = runTest {
         val testDate = MockConvertHistories().data.first()
         viewModel.deleteConvertHistory(historyData = testDate)
