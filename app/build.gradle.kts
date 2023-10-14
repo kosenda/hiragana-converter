@@ -127,6 +127,7 @@ tasks.create<JavaExec>("ktlintFormatting") {
     classpath = ktlint
     mainClass.set("com.pinterest.ktlint.Main")
     args("-F", "src/**/*.kt")
+    jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }
 
 tasks.withType<Test>().configureEach {
