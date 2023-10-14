@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.data.database
+package ksnd.hiraganaconverter.core.data.database
 
 import android.content.Context
 import androidx.room.Room

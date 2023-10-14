@@ -1,11 +1,11 @@
-package ksnd.hiraganaconverter.data.di
+package ksnd.hiraganaconverter.core.data.di
 
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import ksnd.hiraganaconverter.data.database.ConvertHistoryDao
-import ksnd.hiraganaconverter.data.database.ConvertHistoryDatabase
+import ksnd.hiraganaconverter.core.data.database.ConvertHistoryDao
+import ksnd.hiraganaconverter.core.data.database.ConvertHistoryDatabase
 import javax.inject.Singleton
 
 @Module

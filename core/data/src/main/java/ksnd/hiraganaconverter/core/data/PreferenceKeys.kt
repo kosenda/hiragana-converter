@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.data
+package ksnd.hiraganaconverter.core.data
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey

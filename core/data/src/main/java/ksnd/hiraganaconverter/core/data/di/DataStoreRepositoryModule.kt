@@ -1,11 +1,11 @@
-package ksnd.hiraganaconverter.data.di
+package ksnd.hiraganaconverter.core.data.di
 
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
-import ksnd.hiraganaconverter.data.repository.DataStoreRepositoryImpl
+import ksnd.hiraganaconverter.core.data.repository.DataStoreRepositoryImpl
 import javax.inject.Singleton
 
 @Module

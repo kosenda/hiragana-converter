@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.data.inappupdate
+package ksnd.hiraganaconverter.core.data.inappupdate
 
 import android.content.Context
 import androidx.activity.result.ActivityResultLauncher

@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.data.repository
+package ksnd.hiraganaconverter.core.data.repository
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -15,7 +15,7 @@ import ksnd.hiraganaconverter.core.model.ui.FontType
 import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.resource.LIMIT_CONVERT_COUNT
 import ksnd.hiraganaconverter.core.resource.di.IODispatcher
-import ksnd.hiraganaconverter.data.PreferenceKeys
+import ksnd.hiraganaconverter.core.data.PreferenceKeys
 import timber.log.Timber
 import java.io.IOException
 import java.time.LocalDate

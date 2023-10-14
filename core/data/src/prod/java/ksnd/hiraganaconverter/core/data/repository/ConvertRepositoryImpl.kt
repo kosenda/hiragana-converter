@@ -8,7 +8,7 @@ import kotlinx.serialization.json.Json
 import ksnd.hiraganaconverter.core.domain.repository.ConvertRepository
 import ksnd.hiraganaconverter.core.model.RequestData
 import ksnd.hiraganaconverter.core.model.ResponseData
-import ksnd.hiraganaconverter.data.client.ConvertApiClient
+import ksnd.hiraganaconverter.core.data.client.ConvertApiClient
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
