@@ -8,10 +8,8 @@ import com.google.android.play.core.install.InstallState
 import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.InstallStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.stateIn
@@ -27,16 +25,17 @@ class MainActivityViewModel @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
     private val inAppUpdateManager: InAppUpdateManager,
 ) : ViewModel(), InstallStateUpdatedListener {
-    private val _inAppUpdateState: MutableStateFlow<InAppUpdateState> = MutableStateFlow(InAppUpdateState.Requesting)
-    val inAppUpdateState: Flow<InAppUpdateState> = _inAppUpdateState.asStateFlow()
+    private val inAppUpdateState: MutableStateFlow<InAppUpdateState> = MutableStateFlow(InAppUpdateState.Requesting)
 
     val uiState = combine(
         dataStoreRepository.theme(),
         dataStoreRepository.fontType(),
-    ) { theme, fontType ->
+        inAppUpdateState,
+    ) { theme, fontType, inAppUpdateState ->
         MainActivityUiState(
             theme = theme,
             fontType = fontType,
+            inAppUpdateState = inAppUpdateState,
         )
     }.stateIn(
         scope = viewModelScope,
@@ -49,7 +48,7 @@ class MainActivityViewModel @Inject constructor(
     }
 
     fun startInAppUpdateInstall() {
-        _inAppUpdateState.value = InAppUpdateState.Installing
+        inAppUpdateState.value = InAppUpdateState.Installing
         inAppUpdateManager.startInstall()
     }
 
@@ -57,30 +56,30 @@ class MainActivityViewModel @Inject constructor(
         if (dataStoreRepository.enableInAppUpdate().firstOrNull() == true) {
             inAppUpdateManager.requestUpdate(
                 activityResultLauncher = activityResultLauncher,
-                alreadyDownloaded = { _inAppUpdateState.value = InAppUpdateState.Downloaded },
-                notAvailable = { _inAppUpdateState.value = InAppUpdateState.NotAvailable },
-                onFailed = { _inAppUpdateState.value = InAppUpdateState.Failed },
+                alreadyDownloaded = { inAppUpdateState.value = InAppUpdateState.Downloaded },
+                notAvailable = { inAppUpdateState.value = InAppUpdateState.NotAvailable },
+                onFailed = { inAppUpdateState.value = InAppUpdateState.Failed },
             )
         } else {
-            _inAppUpdateState.value = InAppUpdateState.NotAvailable
+            inAppUpdateState.value = InAppUpdateState.NotAvailable
         }
     }
 
     fun updateInAppUpdateState(state: InAppUpdateState) {
-        _inAppUpdateState.value = state
+        inAppUpdateState.value = state
     }
 
     override fun onStateUpdate(state: InstallState) {
         when (state.installStatus()) {
             InstallStatus.DOWNLOADING -> {
-                _inAppUpdateState.value = InAppUpdateState.Downloading(
+                inAppUpdateState.value = InAppUpdateState.Downloading(
                     percentage = ((state.bytesDownloaded().toFloat() / state.totalBytesToDownload().toFloat()) * 100).toInt().coerceIn(0, 100),
                 )
             }
-            InstallStatus.DOWNLOADED -> _inAppUpdateState.value = InAppUpdateState.Downloaded
+            InstallStatus.DOWNLOADED -> inAppUpdateState.value = InAppUpdateState.Downloaded
             InstallStatus.FAILED -> {
                 Timber.d("Failed in app update installErrorCode: ${state.installErrorCode()}")
-                _inAppUpdateState.value = InAppUpdateState.Failed
+                inAppUpdateState.value = InAppUpdateState.Failed
             }
             else -> {}
         }

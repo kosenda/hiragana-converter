@@ -74,7 +74,6 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             val uiState by mainViewModel.uiState.collectAsState(initial = MainActivityUiState())
-            val inAppUpdateState by mainViewModel.inAppUpdateState.collectAsState(initial = InAppUpdateState.Requesting)
             val snackbarHostState = remember { SnackbarHostState() }
 
             val isDarkTheme = when (uiState.theme) {
@@ -99,8 +98,8 @@ class MainActivity : AppCompatActivity() {
                 onDispose { }
             }
 
-            LaunchedEffect(inAppUpdateState) {
-                when (inAppUpdateState) {
+            LaunchedEffect(uiState.inAppUpdateState) {
+                when (uiState.inAppUpdateState) {
                     is InAppUpdateState.Requesting -> mainViewModel.requestInAppUpdate(activityResultLauncher = updateFlowResultLauncher)
                     is InAppUpdateState.Downloaded -> {
                         val snackbarResult = snackbarHostState.showSnackbar(
@@ -121,8 +120,8 @@ class MainActivity : AppCompatActivity() {
                 fontType = uiState.fontType,
             ) {
                 // Because the state changes before the animation ends
-                val downloadPercentage = if (inAppUpdateState is InAppUpdateState.Downloading) {
-                    (inAppUpdateState as InAppUpdateState.Downloading).percentage
+                val downloadPercentage = if (uiState.inAppUpdateState is InAppUpdateState.Downloading) {
+                    (uiState.inAppUpdateState as InAppUpdateState.Downloading).percentage
                 } else {
                     100
                 }
@@ -130,7 +129,7 @@ class MainActivity : AppCompatActivity() {
                 Column {
                     InAppUpdateDownloadingCard(
                         text = this@MainActivity.getString(R.string.in_app_update_downloading_snackbar_title, downloadPercentage),
-                        isVisible = inAppUpdateState is InAppUpdateState.Downloading,
+                        isVisible = uiState.inAppUpdateState is InAppUpdateState.Downloading,
                     )
                     Navigation(
                         modifier = Modifier.weight(1f),
