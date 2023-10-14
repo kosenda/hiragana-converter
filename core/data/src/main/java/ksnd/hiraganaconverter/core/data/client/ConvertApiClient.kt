@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.data.client
+package ksnd.hiraganaconverter.core.data.client
 
 import ksnd.hiraganaconverter.core.model.ResponseData
 import okhttp3.RequestBody

@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.data.repository
+package ksnd.hiraganaconverter.core.data.repository
 
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.test.runTest
 import ksnd.hiraganaconverter.core.testing.MainDispatcherRule
-import ksnd.hiraganaconverter.data.database.ConvertHistoryDao
-import ksnd.hiraganaconverter.data.database.RoomRule
+import ksnd.hiraganaconverter.core.data.database.ConvertHistoryDao
+import ksnd.hiraganaconverter.core.data.database.RoomRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.data.di
+package ksnd.hiraganaconverter.core.data.di
 
 import android.content.Context
 import androidx.datastore.core.DataStore

@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.data.repository
+package ksnd.hiraganaconverter.core.data.repository
 
 import android.content.Context
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory

@@ -1,10 +1,10 @@
-package ksnd.hiraganaconverter.data.repository
+package ksnd.hiraganaconverter.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import ksnd.hiraganaconverter.core.domain.repository.ConvertHistoryRepository
 import ksnd.hiraganaconverter.core.model.ConvertHistoryData
 import ksnd.hiraganaconverter.core.resource.TimeFormat
-import ksnd.hiraganaconverter.data.database.ConvertHistoryDao
+import ksnd.hiraganaconverter.core.data.database.ConvertHistoryDao
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
