@@ -2,13 +2,18 @@ package ksnd.hiraganaconverter.viewmodel
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.spyk
 import io.mockk.verify
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import ksnd.hiraganaconverter.core.data.inappupdate.InAppUpdateState
 import ksnd.hiraganaconverter.core.domain.inappupdate.InAppUpdateManager
 import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
 import ksnd.hiraganaconverter.core.model.ui.FontType
@@ -39,11 +44,6 @@ class MainActivityViewModelTest {
     }
 
     @Test
-    fun viewModel_init_calledRegisterListener() {
-        verify(exactly = 1) { inAppUpdateManager.registerListener(viewModel) }
-    }
-
-    @Test
     fun mainActivityViewModel_collect_changeUiState() = runTest {
         viewModel.uiState.test {
             assertThat(awaitItem()).isEqualTo(MainActivityUiState())
@@ -56,6 +56,50 @@ class MainActivityViewModelTest {
         }
         verify(exactly = 1) { dataStoreRepository.theme() }
         verify(exactly = 1) { dataStoreRepository.fontType() }
+    }
+
+    @Test
+    fun viewModel_init_calledRegisterListener() {
+        verify(exactly = 1) { inAppUpdateManager.registerListener(viewModel) }
+    }
+
+    @Test
+    fun startInAppUpdateInstall_state_changeToInstalling() = runTest {
+        viewModel.uiState.test {
+            assertThat(awaitItem().inAppUpdateState).isEqualTo(InAppUpdateState.Requesting)
+            viewModel.startInAppUpdateInstall()
+            assertThat(awaitItem().inAppUpdateState).isEqualTo(InAppUpdateState.Installing)
+            coVerify(exactly = 1) { inAppUpdateManager.startInstall() }
+        }
+    }
+
+    @Test
+    fun requestInAppUpdate_enableInAppUpdate_callRequestUpdate() = runTest {
+        coEvery { dataStoreRepository.enableInAppUpdate() } returns flowOf(true)
+        coEvery { inAppUpdateManager.requestUpdate(any(), any(), any(), any()) } just runs
+        assertThat(viewModel.uiState.value.inAppUpdateState).isEqualTo(InAppUpdateState.Requesting)
+        viewModel.requestInAppUpdate(mockk(relaxed = true))
+        coVerify(exactly = 1) { inAppUpdateManager.requestUpdate(any(), any(), any(), any()) }
+    }
+
+    @Test
+    fun requestInAppUpdate_disEnableInAppUpdate_notCallRequestUpdate() = runTest {
+        coEvery { dataStoreRepository.enableInAppUpdate() } returns flowOf(false)
+        assertThat(viewModel.uiState.value.inAppUpdateState).isEqualTo(InAppUpdateState.Requesting)
+        viewModel.requestInAppUpdate(mockk(relaxed = true))
+        assertThat(viewModel.uiState.value.inAppUpdateState).isEqualTo(InAppUpdateState.NotAvailable)
+        coVerify(exactly = 0) { inAppUpdateManager.requestUpdate(any(), any(), any(), any()) }
+    }
+
+    @Test
+    fun updateInAppUpdateState_state_changeUiState() = runTest {
+        viewModel.uiState.test {
+            assertThat(awaitItem().inAppUpdateState).isEqualTo(InAppUpdateState.Requesting)
+            viewModel.updateInAppUpdateState(InAppUpdateState.Downloaded)
+            assertThat(awaitItem().inAppUpdateState).isEqualTo(InAppUpdateState.Downloaded)
+            viewModel.updateInAppUpdateState(InAppUpdateState.Canceled)
+            assertThat(awaitItem().inAppUpdateState).isEqualTo(InAppUpdateState.Canceled)
+        }
     }
 
     companion object {
