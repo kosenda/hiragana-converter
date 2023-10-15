@@ -1,9 +1,8 @@
 package ksnd.hiraganaconverter.core.data.inappupdate
 
-import android.content.Context
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.AppUpdateType
@@ -11,7 +10,6 @@ import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
 import com.google.android.play.core.ktx.requestAppUpdateInfo
-import dagger.hilt.android.qualifiers.ApplicationContext
 import ksnd.hiraganaconverter.core.domain.inappupdate.InAppUpdateManager
 import timber.log.Timber
 import javax.inject.Inject
@@ -19,9 +17,8 @@ import javax.inject.Inject
 const val DAYS_FOR_FLEXIBLE_UPDATE = 2L
 
 class InAppUpdateManagerImpl @Inject constructor(
-    @ApplicationContext context: Context,
+    private val appUpdateManager: AppUpdateManager
 ) : InAppUpdateManager {
-    private val appUpdateManager = AppUpdateManagerFactory.create(context)
 
     override suspend fun requestUpdate(
         activityResultLauncher: ActivityResultLauncher<IntentSenderRequest>,
