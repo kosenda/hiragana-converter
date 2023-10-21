@@ -39,7 +39,7 @@ import ksnd.hiraganaconverter.view.TopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppNavigation(
+fun Navigation(
     modifier: Modifier,
     snackbarHostState: SnackbarHostState,
     receivedText: CharSequence?,

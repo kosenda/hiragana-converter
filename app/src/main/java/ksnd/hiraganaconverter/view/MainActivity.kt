@@ -35,7 +35,7 @@ import ksnd.hiraganaconverter.core.data.inappupdate.InAppUpdateState
 import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
-import ksnd.hiraganaconverter.view.navigation.AppNavigation
+import ksnd.hiraganaconverter.view.navigation.Navigation
 import ksnd.hiraganaconverter.viewmodel.MainActivityViewModel
 import timber.log.Timber
 
@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity() {
                         text = this@MainActivity.getString(R.string.in_app_update_downloading_snackbar_title, downloadPercentage),
                         isVisible = uiState.inAppUpdateState is InAppUpdateState.Downloading,
                     )
-                    AppNavigation(
+                    Navigation(
                         modifier = Modifier.weight(1f),
                         snackbarHostState = snackbarHostState,
                         receivedText = receivedText,
