@@ -18,7 +18,7 @@ coroutines = "1.7.3"
 coroutineTest = "1.7.3"
 dokka = "1.9.10"
 gmsPlugin = "4.4.0"
-firebaseBom = "32.3.1"
+firebaseBom = "32.4.0"
 firebaseCrashlyticsPlugin = "2.9.9"
 hilt = "2.48.1"
 junit4 = "4.13.2"
@@ -120,8 +120,8 @@ roborazzi-junit4-rule = { group = "io.github.takahirom.roborazzi", name = "robor
 
 # Firebase
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref="firebaseBom"}
-firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx"}
-firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx"}
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics"}
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics"}
 
 # App Update
 app-update = { group = "com.google.android.play", name = "app-update", version.ref = "appUpdate" }
