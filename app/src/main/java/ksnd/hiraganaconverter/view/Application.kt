@@ -2,8 +2,8 @@ package ksnd.hiraganaconverter.view
 
 import android.app.Application
 import android.util.Log
-import com.google.firebase.crashlytics.ktx.crashlytics
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.Firebase
+import com.google.firebase.crashlytics.crashlytics
 import dagger.hilt.android.HiltAndroidApp
 import ksnd.hiraganaconverter.BuildConfig
 import timber.log.Timber

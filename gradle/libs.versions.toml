@@ -120,8 +120,8 @@ roborazzi-junit4-rule = { group = "io.github.takahirom.roborazzi", name = "robor
 
 # Firebase
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref="firebaseBom"}
-firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx"}
-firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx"}
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics"}
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics"}
 
 # App Update
 app-update = { group = "com.google.android.play", name = "app-update", version.ref = "appUpdate" }
