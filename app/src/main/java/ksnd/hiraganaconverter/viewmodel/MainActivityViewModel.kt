@@ -21,27 +21,30 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class MainActivityViewModel @Inject constructor(
+class MainActivityViewModel
+@Inject
+constructor(
     private val dataStoreRepository: DataStoreRepository,
     private val inAppUpdateManager: InAppUpdateManager,
 ) : ViewModel(), InstallStateUpdatedListener {
     private val inAppUpdateState: MutableStateFlow<InAppUpdateState> = MutableStateFlow(InAppUpdateState.Requesting)
 
-    val uiState = combine(
-        dataStoreRepository.theme(),
-        dataStoreRepository.fontType(),
-        inAppUpdateState,
-    ) { theme, fontType, inAppUpdateState ->
-        MainActivityUiState(
-            theme = theme,
-            fontType = fontType,
-            inAppUpdateState = inAppUpdateState,
+    val uiState =
+        combine(
+            dataStoreRepository.theme(),
+            dataStoreRepository.fontType(),
+            inAppUpdateState,
+        ) { theme, fontType, inAppUpdateState ->
+            MainActivityUiState(
+                theme = theme,
+                fontType = fontType,
+                inAppUpdateState = inAppUpdateState,
+            )
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = MainActivityUiState(),
         )
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.Eagerly,
-        initialValue = MainActivityUiState(),
-    )
 
     init {
         inAppUpdateManager.registerListener(this)
@@ -72,9 +75,10 @@ class MainActivityViewModel @Inject constructor(
     override fun onStateUpdate(state: InstallState) {
         when (state.installStatus()) {
             InstallStatus.DOWNLOADING -> {
-                inAppUpdateState.value = InAppUpdateState.Downloading(
-                    percentage = ((state.bytesDownloaded().toFloat() / state.totalBytesToDownload().toFloat()) * 100).toInt().coerceIn(0, 100),
-                )
+                inAppUpdateState.value =
+                    InAppUpdateState.Downloading(
+                        percentage = ((state.bytesDownloaded().toFloat() / state.totalBytesToDownload().toFloat()) * 100).toInt().coerceIn(0, 100),
+                    )
             }
             InstallStatus.DOWNLOADED -> inAppUpdateState.value = InAppUpdateState.Downloaded
             InstallStatus.FAILED -> {

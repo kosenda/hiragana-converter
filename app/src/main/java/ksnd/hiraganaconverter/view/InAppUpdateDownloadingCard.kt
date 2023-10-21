@@ -30,7 +30,10 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import ksnd.hiraganaconverter.core.resource.R
 
 @Composable
-fun InAppUpdateDownloadingCard(text: String, isVisible: Boolean) {
+fun InAppUpdateDownloadingCard(
+    text: String,
+    isVisible: Boolean,
+) {
     val composition by rememberLottieComposition(
         spec = LottieCompositionSpec.RawRes(R.raw.animation_downloading),
     )
@@ -42,7 +45,8 @@ fun InAppUpdateDownloadingCard(text: String, isVisible: Boolean) {
         exit = shrinkVertically(shrinkTowards = Alignment.Top, animationSpec = tween(1000)),
     ) {
         Card(
-            modifier = Modifier
+            modifier =
+            Modifier
                 .statusBarsPadding()
                 .padding(horizontal = 16.dp)
                 .padding(top = 16.dp)

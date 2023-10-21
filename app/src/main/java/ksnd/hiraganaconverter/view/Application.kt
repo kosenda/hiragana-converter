@@ -17,14 +17,20 @@ class Application : Application() {
 }
 
 private class ReleaseTree : Timber.Tree() {
-    override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-        val priorityStr = when (priority) {
-            Log.ERROR -> "E/"
-            Log.WARN -> "W/"
-            Log.INFO -> "I/"
-            Log.DEBUG -> "D/"
-            else -> return
-        }
+    override fun log(
+        priority: Int,
+        tag: String?,
+        message: String,
+        t: Throwable?,
+    ) {
+        val priorityStr =
+            when (priority) {
+                Log.ERROR -> "E/"
+                Log.WARN -> "W/"
+                Log.INFO -> "I/"
+                Log.DEBUG -> "D/"
+                else -> return
+            }
         Firebase.crashlytics.log(
             "%s%s%s".format(
                 priorityStr,
