@@ -41,20 +41,20 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
     private val mainViewModel: MainActivityViewModel by viewModels()
-    private val updateFlowResultLauncher: ActivityResultLauncher<IntentSenderRequest> = registerForActivityResult(
-        ActivityResultContracts.StartIntentSenderForResult(),
-    ) { result ->
-        when (result.resultCode) {
-            RESULT_OK -> mainViewModel.updateInAppUpdateState(state = InAppUpdateState.Downloading(0))
-            RESULT_CANCELED -> mainViewModel.updateInAppUpdateState(state = InAppUpdateState.Canceled)
-            else -> {
-                mainViewModel.updateInAppUpdateState(state = InAppUpdateState.Failed)
-                Timber.e("Failed in app update resultCode: ${result.resultCode}")
+    private val updateFlowResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
+        registerForActivityResult(
+            ActivityResultContracts.StartIntentSenderForResult(),
+        ) { result ->
+            when (result.resultCode) {
+                RESULT_OK -> mainViewModel.updateInAppUpdateState(state = InAppUpdateState.Downloading(0))
+                RESULT_CANCELED -> mainViewModel.updateInAppUpdateState(state = InAppUpdateState.Canceled)
+                else -> {
+                    mainViewModel.updateInAppUpdateState(state = InAppUpdateState.Failed)
+                    Timber.e("Failed in app update resultCode: ${result.resultCode}")
+                }
             }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,20 +76,23 @@ class MainActivity : AppCompatActivity() {
             val uiState by mainViewModel.uiState.collectAsState(initial = MainActivityUiState())
             val snackbarHostState = remember { SnackbarHostState() }
 
-            val isDarkTheme = when (uiState.theme) {
-                Theme.NIGHT -> true
-                Theme.DAY -> false
-                else -> isSystemInDarkTheme()
-            }
+            val isDarkTheme =
+                when (uiState.theme) {
+                    Theme.NIGHT -> true
+                    Theme.DAY -> false
+                    else -> isSystemInDarkTheme()
+                }
 
             DisposableEffect(isDarkTheme) {
                 enableEdgeToEdge(
-                    statusBarStyle = SystemBarStyle.auto(
+                    statusBarStyle =
+                    SystemBarStyle.auto(
                         lightScrim = Color.Transparent.toArgb(),
                         darkScrim = Color.Transparent.toArgb(),
                         detectDarkMode = { isDarkTheme },
                     ),
-                    navigationBarStyle = SystemBarStyle.auto(
+                    navigationBarStyle =
+                    SystemBarStyle.auto(
                         lightScrim = Color.Transparent.toArgb(),
                         darkScrim = Color.Transparent.toArgb(),
                         detectDarkMode = { isDarkTheme },
@@ -102,11 +105,12 @@ class MainActivity : AppCompatActivity() {
                 when (uiState.inAppUpdateState) {
                     is InAppUpdateState.Requesting -> mainViewModel.requestInAppUpdate(activityResultLauncher = updateFlowResultLauncher)
                     is InAppUpdateState.Downloaded -> {
-                        val snackbarResult = snackbarHostState.showSnackbar(
-                            message = this@MainActivity.getString(R.string.in_app_update_downloaded_snackbar_title),
-                            actionLabel = this@MainActivity.getString(R.string.in_app_update_downloaded_action_label),
-                            duration = SnackbarDuration.Indefinite,
-                        )
+                        val snackbarResult =
+                            snackbarHostState.showSnackbar(
+                                message = this@MainActivity.getString(R.string.in_app_update_downloaded_snackbar_title),
+                                actionLabel = this@MainActivity.getString(R.string.in_app_update_downloaded_action_label),
+                                duration = SnackbarDuration.Indefinite,
+                            )
                         if (snackbarResult == SnackbarResult.ActionPerformed) {
                             mainViewModel.startInAppUpdateInstall()
                         }
@@ -120,11 +124,12 @@ class MainActivity : AppCompatActivity() {
                 fontType = uiState.fontType,
             ) {
                 // Because the state changes before the animation ends
-                val downloadPercentage = if (uiState.inAppUpdateState is InAppUpdateState.Downloading) {
-                    (uiState.inAppUpdateState as InAppUpdateState.Downloading).percentage
-                } else {
-                    100
-                }
+                val downloadPercentage =
+                    if (uiState.inAppUpdateState is InAppUpdateState.Downloading) {
+                        (uiState.inAppUpdateState as InAppUpdateState.Downloading).percentage
+                    } else {
+                        100
+                    }
 
                 Column {
                     InAppUpdateDownloadingCard(

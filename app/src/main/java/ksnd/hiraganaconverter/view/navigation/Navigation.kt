@@ -88,17 +88,19 @@ fun Navigation(
                 slideInVertically(
                     animationSpec = tween(durationMillis = 400, easing = EaseInOutQuart),
                     initialOffsetY = { fullHeight -> fullHeight * 8 / 10 },
-                ) + fadeIn(
-                    animationSpec = tween(durationMillis = 400, easing = EaseOutQuad),
-                )
+                ) +
+                    fadeIn(
+                        animationSpec = tween(durationMillis = 400, easing = EaseOutQuad),
+                    )
             },
             exitTransition = {
                 slideOutVertically(
                     animationSpec = tween(durationMillis = 400, easing = EaseInOutQuart),
                     targetOffsetY = { fullHeight -> fullHeight * 8 / 10 },
-                ) + fadeOut(
-                    animationSpec = tween(durationMillis = 400, easing = EaseOutQuad),
-                )
+                ) +
+                    fadeOut(
+                        animationSpec = tween(durationMillis = 400, easing = EaseOutQuad),
+                    )
             },
             content = content,
         )
@@ -111,7 +113,8 @@ fun Navigation(
     ) {
         fadeComposable(
             route = "%s/{%s}".format(NavRoute.Converter.route, NavKey.RECEIVED_TEXT),
-            arguments = listOf(
+            arguments =
+            listOf(
                 navArgument(NavKey.RECEIVED_TEXT) {
                     type = NavType.StringType
                     defaultValue = receivedText?.toString() ?: ""
