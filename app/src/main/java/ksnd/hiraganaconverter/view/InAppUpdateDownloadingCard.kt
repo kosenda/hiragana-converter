@@ -45,9 +45,7 @@ fun InAppUpdateDownloadingCard(
         exit = shrinkVertically(shrinkTowards = Alignment.Top, animationSpec = tween(1000)),
     ) {
         Card(
-            modifier =
-            Modifier
-                .statusBarsPadding()
+            modifier = Modifier.statusBarsPadding()
                 .padding(horizontal = 16.dp)
                 .padding(top = 16.dp)
                 .fillMaxWidth(),
