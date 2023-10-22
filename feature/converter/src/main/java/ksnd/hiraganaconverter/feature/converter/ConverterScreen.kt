@@ -72,7 +72,7 @@ import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 fun ConverterScreen(
     modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState,
-    viewModel: ConvertViewModelImpl,
+    viewModel: ConvertViewModel,
     topBar: @Composable () -> Unit,
     topBarHeight: Int,
     scrollBehavior: TopAppBarScrollBehavior,
