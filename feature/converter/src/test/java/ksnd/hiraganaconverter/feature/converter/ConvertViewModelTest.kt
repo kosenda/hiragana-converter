@@ -17,12 +17,12 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class ConvertViewModelImplTest {
+class ConvertViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
     private val convertTextUseCase = mockk<ConvertTextUseCase>(relaxUnitFun = true)
-    private val viewModel = ConvertViewModelImpl(
+    private val viewModel = ConvertViewModel(
         convertTextUseCase = convertTextUseCase,
         ioDispatcher = mainDispatcherRule.testDispatcher,
         savedStateHandle = SavedStateHandle(),
@@ -31,7 +31,7 @@ class ConvertViewModelImplTest {
     @Test
     fun init_receivedText_isUpdated() {
         val receivedText = "漢字"
-        val viewModel = ConvertViewModelImpl(
+        val viewModel = ConvertViewModel(
             convertTextUseCase = convertTextUseCase,
             ioDispatcher = mainDispatcherRule.testDispatcher,
             savedStateHandle = SavedStateHandle().apply { set(NavKey.RECEIVED_TEXT, receivedText) },
