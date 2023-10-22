@@ -11,11 +11,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.domain.NavKey
-import ksnd.hiraganaconverter.core.domain.usecase.ConversionFailedException
 import ksnd.hiraganaconverter.core.domain.usecase.ConvertTextUseCase
-import ksnd.hiraganaconverter.core.domain.usecase.InterceptorError
-import ksnd.hiraganaconverter.core.domain.usecase.IsReachedConvertMaxLimitException
-import ksnd.hiraganaconverter.core.model.ui.ConvertErrorType
+import ksnd.hiraganaconverter.core.domain.usecase.toConvertErrorType
 import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
 import ksnd.hiraganaconverter.core.resource.di.IODispatcher
 import timber.log.Timber
@@ -51,32 +48,13 @@ class ConvertViewModel @Inject constructor(
                         outputText = outputText,
                         convertErrorType = null,
                         previousInputText = uiState.value.inputText,
+                        isConverting = false,
                     )
                 }
             }.onFailure { throwable ->
-                Timber.d("convert throwable: $throwable")
-                _uiState.update {
-                    it.copy(
-                        convertErrorType = when (throwable) {
-                            is IsReachedConvertMaxLimitException -> ConvertErrorType.REACHED_CONVERT_MAX_LIMIT
-                            is ConversionFailedException -> ConvertErrorType.CONVERSION_FAILED
-                            is InterceptorError -> when (throwable.message) {
-                                ConvertErrorType.TOO_MANY_CHARACTER.name -> ConvertErrorType.TOO_MANY_CHARACTER
-                                ConvertErrorType.RATE_LIMIT_EXCEEDED.name -> ConvertErrorType.RATE_LIMIT_EXCEEDED
-                                ConvertErrorType.CONVERSION_FAILED.name -> ConvertErrorType.CONVERSION_FAILED
-                                ConvertErrorType.INTERNAL_SERVER.name -> ConvertErrorType.INTERNAL_SERVER
-                                ConvertErrorType.NETWORK.name -> ConvertErrorType.NETWORK
-                                else -> {
-                                    Timber.w("InterceptorError: %s".format(throwable.message))
-                                    ConvertErrorType.CONVERSION_FAILED
-                                }
-                            }
-                            else -> throw IllegalStateException("Not defined ConvertTextUseCaseException!")
-                        },
-                    )
-                }
+                val convertErrorType = throwable.toConvertErrorType().also { Timber.d("convert error type: $it") }
+                _uiState.update { it.copy(convertErrorType = convertErrorType, isConverting = false) }
             }
-            _uiState.update { it.copy(isConverting = false) }
         }
     }
 
