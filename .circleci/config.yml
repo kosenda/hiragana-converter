@@ -52,22 +52,11 @@ jobs:
       - image: cimg/base:stable
     steps:
       - slack/notify:
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "plain_text",
-                      "text": "*This is a text notification*",
-                      "emoji": true
-                    }
-                  ]
-                }
-              ]
-            }
-          event: always
+          event: fail
+          template: basic_fail_1
+      - slack/notify:
+          event: success
+          template: basic_success_1
 
 workflows:
   test:
