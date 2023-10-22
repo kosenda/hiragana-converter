@@ -1,5 +1,7 @@
 version: 2.1
 
+orbs:
+  slack: circleci/slack@4.12.5
 jobs:
   build-and-test:
     docker:
@@ -45,12 +47,36 @@ jobs:
       - run:
           name: run-danger-file
           command: bundle exec danger --verbose
-
+  notify:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - slack/notify:
+          custom: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "plain_text",
+                      "text": "*This is a text notification*",
+                      "emoji": true
+                    }
+                  ]
+                }
+              ]
+            }
+          event: always
 
 workflows:
   test:
     jobs:
       - build-and-test
+  send-notification:
+    jobs:
+      - notify:
+          context: slack-secrets
 
 # ■ memo ■
 # チェックコマンド： circleci config validate
