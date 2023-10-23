@@ -128,7 +128,7 @@ app-update = { group = "com.google.android.play", name = "app-update", version.r
 app-update-ktx = { group = "com.google.android.play", name = "app-update-ktx", version.ref = "appUpdate" }
 
 # okhttp3
-okhttp3 = { group = "com.squareup.okhttp3", name = "okhttp", version = "okhttp3" }
+4.12.0 = { group = "com.squareup.okhttp3", name = "okhttp", version = "okhttp3" }
 okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp3" }
 
 # Turbine
