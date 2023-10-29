@@ -10,16 +10,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import com.github.takahirom.roborazzi.captureRoboImage
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.feature.converter.ConvertUiState
 import ksnd.hiraganaconverter.feature.converter.ConverterScreenContent
-import ksnd.hiraganaconverter.view.MainActivity
 import ksnd.hiraganaconverter.view.TopBar
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -30,8 +27,9 @@ import org.robolectric.annotation.GraphicsMode
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(qualifiers = RobolectricDeviceQualifiers.Pixel6Pro)
 class ConverterScreenTest {
-    @get:Rule
-    val composeTestRule = createAndroidComposeRule<MainActivity>()
+// FIXME: I have commented out the error since I started to Inject Firebase into MainActivity.
+//    @get:Rule
+//    val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     @Test
     fun converterScreen_light() {

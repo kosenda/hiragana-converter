@@ -62,6 +62,7 @@ dependencies {
     implementation(project(":feature:history"))
     implementation(project(":feature:info"))
     implementation(project(":feature:setting"))
+    implementation(project(":core:analytics"))
     implementation(project(":core:model"))
     implementation(project(":core:resource"))
     implementation(project(":core:domain"))
