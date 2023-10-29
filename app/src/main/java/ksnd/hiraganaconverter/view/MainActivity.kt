@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -31,6 +32,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import ksnd.hiraganaconverter.core.analytics.Analytics
+import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
 import ksnd.hiraganaconverter.core.data.inappupdate.InAppUpdateState
 import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.resource.R
@@ -38,9 +41,12 @@ import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.view.navigation.Navigation
 import ksnd.hiraganaconverter.viewmodel.MainActivityViewModel
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    @Inject lateinit var analytics: Analytics
+
     private val mainViewModel: MainActivityViewModel by viewModels()
     private val updateFlowResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
         registerForActivityResult(
@@ -119,28 +125,30 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            HiraganaConverterTheme(
-                isDarkTheme = isDarkTheme,
-                fontType = uiState.fontType,
-            ) {
-                // Because the state changes before the animation ends
-                val downloadPercentage =
-                    if (uiState.inAppUpdateState is InAppUpdateState.Downloading) {
-                        (uiState.inAppUpdateState as InAppUpdateState.Downloading).percentage
-                    } else {
-                        100
-                    }
+            CompositionLocalProvider(LocalAnalytics provides analytics) {
+                HiraganaConverterTheme(
+                    isDarkTheme = isDarkTheme,
+                    fontType = uiState.fontType,
+                ) {
+                    // Because the state changes before the animation ends
+                    val downloadPercentage =
+                        if (uiState.inAppUpdateState is InAppUpdateState.Downloading) {
+                            (uiState.inAppUpdateState as InAppUpdateState.Downloading).percentage
+                        } else {
+                            100
+                        }
 
-                Column {
-                    InAppUpdateDownloadingCard(
-                        text = this@MainActivity.getString(R.string.in_app_update_downloading_snackbar_title, downloadPercentage),
-                        isVisible = uiState.inAppUpdateState is InAppUpdateState.Downloading,
-                    )
-                    Navigation(
-                        modifier = Modifier.weight(1f),
-                        snackbarHostState = snackbarHostState,
-                        receivedText = receivedText,
-                    )
+                    Column {
+                        InAppUpdateDownloadingCard(
+                            text = this@MainActivity.getString(R.string.in_app_update_downloading_snackbar_title, downloadPercentage),
+                            isVisible = uiState.inAppUpdateState is InAppUpdateState.Downloading,
+                        )
+                        Navigation(
+                            modifier = Modifier.weight(1f),
+                            snackbarHostState = snackbarHostState,
+                            receivedText = receivedText,
+                        )
+                    }
                 }
             }
         }

@@ -1,0 +1,16 @@
+package ksnd.hiraganaconverter.core.analytics
+
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
+import javax.inject.Inject
+
+
+class AnalyticsImpl @Inject constructor(
+    private val firebaseAnalytics: FirebaseAnalytics,
+) : Analytics {
+    override fun logScreen(screen: Screen) {
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+            param(FirebaseAnalytics.Param.SCREEN_NAME, screen.name)
+        }
+    }
+}

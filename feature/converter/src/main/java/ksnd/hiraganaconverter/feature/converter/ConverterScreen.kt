@@ -35,6 +35,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -55,6 +56,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ShareCompat
+import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
+import ksnd.hiraganaconverter.core.analytics.Screen
 import ksnd.hiraganaconverter.core.model.ui.ConvertErrorType
 import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
 import ksnd.hiraganaconverter.core.resource.LIMIT_CONVERT_COUNT
@@ -78,6 +81,11 @@ fun ConverterScreen(
     scrollBehavior: TopAppBarScrollBehavior,
 ) {
     val uiState by viewModel.uiState.collectAsState(ConvertUiState())
+    val analytics = LocalAnalytics.current
+
+    LaunchedEffect(Unit) {
+        analytics.logScreen(Screen.CONVERTER)
+    }
 
     ConverterScreenContent(
         modifier = modifier,
