@@ -4,7 +4,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import javax.inject.Inject
 
-
 class AnalyticsImpl @Inject constructor(
     private val firebaseAnalytics: FirebaseAnalytics,
 ) : Analytics {
