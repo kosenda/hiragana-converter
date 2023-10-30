@@ -5,7 +5,10 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import io.mockk.spyk
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
+import ksnd.hiraganaconverter.core.analytics.MockAnalytics
 import ksnd.hiraganaconverter.core.domain.NavKey
 import ksnd.hiraganaconverter.core.domain.usecase.ConversionFailedException
 import ksnd.hiraganaconverter.core.domain.usecase.ConvertTextUseCase
@@ -22,8 +25,10 @@ class ConvertViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private val convertTextUseCase = mockk<ConvertTextUseCase>(relaxUnitFun = true)
+    private val analytics = spyk(MockAnalytics())
     private val viewModel = ConvertViewModel(
         convertTextUseCase = convertTextUseCase,
+        analytics = analytics,
         ioDispatcher = mainDispatcherRule.testDispatcher,
         savedStateHandle = SavedStateHandle(),
     )
@@ -33,6 +38,7 @@ class ConvertViewModelTest {
         val receivedText = "漢字"
         val viewModel = ConvertViewModel(
             convertTextUseCase = convertTextUseCase,
+            analytics = analytics,
             ioDispatcher = mainDispatcherRule.testDispatcher,
             savedStateHandle = SavedStateHandle().apply { set(NavKey.RECEIVED_TEXT, receivedText) },
         )
@@ -71,6 +77,7 @@ class ConvertViewModelTest {
         assertThat(viewModel.uiState.value.previousInputText).isEqualTo(inputText)
         assertThat(viewModel.uiState.value.convertErrorType).isNull()
         coVerify(exactly = 1) { convertTextUseCase(any(), any()) }
+        verify(exactly = 1) { analytics.logConvert(any()) }
     }
 
     @Test
