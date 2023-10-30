@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ksnd.hiraganaconverter.core.analytics.Analytics
+import ksnd.hiraganaconverter.core.analytics.ConvertType
 import ksnd.hiraganaconverter.core.domain.NavKey
 import ksnd.hiraganaconverter.core.domain.usecase.ConvertTextUseCase
 import ksnd.hiraganaconverter.core.domain.usecase.toConvertErrorType
@@ -21,6 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ConvertViewModel @Inject constructor(
     private val convertTextUseCase: ConvertTextUseCase,
+    private val analytics: Analytics,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
@@ -37,6 +40,7 @@ class ConvertViewModel @Inject constructor(
     fun convert() {
         // If input has not changed since the last time, it will not be converted.
         if (uiState.value.isChangedInputText().not()) return
+        analytics.logConvert(type = if (uiState.value.selectedTextType == HiraKanaType.HIRAGANA) ConvertType.HIRAGANA else ConvertType.KATAKANA)
 
         CoroutineScope(ioDispatcher).launch {
             _uiState.update { it.copy(isConverting = true) }
