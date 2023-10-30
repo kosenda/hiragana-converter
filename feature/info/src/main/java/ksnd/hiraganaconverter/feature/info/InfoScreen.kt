@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,6 +48,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
+import ksnd.hiraganaconverter.core.analytics.Screen
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.BackTopBar
 import ksnd.hiraganaconverter.core.ui.parts.GooCreditImage
@@ -63,6 +66,12 @@ fun InfoScreen(
     viewModel: InfoViewModel,
     onBackPressed: () -> Unit,
 ) {
+    val analytics = LocalAnalytics.current
+
+    LaunchedEffect(Unit) {
+        analytics.logScreen(Screen.INFO)
+    }
+
     InfoScreenContent(versionName = viewModel.versionName, onBackPressed = onBackPressed)
 }
 
