@@ -5,4 +5,5 @@ package ksnd.hiraganaconverter.core.analytics
  */
 class MockAnalytics : Analytics {
     override fun logScreen(screen: Screen) {}
+    override fun logConvert(type: ConvertType) {}
 }

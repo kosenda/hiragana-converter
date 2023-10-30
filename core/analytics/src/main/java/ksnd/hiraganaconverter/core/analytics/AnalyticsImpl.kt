@@ -12,4 +12,10 @@ class AnalyticsImpl @Inject constructor(
             param(FirebaseAnalytics.Param.SCREEN_NAME, screen.name)
         }
     }
+
+    override fun logConvert(type: ConvertType) {
+        firebaseAnalytics.logEvent(Event.CONVERT.name) {
+            param(Param.CONVERT_TYPE.name, type.name)
+        }
+    }
 }
