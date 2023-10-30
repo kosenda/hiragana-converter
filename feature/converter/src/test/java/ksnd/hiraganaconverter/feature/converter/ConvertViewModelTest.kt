@@ -4,10 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
+import ksnd.hiraganaconverter.core.analytics.ConvertType
 import ksnd.hiraganaconverter.core.analytics.MockAnalytics
 import ksnd.hiraganaconverter.core.domain.NavKey
 import ksnd.hiraganaconverter.core.domain.usecase.ConversionFailedException
@@ -125,5 +127,16 @@ class ConvertViewModelTest {
         assertThat(viewModel.uiState.value.inputText).isEmpty()
         assertThat(viewModel.uiState.value.outputText).isEmpty()
         assertThat(viewModel.uiState.value.convertErrorType).isNull()
+    }
+
+    @Test
+    fun convert_setConvertType_switchType() = runTest {
+        viewModel.updateInputText("漢字")
+        viewModel.changeHiraKanaType(HiraKanaType.KATAKANA)
+        viewModel.convert()
+        every { analytics.logConvert(ConvertType.KATAKANA) }
+        viewModel.changeHiraKanaType(HiraKanaType.HIRAGANA)
+        viewModel.convert()
+        every { analytics.logConvert(ConvertType.HIRAGANA) }
     }
 }
