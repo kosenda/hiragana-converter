@@ -2,6 +2,7 @@ package ksnd.hiraganaconverter.feature.info
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -38,6 +39,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.web.WebView
+import com.google.accompanist.web.WebViewNavigator
 import com.google.accompanist.web.rememberWebViewNavigator
 import com.google.accompanist.web.rememberWebViewState
 import kotlinx.coroutines.launch
@@ -47,6 +49,8 @@ import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.parts.button.TransitionButton
 import ksnd.hiraganaconverter.core.ui.parts.card.TitleCard
+import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
+import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
 private const val FLOATING_PADDING = 16
 
@@ -55,11 +59,8 @@ private const val FLOATING_PADDING = 16
 fun PrivacyPolicyContent() {
     var isShowWebView by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val privacyPolicyUrl = stringResource(id = R.string.privacy_policy_url)
     var floatingPlayerHeight by remember { mutableIntStateOf(0) }
-    val density = LocalDensity.current.density
-    val webViewState = rememberWebViewState(privacyPolicyUrl)
-    val coroutineScope = rememberCoroutineScope()
+    val webViewState = rememberWebViewState(url = stringResource(id = R.string.privacy_policy_url))
     val navigator = rememberWebViewNavigator()
     val scrollState = rememberScrollState()
     val isScrollTop by remember(scrollState.value) { derivedStateOf { scrollState.value == 0 } }
@@ -82,41 +83,7 @@ fun PrivacyPolicyContent() {
     if (isShowWebView) {
         ModalBottomSheet(
             onDismissRequest = { isShowWebView = false },
-            dragHandle = {
-                Box(
-                    modifier = Modifier
-                        .padding(all = 4.dp)
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    BottomSheetDefaults.DragHandle()
-                    Row {
-                        CustomIconButton(
-                            painter = painterResource(R.drawable.baseline_keyboard_arrow_left_24),
-                            contentDescription = "",
-                            contentColor = if (navigator.canGoBack) {
-                                MaterialTheme.colorScheme.primary
-                            } else {
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
-                            },
-                            containerColor = Color.Transparent,
-                            onClick = navigator::navigateBack,
-                        )
-                        CustomIconButton(
-                            painter = painterResource(R.drawable.baseline_keyboard_arrow_right_24),
-                            contentDescription = "",
-                            contentColor = if (navigator.canGoForward) {
-                                MaterialTheme.colorScheme.primary
-                            } else {
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
-                            },
-                            containerColor = Color.Transparent,
-                            onClick = navigator::navigateForward,
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                    }
-                }
-            },
+            dragHandle = { DragHandle(navigator = navigator) },
             sheetState = sheetState,
         ) {
             Box(
@@ -136,29 +103,102 @@ fun PrivacyPolicyContent() {
                     contentAlignment = Alignment.BottomEnd,
                 ) {
                     this@ModalBottomSheet.AnimatedVisibility(visible = isScrollTop.not()) {
-                        FloatingActionButton(
-                            modifier = Modifier
-                                .padding(all = FLOATING_PADDING.dp)
-                                .onSizeChanged {
-                                    floatingPlayerHeight = it.height / density.toInt()
-                                },
-                            onClick = {
-                                coroutineScope.launch {
-                                    scrollState.animateScrollTo(0)
-                                }
-                            },
-                        ) {
-                            Image(
-                                modifier = Modifier.size(size = 48.dp),
-                                painter = painterResource(R.drawable.ic_baseline_keyboard_arrow_up_24),
-                                contentDescription = "TOP",
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
-                                contentScale = ContentScale.Fit,
-                            )
-                        }
+                        ToTopFloatingButton(
+                            scrollState = scrollState,
+                            sizeChangedHeight = { floatingPlayerHeight = it },
+                        )
                     }
                 }
             }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DragHandle(navigator: WebViewNavigator) {
+    Box(
+        modifier = Modifier
+            .padding(all = 4.dp)
+            .fillMaxWidth(),
+        contentAlignment = Alignment.Center,
+    ) {
+        BottomSheetDefaults.DragHandle()
+        Row {
+            CustomIconButton(
+                painter = painterResource(R.drawable.baseline_keyboard_arrow_left_24),
+                contentDescription = "",
+                contentColor = if (navigator.canGoBack) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
+                },
+                containerColor = Color.Transparent,
+                onClick = navigator::navigateBack,
+            )
+            CustomIconButton(
+                painter = painterResource(R.drawable.baseline_keyboard_arrow_right_24),
+                contentDescription = "",
+                contentColor = if (navigator.canGoForward) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
+                },
+                containerColor = Color.Transparent,
+                onClick = navigator::navigateForward,
+            )
+            Spacer(modifier = Modifier.weight(1f))
+        }
+    }
+}
+
+@Composable
+private fun ToTopFloatingButton(scrollState: ScrollState, sizeChangedHeight: (Int) -> Unit) {
+    val density = LocalDensity.current.density
+    val coroutineScope = rememberCoroutineScope()
+
+    FloatingActionButton(
+        modifier = Modifier
+            .padding(all = FLOATING_PADDING.dp)
+            .onSizeChanged {
+                sizeChangedHeight(it.height / density.toInt())
+            },
+        onClick = {
+            coroutineScope.launch {
+                scrollState.animateScrollTo(0)
+            }
+        },
+    ) {
+        Image(
+            modifier = Modifier.size(size = 48.dp),
+            painter = painterResource(R.drawable.ic_baseline_keyboard_arrow_up_24),
+            contentDescription = "TOP",
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+            contentScale = ContentScale.Fit,
+        )
+    }
+}
+
+@UiModePreview
+@Composable
+private fun PreviewPrivacyPolicyContent() {
+    HiraganaConverterTheme {
+        PrivacyPolicyContent()
+    }
+}
+
+@UiModePreview
+@Composable
+private fun PreviewDragHandler() {
+    HiraganaConverterTheme {
+        DragHandle(navigator = rememberWebViewNavigator())
+    }
+}
+
+@UiModePreview
+@Composable
+private fun PreviewToTopFloatingPlayer() {
+    HiraganaConverterTheme {
+        ToTopFloatingButton(scrollState = rememberScrollState(), sizeChangedHeight = {})
     }
 }
