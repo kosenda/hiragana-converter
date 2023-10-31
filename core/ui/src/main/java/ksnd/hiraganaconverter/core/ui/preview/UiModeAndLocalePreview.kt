@@ -8,3 +8,7 @@ import androidx.compose.ui.tooling.preview.Preview
 @Preview(name = "Light and en_US", uiMode = Configuration.UI_MODE_NIGHT_NO, locale = "en_US")
 @Preview(name = "Light and ja", uiMode = Configuration.UI_MODE_NIGHT_NO, locale = "ja")
 annotation class UiModeAndLocalePreview
+
+@Preview(name = "Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Light", uiMode = Configuration.UI_MODE_NIGHT_NO)
+annotation class UiModePreview
