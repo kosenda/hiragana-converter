@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -40,9 +41,11 @@ import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewNavigator
 import com.google.accompanist.web.rememberWebViewState
 import kotlinx.coroutines.launch
+import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
+import ksnd.hiraganaconverter.core.analytics.Screen
 import ksnd.hiraganaconverter.core.resource.R
-import ksnd.hiraganaconverter.core.ui.parts.button.TransitionButton
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
+import ksnd.hiraganaconverter.core.ui.parts.button.TransitionButton
 import ksnd.hiraganaconverter.core.ui.parts.card.TitleCard
 
 private const val FLOATING_PADDING = 16
@@ -60,6 +63,11 @@ fun PrivacyPolicyContent() {
     val navigator = rememberWebViewNavigator()
     val scrollState = rememberScrollState()
     val isScrollTop by remember(scrollState.value) { derivedStateOf { scrollState.value == 0 } }
+    val analytics = LocalAnalytics.current
+
+    LaunchedEffect(isShowWebView) {
+        if (isShowWebView) analytics.logScreen(Screen.PRIVACY_POLICY)
+    }
 
     TitleCard(
         text = stringResource(id = R.string.privacy_policy_title),

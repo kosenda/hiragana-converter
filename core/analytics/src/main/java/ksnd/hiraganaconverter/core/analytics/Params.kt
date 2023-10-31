@@ -5,6 +5,7 @@ enum class Screen {
     HISTORY,
     SETTING,
     INFO,
+    PRIVACY_POLICY,
 }
 
 enum class Event {
