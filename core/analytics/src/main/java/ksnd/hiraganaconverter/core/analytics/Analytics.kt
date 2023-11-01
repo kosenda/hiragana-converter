@@ -2,5 +2,8 @@ package ksnd.hiraganaconverter.core.analytics
 
 interface Analytics {
     fun logScreen(screen: Screen)
-    fun logConvert(type: ConvertType)
+    fun logConvert(hiraKanaType: String)
+    fun logConvertError(error: String)
+    fun logChangeHiraKanaType(hiraKanaType: String)
+    fun logClearAllText()
 }

@@ -10,13 +10,12 @@ enum class Screen {
 
 enum class Event {
     CONVERT,
+    CONVERT_ERROR,
+    CHANGE_HIRA_KANA_TYPE,
+    CLEAR_ALL_TEXT,
 }
 
 enum class Param {
     CONVERT_TYPE,
-}
-
-enum class ConvertType {
-    HIRAGANA,
-    KATAKANA,
+    CONVERT_ERROR,
 }
