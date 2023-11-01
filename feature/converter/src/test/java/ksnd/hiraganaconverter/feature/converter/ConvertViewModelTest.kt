@@ -9,7 +9,6 @@ import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
-import ksnd.hiraganaconverter.core.analytics.ConvertType
 import ksnd.hiraganaconverter.core.analytics.MockAnalytics
 import ksnd.hiraganaconverter.core.domain.NavKey
 import ksnd.hiraganaconverter.core.domain.usecase.ConversionFailedException
@@ -134,9 +133,9 @@ class ConvertViewModelTest {
         viewModel.updateInputText("漢字")
         viewModel.changeHiraKanaType(HiraKanaType.KATAKANA)
         viewModel.convert()
-        every { analytics.logConvert(ConvertType.KATAKANA) }
+        every { analytics.logConvert(HiraKanaType.KATAKANA.name) }
         viewModel.changeHiraKanaType(HiraKanaType.HIRAGANA)
         viewModel.convert()
-        every { analytics.logConvert(ConvertType.HIRAGANA) }
+        every { analytics.logConvert(HiraKanaType.HIRAGANA.name) }
     }
 }
