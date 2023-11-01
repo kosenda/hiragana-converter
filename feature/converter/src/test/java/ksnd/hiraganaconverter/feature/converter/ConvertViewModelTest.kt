@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
@@ -89,6 +88,7 @@ class ConvertViewModelTest {
         viewModel.convert()
         assertThat(viewModel.uiState.value.convertErrorType).isNotNull()
         coVerify(exactly = 1) { convertTextUseCase(any(), any()) }
+        verify(exactly = 1) { analytics.logConvertError(any()) }
     }
 
     @Test
@@ -123,6 +123,7 @@ class ConvertViewModelTest {
         assertThat(viewModel.uiState.value.outputText).isNotEmpty()
         assertThat(viewModel.uiState.value.convertErrorType).isNotNull()
         viewModel.clearAllText()
+        verify(exactly = 1) { analytics.logClearAllText() }
         assertThat(viewModel.uiState.value.inputText).isEmpty()
         assertThat(viewModel.uiState.value.outputText).isEmpty()
         assertThat(viewModel.uiState.value.convertErrorType).isNull()
@@ -133,9 +134,10 @@ class ConvertViewModelTest {
         viewModel.updateInputText("漢字")
         viewModel.changeHiraKanaType(HiraKanaType.KATAKANA)
         viewModel.convert()
-        every { analytics.logConvert(HiraKanaType.KATAKANA.name) }
+        verify(exactly = 1) { analytics.logConvert(HiraKanaType.KATAKANA.name) }
         viewModel.changeHiraKanaType(HiraKanaType.HIRAGANA)
+        verify(exactly = 1) { analytics.logChangeHiraKanaType(HiraKanaType.HIRAGANA.name) }
         viewModel.convert()
-        every { analytics.logConvert(HiraKanaType.HIRAGANA.name) }
+        verify(exactly = 1) { analytics.logConvert(HiraKanaType.HIRAGANA.name) }
     }
 }
