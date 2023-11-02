@@ -39,7 +39,7 @@ class ConvertViewModel @Inject constructor(
     fun convert() {
         // If input has not changed since the last time, it will not be converted.
         if (uiState.value.isChangedInputText().not()) return
-        analytics.logConvert(hiraKanaType = uiState.value.selectedTextType.name)
+        analytics.logConvert(hiraKanaType = uiState.value.selectedTextType.name, inputTextLength = uiState.value.inputText.length)
 
         CoroutineScope(ioDispatcher).launch {
             _uiState.update { it.copy(isConverting = true) }
