@@ -77,7 +77,7 @@ class ConvertViewModelTest {
         assertThat(viewModel.uiState.value.previousInputText).isEqualTo(inputText)
         assertThat(viewModel.uiState.value.convertErrorType).isNull()
         coVerify(exactly = 1) { convertTextUseCase(any(), any()) }
-        verify(exactly = 1) { analytics.logConvert(any()) }
+        verify(exactly = 1) { analytics.logConvert(any(), inputText.length) }
     }
 
     @Test
@@ -131,13 +131,14 @@ class ConvertViewModelTest {
 
     @Test
     fun convert_setConvertType_switchType() = runTest {
-        viewModel.updateInputText("漢字")
+        val inputText = "漢字"
+        viewModel.updateInputText(inputText)
         viewModel.changeHiraKanaType(HiraKanaType.KATAKANA)
         viewModel.convert()
-        verify(exactly = 1) { analytics.logConvert(HiraKanaType.KATAKANA.name) }
+        verify(exactly = 1) { analytics.logConvert(HiraKanaType.KATAKANA.name, inputText.length) }
         viewModel.changeHiraKanaType(HiraKanaType.HIRAGANA)
         verify(exactly = 1) { analytics.logChangeHiraKanaType(HiraKanaType.HIRAGANA.name) }
         viewModel.convert()
-        verify(exactly = 1) { analytics.logConvert(HiraKanaType.HIRAGANA.name) }
+        verify(exactly = 1) { analytics.logConvert(HiraKanaType.HIRAGANA.name, inputText.length) }
     }
 }

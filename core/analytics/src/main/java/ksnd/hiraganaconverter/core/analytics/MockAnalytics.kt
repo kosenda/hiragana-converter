@@ -5,7 +5,7 @@ package ksnd.hiraganaconverter.core.analytics
  */
 class MockAnalytics : Analytics {
     override fun logScreen(screen: Screen) {}
-    override fun logConvert(hiraKanaType: String) {}
+    override fun logConvert(hiraKanaType: String, inputTextLength: Int) {}
     override fun logConvertError(error: String) {}
     override fun logChangeHiraKanaType(hiraKanaType: String) {}
     override fun logClearAllText() {}
