@@ -18,4 +18,5 @@ enum class Event {
 enum class Param {
     CONVERT_TYPE,
     CONVERT_ERROR,
+    INPUT_TEXT_LENGTH,
 }

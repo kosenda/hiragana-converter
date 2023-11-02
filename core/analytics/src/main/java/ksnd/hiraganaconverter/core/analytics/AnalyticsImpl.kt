@@ -13,9 +13,10 @@ class AnalyticsImpl @Inject constructor(
         }
     }
 
-    override fun logConvert(hiraKanaType: String) {
+    override fun logConvert(hiraKanaType: String, inputTextLength: Int) {
         firebaseAnalytics.logEvent(Event.CONVERT.name) {
             param(Param.CONVERT_TYPE.name, hiraKanaType)
+            param(Param.INPUT_TEXT_LENGTH.name, inputTextLength.toString())
         }
     }
 
