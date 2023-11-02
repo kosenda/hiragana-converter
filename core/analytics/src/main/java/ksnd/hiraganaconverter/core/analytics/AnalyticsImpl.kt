@@ -35,4 +35,28 @@ class AnalyticsImpl @Inject constructor(
     override fun logClearAllText() {
         firebaseAnalytics.logEvent(Event.CLEAR_ALL_TEXT.name) {}
     }
+
+    override fun logUpdateTheme(theme: String) {
+        firebaseAnalytics.logEvent(Event.UPDATE_THEME.name) {
+            param(Param.THEME.name, theme)
+        }
+    }
+
+    override fun logUpdateLanguage(language: String) {
+        firebaseAnalytics.logEvent(Event.UPDATE_LANGUAGE.name) {
+            param(Param.LANGUAGE.name, language)
+        }
+    }
+
+    override fun logUpdateFont(font: String) {
+        firebaseAnalytics.logEvent(Event.UPDATE_FONT.name) {
+            param(Param.FONT.name, font)
+        }
+    }
+
+    override fun logSwitchEnableInAppUpdate(isEnable: Boolean) {
+        firebaseAnalytics.logEvent(Event.SWITCH_ENABLE_IN_APP_UPDATE.name) {
+            param(Param.IS_ENABLE_IN_APP_UPDATE.name, isEnable.toString())
+        }
+    }
 }

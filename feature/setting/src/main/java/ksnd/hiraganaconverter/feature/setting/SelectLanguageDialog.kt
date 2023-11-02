@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.os.LocaleListCompat
+import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.card.LanguageCard
 import ksnd.hiraganaconverter.core.ui.parts.dialog.DialogCloseButton
@@ -52,6 +53,7 @@ fun SelectLanguageDialog(
 private fun SelectLanguageDialogContent(
     onCloseClick: () -> Unit,
 ) {
+    val analytics = LocalAnalytics.current
     var settingLocale by rememberSaveable { mutableStateOf("") }
     val languagePair = listOf(
         stringResource(id = R.string.locale_en) to stringResource(id = R.string.display_en),
@@ -83,7 +85,10 @@ private fun SelectLanguageDialogContent(
                     modifier = Modifier.weight(1f),
                     displayLanguage = displayLanguage,
                     isSelected = settingLocale == locale,
-                    onClick = { AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(locale)) },
+                    onClick = {
+                        analytics.logUpdateLanguage(displayLanguage)
+                        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(locale))
+                    },
                 )
             }
         }
