@@ -56,7 +56,7 @@ fun SettingScreen(
         uiState = uiState,
         updateTheme = viewModel::updateTheme,
         updateFontType = viewModel::updateFontType,
-        updateUseInAppUpdate = viewModel::updateUseInAppUpdate,
+        updateUseInAppUpdate = viewModel::updateEnableInAppUpdate,
         onBackPressed = onBackPressed,
     )
 }

@@ -6,4 +6,8 @@ interface Analytics {
     fun logConvertError(error: String)
     fun logChangeHiraKanaType(hiraKanaType: String)
     fun logClearAllText()
+    fun logUpdateTheme(theme: String)
+    fun logUpdateLanguage(language: String)
+    fun logUpdateFont(font: String)
+    fun logSwitchEnableInAppUpdate(isEnable: Boolean)
 }
