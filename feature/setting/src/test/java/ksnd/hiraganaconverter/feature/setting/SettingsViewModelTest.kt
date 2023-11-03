@@ -29,11 +29,6 @@ class SettingsViewModelTest {
     private val analytics = spyk(MockAnalytics())
     private lateinit var viewModel : SettingsViewModel
 
-    @Test
-    fun `test 絶対に失敗するテスト`() {
-        assertThat(true).isFalse()
-    }
-
     @Before
     fun setUp() {
         // Test with different default values for UiState and initial values for the test.
