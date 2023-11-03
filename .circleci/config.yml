@@ -47,13 +47,11 @@ jobs:
       - run:
           name: run-danger-file
           command: bundle exec danger --verbose
-  notify:
-    docker:
-      - image: cimg/base:stable
-    steps:
+
       - slack/notify:
           event: fail
           template: basic_fail_1
+
       - slack/notify:
           event: pass
           template: basic_success_1
@@ -61,11 +59,8 @@ jobs:
 workflows:
   test:
     jobs:
-      - build-and-test
-      - notify:
+      - build-and-test:
           context: slack-secrets
-          requires:
-            - build-and-test
 
 # ■ memo ■
 # チェックコマンド： circleci config validate
