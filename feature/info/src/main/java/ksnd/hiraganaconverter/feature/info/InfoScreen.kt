@@ -233,9 +233,9 @@ private fun DeveloperInfoContent() {
                     CustomIconButton(
                         modifier = Modifier.padding(start = 8.dp),
                         contentDescription = "",
-                        painter = painterResource(id = R.drawable.ic_twitter_logo),
+                        painter = painterResource(id = R.drawable.ic_x_logo),
                         contentColor = null,
-                        containerColor = Color.White,
+                        containerColor = Color.Black,
                         onClick = { uriHandler.openUri(uri = "https://twitter.com/ksnd_dev") },
                     )
                 }
