@@ -33,6 +33,7 @@ class ConvertTextUseCaseTest {
         dataStoreRepository = dataStoreRepository,
         convertHistoryRepository = convertHistoryRepository,
         appConfig = mockk(relaxed = true),
+        ioDispatcher = mainDispatcherRule.testDispatcher,
     )
 
     @Test

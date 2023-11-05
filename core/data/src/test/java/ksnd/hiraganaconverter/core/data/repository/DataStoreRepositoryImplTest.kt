@@ -27,7 +27,6 @@ class DataStoreRepositoryImplTest {
     )
     private val dataStoreRepository = DataStoreRepositoryImpl(
         dataStore = dataStore,
-        ioDispatcher = mainDispatcherRule.testDispatcher,
     )
 
     @Test

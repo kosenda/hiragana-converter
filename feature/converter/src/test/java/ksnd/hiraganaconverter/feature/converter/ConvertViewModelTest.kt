@@ -29,7 +29,6 @@ class ConvertViewModelTest {
     private val viewModel = ConvertViewModel(
         convertTextUseCase = convertTextUseCase,
         analytics = analytics,
-        ioDispatcher = mainDispatcherRule.testDispatcher,
         savedStateHandle = SavedStateHandle(),
     )
 
@@ -39,7 +38,6 @@ class ConvertViewModelTest {
         val viewModel = ConvertViewModel(
             convertTextUseCase = convertTextUseCase,
             analytics = analytics,
-            ioDispatcher = mainDispatcherRule.testDispatcher,
             savedStateHandle = SavedStateHandle().apply { set(NavKey.RECEIVED_TEXT, receivedText) },
         )
         assertThat(viewModel.uiState.value.inputText).isEqualTo(receivedText)

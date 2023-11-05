@@ -27,4 +27,5 @@ dependencies {
     implementation(project(":core:analytics"))
     testImplementation(project(":core:testing"))
     implementation(libs.timber)
+    implementation(libs.androidx.lifecycle.viewModelCompose)
 }

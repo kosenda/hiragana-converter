@@ -2,9 +2,8 @@ package ksnd.hiraganaconverter.feature.converter
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,7 +14,6 @@ import ksnd.hiraganaconverter.core.domain.NavKey
 import ksnd.hiraganaconverter.core.domain.usecase.ConvertTextUseCase
 import ksnd.hiraganaconverter.core.domain.usecase.toConvertErrorType
 import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
-import ksnd.hiraganaconverter.core.resource.di.IODispatcher
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -23,7 +21,6 @@ import javax.inject.Inject
 class ConvertViewModel @Inject constructor(
     private val convertTextUseCase: ConvertTextUseCase,
     private val analytics: Analytics,
-    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val receivedText = savedStateHandle.get<String>(NavKey.RECEIVED_TEXT) ?: ""
@@ -40,8 +37,7 @@ class ConvertViewModel @Inject constructor(
         // If input has not changed since the last time, it will not be converted.
         if (uiState.value.isChangedInputText().not()) return
         analytics.logConvert(hiraKanaType = uiState.value.selectedTextType.name, inputTextLength = uiState.value.inputText.length)
-
-        CoroutineScope(ioDispatcher).launch {
+        viewModelScope.launch {
             _uiState.update { it.copy(isConverting = true) }
             runCatching {
                 convertTextUseCase(uiState.value.inputText, uiState.value.selectedTextType)
