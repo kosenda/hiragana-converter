@@ -1,10 +1,13 @@
 package ksnd.hiraganaconverter.core.domain.usecase
 
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 import ksnd.hiraganaconverter.core.domain.repository.ConvertHistoryRepository
 import ksnd.hiraganaconverter.core.domain.repository.ConvertRepository
 import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
 import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
 import ksnd.hiraganaconverter.core.resource.AppConfig
+import ksnd.hiraganaconverter.core.resource.di.IODispatcher
 import java.util.Locale
 import javax.inject.Inject
 
@@ -13,8 +16,9 @@ class ConvertTextUseCase @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
     private val convertHistoryRepository: ConvertHistoryRepository,
     private val appConfig: AppConfig,
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) {
-    suspend operator fun invoke(inputText: String, selectedTextType: HiraKanaType): String {
+    suspend operator fun invoke(inputText: String, selectedTextType: HiraKanaType): String = withContext(ioDispatcher) {
         val isReachedConvertMaxLimit = dataStoreRepository.checkIsExceedingMaxLimit()
         if (isReachedConvertMaxLimit) throw IsReachedConvertMaxLimitException
 
@@ -33,7 +37,7 @@ class ConvertTextUseCase @Inject constructor(
                     beforeText = inputText,
                     afterText = outputText,
                 )
-                return outputText
+                return@withContext outputText
             }
         }
     }

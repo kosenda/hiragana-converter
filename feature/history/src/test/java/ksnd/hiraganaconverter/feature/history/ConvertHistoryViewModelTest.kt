@@ -19,7 +19,6 @@ class ConvertHistoryViewModelTest {
     private val convertHistoryRepository = mockk<ConvertHistoryRepository>(relaxed = true)
     private val viewModel = ConvertHistoryViewModel(
         convertHistoryRepository = convertHistoryRepository,
-        ioDispatcher = mainDispatcherRule.testDispatcher,
     )
 
     @Test
