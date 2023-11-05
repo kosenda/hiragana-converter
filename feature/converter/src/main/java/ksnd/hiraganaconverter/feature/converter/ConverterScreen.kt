@@ -258,7 +258,16 @@ private fun BeforeOrAfterTextField(
             color = MaterialTheme.colorScheme.onSurface,
         )
 
-        if (isBefore.not()) {
+        if (isBefore) {
+            CustomIconButton(
+                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
+                contentDescription = "pasteText",
+                painter = painterResource(id = R.drawable.ic_baseline_content_paste_24),
+                onClick = {
+                    onValueChange(clipboardManager.getText()?.text ?: "")
+                },
+            )
+        } else {
             CustomIconButton(
                 modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
                 contentDescription = "share",
@@ -272,17 +281,17 @@ private fun BeforeOrAfterTextField(
                     )
                 },
             )
-        }
 
-        CustomIconButton(
-            modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
-            contentDescription = "copyText",
-            painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
-            onClick = {
-                clipboardManager.setText(AnnotatedString(text))
-                Toast.makeText(context, "COPIED.", Toast.LENGTH_SHORT).show()
-            },
-        )
+            CustomIconButton(
+                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
+                contentDescription = "copyText",
+                painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
+                onClick = {
+                    clipboardManager.setText(AnnotatedString(text))
+                    Toast.makeText(context, "COPIED.", Toast.LENGTH_SHORT).show()
+                },
+            )
+        }
     }
     OutlinedTextField(
         value = text,
