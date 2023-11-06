@@ -21,9 +21,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class MainActivityViewModel
-@Inject
-constructor(
+class MainActivityViewModel @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
     private val inAppUpdateManager: InAppUpdateManager,
 ) : ViewModel(), InstallStateUpdatedListener {

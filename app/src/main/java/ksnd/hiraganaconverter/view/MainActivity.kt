@@ -35,6 +35,7 @@ import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.analytics.Analytics
 import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
 import ksnd.hiraganaconverter.core.data.inappupdate.InAppUpdateState
+import ksnd.hiraganaconverter.core.domain.inappreview.InAppReviewManager
 import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
@@ -46,6 +47,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     @Inject lateinit var analytics: Analytics
+
+    @Inject lateinit var inAppReviewManager: InAppReviewManager
 
     private val mainViewModel: MainActivityViewModel by viewModels()
     private val updateFlowResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
@@ -72,6 +75,7 @@ class MainActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Default).launch {
             delay(800L)
             isAnimateSplash = false
+            inAppReviewManager.requestReview()
         }
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition { isAnimateSplash }
