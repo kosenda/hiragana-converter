@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.data.inappupdate.InAppUpdateState
 import ksnd.hiraganaconverter.core.domain.inappupdate.InAppUpdateManager
 import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository

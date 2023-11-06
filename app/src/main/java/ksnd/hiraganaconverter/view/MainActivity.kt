@@ -47,6 +47,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     @Inject lateinit var analytics: Analytics
+
     @Inject lateinit var inAppReviewManager: InAppReviewManager
 
     private val mainViewModel: MainActivityViewModel by viewModels()
