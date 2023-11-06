@@ -31,6 +31,7 @@ https://labs.goo.ne.jp/apiusage/
 |:--|:--|
 |Analytics|Firebase analytics|
 |App Update|In App Update|
+|App Review|In App Review|
 |Coil|Image loading library|
 |Crashlytics|Firebase crashlytics|
 |Danger|Automatic review|
@@ -75,6 +76,8 @@ https://labs.goo.ne.jp/apiusage/
 |<img width="280" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/708f10fb-d93c-4d28-91d1-7b5a25c543ec">|<img width="280" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/718a2722-3ab9-48f7-95be-65efe6a9112c">|
 
 ## Module Configurations
+
+⚠️ Excluding `:core:analytics`
 
 ```mermaid
 flowchart LR
