@@ -49,4 +49,5 @@ dependencies {
 
     // App Review
     implementation(libs.app.review)
+    implementation(libs.app.review.ktx)
 }
