@@ -1,19 +1,17 @@
 package ksnd.hiraganaconverter.core.data.di
 
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import ksnd.hiraganaconverter.core.domain.inappupdate.InAppUpdateManager
 import ksnd.hiraganaconverter.core.data.inappupdate.InAppUpdateManagerImpl
+import ksnd.hiraganaconverter.core.domain.inappupdate.InAppUpdateManager
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object InAppUpdateManagerModule {
-    @Provides
+abstract class InAppUpdateManagerModule {
+    @Binds
     @Singleton
-    fun provideInAppUpdateManager(inAppUpdateManagerImpl: InAppUpdateManagerImpl): InAppUpdateManager {
-        return inAppUpdateManagerImpl
-    }
+    abstract fun provideInAppUpdateManager(impl: InAppUpdateManagerImpl): InAppUpdateManager
 }
