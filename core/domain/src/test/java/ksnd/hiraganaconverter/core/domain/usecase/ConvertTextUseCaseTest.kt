@@ -5,6 +5,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
+import ksnd.hiraganaconverter.core.analytics.Analytics
 import ksnd.hiraganaconverter.core.domain.repository.ConvertHistoryRepository
 import ksnd.hiraganaconverter.core.domain.repository.ConvertRepository
 import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
@@ -28,16 +29,29 @@ class ConvertTextUseCaseTest {
     private val convertRepository = mockk<ConvertRepository>(relaxed = true)
     private val dataStoreRepository = mockk<DataStoreRepository>(relaxUnitFun = true)
     private val convertHistoryRepository = mockk<ConvertHistoryRepository>(relaxUnitFun = true)
+    private val analytics = mockk<Analytics>(relaxUnitFun = true)
     private val useCase = ConvertTextUseCase(
         convertRepository = convertRepository,
         dataStoreRepository = dataStoreRepository,
         convertHistoryRepository = convertHistoryRepository,
         appConfig = mockk(relaxed = true),
+        analytics = analytics,
         ioDispatcher = mainDispatcherRule.testDispatcher,
     )
 
     @Test
+    fun invoke_first_callCountUpTotalConvertCount() = runTest {
+        coEvery { dataStoreRepository.countUpTotalConvertCount() } returns TOTAL_CONVERT_COUNT
+        coEvery { dataStoreRepository.checkIsExceedingMaxLimit() } returns false
+        coEvery { convertRepository.requestConvert(any(), any(), any()) } returns successResponse
+        useCase(inputText = INPUT_TXT, selectedTextType = SELECTED_TYPE)
+        coVerify { dataStoreRepository.countUpTotalConvertCount() }
+        coVerify(exactly = 1) { analytics.logTotalConvertCount(TOTAL_CONVERT_COUNT) }
+    }
+
+    @Test
     fun invoke_overConvertForReachedConvert_isReachedConvertMaxLimitException() = runTest {
+        coEvery { dataStoreRepository.countUpTotalConvertCount() } returns TOTAL_CONVERT_COUNT
         coEvery { dataStoreRepository.checkIsExceedingMaxLimit() } returns true
         assertFailsWith<IsReachedConvertMaxLimitException> {
             useCase(inputText = INPUT_TXT, selectedTextType = SELECTED_TYPE)
@@ -47,6 +61,7 @@ class ConvertTextUseCaseTest {
 
     @Test
     fun invoke_responseIsNothing_conversionFailedException() = runTest {
+        coEvery { dataStoreRepository.countUpTotalConvertCount() } returns TOTAL_CONVERT_COUNT
         coEvery { dataStoreRepository.checkIsExceedingMaxLimit() } returns false
         coEvery { convertRepository.requestConvert(any(), any(), any()) } returns null
         assertFailsWith<ConversionFailedException> {
@@ -57,6 +72,7 @@ class ConvertTextUseCaseTest {
 
     @Test
     fun invoke_error413_conversionFailedException() = runTest {
+        coEvery { dataStoreRepository.countUpTotalConvertCount() } returns TOTAL_CONVERT_COUNT
         coEvery { dataStoreRepository.checkIsExceedingMaxLimit() } returns false
         coEvery { convertRepository.requestConvert(any(), any(), any()) } returns errorResponse
         assertFailsWith<InterceptorError> {
@@ -67,6 +83,7 @@ class ConvertTextUseCaseTest {
 
     @Test
     fun invoke_relaxed_outputConverted() = runTest {
+        coEvery { dataStoreRepository.countUpTotalConvertCount() } returns TOTAL_CONVERT_COUNT
         coEvery { dataStoreRepository.checkIsExceedingMaxLimit() } returns false
         coEvery { convertRepository.requestConvert(any(), any(), any()) } returns successResponse
         assertThat(useCase(inputText = INPUT_TXT, selectedTextType = SELECTED_TYPE)).isNotEmpty()
@@ -81,5 +98,6 @@ class ConvertTextUseCaseTest {
         private val successResponse: Response<ResponseData> = Response.success(
             ResponseData(converted = "かんじ", outputType = "hiragana", requestId = "labs.goo.ne.jp\temp\t0"),
         )
+        private const val TOTAL_CONVERT_COUNT = 10
     }
 }

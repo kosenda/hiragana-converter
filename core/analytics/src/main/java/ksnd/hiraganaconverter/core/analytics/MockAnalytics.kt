@@ -13,4 +13,5 @@ class MockAnalytics : Analytics {
     override fun logUpdateLanguage(language: String) {}
     override fun logUpdateFont(font: String) {}
     override fun logSwitchEnableInAppUpdate(isEnable: Boolean) {}
+    override fun logTotalConvertCount(count: Int) {}
 }

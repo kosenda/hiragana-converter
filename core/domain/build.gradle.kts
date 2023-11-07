@@ -20,6 +20,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:analytics"))
     implementation(project(":core:model"))
     implementation(project(":core:resource"))
     testImplementation(project(":core:testing"))
