@@ -54,15 +54,26 @@ class DataStoreRepositoryImpl @Inject constructor(
             }
     }
 
-    private fun convertCount(): Flow<Int> {
+    private fun todayConvertCount(): Flow<Int> {
         return dataStore.data
             .catch { exception ->
                 Timber.e("DataStore: %s".format(exception))
                 if (exception is IOException) emit(emptyPreferences())
             }
             .map { preferences ->
-                preferences[PreferenceKeys.CONVERT_COUNT] ?: 1
+                preferences[PreferenceKeys.TODAY_CONVERT_COUNT] ?: 1
             }
+    }
+
+    private suspend fun getTotalConvertCount(): Int? {
+        return dataStore.data
+            .catch { exception ->
+                Timber.e("DataStore: %s".format(exception))
+                if (exception is IOException) emit(emptyPreferences())
+            }
+            .map { preferences ->
+                preferences[PreferenceKeys.TOTAL_CONVERT_COUNT]
+            }.firstOrNull()
     }
 
     override fun enableInAppUpdate(): Flow<Boolean> {
@@ -87,12 +98,12 @@ class DataStoreRepositoryImpl @Inject constructor(
     override suspend fun checkIsExceedingMaxLimit(): Boolean {
         val today = LocalDate.now()
         return if (today == lastConvertTime().firstOrNull()) {
-            val newConvertCount = (convertCount().firstOrNull() ?: 0) + 1
-            updateConvertCount(newConvertCount)
+            val newConvertCount = (todayConvertCount().firstOrNull() ?: 0) + 1
+            updateTodayConvertCount(newConvertCount)
             newConvertCount > LIMIT_CONVERT_COUNT
         } else {
             updateLastConvertTime(today)
-            updateConvertCount(1)
+            updateTodayConvertCount(1)
             false
         }
     }
@@ -101,11 +112,18 @@ class DataStoreRepositoryImpl @Inject constructor(
         dataStore.edit { it[PreferenceKeys.ENABLE_IN_APP_UPDATE] = isUsed }
     }
 
+
     private suspend fun updateLastConvertTime(convertDate: LocalDate) {
         dataStore.edit { it[PreferenceKeys.LAST_CONVERT_DATE] = convertDate.toString() }
     }
 
-    private suspend fun updateConvertCount(convertCount: Int) {
-        dataStore.edit { it[PreferenceKeys.CONVERT_COUNT] = convertCount }
+    private suspend fun updateTodayConvertCount(convertCount: Int) {
+        dataStore.edit { it[PreferenceKeys.TODAY_CONVERT_COUNT] = convertCount }
+    }
+
+    override suspend fun countUpTotalConvertCount(): Int {
+        val totalConvertCount = (getTotalConvertCount() ?: 0) + 1
+        dataStore.edit { it[PreferenceKeys.TOTAL_CONVERT_COUNT] = totalConvertCount }
+        return totalConvertCount
     }
 }

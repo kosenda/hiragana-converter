@@ -12,4 +12,5 @@ interface DataStoreRepository {
     suspend fun updateFontType(fontType: FontType)
     suspend fun checkIsExceedingMaxLimit(): Boolean
     suspend fun updateUseInAppUpdate(isUsed: Boolean)
+    suspend fun countUpTotalConvertCount(): Int
 }

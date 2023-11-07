@@ -17,6 +17,7 @@ enum class Event {
     UPDATE_LANGUAGE,
     UPDATE_FONT,
     SWITCH_ENABLE_IN_APP_UPDATE,
+    COUNT_UP_TOTAL_CONVERT_COUNT,
 }
 
 enum class Param {
@@ -27,4 +28,5 @@ enum class Param {
     LANGUAGE,
     FONT,
     IS_ENABLE_IN_APP_UPDATE,
+    COUNT,
 }

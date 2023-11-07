@@ -59,4 +59,10 @@ class AnalyticsImpl @Inject constructor(
             param(Param.IS_ENABLE_IN_APP_UPDATE.name, isEnable.toString())
         }
     }
+
+    override fun logTotalConvertCount(count: Int) {
+        firebaseAnalytics.logEvent(Event.COUNT_UP_TOTAL_CONVERT_COUNT.name) {
+            param(Param.COUNT.name, count.toString())
+        }
+    }
 }

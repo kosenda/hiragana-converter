@@ -10,4 +10,5 @@ interface Analytics {
     fun logUpdateLanguage(language: String)
     fun logUpdateFont(font: String)
     fun logSwitchEnableInAppUpdate(isEnable: Boolean)
+    fun logTotalConvertCount(count: Int)
 }
