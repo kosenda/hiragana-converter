@@ -65,17 +65,6 @@ class DataStoreRepositoryImpl @Inject constructor(
             }
     }
 
-    private suspend fun getTotalConvertCount(): Int? {
-        return dataStore.data
-            .catch { exception ->
-                Timber.e("DataStore: %s".format(exception))
-                if (exception is IOException) emit(emptyPreferences())
-            }
-            .map { preferences ->
-                preferences[PreferenceKeys.TOTAL_CONVERT_COUNT]
-            }.firstOrNull()
-    }
-
     override fun enableInAppUpdate(): Flow<Boolean> {
         return dataStore.data
             .catch { exception ->
@@ -119,11 +108,5 @@ class DataStoreRepositoryImpl @Inject constructor(
 
     private suspend fun updateTodayConvertCount(convertCount: Int) {
         dataStore.edit { it[PreferenceKeys.TODAY_CONVERT_COUNT] = convertCount }
-    }
-
-    override suspend fun countUpTotalConvertCount(): Int {
-        val totalConvertCount = (getTotalConvertCount() ?: 0) + 1
-        dataStore.edit { it[PreferenceKeys.TOTAL_CONVERT_COUNT] = totalConvertCount }
-        return totalConvertCount
     }
 }

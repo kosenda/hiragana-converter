@@ -126,8 +126,6 @@ class MainActivityViewModelTest {
 
             override suspend fun updateUseInAppUpdate(isUsed: Boolean) {}
 
-            override suspend fun countUpTotalConvertCount(): Int = 1
-
             suspend fun emit(theme: Theme) {
                 this.theme.emit(theme)
             }

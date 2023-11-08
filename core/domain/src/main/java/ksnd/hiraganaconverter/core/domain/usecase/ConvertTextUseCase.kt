@@ -6,6 +6,7 @@ import ksnd.hiraganaconverter.core.analytics.Analytics
 import ksnd.hiraganaconverter.core.domain.repository.ConvertHistoryRepository
 import ksnd.hiraganaconverter.core.domain.repository.ConvertRepository
 import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
+import ksnd.hiraganaconverter.core.domain.repository.ReviewInfoRepository
 import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
 import ksnd.hiraganaconverter.core.resource.AppConfig
 import ksnd.hiraganaconverter.core.resource.di.IODispatcher
@@ -16,12 +17,13 @@ class ConvertTextUseCase @Inject constructor(
     private val convertRepository: ConvertRepository,
     private val dataStoreRepository: DataStoreRepository,
     private val convertHistoryRepository: ConvertHistoryRepository,
+    private val reviewInfoRepository: ReviewInfoRepository,
     private val appConfig: AppConfig,
     private val analytics: Analytics,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) {
     suspend operator fun invoke(inputText: String, selectedTextType: HiraKanaType): String = withContext(ioDispatcher) {
-        val totalConvertCount = dataStoreRepository.countUpTotalConvertCount()
+        val totalConvertCount = reviewInfoRepository.countUpTotalConvertCount()
         analytics.logTotalConvertCount(count = totalConvertCount)
 
         val isReachedConvertMaxLimit = dataStoreRepository.checkIsExceedingMaxLimit()
