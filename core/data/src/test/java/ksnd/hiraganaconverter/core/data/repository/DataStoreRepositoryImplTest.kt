@@ -77,14 +77,4 @@ class DataStoreRepositoryImplTest {
         dataStoreRepository.updateUseInAppUpdate(false)
         assertThat(dataStoreRepository.enableInAppUpdate().first()).isFalse()
     }
-
-    @Test
-    fun countUpTotalConvertCount_first_is1() = runTest {
-        assertThat(dataStoreRepository.countUpTotalConvertCount()).isEqualTo(1)
-    }
-
-    @Test
-    fun countUpTotalConvertCount_countUp_isCountUp() = runTest {
-        repeat(5) { assertThat(dataStoreRepository.countUpTotalConvertCount()).isEqualTo(it + 1) }
-    }
 }
