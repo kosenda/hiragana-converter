@@ -6,4 +6,5 @@ import ksnd.hiraganaconverter.core.model.ReviewInfo
 interface ReviewInfoRepository {
     val reviewInfo: Flow<ReviewInfo>
     suspend fun countUpTotalConvertCount(): Int
+    suspend fun updateLastRequestReviewLocalDate()
 }
