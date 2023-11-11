@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
@@ -16,6 +17,8 @@ import kotlinx.coroutines.test.runTest
 import ksnd.hiraganaconverter.core.data.inappupdate.InAppUpdateState
 import ksnd.hiraganaconverter.core.domain.inappupdate.InAppUpdateManager
 import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
+import ksnd.hiraganaconverter.core.domain.usecase.CompletedRequestReviewUseCase
+import ksnd.hiraganaconverter.core.domain.usecase.ObserveNeedRequestReviewUseCase
 import ksnd.hiraganaconverter.core.model.ui.FontType
 import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.testing.MainDispatcherRule
@@ -29,18 +32,21 @@ class MainActivityViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private val dataStoreRepository = spyk(FakeDataStoreRepository())
-
     private val inAppUpdateManager = mockk<InAppUpdateManager>(relaxed = true)
+    private val observeNeedRequestReviewUseCase = mockk<ObserveNeedRequestReviewUseCase>(relaxUnitFun = true)
+    private val completedRequestReviewUseCase = mockk<CompletedRequestReviewUseCase>(relaxUnitFun = true)
 
     private lateinit var viewModel: MainActivityViewModel
 
     @Before
     fun setUp() {
-        viewModel =
-            MainActivityViewModel(
-                dataStoreRepository = dataStoreRepository,
-                inAppUpdateManager = inAppUpdateManager,
-            )
+        every { observeNeedRequestReviewUseCase() } returns flowOf(false)
+        viewModel = MainActivityViewModel(
+            dataStoreRepository = dataStoreRepository,
+            inAppUpdateManager = inAppUpdateManager,
+            observeNeedRequestReviewUseCase = observeNeedRequestReviewUseCase,
+            completedRequestReviewUseCase = completedRequestReviewUseCase,
+        )
     }
 
     @Test
@@ -105,6 +111,13 @@ class MainActivityViewModelTest {
                 viewModel.updateInAppUpdateState(InAppUpdateState.Canceled)
                 assertThat(awaitItem().inAppUpdateState).isEqualTo(InAppUpdateState.Canceled)
             }
+        }
+
+    @Test
+    fun completedRequestReview_callUseCase() =
+        runTest {
+            viewModel.completedRequestReview()
+            coVerify(exactly = 1) { completedRequestReviewUseCase() }
         }
 
     companion object {

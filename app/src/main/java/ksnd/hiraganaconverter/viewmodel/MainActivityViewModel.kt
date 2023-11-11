@@ -13,17 +13,22 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.data.inappupdate.InAppUpdateState
 import ksnd.hiraganaconverter.core.domain.inappupdate.InAppUpdateManager
 import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
+import ksnd.hiraganaconverter.core.domain.usecase.CompletedRequestReviewUseCase
+import ksnd.hiraganaconverter.core.domain.usecase.ObserveNeedRequestReviewUseCase
 import ksnd.hiraganaconverter.view.MainActivityUiState
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
+    observeNeedRequestReviewUseCase: ObserveNeedRequestReviewUseCase,
     private val dataStoreRepository: DataStoreRepository,
     private val inAppUpdateManager: InAppUpdateManager,
+    private val completedRequestReviewUseCase: CompletedRequestReviewUseCase,
 ) : ViewModel(), InstallStateUpdatedListener {
     private val inAppUpdateState: MutableStateFlow<InAppUpdateState> = MutableStateFlow(InAppUpdateState.Requesting)
 
@@ -32,11 +37,13 @@ class MainActivityViewModel @Inject constructor(
             dataStoreRepository.theme(),
             dataStoreRepository.fontType(),
             inAppUpdateState,
-        ) { theme, fontType, inAppUpdateState ->
+            observeNeedRequestReviewUseCase(),
+        ) { theme, fontType, inAppUpdateState, needRequestReview ->
             MainActivityUiState(
                 theme = theme,
                 fontType = fontType,
                 inAppUpdateState = inAppUpdateState,
+                needRequestReview = needRequestReview,
             )
         }.stateIn(
             scope = viewModelScope,
@@ -68,6 +75,12 @@ class MainActivityViewModel @Inject constructor(
 
     fun updateInAppUpdateState(state: InAppUpdateState) {
         inAppUpdateState.value = state
+    }
+
+    fun completedRequestReview() {
+        viewModelScope.launch {
+            completedRequestReviewUseCase()
+        }
     }
 
     override fun onStateUpdate(state: InstallState) {

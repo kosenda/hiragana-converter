@@ -5,7 +5,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import ksnd.hiraganaconverter.core.analytics.Analytics
 import ksnd.hiraganaconverter.core.domain.repository.ConvertHistoryRepository
 import ksnd.hiraganaconverter.core.domain.repository.ConvertRepository
 import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
@@ -31,14 +30,12 @@ class ConvertTextUseCaseTest {
     private val dataStoreRepository = mockk<DataStoreRepository>(relaxUnitFun = true)
     private val convertHistoryRepository = mockk<ConvertHistoryRepository>(relaxUnitFun = true)
     private val reviewInfoRepository = mockk<ReviewInfoRepository>(relaxUnitFun = true)
-    private val analytics = mockk<Analytics>(relaxUnitFun = true)
     private val useCase = ConvertTextUseCase(
         convertRepository = convertRepository,
         dataStoreRepository = dataStoreRepository,
         convertHistoryRepository = convertHistoryRepository,
         reviewInfoRepository = reviewInfoRepository,
         appConfig = mockk(relaxed = true),
-        analytics = analytics,
         ioDispatcher = mainDispatcherRule.testDispatcher,
     )
 
@@ -49,7 +46,6 @@ class ConvertTextUseCaseTest {
         coEvery { convertRepository.requestConvert(any(), any(), any()) } returns successResponse
         useCase(inputText = INPUT_TXT, selectedTextType = SELECTED_TYPE)
         coVerify { reviewInfoRepository.countUpTotalConvertCount() }
-        coVerify(exactly = 1) { analytics.logTotalConvertCount(TOTAL_CONVERT_COUNT) }
     }
 
     @Test

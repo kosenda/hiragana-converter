@@ -9,6 +9,8 @@ android {
 }
 
 dependencies {
+    testImplementation(project(":core:testing"))
+
     // kotlinx serialization
     implementation(libs.kotlinx.serialization.json)
     // kotlinx datetime
