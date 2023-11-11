@@ -35,6 +35,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.analytics.Analytics
 import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
+import ksnd.hiraganaconverter.core.analytics.RequestReview
 import ksnd.hiraganaconverter.core.data.inappupdate.InAppUpdateState
 import ksnd.hiraganaconverter.core.domain.inappreview.InAppReviewManager
 import ksnd.hiraganaconverter.core.model.ui.Theme
@@ -132,7 +133,7 @@ class MainActivity : AppCompatActivity() {
 
             LaunchedEffect(uiState.needRequestReview) {
                 if (uiState.needRequestReview) {
-                    analytics.logRequestReview()
+                    analytics.logEvent(RequestReview())
                 }
             }
 

@@ -10,6 +10,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.analytics.Analytics
+import ksnd.hiraganaconverter.core.analytics.ChangeHiraKanaType
+import ksnd.hiraganaconverter.core.analytics.ClearAllText
+import ksnd.hiraganaconverter.core.analytics.Convert
+import ksnd.hiraganaconverter.core.analytics.ConvertError
 import ksnd.hiraganaconverter.core.domain.NavKey
 import ksnd.hiraganaconverter.core.domain.usecase.ConvertTextUseCase
 import ksnd.hiraganaconverter.core.domain.usecase.toConvertErrorType
@@ -36,7 +40,7 @@ class ConvertViewModel @Inject constructor(
     fun convert() {
         // If input has not changed since the last time, it will not be converted.
         if (uiState.value.isChangedInputText().not()) return
-        analytics.logConvert(hiraKanaType = uiState.value.selectedTextType.name, inputTextLength = uiState.value.inputText.length)
+        analytics.logEvent(Convert(hiraKanaType = uiState.value.selectedTextType.name, inputTextLength = uiState.value.inputText.length))
         viewModelScope.launch {
             _uiState.update { it.copy(isConverting = true) }
             runCatching {
@@ -53,7 +57,7 @@ class ConvertViewModel @Inject constructor(
             }.onFailure { throwable ->
                 val convertErrorType = throwable.toConvertErrorType()
                 Timber.d("convert error type: $convertErrorType")
-                analytics.logConvertError(error = convertErrorType.name)
+                analytics.logEvent(ConvertError(error = convertErrorType.name))
                 _uiState.update { it.copy(convertErrorType = convertErrorType, isConverting = false) }
             }
         }
@@ -72,7 +76,7 @@ class ConvertViewModel @Inject constructor(
     }
 
     fun clearAllText() {
-        if (uiState.value.inputText.isNotEmpty() || uiState.value.outputText.isNotEmpty()) analytics.logClearAllText()
+        if (uiState.value.inputText.isNotEmpty() || uiState.value.outputText.isNotEmpty()) analytics.logEvent(ClearAllText())
         _uiState.update {
             it.copy(
                 inputText = "",
@@ -83,7 +87,7 @@ class ConvertViewModel @Inject constructor(
     }
 
     fun changeHiraKanaType(type: HiraKanaType) {
-        analytics.logChangeHiraKanaType(hiraKanaType = type.name)
+        analytics.logEvent(ChangeHiraKanaType(hiraKanaType = type.name))
         _uiState.update {
             it.copy(
                 selectedTextType = type,
