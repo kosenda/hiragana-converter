@@ -30,4 +30,5 @@ dependencies {
     implementation(libs.okhttp3.logging.interceptor)
     implementation(libs.timber)
     implementation(libs.app.update)
+    implementation(libs.kotlinx.datetime)
 }

@@ -75,7 +75,6 @@ class MainActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Default).launch {
             delay(800L)
             isAnimateSplash = false
-            inAppReviewManager.requestReview()
         }
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition { isAnimateSplash }
@@ -126,6 +125,15 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                     else -> Unit
+                }
+            }
+
+            LaunchedEffect(uiState.needRequestReview) {
+                if (uiState.needRequestReview) {
+                    // TODO: Show a dialog to be created by the application instead of asking for a review out of the blue,
+                    //  and call `inAppReviewManager.requestReview()`and`mainViewModel.completedRequestReview()` only when you can review it.
+                    inAppReviewManager.requestReview()
+                    mainViewModel.completedRequestReview()
                 }
             }
 

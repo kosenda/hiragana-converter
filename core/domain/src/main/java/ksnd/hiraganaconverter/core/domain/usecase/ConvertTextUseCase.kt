@@ -2,7 +2,6 @@ package ksnd.hiraganaconverter.core.domain.usecase
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import ksnd.hiraganaconverter.core.analytics.Analytics
 import ksnd.hiraganaconverter.core.domain.repository.ConvertHistoryRepository
 import ksnd.hiraganaconverter.core.domain.repository.ConvertRepository
 import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
@@ -19,13 +18,9 @@ class ConvertTextUseCase @Inject constructor(
     private val convertHistoryRepository: ConvertHistoryRepository,
     private val reviewInfoRepository: ReviewInfoRepository,
     private val appConfig: AppConfig,
-    private val analytics: Analytics,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
 ) {
     suspend operator fun invoke(inputText: String, selectedTextType: HiraKanaType): String = withContext(ioDispatcher) {
-        val totalConvertCount = reviewInfoRepository.countUpTotalConvertCount()
-        analytics.logTotalConvertCount(count = totalConvertCount)
-
         val isReachedConvertMaxLimit = dataStoreRepository.checkIsExceedingMaxLimit()
         if (isReachedConvertMaxLimit) throw IsReachedConvertMaxLimitException
 
@@ -44,6 +39,7 @@ class ConvertTextUseCase @Inject constructor(
                     beforeText = inputText,
                     afterText = outputText,
                 )
+                reviewInfoRepository.countUpTotalConvertCount()
                 return@withContext outputText
             }
         }

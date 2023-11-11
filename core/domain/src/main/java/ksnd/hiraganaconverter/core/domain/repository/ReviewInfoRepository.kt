@@ -7,4 +7,5 @@ interface ReviewInfoRepository {
     val reviewInfo: Flow<ReviewInfo>
     suspend fun countUpTotalConvertCount(): Int
     suspend fun updateLastRequestReviewLocalDate()
+    suspend fun completedRequestReview()
 }

@@ -51,4 +51,7 @@ dependencies {
     // App Review
     implementation(libs.app.review)
     implementation(libs.app.review.ktx)
+
+    // Analytics
+    implementation(project(":core:analytics"))
 }
