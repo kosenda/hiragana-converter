@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.data.inappupdate.InAppUpdateState
 import ksnd.hiraganaconverter.core.domain.inappupdate.InAppUpdateManager
 import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
+import ksnd.hiraganaconverter.core.domain.usecase.CancelReviewUseCase
 import ksnd.hiraganaconverter.core.domain.usecase.CompletedRequestReviewUseCase
 import ksnd.hiraganaconverter.core.domain.usecase.ObserveNeedRequestReviewUseCase
 import ksnd.hiraganaconverter.view.MainActivityUiState
@@ -29,6 +30,7 @@ class MainActivityViewModel @Inject constructor(
     private val dataStoreRepository: DataStoreRepository,
     private val inAppUpdateManager: InAppUpdateManager,
     private val completedRequestReviewUseCase: CompletedRequestReviewUseCase,
+    private val cancelReviewUseCase: CancelReviewUseCase,
 ) : ViewModel(), InstallStateUpdatedListener {
     private val inAppUpdateState: MutableStateFlow<InAppUpdateState> = MutableStateFlow(InAppUpdateState.Requesting)
 
@@ -80,6 +82,12 @@ class MainActivityViewModel @Inject constructor(
     fun completedRequestReview() {
         viewModelScope.launch {
             completedRequestReviewUseCase()
+        }
+    }
+
+    fun cancelledReview() {
+        viewModelScope.launch {
+            cancelReviewUseCase()
         }
     }
 

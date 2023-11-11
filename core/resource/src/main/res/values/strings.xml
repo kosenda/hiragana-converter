@@ -34,6 +34,11 @@
     <string name="in_app_update_setting">In app update</string>
     <string name="in_app_update_show_update">Show update</string>
 
+    <!-- Request Review -->
+    <string name="request_review_title">Request</string>
+    <string name="request_review_desc">Could you please review the application?</string>
+    <string name="request_review_cancel">Later</string>
+
     <string-array name="conversion_type">
         <item>ひらがな</item>
         <item>カタカナ</item>
@@ -47,6 +52,7 @@
     <string name="version_title" translatable="false">App Version</string>
     <string name="app_info_title" translatable="false">App Info</string>
     <string name="app_name_title" translatable="false">App Name</string>
+    <string name="ok" translatable="false">OK</string>
 
     <string name="developer_name_title" translatable="false">Developer</string>
     <string name="developer_name" translatable="false">KSND</string>

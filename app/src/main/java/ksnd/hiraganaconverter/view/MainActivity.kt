@@ -21,6 +21,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -84,6 +85,7 @@ class MainActivity : AppCompatActivity() {
         setContent {
             val uiState by mainViewModel.uiState.collectAsState(initial = MainActivityUiState())
             val snackbarHostState = remember { SnackbarHostState() }
+            val coroutineScope = rememberCoroutineScope()
 
             val isDarkTheme =
                 when (uiState.theme) {
@@ -130,11 +132,18 @@ class MainActivity : AppCompatActivity() {
 
             LaunchedEffect(uiState.needRequestReview) {
                 if (uiState.needRequestReview) {
-                    // TODO: Show a dialog to be created by the application instead of asking for a review out of the blue,
-                    //  and call `inAppReviewManager.requestReview()`and`mainViewModel.completedRequestReview()` only when you can review it.
-                    inAppReviewManager.requestReview()
-                    mainViewModel.completedRequestReview()
+                    analytics.logRequestReview()
                 }
+            }
+
+            if (uiState.needRequestReview) {
+                RequestReviewDialog(
+                    onLater = mainViewModel::cancelledReview,
+                    onOk = {
+                        coroutineScope.launch { inAppReviewManager.requestReview() }
+                        mainViewModel.completedRequestReview()
+                    },
+                )
             }
 
             CompositionLocalProvider(LocalAnalytics provides analytics) {

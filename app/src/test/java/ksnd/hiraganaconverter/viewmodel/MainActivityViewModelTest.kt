@@ -17,6 +17,7 @@ import kotlinx.coroutines.test.runTest
 import ksnd.hiraganaconverter.core.data.inappupdate.InAppUpdateState
 import ksnd.hiraganaconverter.core.domain.inappupdate.InAppUpdateManager
 import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
+import ksnd.hiraganaconverter.core.domain.usecase.CancelReviewUseCase
 import ksnd.hiraganaconverter.core.domain.usecase.CompletedRequestReviewUseCase
 import ksnd.hiraganaconverter.core.domain.usecase.ObserveNeedRequestReviewUseCase
 import ksnd.hiraganaconverter.core.model.ui.FontType
@@ -35,6 +36,7 @@ class MainActivityViewModelTest {
     private val inAppUpdateManager = mockk<InAppUpdateManager>(relaxed = true)
     private val observeNeedRequestReviewUseCase = mockk<ObserveNeedRequestReviewUseCase>(relaxUnitFun = true)
     private val completedRequestReviewUseCase = mockk<CompletedRequestReviewUseCase>(relaxUnitFun = true)
+    private val cancelReviewUseCase = mockk<CancelReviewUseCase>(relaxUnitFun = true)
 
     private lateinit var viewModel: MainActivityViewModel
 
@@ -46,6 +48,7 @@ class MainActivityViewModelTest {
             inAppUpdateManager = inAppUpdateManager,
             observeNeedRequestReviewUseCase = observeNeedRequestReviewUseCase,
             completedRequestReviewUseCase = completedRequestReviewUseCase,
+            cancelReviewUseCase = cancelReviewUseCase,
         )
     }
 
@@ -114,11 +117,16 @@ class MainActivityViewModelTest {
         }
 
     @Test
-    fun completedRequestReview_callUseCase() =
-        runTest {
-            viewModel.completedRequestReview()
-            coVerify(exactly = 1) { completedRequestReviewUseCase() }
-        }
+    fun completedRequestReview_callUseCase() = runTest {
+        viewModel.completedRequestReview()
+        coVerify(exactly = 1) { completedRequestReviewUseCase() }
+    }
+
+    @Test
+    fun cancelReview_callUseCase() = runTest {
+        viewModel.cancelledReview()
+        coVerify(exactly = 1) { cancelReviewUseCase() }
+    }
 
     companion object {
         class FakeDataStoreRepository : DataStoreRepository {
