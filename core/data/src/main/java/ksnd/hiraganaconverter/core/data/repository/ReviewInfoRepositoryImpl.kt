@@ -7,6 +7,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
 import ksnd.hiraganaconverter.core.analytics.Analytics
+import ksnd.hiraganaconverter.core.analytics.TotalConvertCount
 import ksnd.hiraganaconverter.core.domain.repository.ReviewInfoRepository
 import ksnd.hiraganaconverter.core.model.ReviewInfo
 import javax.inject.Inject
@@ -20,7 +21,7 @@ class ReviewInfoRepositoryImpl @Inject constructor(
     override suspend fun countUpTotalConvertCount(): Int {
         val newCount = (reviewInfo.firstOrNull()?.totalConvertCount ?: 0) + 1
         dataStore.updateData { it.copy(totalConvertCount = newCount) }
-        analytics.logTotalConvertCount(count = newCount)
+        analytics.logEvent(TotalConvertCount(count = newCount))
         return newCount
     }
 

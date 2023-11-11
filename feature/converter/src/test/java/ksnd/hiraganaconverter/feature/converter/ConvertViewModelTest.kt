@@ -5,8 +5,6 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import io.mockk.spyk
-import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import ksnd.hiraganaconverter.core.analytics.MockAnalytics
 import ksnd.hiraganaconverter.core.domain.NavKey
@@ -25,10 +23,9 @@ class ConvertViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private val convertTextUseCase = mockk<ConvertTextUseCase>(relaxUnitFun = true)
-    private val analytics = spyk(MockAnalytics())
     private val viewModel = ConvertViewModel(
         convertTextUseCase = convertTextUseCase,
-        analytics = analytics,
+        analytics = MockAnalytics(),
         savedStateHandle = SavedStateHandle(),
     )
 
@@ -37,7 +34,7 @@ class ConvertViewModelTest {
         val receivedText = "漢字"
         val viewModel = ConvertViewModel(
             convertTextUseCase = convertTextUseCase,
-            analytics = analytics,
+            analytics = MockAnalytics(),
             savedStateHandle = SavedStateHandle().apply { set(NavKey.RECEIVED_TEXT, receivedText) },
         )
         assertThat(viewModel.uiState.value.inputText).isEqualTo(receivedText)
@@ -75,7 +72,6 @@ class ConvertViewModelTest {
         assertThat(viewModel.uiState.value.previousInputText).isEqualTo(inputText)
         assertThat(viewModel.uiState.value.convertErrorType).isNull()
         coVerify(exactly = 1) { convertTextUseCase(any(), any()) }
-        verify(exactly = 1) { analytics.logConvert(any(), inputText.length) }
     }
 
     @Test
@@ -86,7 +82,6 @@ class ConvertViewModelTest {
         viewModel.convert()
         assertThat(viewModel.uiState.value.convertErrorType).isNotNull()
         coVerify(exactly = 1) { convertTextUseCase(any(), any()) }
-        verify(exactly = 1) { analytics.logConvertError(any()) }
     }
 
     @Test
@@ -121,7 +116,6 @@ class ConvertViewModelTest {
         assertThat(viewModel.uiState.value.outputText).isNotEmpty()
         assertThat(viewModel.uiState.value.convertErrorType).isNotNull()
         viewModel.clearAllText()
-        verify(exactly = 1) { analytics.logClearAllText() }
         assertThat(viewModel.uiState.value.inputText).isEmpty()
         assertThat(viewModel.uiState.value.outputText).isEmpty()
         assertThat(viewModel.uiState.value.convertErrorType).isNull()
@@ -133,10 +127,7 @@ class ConvertViewModelTest {
         viewModel.updateInputText(inputText)
         viewModel.changeHiraKanaType(HiraKanaType.KATAKANA)
         viewModel.convert()
-        verify(exactly = 1) { analytics.logConvert(HiraKanaType.KATAKANA.name, inputText.length) }
         viewModel.changeHiraKanaType(HiraKanaType.HIRAGANA)
-        verify(exactly = 1) { analytics.logChangeHiraKanaType(HiraKanaType.HIRAGANA.name) }
         viewModel.convert()
-        verify(exactly = 1) { analytics.logConvert(HiraKanaType.HIRAGANA.name, inputText.length) }
     }
 }

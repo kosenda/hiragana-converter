@@ -8,6 +8,9 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.analytics.Analytics
+import ksnd.hiraganaconverter.core.analytics.SwitchEnableInAppUpdate
+import ksnd.hiraganaconverter.core.analytics.UpdateFont
+import ksnd.hiraganaconverter.core.analytics.UpdateTheme
 import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
 import ksnd.hiraganaconverter.core.model.ui.FontType
 import ksnd.hiraganaconverter.core.model.ui.Theme
@@ -36,21 +39,21 @@ class SettingsViewModel @Inject constructor(
     )
 
     fun updateTheme(newTheme: Theme) {
-        if (uiState.value.theme != newTheme) analytics.logUpdateTheme(newTheme.name)
+        if (uiState.value.theme != newTheme) analytics.logEvent(UpdateTheme(newTheme.name))
         viewModelScope.launch {
             dataStoreRepository.updateTheme(newTheme)
         }
     }
 
     fun updateFontType(newFontType: FontType) {
-        if (uiState.value.fontType != newFontType) analytics.logUpdateFont(newFontType.name)
+        if (uiState.value.fontType != newFontType) analytics.logEvent(UpdateFont(newFontType.name))
         viewModelScope.launch {
             dataStoreRepository.updateFontType(newFontType)
         }
     }
 
     fun updateEnableInAppUpdate(isEnabled: Boolean) {
-        if (uiState.value.enableInAppUpdate != isEnabled) analytics.logSwitchEnableInAppUpdate(isEnabled)
+        if (uiState.value.enableInAppUpdate != isEnabled) analytics.logEvent(SwitchEnableInAppUpdate(isEnabled))
         viewModelScope.launch {
             dataStoreRepository.updateUseInAppUpdate(isEnabled)
         }

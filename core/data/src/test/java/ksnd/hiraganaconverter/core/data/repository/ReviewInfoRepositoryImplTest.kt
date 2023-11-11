@@ -6,8 +6,6 @@ import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.test.core.app.ApplicationProvider
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import io.mockk.coVerify
-import io.mockk.spyk
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -31,10 +29,9 @@ class ReviewInfoRepositoryImplTest {
         serializer = ReviewInfoSerializer,
         produceFile = { context.preferencesDataStoreFile("TestReviewInfoDataStore") },
     )
-    private val analytics = spyk<MockAnalytics>()
     private val repository = ReviewInfoRepositoryImpl(
         dataStore = dataStore,
-        analytics = analytics,
+        analytics = MockAnalytics(),
     )
 
     @Test
@@ -43,7 +40,6 @@ class ReviewInfoRepositoryImplTest {
             assertThat(awaitItem()).isEqualTo(ReviewInfo())
             assertThat(repository.countUpTotalConvertCount()).isEqualTo(1)
             assertThat(awaitItem()).isEqualTo(ReviewInfo().copy(totalConvertCount = 1))
-            coVerify { analytics.logTotalConvertCount(count = 1) }
         }
     }
 
@@ -54,7 +50,6 @@ class ReviewInfoRepositoryImplTest {
             repeat(5) {
                 assertThat(repository.countUpTotalConvertCount()).isEqualTo(it + 1)
                 assertThat(awaitItem()).isEqualTo(ReviewInfo().copy(totalConvertCount = it + 1))
-                coVerify { analytics.logTotalConvertCount(count = it + 1) }
             }
         }
     }

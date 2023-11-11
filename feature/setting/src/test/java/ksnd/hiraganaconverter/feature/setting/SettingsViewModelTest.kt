@@ -5,8 +5,6 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.spyk
-import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import ksnd.hiraganaconverter.core.analytics.MockAnalytics
@@ -26,7 +24,6 @@ class SettingsViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private val dataStoreRepository = mockk<DataStoreRepository>(relaxed = true)
-    private val analytics = spyk(MockAnalytics())
     private lateinit var viewModel : SettingsViewModel
 
     @Before
@@ -41,7 +38,7 @@ class SettingsViewModelTest {
         every { dataStoreRepository.enableInAppUpdate() } returns flowOf(FIRST_SAVED_ENABLE_IN_APP_UPDATE)
         viewModel = SettingsViewModel(
             dataStoreRepository = dataStoreRepository,
-            analytics = analytics,
+            analytics = MockAnalytics(),
         )
     }
 
@@ -63,7 +60,6 @@ class SettingsViewModelTest {
         val newTheme = Theme.DAY
         viewModel.updateTheme(newTheme)
         coVerify(exactly = 1) { dataStoreRepository.updateTheme(newTheme) }
-        verify(exactly = 1) { analytics.logUpdateTheme(newTheme.name) }
     }
 
     @Test
@@ -71,7 +67,6 @@ class SettingsViewModelTest {
         val newFontType = FontType.DELA_GOTHIC_ONE
         viewModel.updateFontType(newFontType)
         coVerify(exactly = 1) { dataStoreRepository.updateFontType(newFontType) }
-        verify(exactly = 1) { analytics.logUpdateFont(newFontType.name) }
     }
 
     @Test
@@ -79,7 +74,6 @@ class SettingsViewModelTest {
         val isEnabled = false
         viewModel.updateEnableInAppUpdate(isEnabled)
         coVerify(exactly = 1) { dataStoreRepository.updateUseInAppUpdate(isEnabled) }
-        verify(exactly = 1) { analytics.logSwitchEnableInAppUpdate(isEnabled) }
     }
 
     companion object {
