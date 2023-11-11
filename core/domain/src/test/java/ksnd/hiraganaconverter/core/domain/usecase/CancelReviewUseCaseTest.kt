@@ -11,20 +11,20 @@ import ksnd.hiraganaconverter.core.testing.MainDispatcherRule
 import org.junit.Rule
 import org.junit.Test
 
-class CompletedRequestReviewUseCaseTest {
+class CancelReviewUseCaseTest {
     @get: Rule
     val mainDispatcherRule = MainDispatcherRule()
 
     private val reviewInfoRepository = mockk<ReviewInfoRepository>(relaxUnitFun = true)
-    private val useCase = CompletedRequestReviewUseCase(
+    private val useCase = CancelReviewUseCase(
         reviewInfoRepository = reviewInfoRepository,
         ioDispatcher = mainDispatcherRule.testDispatcher,
     )
 
     @Test
-    fun useCase_completedRequestReview() = runTest {
-        coEvery { reviewInfoRepository.completedRequestReview() } just runs
+    fun useCase_callUpdateLastRequestReviewLocalDate() = runTest {
+        coEvery { reviewInfoRepository.updateLastRequestReviewLocalDate() } just runs
         useCase()
-        coVerify(exactly = 1) { reviewInfoRepository.completedRequestReview() }
+        coVerify(exactly = 1) { reviewInfoRepository.updateLastRequestReviewLocalDate() }
     }
 }

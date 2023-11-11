@@ -34,6 +34,11 @@
     <string name="in_app_update_setting">アプリ内アップデート</string>
     <string name="in_app_update_show_update">アップデートを表示する</string>
 
+    <!-- Request Review -->
+    <string name="request_review_title">お願い</string>
+    <string name="request_review_desc">アプリのレビューをしていただけないでしょうか？</string>
+    <string name="request_review_cancel">後で</string>
+
     <string-array name="conversion_type">
         <item>ひらがな</item>
         <item>カタカナ</item>

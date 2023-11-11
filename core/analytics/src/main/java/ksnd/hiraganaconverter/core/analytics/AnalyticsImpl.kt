@@ -65,4 +65,8 @@ class AnalyticsImpl @Inject constructor(
             param(Param.COUNT.name, count.toString())
         }
     }
+
+    override fun logRequestReview() {
+        firebaseAnalytics.logEvent(Event.REQUEST_REVIEW.name) {}
+    }
 }

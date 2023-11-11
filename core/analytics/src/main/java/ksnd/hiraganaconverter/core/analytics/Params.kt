@@ -18,6 +18,7 @@ enum class Event {
     UPDATE_FONT,
     SWITCH_ENABLE_IN_APP_UPDATE,
     COUNT_UP_TOTAL_CONVERT_COUNT,
+    REQUEST_REVIEW,
 }
 
 enum class Param {
