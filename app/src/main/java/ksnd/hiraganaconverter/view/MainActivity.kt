@@ -34,8 +34,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.analytics.Analytics
+import ksnd.hiraganaconverter.core.analytics.AnalyticsHelper
 import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
-import ksnd.hiraganaconverter.core.analytics.RequestReview
 import ksnd.hiraganaconverter.core.data.inappupdate.InAppUpdateState
 import ksnd.hiraganaconverter.core.domain.inappreview.InAppReviewManager
 import ksnd.hiraganaconverter.core.model.ui.Theme
@@ -48,7 +48,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    @Inject lateinit var analytics: Analytics
+    @Inject lateinit var analytics: AnalyticsHelper
 
     @Inject lateinit var inAppReviewManager: InAppReviewManager
 
@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity() {
 
             LaunchedEffect(uiState.needRequestReview) {
                 if (uiState.needRequestReview) {
-                    analytics.logEvent(RequestReview())
+                    analytics.logEvent(Analytics.RequestReview())
                 }
             }
 
