@@ -13,6 +13,7 @@ plugins {
     alias(libs.plugins.gms) apply false
     alias(libs.plugins.firebase.crashlytics) apply false
     alias(libs.plugins.androidLibrary) apply false
+    alias(libs.plugins.firebase.perf) apply false
 }
 
 tasks.create<JacocoReport>("mergeJacoco") {
