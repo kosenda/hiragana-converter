@@ -1,3 +1,5 @@
+import java.net.URL
+
 pluginManagement {
     includeBuild("build-logic")
     repositories {
@@ -18,6 +20,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven(url = URL("https://jitpack.io"))
     }
 }
 rootProject.name = "hiraganaconverter"
