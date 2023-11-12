@@ -29,4 +29,5 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.androidx.lifecycle.viewModelCompose)
     implementation(libs.lazyColumnScrollbar)
+    implementation(libs.firebase.perf)
 }
