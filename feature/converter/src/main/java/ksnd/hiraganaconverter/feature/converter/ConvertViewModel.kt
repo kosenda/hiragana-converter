@@ -3,6 +3,7 @@ package ksnd.hiraganaconverter.feature.converter
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.perf.metrics.AddTrace
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,6 +35,7 @@ class ConvertViewModel @Inject constructor(
         savedStateHandle.remove<String>(NavKey.RECEIVED_TEXT)
     }
 
+    @AddTrace(name = "ConvertViewModel#convert")
     fun convert() {
         // If input has not changed since the last time, it will not be converted.
         if (uiState.value.isChangedInputText().not()) return
