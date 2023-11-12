@@ -20,6 +20,7 @@ dokka = "1.9.10"
 gmsPlugin = "4.4.0"
 firebaseBom = "32.5.0"
 firebaseCrashlyticsPlugin = "2.9.9"
+firebasePerfPlugin = "1.4.2"
 hilt = "2.48.1"
 junit4 = "4.13.2"
 kotlin = "1.9.10"
@@ -127,6 +128,7 @@ roborazzi-junit4-rule = { group = "io.github.takahirom.roborazzi", name = "robor
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref="firebaseBom"}
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics"}
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics"}
+firebase-perf = { group = "com.google.firebase", name = "firebase-perf"}
 
 # App Update
 app-update = { group = "com.google.android.play", name = "app-update", version.ref = "appUpdate" }
@@ -162,4 +164,5 @@ dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 gms = { id = "com.google.gms.google-services", version.ref = "gmsPlugin"}
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin"}
+firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "firebasePerfPlugin" }
 androidLibrary = { id = "com.android.library", version.ref = "androidGradlePlugin" }
