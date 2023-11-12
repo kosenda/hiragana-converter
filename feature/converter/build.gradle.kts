@@ -28,4 +28,5 @@ dependencies {
     testImplementation(project(":core:testing"))
     implementation(libs.timber)
     implementation(libs.androidx.lifecycle.viewModelCompose)
+    implementation(libs.lazyColumnScrollbar)
 }

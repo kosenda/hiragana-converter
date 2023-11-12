@@ -69,6 +69,8 @@ import ksnd.hiraganaconverter.core.ui.parts.card.ConversionTypeCard
 import ksnd.hiraganaconverter.core.ui.parts.card.ErrorCard
 import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
+import my.nanihadesuka.compose.ColumnScrollbar
+import my.nanihadesuka.compose.ScrollbarSelectionMode
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -149,82 +151,89 @@ fun ConverterScreenContent(
         containerColor = MaterialTheme.colorScheme.surface,
         floatingActionButton = { ksnd.hiraganaconverter.core.ui.parts.button.MoveTopButton(scrollState = scrollState) },
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .consumeWindowInsets(innerPadding)
-                .fillMaxSize()
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .verticalScroll(scrollState)
-                .pointerInput(Unit) {
-                    detectTapGestures(
-                        onTap = {
-                            focusManager.clearFocus()
-                        },
-                    )
-                },
+        ColumnScrollbar(
+            state = scrollState,
+            thumbColor = MaterialTheme.colorScheme.tertiaryContainer,
+            thumbSelectedColor = MaterialTheme.colorScheme.tertiary,
+            selectionMode = ScrollbarSelectionMode.Full,
         ) {
-            Spacer(modifier = Modifier.height((topBarHeight / density).toInt().dp))
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Row(modifier = Modifier.weight(1f)) {
-                    ConversionTypeCard(onSelectedChange = changeHiraKanaType)
-                }
-                CustomButtonWithBackground(
-                    id = R.drawable.ic_reset,
-                    convertDescription = "reset",
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                    contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    onClick = clearAllText,
-                )
-                ConvertButton(
-                    modifier = Modifier.padding(start = 4.dp),
-                    isConverting = uiState.isConverting,
-                    onClick = convert,
-                )
-            }
-
-            uiState.convertErrorType?.let {
-                ErrorCard(
-                    errorText = when (it) {
-                        ConvertErrorType.TOO_MANY_CHARACTER -> stringResource(id = R.string.request_too_large)
-                        ConvertErrorType.RATE_LIMIT_EXCEEDED -> stringResource(id = R.string.limit_exceeded)
-                        ConvertErrorType.CONVERSION_FAILED -> stringResource(id = R.string.conversion_failed)
-                        ConvertErrorType.INTERNAL_SERVER -> stringResource(id = R.string.internal_server_error)
-                        ConvertErrorType.NETWORK -> stringResource(id = R.string.network_error)
-                        ConvertErrorType.REACHED_CONVERT_MAX_LIMIT -> stringResource(
-                            id = R.string.limit_local_count,
-                            LIMIT_CONVERT_COUNT,
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .consumeWindowInsets(innerPadding)
+                    .fillMaxSize()
+                    .nestedScroll(scrollBehavior.nestedScrollConnection)
+                    .verticalScroll(scrollState)
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onTap = {
+                                focusManager.clearFocus()
+                            },
                         )
                     },
-                    onClick = clearConvertErrorType,
+            ) {
+                Spacer(modifier = Modifier.height((topBarHeight / density).toInt().dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Row(modifier = Modifier.weight(1f)) {
+                        ConversionTypeCard(onSelectedChange = changeHiraKanaType)
+                    }
+                    CustomButtonWithBackground(
+                        id = R.drawable.ic_reset,
+                        convertDescription = "reset",
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        onClick = clearAllText,
+                    )
+                    ConvertButton(
+                        modifier = Modifier.padding(start = 4.dp),
+                        isConverting = uiState.isConverting,
+                        onClick = convert,
+                    )
+                }
+
+                uiState.convertErrorType?.let {
+                    ErrorCard(
+                        errorText = when (it) {
+                            ConvertErrorType.TOO_MANY_CHARACTER -> stringResource(id = R.string.request_too_large)
+                            ConvertErrorType.RATE_LIMIT_EXCEEDED -> stringResource(id = R.string.limit_exceeded)
+                            ConvertErrorType.CONVERSION_FAILED -> stringResource(id = R.string.conversion_failed)
+                            ConvertErrorType.INTERNAL_SERVER -> stringResource(id = R.string.internal_server_error)
+                            ConvertErrorType.NETWORK -> stringResource(id = R.string.network_error)
+                            ConvertErrorType.REACHED_CONVERT_MAX_LIMIT -> stringResource(
+                                id = R.string.limit_local_count,
+                                LIMIT_CONVERT_COUNT,
+                            )
+                        },
+                        onClick = clearConvertErrorType,
+                    )
+                }
+
+                BeforeOrAfterTextField(
+                    isBefore = true,
+                    text = uiState.inputText,
+                    clipboardManager = clipboardManager,
+                    focusManager = focusManager,
+                    onValueChange = updateInputText,
                 )
+
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 48.dp),
+                    thickness = 2.dp,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+
+                BeforeOrAfterTextField(
+                    isBefore = false,
+                    text = uiState.outputText,
+                    clipboardManager = clipboardManager,
+                    focusManager = focusManager,
+                    onValueChange = updateOutputText,
+                )
+
+                Spacer(modifier = Modifier.height(120.dp))
             }
-
-            BeforeOrAfterTextField(
-                isBefore = true,
-                text = uiState.inputText,
-                clipboardManager = clipboardManager,
-                focusManager = focusManager,
-                onValueChange = updateInputText,
-            )
-
-            HorizontalDivider(
-                modifier = Modifier.padding(vertical = 8.dp, horizontal = 48.dp),
-                thickness = 2.dp,
-                color = MaterialTheme.colorScheme.primary,
-            )
-
-            BeforeOrAfterTextField(
-                isBefore = false,
-                text = uiState.outputText,
-                clipboardManager = clipboardManager,
-                focusManager = focusManager,
-                onValueChange = updateOutputText,
-            )
-
-            Spacer(modifier = Modifier.height(120.dp))
         }
     }
 }
