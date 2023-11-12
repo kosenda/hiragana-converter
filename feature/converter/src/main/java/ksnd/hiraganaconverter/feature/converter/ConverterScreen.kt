@@ -180,11 +180,7 @@ fun ConverterScreenContent(
                 )
                 ConvertButton(
                     modifier = Modifier.padding(start = 4.dp),
-                    id = R.drawable.ic_baseline_compare_arrows_24,
                     isConverting = uiState.isConverting,
-                    convertDescription = stringResource(id = R.string.conversion),
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                     onClick = convert,
                 )
             }
