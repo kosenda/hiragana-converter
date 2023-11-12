@@ -8,8 +8,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import ksnd.hiraganaconverter.core.analytics.Analytics
-import ksnd.hiraganaconverter.core.analytics.AnalyticsImpl
+import ksnd.hiraganaconverter.core.analytics.AnalyticsHelper
+import ksnd.hiraganaconverter.core.analytics.AnalyticsHelperImpl
 import javax.inject.Singleton
 
 /**
@@ -20,7 +20,7 @@ import javax.inject.Singleton
 abstract class AnalyticModule {
     @Binds
     @Singleton
-    abstract fun provideAnalytics(impl: AnalyticsImpl): Analytics
+    abstract fun provideAnalyticsHelper(impl: AnalyticsHelperImpl): AnalyticsHelper
 
     companion object {
         @Provides

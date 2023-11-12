@@ -5,9 +5,9 @@ import com.google.firebase.analytics.logEvent
 import timber.log.Timber
 import javax.inject.Inject
 
-class AnalyticsImpl @Inject constructor(
+class AnalyticsHelperImpl @Inject constructor(
     private val firebaseAnalytics: FirebaseAnalytics,
-) : Analytics {
+) : AnalyticsHelper {
     override fun logScreen(screen: Screen) {
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
             Timber.d("logScreen: screen=${screen.name}")

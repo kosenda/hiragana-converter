@@ -7,7 +7,7 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import ksnd.hiraganaconverter.core.analytics.MockAnalytics
+import ksnd.hiraganaconverter.core.analytics.MockAnalyticsHelper
 import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
 import ksnd.hiraganaconverter.core.model.ui.FontType
 import ksnd.hiraganaconverter.core.model.ui.Theme
@@ -38,7 +38,7 @@ class SettingsViewModelTest {
         every { dataStoreRepository.enableInAppUpdate() } returns flowOf(FIRST_SAVED_ENABLE_IN_APP_UPDATE)
         viewModel = SettingsViewModel(
             dataStoreRepository = dataStoreRepository,
-            analytics = MockAnalytics(),
+            analytics = MockAnalyticsHelper(),
         )
     }
 

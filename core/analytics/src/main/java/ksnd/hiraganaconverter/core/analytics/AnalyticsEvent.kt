@@ -11,69 +11,71 @@ data class AnalyticsParam(
     val value: String,
 )
 
-class Convert(hiraKanaType: String, inputTextLength: Int) : AnalyticsEvent() {
-    override val event = Event.CONVERT
-    override val params = listOf(
-        AnalyticsParam(Param.CONVERT_TYPE, hiraKanaType),
-        AnalyticsParam(Param.INPUT_TEXT_LENGTH, inputTextLength.toString()),
-    )
-}
+object Analytics {
+    class Convert(hiraKanaType: String, inputTextLength: Int) : AnalyticsEvent() {
+        override val event = Event.CONVERT
+        override val params = listOf(
+            AnalyticsParam(Param.CONVERT_TYPE, hiraKanaType),
+            AnalyticsParam(Param.INPUT_TEXT_LENGTH, inputTextLength.toString()),
+        )
+    }
 
-class ConvertError(error: String) : AnalyticsEvent() {
-    override val event = Event.CONVERT_ERROR
-    override val params = listOf(
-        AnalyticsParam(Param.CONVERT_ERROR, error),
-    )
-}
+    class ConvertError(error: String) : AnalyticsEvent() {
+        override val event = Event.CONVERT_ERROR
+        override val params = listOf(
+            AnalyticsParam(Param.CONVERT_ERROR, error),
+        )
+    }
 
-class ChangeHiraKanaType(hiraKanaType: String) : AnalyticsEvent() {
-    override val event = Event.CHANGE_HIRA_KANA_TYPE
-    override val params = listOf(
-        AnalyticsParam(Param.CONVERT_TYPE, hiraKanaType),
-    )
-}
+    class ChangeHiraKanaType(hiraKanaType: String) : AnalyticsEvent() {
+        override val event = Event.CHANGE_HIRA_KANA_TYPE
+        override val params = listOf(
+            AnalyticsParam(Param.CONVERT_TYPE, hiraKanaType),
+        )
+    }
 
-class ClearAllText : AnalyticsEvent() {
-    override val event = Event.CLEAR_ALL_TEXT
-}
+    class ClearAllText : AnalyticsEvent() {
+        override val event = Event.CLEAR_ALL_TEXT
+    }
 
-class UpdateTheme(theme: String) : AnalyticsEvent() {
-    override val event = Event.UPDATE_THEME
-    override val params = listOf(
-        AnalyticsParam(Param.THEME, theme),
-    )
-}
+    class UpdateTheme(theme: String) : AnalyticsEvent() {
+        override val event = Event.UPDATE_THEME
+        override val params = listOf(
+            AnalyticsParam(Param.THEME, theme),
+        )
+    }
 
-class UpdateLanguage(language: String) : AnalyticsEvent() {
-    override val event = Event.UPDATE_LANGUAGE
-    override val params = listOf(
-        AnalyticsParam(Param.LANGUAGE, language),
-    )
-}
+    class UpdateLanguage(language: String) : AnalyticsEvent() {
+        override val event = Event.UPDATE_LANGUAGE
+        override val params = listOf(
+            AnalyticsParam(Param.LANGUAGE, language),
+        )
+    }
 
-class UpdateFont(font: String) : AnalyticsEvent() {
-    override val event = Event.UPDATE_FONT
-    override val params = listOf(
-        AnalyticsParam(Param.FONT, font),
-    )
-}
+    class UpdateFont(font: String) : AnalyticsEvent() {
+        override val event = Event.UPDATE_FONT
+        override val params = listOf(
+            AnalyticsParam(Param.FONT, font),
+        )
+    }
 
-class SwitchEnableInAppUpdate(isEnable: Boolean) : AnalyticsEvent() {
-    override val event = Event.SWITCH_ENABLE_IN_APP_UPDATE
-    override val params = listOf(
-        AnalyticsParam(Param.IS_ENABLE_IN_APP_UPDATE, isEnable.toString()),
-    )
-}
+    class SwitchEnableInAppUpdate(isEnable: Boolean) : AnalyticsEvent() {
+        override val event = Event.SWITCH_ENABLE_IN_APP_UPDATE
+        override val params = listOf(
+            AnalyticsParam(Param.IS_ENABLE_IN_APP_UPDATE, isEnable.toString()),
+        )
+    }
 
-class TotalConvertCount(count: Int) : AnalyticsEvent() {
-    override val event = Event.COUNT_UP_TOTAL_CONVERT_COUNT
-    override val params = listOf(
-        AnalyticsParam(Param.COUNT, count.toString()),
-    )
-}
+    class TotalConvertCount(count: Int) : AnalyticsEvent() {
+        override val event = Event.COUNT_UP_TOTAL_CONVERT_COUNT
+        override val params = listOf(
+            AnalyticsParam(Param.COUNT, count.toString()),
+        )
+    }
 
-class RequestReview() : AnalyticsEvent() {
-    override val event = Event.REQUEST_REVIEW
+    class RequestReview() : AnalyticsEvent() {
+        override val event = Event.REQUEST_REVIEW
+    }
 }
 
 enum class Screen {

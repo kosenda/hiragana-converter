@@ -10,7 +10,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
-import ksnd.hiraganaconverter.core.analytics.MockAnalytics
+import ksnd.hiraganaconverter.core.analytics.MockAnalyticsHelper
 import ksnd.hiraganaconverter.core.data.di.ReviewInfoSerializer
 import ksnd.hiraganaconverter.core.model.ReviewInfo
 import ksnd.hiraganaconverter.core.testing.MainDispatcherRule
@@ -31,7 +31,7 @@ class ReviewInfoRepositoryImplTest {
     )
     private val repository = ReviewInfoRepositoryImpl(
         dataStore = dataStore,
-        analytics = MockAnalytics(),
+        analytics = MockAnalyticsHelper(),
     )
 
     @Test

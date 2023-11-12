@@ -6,7 +6,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import ksnd.hiraganaconverter.core.analytics.MockAnalytics
+import ksnd.hiraganaconverter.core.analytics.MockAnalyticsHelper
 import ksnd.hiraganaconverter.core.domain.NavKey
 import ksnd.hiraganaconverter.core.domain.usecase.ConversionFailedException
 import ksnd.hiraganaconverter.core.domain.usecase.ConvertTextUseCase
@@ -25,7 +25,7 @@ class ConvertViewModelTest {
     private val convertTextUseCase = mockk<ConvertTextUseCase>(relaxUnitFun = true)
     private val viewModel = ConvertViewModel(
         convertTextUseCase = convertTextUseCase,
-        analytics = MockAnalytics(),
+        analytics = MockAnalyticsHelper(),
         savedStateHandle = SavedStateHandle(),
     )
 
@@ -34,7 +34,7 @@ class ConvertViewModelTest {
         val receivedText = "漢字"
         val viewModel = ConvertViewModel(
             convertTextUseCase = convertTextUseCase,
-            analytics = MockAnalytics(),
+            analytics = MockAnalyticsHelper(),
             savedStateHandle = SavedStateHandle().apply { set(NavKey.RECEIVED_TEXT, receivedText) },
         )
         assertThat(viewModel.uiState.value.inputText).isEqualTo(receivedText)
