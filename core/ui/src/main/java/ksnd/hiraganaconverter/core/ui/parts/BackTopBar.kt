@@ -3,6 +3,7 @@ package ksnd.hiraganaconverter.core.ui.parts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -35,6 +36,7 @@ fun BackTopBar(
         navigationIcon = {
             Box(
                 modifier = Modifier
+                    .displayCutoutPadding()
                     .padding(start = 16.dp)
                     .clip(shape = CircleShape)
                     .size(48.dp)
