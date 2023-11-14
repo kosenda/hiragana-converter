@@ -7,8 +7,11 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,6 +43,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -54,8 +58,8 @@ import ksnd.hiraganaconverter.core.analytics.Screen
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.BackTopBar
 import ksnd.hiraganaconverter.core.ui.parts.GooCreditImage
-import ksnd.hiraganaconverter.core.ui.parts.button.TransitionButton
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
+import ksnd.hiraganaconverter.core.ui.parts.button.TransitionButton
 import ksnd.hiraganaconverter.core.ui.parts.card.TitleCard
 import ksnd.hiraganaconverter.core.ui.parts.dialog.MovesToSiteDialog
 import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
@@ -84,6 +88,7 @@ private fun InfoScreenContent(
 ) {
     val urlHandler = LocalUriHandler.current
     val context = LocalContext.current
+    val layoutDirection = LocalLayoutDirection.current
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     var isShowMovesToAppSiteDialog by remember { mutableStateOf(false) }
     var isShowMovesToApiSiteDialog by remember { mutableStateOf(false) }
@@ -91,7 +96,7 @@ private fun InfoScreenContent(
     Scaffold(
         topBar = {
             BackTopBar(scrollBehavior = scrollBehavior, onBackPressed = onBackPressed)
-        }
+        },
     ) { padding ->
         if (isShowMovesToAppSiteDialog) {
             MovesToSiteDialog(
@@ -121,22 +126,24 @@ private fun InfoScreenContent(
         Column(
             modifier = Modifier
                 .displayCutoutPadding()
-                .padding(padding)
-                .fillMaxSize()
-                .nestedScroll(scrollBehavior.nestedScrollConnection),
+                .padding(
+                    paddingValues = PaddingValues(
+                        start = padding.calculateStartPadding(layoutDirection),
+                        top = padding.calculateTopPadding(),
+                        end = padding.calculateEndPadding(layoutDirection)
+                    ),
+                )
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp)
+                .fillMaxSize(),
         ) {
-            Column(
-                modifier = Modifier
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = 16.dp),
-            ) {
-                AppInfoContent(versionName = versionName, onURLClick = { isShowMovesToAppSiteDialog = true })
-                DeveloperInfoContent()
-                APIInfoContent(onURLClick = { isShowMovesToApiSiteDialog = true })
-                LicensesContent()
-                PrivacyPolicyContent()
-                Spacer(modifier = Modifier.height(40.dp))
-            }
+            AppInfoContent(versionName = versionName, onURLClick = { isShowMovesToAppSiteDialog = true })
+            DeveloperInfoContent()
+            APIInfoContent(onURLClick = { isShowMovesToApiSiteDialog = true })
+            LicensesContent()
+            PrivacyPolicyContent()
+            Spacer(modifier = Modifier.height(40.dp))
         }
     }
 }
