@@ -2,6 +2,7 @@ package ksnd.hiraganaconverter.feature.info
 
 import android.content.Intent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
@@ -94,6 +95,9 @@ private fun InfoScreenContent(
     var isShowMovesToApiSiteDialog by remember { mutableStateOf(false) }
 
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+            .background(MaterialTheme.colorScheme.surface)
+            .displayCutoutPadding(),
         topBar = {
             BackTopBar(scrollBehavior = scrollBehavior, onBackPressed = onBackPressed)
         },
@@ -125,7 +129,6 @@ private fun InfoScreenContent(
 
         Column(
             modifier = Modifier
-                .displayCutoutPadding()
                 .padding(
                     paddingValues = PaddingValues(
                         start = padding.calculateStartPadding(layoutDirection),
@@ -133,7 +136,6 @@ private fun InfoScreenContent(
                         end = padding.calculateEndPadding(layoutDirection)
                     ),
                 )
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp)
                 .fillMaxSize(),

@@ -1,6 +1,7 @@
 package ksnd.hiraganaconverter.feature.history
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -82,6 +83,9 @@ private fun ConvertHistoryScreenContent(
     val layoutDirection = LocalLayoutDirection.current
 
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+            .background(MaterialTheme.colorScheme.surface)
+            .displayCutoutPadding(),
         topBar = {
             BackTopBar(scrollBehavior = scrollBehavior, onBackPressed = onBackPressed)
         }
@@ -97,7 +101,6 @@ private fun ConvertHistoryScreenContent(
 
         Column(
             modifier = Modifier
-                .displayCutoutPadding()
                 .padding(
                     paddingValues = PaddingValues(
                         start = padding.calculateStartPadding(layoutDirection),
@@ -110,9 +113,7 @@ private fun ConvertHistoryScreenContent(
             if (state.convertHistories.isEmpty()) {
                 EmptyHistoryImage()
             } else {
-                LazyColumn(
-                    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-                ) {
+                LazyColumn {
                     item {
                         Row {
                             Spacer(modifier = Modifier.weight(1f))
