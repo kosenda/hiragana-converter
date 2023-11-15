@@ -7,9 +7,9 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.test.runTest
-import ksnd.hiraganaconverter.core.testing.MainDispatcherRule
 import ksnd.hiraganaconverter.core.data.database.ConvertHistoryDao
 import ksnd.hiraganaconverter.core.data.database.RoomRule
+import ksnd.hiraganaconverter.core.testing.MainDispatcherRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -25,7 +25,10 @@ class ConvertHistoryRepositoryImplTest {
 
     private val convertHistoryDao = spyk<ConvertHistoryDao>(roomRule.dao)
 
-    private val convertHistoryRepositoryImpl = ConvertHistoryRepositoryImpl(convertHistoryDao = convertHistoryDao)
+    private val convertHistoryRepositoryImpl = ConvertHistoryRepositoryImpl(
+        convertHistoryDao = convertHistoryDao,
+        ioDispatcher = mainDispatcherRule.testDispatcher,
+    )
 
     @Test
     fun observeAllConvertHistory_initial_isEmpty() = runTest {

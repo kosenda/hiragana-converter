@@ -1,5 +1,6 @@
 package ksnd.hiraganaconverter.feature.setting
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -86,7 +87,9 @@ private fun SettingScreenContent(
     }
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+            .background(MaterialTheme.colorScheme.surface)
+            .displayCutoutPadding(),
         topBar = {
             BackTopBar(scrollBehavior = scrollBehavior, onBackPressed = onBackPressed)
         },

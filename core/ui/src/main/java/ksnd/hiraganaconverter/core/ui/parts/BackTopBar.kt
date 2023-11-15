@@ -28,10 +28,12 @@ import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 @Composable
 fun BackTopBar(
     scrollBehavior: TopAppBarScrollBehavior,
+    modifier: Modifier = Modifier,
     onBackPressed: () -> Unit,
 ) {
     TopAppBar(
         title = {},
+        modifier = modifier,
         scrollBehavior = scrollBehavior,
         navigationIcon = {
             Box(
