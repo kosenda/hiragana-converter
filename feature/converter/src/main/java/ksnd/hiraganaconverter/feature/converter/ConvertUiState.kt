@@ -11,6 +11,7 @@ data class ConvertUiState(
     val selectedTextType: HiraKanaType = HiraKanaType.HIRAGANA,
     val isConverting: Boolean = false,
     val showRequestReview: Boolean = false,
+    val showErrorCard: Boolean = false,
 ) {
     fun isChangedInputText(): Boolean {
         return inputText != "" && previousInputText != inputText

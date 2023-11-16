@@ -51,13 +51,14 @@ class ConvertViewModel @Inject constructor(
                         convertErrorType = null,
                         previousInputText = uiState.value.inputText,
                         isConverting = false,
+                        showErrorCard = false,
                     )
                 }
             }.onFailure { throwable ->
                 val convertErrorType = throwable.toConvertErrorType()
                 Timber.d("convert error type: $convertErrorType")
                 analytics.logEvent(Analytics.ConvertError(error = convertErrorType.name))
-                _uiState.update { it.copy(convertErrorType = convertErrorType, isConverting = false) }
+                _uiState.update { it.copy(convertErrorType = convertErrorType, isConverting = false, showErrorCard = true) }
             }
         }
     }
@@ -81,6 +82,7 @@ class ConvertViewModel @Inject constructor(
                 inputText = "",
                 outputText = "",
                 convertErrorType = null,
+                showErrorCard = false,
             )
         }
     }
@@ -93,5 +95,9 @@ class ConvertViewModel @Inject constructor(
                 previousInputText = "",
             )
         }
+    }
+
+    fun hideErrorCard() {
+        _uiState.update { it.copy(showErrorCard = false) }
     }
 }

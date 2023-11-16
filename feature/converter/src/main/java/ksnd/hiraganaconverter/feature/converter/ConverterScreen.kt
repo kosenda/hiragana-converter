@@ -56,6 +56,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ShareCompat
+import kotlinx.coroutines.delay
 import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
 import ksnd.hiraganaconverter.core.analytics.Screen
 import ksnd.hiraganaconverter.core.model.ui.ConvertErrorType
@@ -67,6 +68,7 @@ import ksnd.hiraganaconverter.core.ui.parts.button.CustomButtonWithBackground
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.parts.card.ConversionTypeCard
 import ksnd.hiraganaconverter.core.ui.parts.card.ErrorCard
+import ksnd.hiraganaconverter.core.ui.parts.card.ErrorCardAnimationDuration
 import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import my.nanihadesuka.compose.ColumnScrollbar
@@ -89,6 +91,13 @@ fun ConverterScreen(
         analytics.logScreen(Screen.CONVERTER)
     }
 
+    LaunchedEffect(uiState.showErrorCard) {
+        if (uiState.convertErrorType != null && uiState.showErrorCard.not()) {
+            delay(ErrorCardAnimationDuration.toLong())
+            viewModel.clearConvertErrorType()
+        }
+    }
+
     ConverterScreenContent(
         modifier = modifier,
         uiState = uiState,
@@ -99,9 +108,9 @@ fun ConverterScreen(
         changeHiraKanaType = viewModel::changeHiraKanaType,
         clearAllText = viewModel::clearAllText,
         convert = viewModel::convert,
-        clearConvertErrorType = viewModel::clearConvertErrorType,
         updateInputText = viewModel::updateInputText,
         updateOutputText = viewModel::updateOutputText,
+        hideErrorCard = viewModel::hideErrorCard,
     )
 }
 
@@ -117,9 +126,9 @@ fun ConverterScreenContent(
     changeHiraKanaType: (HiraKanaType) -> Unit,
     clearAllText: () -> Unit,
     convert: () -> Unit,
-    clearConvertErrorType: () -> Unit,
     updateInputText: (String) -> Unit,
     updateOutputText: (String) -> Unit,
+    hideErrorCard: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
@@ -193,22 +202,22 @@ fun ConverterScreenContent(
                     )
                 }
 
-                uiState.convertErrorType?.let {
-                    ErrorCard(
-                        errorText = when (it) {
-                            ConvertErrorType.TOO_MANY_CHARACTER -> stringResource(id = R.string.request_too_large)
-                            ConvertErrorType.RATE_LIMIT_EXCEEDED -> stringResource(id = R.string.limit_exceeded)
-                            ConvertErrorType.CONVERSION_FAILED -> stringResource(id = R.string.conversion_failed)
-                            ConvertErrorType.INTERNAL_SERVER -> stringResource(id = R.string.internal_server_error)
-                            ConvertErrorType.NETWORK -> stringResource(id = R.string.network_error)
-                            ConvertErrorType.REACHED_CONVERT_MAX_LIMIT -> stringResource(
-                                id = R.string.limit_local_count,
-                                LIMIT_CONVERT_COUNT,
-                            )
-                        },
-                        onClick = clearConvertErrorType,
-                    )
-                }
+                ErrorCard(
+                    visible = uiState.showErrorCard,
+                    errorText = when (uiState.convertErrorType) {
+                        ConvertErrorType.TOO_MANY_CHARACTER -> stringResource(id = R.string.request_too_large)
+                        ConvertErrorType.RATE_LIMIT_EXCEEDED -> stringResource(id = R.string.limit_exceeded)
+                        ConvertErrorType.CONVERSION_FAILED -> stringResource(id = R.string.conversion_failed)
+                        ConvertErrorType.INTERNAL_SERVER -> stringResource(id = R.string.internal_server_error)
+                        ConvertErrorType.NETWORK -> stringResource(id = R.string.network_error)
+                        ConvertErrorType.REACHED_CONVERT_MAX_LIMIT -> stringResource(
+                            id = R.string.limit_local_count,
+                            LIMIT_CONVERT_COUNT,
+                        )
+                        else -> ""
+                    },
+                    onClick = hideErrorCard,
+                )
 
                 BeforeOrAfterTextField(
                     isBefore = true,
@@ -350,9 +359,9 @@ private fun PreviewConverterScreenContent() {
             changeHiraKanaType = {},
             clearAllText = {},
             convert = {},
-            clearConvertErrorType = {},
             updateInputText = {},
             updateOutputText = {},
+            hideErrorCard = {},
         )
     }
 }
