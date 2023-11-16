@@ -54,9 +54,9 @@ class ConverterScreenTest {
                     changeHiraKanaType = {},
                     clearAllText = {},
                     convert = {},
-                    clearConvertErrorType = {},
                     updateInputText = {},
                     updateOutputText = {},
+                    hideErrorCard = {},
                 )
             }
         }
@@ -85,9 +85,9 @@ class ConverterScreenTest {
                     changeHiraKanaType = {},
                     clearAllText = {},
                     convert = {},
-                    clearConvertErrorType = {},
                     updateInputText = {},
                     updateOutputText = {},
+                    hideErrorCard = {},
                 )
             }
         }

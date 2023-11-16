@@ -71,6 +71,7 @@ class ConvertViewModelTest {
         assertThat(viewModel.uiState.value.outputText).isEqualTo(outputText)
         assertThat(viewModel.uiState.value.previousInputText).isEqualTo(inputText)
         assertThat(viewModel.uiState.value.convertErrorType).isNull()
+        assertThat(viewModel.uiState.value.showErrorCard).isFalse()
         coVerify(exactly = 1) { convertTextUseCase(any(), any()) }
     }
 
@@ -81,6 +82,7 @@ class ConvertViewModelTest {
         assertThat(viewModel.uiState.value.convertErrorType).isNull()
         viewModel.convert()
         assertThat(viewModel.uiState.value.convertErrorType).isNotNull()
+        assertThat(viewModel.uiState.value.showErrorCard).isTrue()
         coVerify(exactly = 1) { convertTextUseCase(any(), any()) }
     }
 
@@ -115,10 +117,12 @@ class ConvertViewModelTest {
         assertThat(viewModel.uiState.value.inputText).isNotEmpty()
         assertThat(viewModel.uiState.value.outputText).isNotEmpty()
         assertThat(viewModel.uiState.value.convertErrorType).isNotNull()
+        assertThat(viewModel.uiState.value.showErrorCard).isTrue()
         viewModel.clearAllText()
         assertThat(viewModel.uiState.value.inputText).isEmpty()
         assertThat(viewModel.uiState.value.outputText).isEmpty()
         assertThat(viewModel.uiState.value.convertErrorType).isNull()
+        assertThat(viewModel.uiState.value.showErrorCard).isFalse()
     }
 
     @Test
@@ -129,5 +133,15 @@ class ConvertViewModelTest {
         viewModel.convert()
         viewModel.changeHiraKanaType(HiraKanaType.HIRAGANA)
         viewModel.convert()
+    }
+
+    @Test
+    fun hideErrorCard_once_isHidden() = runTest {
+        coEvery { convertTextUseCase(any(), any()) } throws ConversionFailedException
+        viewModel.updateInputText("漢字")
+        viewModel.convert()
+        assertThat(viewModel.uiState.value.showErrorCard).isTrue()
+        viewModel.hideErrorCard()
+        assertThat(viewModel.uiState.value.showErrorCard).isFalse()
     }
 }
