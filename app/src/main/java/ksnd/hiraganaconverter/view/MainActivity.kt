@@ -1,5 +1,7 @@
 package ksnd.hiraganaconverter.view
 
+import android.net.ConnectivityManager
+import android.net.Network
 import android.os.Bundle
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -41,6 +43,7 @@ import ksnd.hiraganaconverter.core.data.inappupdate.InAppUpdateState
 import ksnd.hiraganaconverter.core.domain.inappreview.InAppReviewManager
 import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.resource.R
+import ksnd.hiraganaconverter.core.ui.LocalIsConnectNetwork
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.view.navigation.Navigation
 import ksnd.hiraganaconverter.viewmodel.MainActivityViewModel
@@ -82,6 +85,23 @@ class MainActivity : AppCompatActivity() {
         }
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition { isAnimateSplash }
+
+        val connectivityManager = getSystemService(ConnectivityManager::class.java)
+        connectivityManager.registerDefaultNetworkCallback(
+            object : ConnectivityManager.NetworkCallback() {
+                init {
+                    mainViewModel.onNetworkConnectivityChanged(isConnectNetwork = connectivityManager.activeNetwork != null)
+                }
+                override fun onAvailable(network: Network) {
+                    super.onAvailable(network)
+                    mainViewModel.onNetworkConnectivityChanged(isConnectNetwork = true)
+                }
+                override fun onLost(network: Network) {
+                    super.onLost(network)
+                    mainViewModel.onNetworkConnectivityChanged(isConnectNetwork = false)
+                }
+            },
+        )
 
         enableEdgeToEdge()
 
@@ -149,7 +169,10 @@ class MainActivity : AppCompatActivity() {
                 )
             }
 
-            CompositionLocalProvider(LocalAnalytics provides analytics) {
+            CompositionLocalProvider(
+                LocalAnalytics provides analytics,
+                LocalIsConnectNetwork provides uiState.isConnectNetwork,
+            ) {
                 HiraganaConverterTheme(
                     isDarkTheme = isDarkTheme,
                     fontType = uiState.fontType,

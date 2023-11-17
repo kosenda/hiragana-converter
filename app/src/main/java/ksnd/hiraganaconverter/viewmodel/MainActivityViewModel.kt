@@ -33,6 +33,7 @@ class MainActivityViewModel @Inject constructor(
     private val cancelReviewUseCase: CancelReviewUseCase,
 ) : ViewModel(), InstallStateUpdatedListener {
     private val inAppUpdateState: MutableStateFlow<InAppUpdateState> = MutableStateFlow(InAppUpdateState.Requesting)
+    private val isConnectNetwork: MutableStateFlow<Boolean?> = MutableStateFlow(null)
 
     val uiState =
         combine(
@@ -40,12 +41,14 @@ class MainActivityViewModel @Inject constructor(
             dataStoreRepository.fontType(),
             inAppUpdateState,
             observeNeedRequestReviewUseCase(),
-        ) { theme, fontType, inAppUpdateState, needRequestReview ->
+            isConnectNetwork,
+        ) { theme, fontType, inAppUpdateState, needRequestReview, isConnectNetwork ->
             MainActivityUiState(
                 theme = theme,
                 fontType = fontType,
                 inAppUpdateState = inAppUpdateState,
                 needRequestReview = needRequestReview,
+                isConnectNetwork = isConnectNetwork,
             )
         }.stateIn(
             scope = viewModelScope,
@@ -89,6 +92,10 @@ class MainActivityViewModel @Inject constructor(
         viewModelScope.launch {
             cancelReviewUseCase()
         }
+    }
+
+    fun onNetworkConnectivityChanged(isConnectNetwork: Boolean) {
+        this.isConnectNetwork.value = isConnectNetwork
     }
 
     override fun onStateUpdate(state: InstallState) {

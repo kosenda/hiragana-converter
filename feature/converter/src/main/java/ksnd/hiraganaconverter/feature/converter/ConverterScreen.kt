@@ -35,6 +35,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -63,12 +64,14 @@ import ksnd.hiraganaconverter.core.model.ui.ConvertErrorType
 import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
 import ksnd.hiraganaconverter.core.resource.LIMIT_CONVERT_COUNT
 import ksnd.hiraganaconverter.core.resource.R
+import ksnd.hiraganaconverter.core.ui.LocalIsConnectNetwork
 import ksnd.hiraganaconverter.core.ui.parts.button.ConvertButton
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomButtonWithBackground
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.parts.card.ConversionTypeCard
 import ksnd.hiraganaconverter.core.ui.parts.card.ErrorCard
 import ksnd.hiraganaconverter.core.ui.parts.card.ErrorCardAnimationDuration
+import ksnd.hiraganaconverter.core.ui.parts.card.OfflineCard
 import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import my.nanihadesuka.compose.ColumnScrollbar
@@ -135,6 +138,7 @@ fun ConverterScreenContent(
     val density = LocalDensity.current.density
     val layoutDirection = LocalLayoutDirection.current
     val scrollState = rememberScrollState()
+    val isConnectNetwork = LocalIsConnectNetwork.current
 
     Scaffold(
         modifier = modifier
@@ -185,9 +189,8 @@ fun ConverterScreenContent(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Row(modifier = Modifier.weight(1f)) {
-                        ConversionTypeCard(onSelectedChange = changeHiraKanaType)
-                    }
+                    ConversionTypeCard(onSelectedChange = changeHiraKanaType)
+                    Spacer(modifier = Modifier.weight(1f))
                     CustomButtonWithBackground(
                         id = R.drawable.ic_reset,
                         convertDescription = "reset",
@@ -201,6 +204,8 @@ fun ConverterScreenContent(
                         onClick = convert,
                     )
                 }
+
+                OfflineCard(visible = isConnectNetwork == false)
 
                 ErrorCard(
                     visible = uiState.showErrorCard,
@@ -348,20 +353,22 @@ private fun BeforeOrAfterTextField(
 @Composable
 private fun PreviewConverterScreenContent() {
     HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
-        ConverterScreenContent(
-            uiState = ConvertUiState(
-                convertErrorType = ConvertErrorType.CONVERSION_FAILED,
-            ),
-            snackbarHostState = remember { SnackbarHostState() },
-            topBar = { },
-            topBarHeight = 0,
-            scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState()),
-            changeHiraKanaType = {},
-            clearAllText = {},
-            convert = {},
-            updateInputText = {},
-            updateOutputText = {},
-            hideErrorCard = {},
-        )
+        CompositionLocalProvider(LocalIsConnectNetwork provides false) {
+            ConverterScreenContent(
+                uiState = ConvertUiState(
+                    convertErrorType = ConvertErrorType.CONVERSION_FAILED,
+                ),
+                snackbarHostState = remember { SnackbarHostState() },
+                topBar = { },
+                topBarHeight = 0,
+                scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState()),
+                changeHiraKanaType = {},
+                clearAllText = {},
+                convert = {},
+                updateInputText = {},
+                updateOutputText = {},
+                hideErrorCard = {},
+            )
+        }
     }
 }
