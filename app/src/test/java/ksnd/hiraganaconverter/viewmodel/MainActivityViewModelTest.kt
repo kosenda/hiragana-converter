@@ -131,7 +131,7 @@ class MainActivityViewModelTest {
     @Test
     fun onNetworkConnectivityChanged_changeUiState() = runTest {
         viewModel.uiState.test {
-            assertThat(awaitItem().isConnectNetwork).isTrue()
+            assertThat(awaitItem().isConnectNetwork).isNull()
             viewModel.onNetworkConnectivityChanged(false)
             assertThat(awaitItem().isConnectNetwork).isFalse()
             viewModel.onNetworkConnectivityChanged(true)
