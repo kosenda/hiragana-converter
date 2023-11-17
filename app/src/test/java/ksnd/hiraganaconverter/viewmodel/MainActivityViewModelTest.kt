@@ -128,6 +128,17 @@ class MainActivityViewModelTest {
         coVerify(exactly = 1) { cancelReviewUseCase() }
     }
 
+    @Test
+    fun onNetworkConnectivityChanged_changeUiState() = runTest {
+        viewModel.uiState.test {
+            assertThat(awaitItem().isConnectNetwork).isTrue()
+            viewModel.onNetworkConnectivityChanged(false)
+            assertThat(awaitItem().isConnectNetwork).isFalse()
+            viewModel.onNetworkConnectivityChanged(true)
+            assertThat(awaitItem().isConnectNetwork).isTrue()
+        }
+    }
+
     companion object {
         class FakeDataStoreRepository : DataStoreRepository {
             private val theme = MutableStateFlow(MainActivityUiState().theme)

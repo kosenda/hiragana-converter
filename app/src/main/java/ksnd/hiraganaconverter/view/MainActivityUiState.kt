@@ -9,4 +9,5 @@ data class MainActivityUiState(
     val fontType: FontType = FontType.YUSEI_MAGIC,
     val inAppUpdateState: InAppUpdateState = InAppUpdateState.Requesting,
     val needRequestReview: Boolean = false,
+    val isConnectNetwork: Boolean? = null,
 )

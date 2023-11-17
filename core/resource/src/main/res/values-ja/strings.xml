@@ -19,6 +19,7 @@
     <string name="font_setting">フォント</string>
     <string name="delete_all">すべて削除</string>
     <string name="top">Top</string>
+    <string name="not_connected_network">ネットワークに接続していません…</string>
 
     <string name="conversion_failed">変換に失敗しました。</string>
     <string name="request_too_large">文字数が多すぎます。文字数を減らして再度変換してください。</string>
