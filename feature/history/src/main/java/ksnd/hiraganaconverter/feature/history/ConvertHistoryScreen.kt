@@ -1,5 +1,9 @@
 package ksnd.hiraganaconverter.feature.history
 
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -69,7 +73,7 @@ fun ConvertHistoryScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 private fun ConvertHistoryScreenContent(
     state: ConvertHistoryUiState,
@@ -119,7 +123,7 @@ private fun ConvertHistoryScreenContent(
                             Spacer(modifier = Modifier.weight(1f))
                             DeleteButton(
                                 modifier = Modifier.padding(end = 16.dp),
-                                onClick = deleteAllConvertHistory
+                                onClick = deleteAllConvertHistory,
                             )
                         }
                     }
@@ -128,7 +132,8 @@ private fun ConvertHistoryScreenContent(
                         key = { history -> history.id },
                     ) { history ->
                         ConvertHistoryCard(
-                            modifier = Modifier.padding(horizontal = 16.dp),
+                            modifier = Modifier.padding(horizontal = 16.dp)
+                                .animateItemPlacement(),
                             beforeText = history.before,
                             time = history.time,
                             onClick = { showConvertHistoryDetailDialog(history) },
