@@ -81,6 +81,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.google.fonts)
     implementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 
     // ktlint
     ktlint(libs.ktlint) {

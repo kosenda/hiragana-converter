@@ -37,7 +37,6 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -57,6 +56,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ShareCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.delay
 import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
 import ksnd.hiraganaconverter.core.analytics.Screen
@@ -87,7 +87,7 @@ fun ConverterScreen(
     topBarHeight: Int,
     scrollBehavior: TopAppBarScrollBehavior,
 ) {
-    val uiState by viewModel.uiState.collectAsState(ConvertUiState())
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle(ConvertUiState())
     val analytics = LocalAnalytics.current
 
     LaunchedEffect(Unit) {
