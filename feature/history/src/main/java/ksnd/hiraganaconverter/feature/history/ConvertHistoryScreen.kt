@@ -27,7 +27,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,6 +36,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
 import ksnd.hiraganaconverter.core.analytics.Screen
 import ksnd.hiraganaconverter.core.model.ConvertHistoryData
@@ -52,7 +52,7 @@ fun ConvertHistoryScreen(
     viewModel: ConvertHistoryViewModel,
     onBackPressed: () -> Unit,
 ) {
-    val uiState by viewModel.uiState.collectAsState(ConvertHistoryUiState())
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle(ConvertHistoryUiState())
     val analytics = LocalAnalytics.current
 
     LaunchedEffect(Unit) {
