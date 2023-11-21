@@ -1,5 +1,6 @@
 package ksnd.hiraganaconverter.feature.history
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -69,7 +71,7 @@ fun ConvertHistoryScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 private fun ConvertHistoryScreenContent(
     state: ConvertHistoryUiState,
@@ -81,9 +83,11 @@ private fun ConvertHistoryScreenContent(
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val layoutDirection = LocalLayoutDirection.current
+    val lazyListState = rememberLazyListState()
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
             .background(MaterialTheme.colorScheme.surface)
             .displayCutoutPadding(),
         topBar = {
@@ -113,7 +117,9 @@ private fun ConvertHistoryScreenContent(
             if (state.convertHistories.isEmpty()) {
                 EmptyHistoryImage()
             } else {
-                LazyColumn {
+                LazyColumn(
+                    state = lazyListState,
+                ) {
                     item {
                         Row {
                             Spacer(modifier = Modifier.weight(1f))
@@ -128,7 +134,12 @@ private fun ConvertHistoryScreenContent(
                         key = { history -> history.id },
                     ) { history ->
                         ConvertHistoryCard(
-                            modifier = Modifier.padding(horizontal = 16.dp),
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .then(
+                                    // adding the condition because it behaves strangely when set while scrolling
+                                    if (lazyListState.isScrollInProgress) Modifier else Modifier.animateItemPlacement()
+                                ),
                             beforeText = history.before,
                             time = history.time,
                             onClick = { showConvertHistoryDetailDialog(history) },
