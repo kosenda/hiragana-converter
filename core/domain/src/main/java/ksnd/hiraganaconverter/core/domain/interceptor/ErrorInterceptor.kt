@@ -21,52 +21,26 @@ class ErrorInterceptor @Inject constructor() : Interceptor {
             }
 
             Timber.w("beforeConvertedErrorMessage: %s".format(response.message))
-            when (response.code) {
-                413 -> {
-                    return response
-                        .newBuilder()
-                        .message(message = ConvertErrorType.TOO_MANY_CHARACTER.name)
-                        .build()
+            val convertedMessage = when (response.code) {
+                413 -> ConvertErrorType.TOO_MANY_CHARACTER.name
+                400 -> when (response.message) {
+                    "Rate limit exceeded" -> ConvertErrorType.RATE_LIMIT_EXCEEDED.name
+                    else -> ConvertErrorType.CONVERSION_FAILED.name
                 }
-                400 -> {
-                    val convertedMessage = when (response.message) {
-                        "Rate limit exceeded" -> ConvertErrorType.RATE_LIMIT_EXCEEDED.name
-                        else -> ConvertErrorType.CONVERSION_FAILED.name
-                    }
-                    return response.newBuilder().message(message = convertedMessage).build()
-                }
-                500 -> {
-                    return response
-                        .newBuilder()
-                        .message(message = ConvertErrorType.INTERNAL_SERVER.name)
-                        .build()
-                }
-                else -> {
-                    return response
-                        .newBuilder()
-                        .message(message = ConvertErrorType.CONVERSION_FAILED.name)
-                        .build()
-                }
+                500 -> ConvertErrorType.INTERNAL_SERVER.name
+                else -> ConvertErrorType.CONVERSION_FAILED.name
             }
-        } catch (ioe: IOException) {
-            Timber.w("NetworkError: %s".format(ioe))
-            return Response
-                .Builder()
-                .request(request)
-                .code(0)
-                .protocol(Protocol.HTTP_2)
-                .body("".toResponseBody("application/json".toMediaType()))
-                .message(message = ConvertErrorType.NETWORK.name)
-                .build()
+            return response.newBuilder().message(message = convertedMessage).build()
         } catch (e: Exception) {
             Timber.e(e)
+            val message = if (e is IOException) ConvertErrorType.NETWORK.name else ConvertErrorType.CONVERSION_FAILED.name
             return Response
                 .Builder()
                 .request(request)
                 .code(0)
                 .protocol(Protocol.HTTP_2)
                 .body("".toResponseBody("application/json".toMediaType()))
-                .message(message = ConvertErrorType.CONVERSION_FAILED.name)
+                .message(message = message)
                 .build()
         }
     }
