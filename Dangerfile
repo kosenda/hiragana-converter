@@ -12,6 +12,9 @@ warn("Big PR") if git.lines_of_code > 500
 fail("fdescribe left in tests") if `grep -r fdescribe specs/ `.length > 1
 fail("fit left in tests") if `grep -r fit specs/ `.length > 1
 
+# Do not show out of range issues, not caused by the current PR
+github.dismiss_out_of_range_messages
+
 checkstyle_format.base_path = Dir.pwd
 checkstyle_format.report 'app/build/reports/ktlint/ktlint-result.xml'
 
