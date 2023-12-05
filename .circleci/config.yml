@@ -5,7 +5,7 @@ orbs:
 jobs:
   build-and-test:
     docker:
-      - image: cimg/android:2023.11
+      - image: cimg/android:2023.12
     steps:
       - checkout
       - run:
