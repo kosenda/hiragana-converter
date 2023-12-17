@@ -1,10 +1,10 @@
 package ksnd.hiraganaconverter.core.data.repository
 
 import kotlinx.coroutines.delay
+import ksnd.hiraganaconverter.core.data.mock.MockConverted
 import ksnd.hiraganaconverter.core.domain.repository.ConvertRepository
 import ksnd.hiraganaconverter.core.model.ResponseData
 import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
-import ksnd.hiraganaconverter.data.mock.MockConverted
 import retrofit2.Response
 import javax.inject.Inject
 
