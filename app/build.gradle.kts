@@ -1,3 +1,5 @@
+import com.google.firebase.perf.plugin.FirebasePerfExtension
+
 val ktlint: Configuration by configurations.creating
 
 plugins {
@@ -26,6 +28,11 @@ android {
             isShrinkResources = true
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro", "shrinker-rules.pro")
+        }
+        debug {
+            configure<FirebasePerfExtension> {
+                setInstrumentationEnabled(false)
+            }
         }
     }
     flavorDimensions += "env"
