@@ -46,7 +46,7 @@ roborazzi = "1.6.0"
 
 # ** I'm using it, so no deletions allowed. **
 androidxComposeCompiler = "1.5.6"
-jacoco = "0.8.9"
+jacoco = "0.8.10"
 
 [libraries]
 # Accompanist
