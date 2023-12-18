@@ -6,3 +6,8 @@ plugins {
 android {
     namespace = "ksnd.hiraganaconverter.core.resource"
 }
+
+dependencies {
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.core.splashscreen)
+}
