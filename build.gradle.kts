@@ -16,7 +16,7 @@ plugins {
     alias(libs.plugins.firebase.perf) apply false
 }
 
-tasks.create<JacocoReport>("mergeJacoco") {
+tasks.create<JacocoReport>("jacocoTestReport") {
     reports {
         html.required.set(true)
         xml.required.set(true)
