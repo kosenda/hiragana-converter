@@ -18,4 +18,4 @@ github.dismiss_out_of_range_messages
 checkstyle_format.base_path = Dir.pwd
 checkstyle_format.report 'app/build/reports/ktlint/ktlint-result.xml'
 
-jacoco.report("build/reports/jacoco/mergeJacoco/mergeJacoco.xml",  fail_no_coverage_data_found: false)
+jacoco.report("build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml",  fail_no_coverage_data_found: false)
