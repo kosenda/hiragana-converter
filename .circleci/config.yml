@@ -2,10 +2,15 @@ version: 2.1
 
 orbs:
   slack: circleci/slack@4.12.5
-jobs:
-  dependencies:
+
+executors:
+  android:
     docker:
       - image: cimg/android:2023.12
+
+jobs:
+  dependencies:
+    executor: android
     steps:
       - checkout
 
@@ -26,9 +31,9 @@ jobs:
           key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
 
   test:
-    docker:
-      - image: cimg/android:2023.12
+    executor: android
     steps:
+      - checkout
 
       - run:
           neme: gem install bundler
