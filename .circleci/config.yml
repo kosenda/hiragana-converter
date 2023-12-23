@@ -44,7 +44,7 @@ jobs:
           # Gemfileのパスを指定してからbundle installを実行する
           command: |
             bundle config set --local path 'vendor/bundle'
-            bundle install --path vendor/bundle
+            bundle install
       - run:
           name: ktlint-check
           command: ./gradlew --continue ktlintCheck
