@@ -31,10 +31,16 @@ jobs:
     steps:
 
       - run:
+          neme: gem install bundler
           command: sudo gem install bundler:2.4.12
 
       - run:
-          command: bundle install
+          name: bundle install
+          # Gemfileのパスを指定してからbundle installを実行する
+          command: |
+            bundle config set --local path 'vendor/bundle'
+            bundle install
+            
 
       - run:
           name: ktlint-check
