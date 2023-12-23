@@ -18,8 +18,9 @@ commands:
             echo "apiKey=$.Environment.DEBUG_AD_APPLICATION_ID" >> $LOCAL_PROPERTIES_PATH
 
 jobs:
-  dependencies:
+  build-and-test:
     executor: android
+    context: slack-secrets
     steps:
       - checkout
       - set-locale-properties
@@ -30,18 +31,12 @@ jobs:
           paths:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
-
-  test:
-    executor: android
-    steps:
-      - checkout
-      - set-locale-properties
       - run:
           neme: gem install bundler
           command: sudo gem install bundler:2.4.12
       - run:
           name: bundle install
-          # Gemfileのパスを指定してからbundle installを実行する
+          # Specify Gemfile path and then run bundle install
           command: |
             bundle config set --local path 'vendor/bundle'
             bundle install
@@ -67,17 +62,7 @@ jobs:
 workflows:
   test:
     jobs:
-      - dependencies
-      - test:
-          context: slack-secrets
-          requires:
-            - dependencies
+      - build-and-test
 
 # ■ memo ■
-# チェックコマンド： circleci config validate
-#
-# ■ 特に参考にしたサイト ■
-# Android プロジェクトの継続的インテグレーション
-# https://circleci.com/ja/blog/building-android-on-circleci/
-# 3年の運用で編み出した CircleCI 超設計大全
-# https://qiita.com/dodonki1223/items/98dbdac6f31f9b486ecf
+# check command： circleci config validate
