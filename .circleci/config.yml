@@ -34,7 +34,7 @@ jobs:
           command: sudo gem install bundler:2.4.12
 
       - run:
-          command: bundle install --path vendor/bundle
+          command: bundle install
 
       - run:
           name: ktlint-check
