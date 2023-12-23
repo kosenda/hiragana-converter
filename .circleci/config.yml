@@ -3,24 +3,32 @@ version: 2.1
 orbs:
   slack: circleci/slack@4.12.5
 jobs:
-  build-and-test:
+  dependencies:
     docker:
       - image: cimg/android:2023.12
     steps:
       - checkout
+
       - run:
           name: set local.properties
           command: |
-              LOCAL_PROPERTIES_PATH=./local.properties
-              echo "apiKey=$.Environment.DEBUG_AD_APPLICATION_ID" >> $LOCAL_PROPERTIES_PATH
+            LOCAL_PROPERTIES_PATH=./local.properties
+            echo "apiKey=$.Environment.DEBUG_AD_APPLICATION_ID" >> $LOCAL_PROPERTIES_PATH
 
       - restore_cache:
           key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
+
       - run: ./gradlew androidDependencies
+
       - save_cache:
           paths:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
+
+  build-and-test:
+    docker:
+      - image: cimg/android:2023.12
+    steps:
 
       - run:
           command: sudo gem install bundler:2.4.12
@@ -55,8 +63,11 @@ jobs:
 workflows:
   test:
     jobs:
+      - dependencies
       - build-and-test:
           context: slack-secrets
+          requires:
+            - dependencies
 
 # ■ memo ■
 # チェックコマンド： circleci config validate
