@@ -20,7 +20,6 @@ commands:
 jobs:
   build-and-test:
     executor: android
-    context: slack-secrets
     steps:
       - checkout
       - set-locale-properties
@@ -62,7 +61,8 @@ jobs:
 workflows:
   test:
     jobs:
-      - build-and-test
+      - build-and-test:
+          context: slack-secrets
 
 # ■ memo ■
 # check command： circleci config validate
