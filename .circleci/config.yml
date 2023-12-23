@@ -8,17 +8,24 @@ executors:
     docker:
       - image: cimg/android:2023.12
 
+commands:
+  set-locale-properties:
+    steps:
+      - run:
+          name: set local.properties
+          command: |
+            LOCAL_PROPERTIES_PATH=./local.properties
+            echo "apiKey=$.Environment.DEBUG_AD_APPLICATION_ID" >> $LOCAL_PROPERTIES_PATH
+
 jobs:
   dependencies:
     executor: android
     steps:
       - checkout
-
+      - set-locale-properties
       - restore_cache:
           key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
-
       - run: ./gradlew androidDependencies
-
       - save_cache:
           paths:
             - ~/.gradle
@@ -28,44 +35,31 @@ jobs:
     executor: android
     steps:
       - checkout
-
-      - run:
-          name: set local.properties
-          command: |
-            LOCAL_PROPERTIES_PATH=./local.properties
-            echo "apiKey=$.Environment.DEBUG_AD_APPLICATION_ID" >> $LOCAL_PROPERTIES_PATH
-
+      - set-locale-properties
       - run:
           neme: gem install bundler
           command: sudo gem install bundler:2.4.12
-
       - run:
           name: bundle install
           # Gemfileのパスを指定してからbundle installを実行する
           command: |
             bundle config set --local path 'vendor/bundle'
             bundle install --path vendor/bundle
-
       - run:
           name: ktlint-check
           command: ./gradlew --continue ktlintCheck
-
       - run:
           name: test
           command: ./gradlew testProdDebug --stacktrace
-
       - run:
           name: jacoco-report
           command: ./gradlew jacocoTestReport
-
       - run:
           name: run-danger-file
           command: bundle exec danger --verbose
-
       - slack/notify:
           event: fail
           template: basic_fail_1
-
       - slack/notify:
           event: pass
           template: basic_success_1
