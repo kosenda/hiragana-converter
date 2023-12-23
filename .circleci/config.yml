@@ -39,8 +39,7 @@ jobs:
           # Gemfileのパスを指定してからbundle installを実行する
           command: |
             bundle config set --local path 'vendor/bundle'
-            bundle install
-            
+            bundle install --path vendor/bundle
 
       - run:
           name: ktlint-check
