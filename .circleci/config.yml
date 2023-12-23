@@ -14,12 +14,6 @@ jobs:
     steps:
       - checkout
 
-      - run:
-          name: set local.properties
-          command: |
-            LOCAL_PROPERTIES_PATH=./local.properties
-            echo "apiKey=$.Environment.DEBUG_AD_APPLICATION_ID" >> $LOCAL_PROPERTIES_PATH
-
       - restore_cache:
           key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
 
@@ -34,6 +28,12 @@ jobs:
     executor: android
     steps:
       - checkout
+
+      - run:
+          name: set local.properties
+          command: |
+            LOCAL_PROPERTIES_PATH=./local.properties
+            echo "apiKey=$.Environment.DEBUG_AD_APPLICATION_ID" >> $LOCAL_PROPERTIES_PATH
 
       - run:
           neme: gem install bundler
