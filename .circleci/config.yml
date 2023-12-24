@@ -31,6 +31,9 @@ jobs:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
       - run:
+          name: build mock
+          command: ./gradlew compileMockDebugSource
+      - run:
           neme: gem install bundler
           command: sudo gem install bundler:2.4.12
       - run:
