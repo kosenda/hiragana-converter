@@ -50,6 +50,7 @@ jobs:
           command: ./gradlew --continue ktlintCheck
       - run:
           name: test
+          parallelism: 4
           command: ./gradlew testProdDebug --stacktrace
       - run:
           name: jacoco-report
