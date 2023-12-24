@@ -2,18 +2,27 @@ version: 2.1
 
 orbs:
   slack: circleci/slack@4.12.5
-jobs:
-  build-and-test:
+
+executors:
+  android:
     docker:
       - image: cimg/android:2023.12
+
+commands:
+  set-locale-properties:
     steps:
-      - checkout
       - run:
           name: set local.properties
           command: |
-              LOCAL_PROPERTIES_PATH=./local.properties
-              echo "apiKey=$.Environment.DEBUG_AD_APPLICATION_ID" >> $LOCAL_PROPERTIES_PATH
+            LOCAL_PROPERTIES_PATH=./local.properties
+            echo "apiKey=$.Environment.DEBUG_AD_APPLICATION_ID" >> $LOCAL_PROPERTIES_PATH
 
+jobs:
+  build-and-test:
+    executor: android
+    steps:
+      - checkout
+      - set-locale-properties
       - restore_cache:
           key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
       - run: ./gradlew androidDependencies
@@ -21,33 +30,30 @@ jobs:
           paths:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
-
       - run:
+          neme: gem install bundler
           command: sudo gem install bundler:2.4.12
-
       - run:
-          command: bundle install --path vendor/bundle
-
+          name: bundle install
+          # Specify Gemfile path and then run bundle install
+          command: |
+            bundle config set --local path 'vendor/bundle'
+            bundle install
       - run:
           name: ktlint-check
           command: ./gradlew --continue ktlintCheck
-
       - run:
           name: test
           command: ./gradlew testProdDebug --stacktrace
-
       - run:
           name: jacoco-report
           command: ./gradlew jacocoTestReport
-
       - run:
           name: run-danger-file
           command: bundle exec danger --verbose
-
       - slack/notify:
           event: fail
           template: basic_fail_1
-
       - slack/notify:
           event: pass
           template: basic_success_1
@@ -59,10 +65,4 @@ workflows:
           context: slack-secrets
 
 # ■ memo ■
-# チェックコマンド： circleci config validate
-#
-# ■ 特に参考にしたサイト ■
-# Android プロジェクトの継続的インテグレーション
-# https://circleci.com/ja/blog/building-android-on-circleci/
-# 3年の運用で編み出した CircleCI 超設計大全
-# https://qiita.com/dodonki1223/items/98dbdac6f31f9b486ecf
+# check command： circleci config validate
