@@ -17,28 +17,31 @@ commands:
             LOCAL_PROPERTIES_PATH=./local.properties
             echo "apiKey=$.Environment.DEBUG_AD_APPLICATION_ID" >> $LOCAL_PROPERTIES_PATH
 
-jobs:
-  build-and-test:
-    executor: android
+  restore-and-save-gradle-cache:
     steps:
-      - checkout
-      - set-locale-properties
       - restore_cache:
           key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
-      - run: ./gradlew androidDependencies
+      - run:
+          name: Download dependencies
+          command: ./gradlew androidDependencies
       - save_cache:
           paths:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
-      - run:
-          name: build mock
-          command: ./gradlew compileMockDebugSource
+
+jobs:
+  build-and-test-prod:
+    executor: android
+    steps:
+      - checkout
+      - set-locale-properties
+      - restore-and-save-gradle-cache
       - run:
           neme: gem install bundler
           command: sudo gem install bundler:2.4.12
       - run:
-          name: bundle install
           # Specify Gemfile path and then run bundle install
+          name: bundle install
           command: |
             bundle config set --local path 'vendor/bundle'
             bundle install
@@ -65,26 +68,27 @@ jobs:
       - slack/notify:
           event: pass
           template: basic_success_1
-#  deploy:
-#    executor: android
-#    steps:
-#      - checkout
-#      - set-locale-properties
-#      - run:
-#          name: build release
-#          command: ./gradlew assembleProdRelease
+
+  build-mock:
+    executor: android
+    steps:
+      - checkout
+      - set-locale-properties
+      - restore-and-save-gradle-cache
+      - run:
+          name: build mock
+          command: ./gradlew compileMockDebugSource
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
 
 workflows:
   test:
     jobs:
-      - build-and-test:
+      - build-and-test-prod:
           context: slack-secrets
-#      - deploy:
-#          requires:
-#            - build-and-test
-#          filters:
-#            branches:
-#              only: main
+      - build-mock:
+          context: slack-secrets
 
 # ■ memo ■
 # check command： circleci config validate
