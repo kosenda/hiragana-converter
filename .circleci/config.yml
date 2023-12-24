@@ -51,6 +51,8 @@ jobs:
       - run:
           name: jacoco-report
           command: ./gradlew jacocoTestReport
+      - store_artifacts:
+          path: ./build/reports/jacoco/jacocoTestReport/html
       - run:
           name: run-danger-file
           command: bundle exec danger --verbose
