@@ -60,12 +60,26 @@ jobs:
       - slack/notify:
           event: pass
           template: basic_success_1
+#  deploy:
+#    executor: android
+#    steps:
+#      - checkout
+#      - set-locale-properties
+#      - run:
+#          name: build release
+#          command: ./gradlew assembleProdRelease
 
 workflows:
   test:
     jobs:
       - build-and-test:
           context: slack-secrets
+#      - deploy:
+#          requires:
+#            - build-and-test
+#          filters:
+#            branches:
+#              only: main
 
 # ■ memo ■
 # check command： circleci config validate

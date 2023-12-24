@@ -1,4 +1,6 @@
 import com.google.firebase.perf.plugin.FirebasePerfExtension
+import java.io.FileInputStream
+import java.util.Properties
 
 val ktlint: Configuration by configurations.creating
 
@@ -35,6 +37,21 @@ android {
             }
         }
     }
+
+    // ref: https://github.com/DroidKaigi/conference-app-2023/blob/main/app-android/build.gradle.kts
+    val keystorePropertiesFile = file("keystore.properties")
+    signingConfigs {
+        if (keystorePropertiesFile.exists()) {
+            val keystoreProperties = Properties()
+            keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+            create("release") {
+                keyAlias = keystoreProperties["keyAlias"] as String?
+                keyPassword = keystoreProperties["keyPassword"] as String?
+                storeFile = keystoreProperties["storeFile"]?.let { file(it) }
+                storePassword = keystoreProperties["storePassword"] as String?
+            }
+        }
+    }
     flavorDimensions += "env"
     productFlavors {
         create("prod") {
@@ -47,6 +64,13 @@ android {
     }
     ksp {
         arg("room.schemaLocation", "$projectDir/schemas")
+    }
+    buildTypes {
+        if (keystorePropertiesFile.exists()) {
+            getByName("release") {
+                signingConfig = signingConfigs.getByName("release")
+            }
+        }
     }
     buildFeatures {
         compose = true
