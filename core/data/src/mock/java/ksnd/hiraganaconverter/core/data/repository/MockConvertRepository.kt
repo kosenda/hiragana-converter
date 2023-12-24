@@ -8,7 +8,7 @@ import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
 import retrofit2.Response
 import javax.inject.Inject
 
-class MockConvertRepository @Inject constructor() : Convertepository {
+class MockConvertRepository @Inject constructor() : ConvertRepository {
     override suspend fun requestConvert(
         sentence: String,
         type: String,
