@@ -51,8 +51,11 @@ jobs:
       - run:
           name: jacoco-report
           command: ./gradlew jacocoTestReport
+      - run:
+          name: jacoco-report to zip
+          command: zip -r jacocoTestReport.zip ./build/reports/jacoco/jacocoTestReport/html
       - store_artifacts:
-          path: ./build/reports/jacoco/jacocoTestReport/html
+          path: ./build/reports/jacoco/jacocoTestReport/html/jacocoTestReport.zip
       - run:
           name: run-danger-file
           command: bundle exec danger --verbose
