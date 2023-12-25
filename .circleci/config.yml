@@ -68,6 +68,8 @@ jobs:
           paths:
             - ./app/build/outputs/roborazzi
           key: "Roborazzi"
+      - store_artifacts:
+          path: ./app/build/outputs/roborazzi
       - run:
           name: jacoco-report
           command: ./gradlew jacocoTestReport
