@@ -51,6 +51,21 @@ jobs:
       - run:
           name: test
           command: ./gradlew testProdDebug --stacktrace
+      - restore_cache:
+          key: "Roborazzi"
+      - run:
+          name: compare screenshots
+          command: ./gradlew compareRoborazziProdDebug --stacktrace
+      - run:
+          name: move screenshots files
+          command: mv ./app/build/outputs/roborazzi/ ./build/outputs/roborazzi/compareProdDebug
+      - run:
+          name: create screenshots
+          command: ./gradlew recordRoborazziProdDebug --stacktrace
+      - save_cache:
+          paths:
+            - ./app/build/outputs/roborazzi
+          key: "Roborazzi"
       - run:
           name: jacoco-report
           command: ./gradlew jacocoTestReport
