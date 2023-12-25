@@ -58,7 +58,9 @@ jobs:
           command: ./gradlew compareRoborazziProdDebug --stacktrace
       - run:
           name: move screenshots files
-          command: mv ./app/build/outputs/roborazzi/ ./build/outputs/roborazzi/compareProdDebug
+          command: |
+            mkdir -p ./build/outputs/roborazzi/compareProdDebug
+            mv ./app/build/outputs/roborazzi ./build/outputs/roborazzi/compareProdDebug
       - run:
           name: create screenshots
           command: ./gradlew recordRoborazziProdDebug --stacktrace
