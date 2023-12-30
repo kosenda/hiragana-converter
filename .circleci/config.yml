@@ -92,6 +92,18 @@ jobs:
     executor: android
     steps:
       - checkout
+      - run:
+          name: create comments
+          command: |
+            cat << EOF > comments
+            test!
+            test!!
+            EOF
+      - run:
+          name: test comment
+          command: |
+            echo $CIRCLE_PULL_REQUEST
+            gh pr comment -F ./comments "$CIRCLE_PULL_REQUEST"
       - set-locale-properties
       - restore-and-save-gradle-cache
       - run:
