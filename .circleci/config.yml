@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   slack: circleci/slack@4.12.5
-  github-cli: circleci/github-cli@2.3.0
+  gh: circleci/github-cli@2.3.0
 
 executors:
   android:
