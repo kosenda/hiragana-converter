@@ -71,7 +71,6 @@ jobs:
           key: "Roborazzi"
       - store_artifacts:
           path: ./app/build/outputs/roborazzi
-
       - gh/setup:
           token: COMMENT_GITHUB_API_TOKEN
       - run:
