@@ -95,7 +95,7 @@ jobs:
       - run:
           name: create comments
           command: |
-            cat << EOF > comments
+            cat \<< EOF > comments
             test!
             test!!
             EOF
