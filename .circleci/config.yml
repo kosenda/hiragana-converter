@@ -85,10 +85,10 @@ jobs:
       - run:
           name: test comment
           command: |
-            gh pr comment 99 "$CIRCLE_PULL_REQUEST" --edit-last -F ./comments
+            gh pr comment "$CIRCLE_PULL_REQUEST" --edit-last -F ./comments
             if [ $? -ne 0 ]; then
               echo "test test"
-              gh pr comment 99 "$CIRCLE_PULL_REQUEST" -F ./comments
+              gh pr comment "$CIRCLE_PULL_REQUEST" -F ./comments
             fi
       - run:
           name: jacoco-report
