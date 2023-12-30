@@ -80,13 +80,13 @@ jobs:
             cat \<< EOF > comments
             |name|image|
             |---|---|
-            |temp|<img src="./app/build/outputs/roborazzi|ksnd.hiraganaconverter.view.screen.ConverterScreenTest.convertScreen_dark_compare.pmn" width="350">|
+            |temp|<img src="./app/build/outputs/roborazzi|ksnd.hiraganaconverter.view.screen.ConverterScreenTest.convertScreen_dark_compare.png" width="350">|
             EOF
       - run:
           name: test comment
           command: |
             echo $CIRCLE_PULL_REQUEST
-            gh pr comment -F --edit-last ./comments "$CIRCLE_PULL_REQUEST" ||  gh pr comment -F ./comments "$CIRCLE_PULL_REQUEST"
+            gh pr comment 999 -F --edit-last ./comments "$CIRCLE_PULL_REQUEST" ||  gh pr comment 999 -F ./comments "$CIRCLE_PULL_REQUEST"
       - run:
           name: jacoco-report
           command: ./gradlew jacocoTestReport
