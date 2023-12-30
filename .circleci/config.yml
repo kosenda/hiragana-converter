@@ -94,7 +94,7 @@ jobs:
     steps:
       - checkout
       - gh/setup:
-        - token: $DANGER_GITHUB_API_TOKEN
+          token: DANGER_GITHUB_API_TOKEN
       - run:
           name: create comments
           command: |
