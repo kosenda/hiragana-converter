@@ -58,6 +58,7 @@ tasks.create<JacocoReport>("jacocoTestReport") {
                         "**/mock/**",
                         "**/*Mock*.*",
                         "**/*Navigation*.*",
+                        "**/*State*.*",
                     )
                 }
             )
