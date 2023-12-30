@@ -85,8 +85,7 @@ jobs:
       - run:
           name: test comment
           command: |
-            echo $CIRCLE_PULL_REQUEST
-            gh pr comment 99 "$CIRCLE_PULL_REQUEST" --edit-last -F ./comments ||gh pr comment 99 "$CIRCLE_PULL_REQUEST" -F ./comments
+            gh pr comment 99 "$CIRCLE_PULL_REQUEST" --edit-last -F ./comments || gh pr comment 99 "$CIRCLE_PULL_REQUEST" -F ./comments
 #            gh pr comment 99 --edit-last -F ./comments "$CIRCLE_PULL_REQUEST"
 #            if [ $? -ne 0 ]; then
 #              echo "test test"
