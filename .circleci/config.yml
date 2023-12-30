@@ -71,6 +71,22 @@ jobs:
           key: "Roborazzi"
       - store_artifacts:
           path: ./app/build/outputs/roborazzi
+
+      - gh/setup:
+          token: DANGER_GITHUB_API_TOKEN
+      - run:
+          name: create comments
+          command: |
+            cat \<< EOF > comments
+            |name|image|
+            |---|---|
+            |temp|<img src="./app/build/outputs/roborazzi|ksnd.hiraganaconverter.view.screen.ConverterScreenTest.convertScreen_dark_compare.pmn" width="350">|
+            EOF
+      - run:
+          name: test comment
+          command: |
+            echo $CIRCLE_PULL_REQUEST
+            gh pr comment -F ./comments "$CIRCLE_PULL_REQUEST"
       - run:
           name: jacoco-report
           command: ./gradlew jacocoTestReport
@@ -93,21 +109,6 @@ jobs:
     executor: android
     steps:
       - checkout
-      - gh/setup:
-          token: DANGER_GITHUB_API_TOKEN
-      - run:
-          name: create comments
-          command: |
-            cat \<< EOF > comments
-            |name|image|
-            |---|---|
-            |temp|<img src="./app/build/outputs/roborazzi|ksnd.hiraganaconverter.view.screen.ConverterScreenTest.convertScreen_dark_compare.pmn" width="350">|
-            EOF
-      - run:
-          name: test comment
-          command: |
-            echo $CIRCLE_PULL_REQUEST
-            gh pr comment -F ./comments "$CIRCLE_PULL_REQUEST"
       - set-locale-properties
       - restore-and-save-gradle-cache
       - run:
