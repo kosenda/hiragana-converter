@@ -73,7 +73,7 @@ jobs:
           path: ./app/build/outputs/roborazzi
 
       - gh/setup:
-          token: DANGER_GITHUB_API_TOKEN
+          token: COMMENT_GITHUB_API_TOKEN
       - run:
           name: create comments
           command: |
