@@ -93,7 +93,7 @@ jobs:
     executor: android
     steps:
       - checkout
-      - gh/install
+      - gh/setup
       - run:
           name: create comments
           command: |
