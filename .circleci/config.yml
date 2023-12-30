@@ -99,8 +99,9 @@ jobs:
           name: create comments
           command: |
             cat \<< EOF > comments
-            test!
-            test!!
+            |name|image|
+            |---|---|
+            |temp|<img src="./app/build/outputs/roborazzi|ksnd.hiraganaconverter.view.screen.ConverterScreenTest.convertScreen_dark_compare.pmn" width="350">|
             EOF
       - run:
           name: test comment
