@@ -257,7 +257,7 @@ class MainActivityViewModelTest {
             activityResultLauncher: ActivityResultLauncher<IntentSenderRequest>,
             alreadyDownloaded: () -> Unit,
             notAvailable: () -> Unit,
-            onFailed: () -> Unit
+            onFailed: () -> Unit,
         ) {
             when (appUpdateInfoState.value) {
                 AppUpdateInfoState.AVAILABLE -> { /* no-op */ }
@@ -275,7 +275,6 @@ class MainActivityViewModelTest {
         override fun unregisterListener(listener: InstallStateUpdatedListener) {
             /* no-op */
         }
-
     }
 
     class MockInstallState(
