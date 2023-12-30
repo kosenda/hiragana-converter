@@ -1,11 +1,11 @@
 package ksnd.hiraganaconverter.core.data.inappupdate
 
 sealed class InAppUpdateState {
-    object Requesting : InAppUpdateState()
-    object NotAvailable : InAppUpdateState()
+    data object Requesting : InAppUpdateState()
+    data object NotAvailable : InAppUpdateState()
     data class Downloading(val percentage: Int) : InAppUpdateState()
-    object Downloaded : InAppUpdateState()
-    object Installing : InAppUpdateState()
-    object Canceled : InAppUpdateState()
-    object Failed : InAppUpdateState()
+    data object Downloaded : InAppUpdateState()
+    data object Installing : InAppUpdateState()
+    data object Canceled : InAppUpdateState()
+    data object Failed : InAppUpdateState()
 }
