@@ -84,12 +84,7 @@ jobs:
             EOF
       - run:
           name: test comment
-          command: |
-            gh pr comment "$CIRCLE_PULL_REQUEST" --edit-last -F ./comments
-            if [ $? -ne 0 ]; then
-              echo "test test"
-              gh pr comment "$CIRCLE_PULL_REQUEST" -F ./comments
-            fi
+          command: gh pr comment "$CIRCLE_PULL_REQUEST" --edit-last -F ./comments || gh pr comment "$CIRCLE_PULL_REQUEST" -F ./comments
       - run:
           name: jacoco-report
           command: ./gradlew jacocoTestReport
