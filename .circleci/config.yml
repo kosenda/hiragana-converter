@@ -86,11 +86,12 @@ jobs:
           name: test comment
           command: |
             echo $CIRCLE_PULL_REQUEST
-            gh pr comment 99 -F --edit-last ./comments "$CIRCLE_PULL_REQUEST"
-            if [ $? -ne 0 ]; then
-              echo "test test"
-              gh pr comment 99 -F ./comments "$CIRCLE_PULL_REQUEST"
-            fi
+            gh pr comment 99 --edit-last -F ./comments "$CIRCLE_PULL_REQUEST" || gh pr comment 99 -F ./comments "$CIRCLE_PULL_REQUEST"
+#            gh pr comment 99 --edit-last -F ./comments "$CIRCLE_PULL_REQUEST"
+#            if [ $? -ne 0 ]; then
+#              echo "test test"
+#              gh pr comment 99 ./comments -F "$CIRCLE_PULL_REQUEST"
+#            fi
       - run:
           name: jacoco-report
           command: ./gradlew jacocoTestReport
