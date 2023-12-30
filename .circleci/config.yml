@@ -93,7 +93,8 @@ jobs:
     executor: android
     steps:
       - checkout
-      - gh/setup
+      - gh/setup:
+        - token: $DANGER_GITHUB_API_TOKEN
       - run:
           name: create comments
           command: |
