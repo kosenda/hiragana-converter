@@ -147,7 +147,7 @@ jobs:
             for file in $files_to_add; do
               if [[ "$file" =~ ^[a-zA-Z0-9_./-]+$ ]]; then
                 base_name=$(basename $file)
-                echo "| $base_name | ![img](\"https://hiraganaconverter-roborazzi.s3.ap-northeast-1.amazonaws.com/image/$base_name\?raw=true") |" >> comments
+                echo "| $base_name | ![img](\"https://hiraganaconverter-roborazzi.s3.ap-northeast-1.amazonaws.com/image/$base_name?raw=true\") |" >> comments
               fi
             done
       - run:
