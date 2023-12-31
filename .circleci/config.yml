@@ -74,38 +74,54 @@ jobs:
       - gh/install
       - run:
           name: gh login
+          # Create GitHub App Token using JWT and pass it with gh auth to login
+          # ref: https://zenn.dev/gorohash/articles/e2c5f6ce50f4e6
           command: |
+            # ◼ create JWT
+            # ◼◼ header
             header=$(echo -n '{"alg":"RS256","typ":"JWT"}' | base64 -w 0)
+            # Current Unix time(Epoch)
             now=$(date "+%s")
+            # Date and time token was issued (issued at) (Set 1 minute before the current time to account for the possibility of the clock being off)
             iat=$((${now} - 60))
+            # Date and time when token expires (Expiration time) (10 minutes later)
             exp=$((${now} + (10 * 60)))
-            github_app_id="$APP_ID" # App ID
-            payload=$(echo -n "{\"iat\":${iat},\"exp\":${exp},\"iss\":${github_app_id}}" | base64 -w 0)
+            # ◼◼ payload
+            # iss: GitHub App ID (issuer)
+            iss="$APP_ID"
+            payload=$(echo -n "{\"iat\":${iat},\"exp\":${exp},\"iss\":${iss}}" | base64 -w 0)
+            # ◼◼ signature
             echo $COMMENT_GITHUB_API_TOKEN | base64 --decode > ./githubapps
-            unsigned_token="${header}.${payload}"
-            signed_token=$(echo -n $(echo -n "${unsigned_token}" | openssl dgst -binary -sha256 -sign "./githubapps" | base64))
+            signature=$(echo -n $(echo -n "${header}.${payload}" | openssl dgst -binary -sha256 -sign "./githubapps" | base64))
             rm ./githubapps
-            jwt="${unsigned_token}.${signed_token}"
-            user_name="kosenda" # githubアカウント
+            # ◼◼ jwt
+            jwt="${header}.${payload}.${signature}"
+            # ◼ Generating an installation access token for a GitHub App
+            user_name="kosenda"
             installation_id=$(
-              curl -s -X GET \
+              curl -s -G \
                 -H "Authorization: Bearer ${jwt}" \
-                -H "Accept: application/vnd.github.v3+json" \
+                -H "Accept: application/vnd.github+json" \
                 "https://api.github.com/app/installations" \
-              | jq -r ".[] | select(.account.login == \"${user_name}\" and .account.type == \"User\") | .id"
-            ) # account_type が Organization の場合は $user_name は OrganizationName にする
-            echo $(
-              curl -s -X POST \
+                | jq -r ".[] | select(.account.login == \"${user_name}\" and .account.type == \"User\") | .id"
+            )
+            # ◼ Get an installation access token
+            token=$(
+              echo $(
+                curl -s -X POST \
                 -H "Authorization: Bearer ${jwt}" \
-                -H "Accept: application/vnd.github.v3+json" \
+                -H "Accept: application/vnd.github+json" \
                 "https://api.github.com/app/installations/${installation_id}/access_tokens" \
-              | jq -r ".token"
-            ) | gh auth login --with-token
+                | jq -r ".token"
+              )
+            )
+            # ◼ gh auth login
+            gh auth login --with-token $token
       - run:
           name: create comments
           command: |
             cat \<< EOF > comments
-            |name|image|
+            |fileName|image|
             |---|---|
             |temp|<img src="./app/build/outputs/roborazzi|ksnd.hiraganaconverter.view.screen.ConverterScreenTest.convertScreen_dark_compare.png" width="350">|
             EOF
