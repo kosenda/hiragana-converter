@@ -59,9 +59,6 @@ jobs:
           name: compare screenshots
           command: ./gradlew compareRoborazziProdDebug --stacktrace
       - run:
-          name: test comment
-          command: gh pr comment "$CIRCLE_PULL_REQUEST" --edit-last -F ./comments || gh pr comment "$CIRCLE_PULL_REQUEST" -F ./comments
-      - run:
           name: jacoco-report
           command: ./gradlew jacocoTestReport
       - run:
@@ -136,6 +133,9 @@ jobs:
             |---|---|
             |temp|<img src="./app/build/outputs/roborazzi|ksnd.hiraganaconverter.view.screen.ConverterScreenTest.convertScreen_dark_compare.png" width="350">|
             EOF
+      - run:
+          name: test comment
+          command: gh pr comment "$CIRCLE_PULL_REQUEST" --edit-last -F ./comments || gh pr comment "$CIRCLE_PULL_REQUEST" -F ./comments
       - run:
           name: create screenshots
           command: ./gradlew recordRoborazziProdDebug --stacktrace
