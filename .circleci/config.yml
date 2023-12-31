@@ -109,7 +109,7 @@ jobs:
             )
             # ◼ Get an installation access token
             echo Get an installation access token
-            token=$(
+            access_token=$(
               echo $(
                 curl -s -X POST \
                 -H "Authorization: Bearer ${jwt}" \
@@ -120,7 +120,7 @@ jobs:
             )
             # ◼ gh auth login
             echo gh auth login
-            $(token) | gh auth login --with-token
+            $(access_token) | gh auth login --with-token
       - run:
           name: create comments
           command: |
