@@ -146,6 +146,7 @@ jobs:
             # Add compare image
             for file in $files_to_add; do
               if [[ "$file" =~ ^[a-zA-Z0-9_./-]+$ ]]; then
+                echo "base name: $(basename $file)"
                 base_name=$(basename $file)
                 echo "| $base_name | <img src=\"https://hiraganaconverter-roborazzi.s3.ap-northeast-1.amazonaws.com/image/$base_name?raw=true\" width=\"600\") |" >> comments
               fi
