@@ -78,6 +78,7 @@ jobs:
           # ref: https://zenn.dev/gorohash/articles/e2c5f6ce50f4e6
           command: |
             # ◼ create JWT
+            echo create JWT
             # ◼◼ header
             header=$(echo -n '{"alg":"RS256","typ":"JWT"}' | base64 -w 0)
             # Current Unix time(Epoch)
@@ -97,6 +98,7 @@ jobs:
             # ◼◼ jwt
             jwt="${header}.${payload}.${signature}"
             # ◼ Generating an installation access token for a GitHub App
+            echo Generating an installation access token for a GitHub App
             user_name="kosenda"
             installation_id=$(
               curl -s -G \
@@ -106,6 +108,7 @@ jobs:
                 | jq -r ".[] | select(.account.login == \"${user_name}\" and .account.type == \"User\") | .id"
             )
             # ◼ Get an installation access token
+            echo Get an installation access token
             token=$(
               echo $(
                 curl -s -X POST \
@@ -116,7 +119,8 @@ jobs:
               )
             )
             # ◼ gh auth login
-            gh auth login --with-token $token
+            echo gh auth login
+            gh auth login --with-token $(token)
       - run:
           name: create comments
           command: |
