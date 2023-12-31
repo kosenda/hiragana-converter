@@ -59,6 +59,7 @@ jobs:
           aws_secret_access_key: AWS_SECRET_ACCESS_KEY
           region: AWS_REGION
       - aws-s3/copy:
+          arguments: --recursive
           from: s3://hiraganaconverter-roborazzi/image
           to: ./app/build/outputs/roborazzi
       - run:
