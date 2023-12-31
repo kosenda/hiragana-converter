@@ -143,16 +143,13 @@ jobs:
             # Find all the files ending with _compare.png
             files_to_add=$(find . -type f -name "*_compare.png")
             
-            # Check for invalid file names and add only valid ones
+            # Add compare image
             for file in $files_to_add; do
               if [[ "$file" =~ ^[a-zA-Z0-9_./-]+$ ]]; then
-                $base_name=$(basename $file)
+                base_name=$(basename $file)
                 echo "|$base_name|<img src="https://hiraganaconverter-roborazzi.s3.ap-northeast-1.amazonaws.com/image/$base_name" width="400">|" > comments
               fi
             done
-            
-            ksnd.hiraganaconverter.view.screen.ConverterScreenTest.converterScreen_dark_actual.png
-
       - run:
           name: test comment
           command: gh pr comment "$CIRCLE_PULL_REQUEST" --edit-last -F ./comments || gh pr comment "$CIRCLE_PULL_REQUEST" -F ./comments
@@ -162,10 +159,6 @@ jobs:
       - aws-s3/sync:
           from: ./app/build/outputs/roborazzi
           to: s3://hiraganaconverter-roborazzi/image
-      - store_artifacts:
-          path: ./app/build/outputs/roborazzi
-      - store_artifacts:
-          path: ./build/outputs/roborazzi/compareProdDebug
       - slack/notify:
           event: fail
           template: basic_fail_1
