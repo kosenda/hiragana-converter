@@ -134,10 +134,20 @@ jobs:
       - run:
           name: create comments
           command: |
+            # Find all the files ending with _compare.png
+            files_to_add=$(find . -type f -name "*_compare.png")
+            
+            # Check for invalid file names and add only valid ones
+            for file in $files_to_add; do
+              if [[ "$file" =~ ^[a-zA-Z0-9_./-]+$ ]]; then
+                echo "fileName: $file"
+              fi
+            done
+            
             cat \<< EOF > comments
             |fileName|image|
             |---|---|
-            |converterScreen_dark_compare.png|<img src="./build/outputs/roborazzi/compareProdDebug/roborazzi/ksnd.hiraganaconverter.view.screen.ConverterScreenTest.converterScreen_dark_compare.png" width="350">|
+            |file|<img src="./build/outputs/roborazzi/compareProdDebug/roborazzi/ksnd.hiraganaconverter.view.screen.ConverterScreenTest.converterScreen_light_compare.png" width="350">|
             EOF
       - run:
           name: test comment
