@@ -59,8 +59,8 @@ jobs:
           aws_secret_access_key: AWS_SECRET_ACCESS_KEY
           region: AWS_REGION
       - aws-s3/copy:
-          from: ./app/build/outputs/roborazzi
-          to: s3://hiraganaconverter-roborazzi/image
+          from: s3://hiraganaconverter-roborazzi/image
+          to: ./app/build/outputs/roborazzi
       - run:
           name: compare screenshots
           command: ./gradlew compareRoborazziProdDebug --stacktrace
