@@ -33,6 +33,8 @@ commands:
 jobs:
   build-and-test-prod:
     executor: android
+    environment:
+      GITHUB_API_ENV: echo "$COMMENT_GITHUB_API_TOKEN" | base64 -d
     steps:
       - checkout
       - set-locale-properties
@@ -71,9 +73,6 @@ jobs:
           key: "Roborazzi"
       - store_artifacts:
           path: ./app/build/outputs/roborazzi
-      - run:
-          name: settings environment variables
-          command: echo "$COMMENT_GITHUB_API_TOKEN" | base64 -d >> "$GITHUB_API_ENV"
       - gh/setup:
           token: GITHUB_API_ENV
       - run:
