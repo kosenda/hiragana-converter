@@ -74,7 +74,33 @@ jobs:
       - gh/install
       - run:
           name: gh login
-          command: echo $COMMENT_GITHUB_API_TOKEN | base64 -d | gh auth login --with-token
+          command: |
+            header=$(echo -n '{"alg":"RS256","typ":"JWT"}' | base64 -w 0)
+            now=$(date "+%s")
+            iat=$((${now} - 60))
+            exp=$((${now} + (10 * 60)))
+            github_app_id="$APP_ID" # App ID
+            payload=$(echo -n "{\"iat\":${iat},\"exp\":${exp},\"iss\":${github_app_id}}" | base64 -w 0)
+            echo $COMMENT_GITHUB_API_TOKEN | base64 --decode > ./githubapps
+            unsigned_token="${header}.${payload}"
+            signed_token=$(echo -n $(echo -n "${unsigned_token}" | openssl dgst -binary -sha256 -sign "./githubapps" | base64))
+            rm ./githubapps
+            jwt="${unsigned_token}.${signed_token}"
+            user_name="kosenda" # githubアカウント
+            installation_id=$(
+              curl -s -X GET \
+                -H "Authorization: Bearer ${jwt}" \
+                -H "Accept: application/vnd.github.v3+json" \
+                "https://api.github.com/app/installations" \
+              | jq -r ".[] | select(.account.login == \"${user_name}\" and .account.type == \"User\") | .id"
+            ) # account_type が Organization の場合は $user_name は OrganizationName にする
+            echo $(
+              curl -s -X POST \
+                -H "Authorization: Bearer ${jwt}" \
+                -H "Accept: application/vnd.github.v3+json" \
+                "https://api.github.com/app/installations/${installation_id}/access_tokens" \
+              | jq -r ".token"
+            ) | gh auth login --with-token
       - run:
           name: create comments
           command: |
