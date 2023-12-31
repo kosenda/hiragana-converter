@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   slack: circleci/slack@4.12.5
   gh: circleci/github-cli@2.3.0
+  aws-cli: circleci/aws-cli@4.0
   aws-s3: circleci/aws-s3@4.0.0
 
 executors:
@@ -142,7 +143,7 @@ jobs:
       - run:
           name: create screenshots
           command: ./gradlew recordRoborazziProdDebug --stacktrace
-      - aws-cli/setup:
+      - aws-s3/setup:
           aws_access_key_id: AWS_ACCESS_KEY_ID
           aws_secret_access_key: AWS_SECRET_ACCESS_KEY
           region: AWS_REGION
