@@ -73,7 +73,7 @@ jobs:
           path: ./app/build/outputs/roborazzi
       - run:
           name: settings environment variables
-          command: echo COMMENT_GITHUB_API_TOKEN | base64 -d >> "$GITHUB_API_ENV"
+          command: echo "$COMMENT_GITHUB_API_TOKEN" | base64 -d >> "$GITHUB_API_ENV"
       - gh/setup:
           token: GITHUB_API_ENV
       - run:
