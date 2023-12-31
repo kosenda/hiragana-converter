@@ -120,7 +120,7 @@ jobs:
             )
             # ◼ gh auth login
             echo gh auth login
-            gh auth login --with-token $(token)
+            $(token) | gh auth login --with-token
       - run:
           name: create comments
           command: |
