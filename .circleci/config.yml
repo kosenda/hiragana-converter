@@ -54,11 +54,13 @@ jobs:
       - run:
           name: test
           command: ./gradlew testProdDebug --stacktrace
-
-      # TODO 何かしらの方法で過去に取得したスクリーンショットを取得する
-      - restore_cache:
-          key: "Roborazzi"
-
+      - aws-cli/setup:
+          aws_access_key_id: AWS_ACCESS_KEY_ID
+          aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+          region: AWS_REGION
+      - aws-s3/copy:
+          from: ./app/build/outputs/roborazzi
+          to: s3://hiraganaconverter-roborazzi/image
       - run:
           name: compare screenshots
           command: ./gradlew compareRoborazziProdDebug --stacktrace
@@ -73,7 +75,6 @@ jobs:
       - run:
           name: run-danger-file
           command: bundle exec danger --verbose
-
       - run:
           name: move screenshots files
           command: |
@@ -135,7 +136,7 @@ jobs:
             cat \<< EOF > comments
             |fileName|image|
             |---|---|
-            |./build/outputs/roborazzi/compareProdDebug/ksnd.hiraganaconverter.view.screen.ConverterScreenTest.converterScreen_dark_compare.png|<img src="./build/outputs/roborazzi/compareProdDebug/ksnd.hiraganaconverter.view.screen.ConverterScreenTest.converterScreen_dark_compare.png" width="350">|
+            |converterScreen_dark_compare.png|<img src="./build/outputs/roborazzi/compareProdDebug/roborazzi/ksnd.hiraganaconverter.view.screen.ConverterScreenTest.converterScreen_dark_compare.png" width="350">|
             EOF
       - run:
           name: test comment
@@ -143,10 +144,6 @@ jobs:
       - run:
           name: create screenshots
           command: ./gradlew recordRoborazziProdDebug --stacktrace
-      - aws-cli/setup:
-          aws_access_key_id: AWS_ACCESS_KEY_ID
-          aws_secret_access_key: AWS_SECRET_ACCESS_KEY
-          region: AWS_REGION
       - aws-s3/sync:
           from: ./app/build/outputs/roborazzi
           to: s3://hiraganaconverter-roborazzi/image
