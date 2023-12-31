@@ -71,8 +71,7 @@ jobs:
           key: "Roborazzi"
       - store_artifacts:
           path: ./app/build/outputs/roborazzi
-      - gh/setup:
-          token: COMMENT_GITHUB_API_TOKEN
+      - gh/setup
       - run:
           name: create comments
           command: |
@@ -83,7 +82,9 @@ jobs:
             EOF
       - run:
           name: test comment
-          command: gh pr comment "$CIRCLE_PULL_REQUEST" --edit-last -F ./comments || gh pr comment "$CIRCLE_PULL_REQUEST" -F ./comments
+          command: |
+            gh auth login--with-token < echo COMMENT_GITHUB_API_TOKEN | base64 -d
+            gh pr comment "$CIRCLE_PULL_REQUEST" --edit-last -F ./comments || gh pr comment "$CIRCLE_PULL_REQUEST" -F ./comments
       - run:
           name: jacoco-report
           command: ./gradlew jacocoTestReport
