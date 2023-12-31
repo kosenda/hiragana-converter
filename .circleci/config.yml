@@ -134,21 +134,25 @@ jobs:
       - run:
           name: create comments
           command: |
+            # create comments
+            cat \<< EOF > comments
+            |fileName|image|
+            |---|---|
+            EOF
+            
             # Find all the files ending with _compare.png
             files_to_add=$(find . -type f -name "*_compare.png")
             
             # Check for invalid file names and add only valid ones
             for file in $files_to_add; do
               if [[ "$file" =~ ^[a-zA-Z0-9_./-]+$ ]]; then
-                echo "fileName: $file"
+                $base_name=$(basename $file)
+                echo "|$base_name|<img src="https://hiraganaconverter-roborazzi.s3.ap-northeast-1.amazonaws.com/image/$base_name" width="400">|" > comments
               fi
             done
             
-            cat \<< EOF > comments
-            |fileName|image|
-            |---|---|
-            |file|<img src="./build/outputs/roborazzi/compareProdDebug/roborazzi/ksnd.hiraganaconverter.view.screen.ConverterScreenTest.converterScreen_light_compare.png" width="350">|
-            EOF
+            ksnd.hiraganaconverter.view.screen.ConverterScreenTest.converterScreen_dark_actual.png
+
       - run:
           name: test comment
           command: gh pr comment "$CIRCLE_PULL_REQUEST" --edit-last -F ./comments || gh pr comment "$CIRCLE_PULL_REQUEST" -F ./comments
