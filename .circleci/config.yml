@@ -74,7 +74,7 @@ jobs:
       - gh/install
       - run:
           name: gh login
-          command: gh auth login --with-token \<< echo $COMMENT_GITHUB_API_TOKEN | base64 -d
+          command: echo $COMMENT_GITHUB_API_TOKEN | base64 -d | gh auth login --with-token
       - run:
           name: create comments
           command: |
