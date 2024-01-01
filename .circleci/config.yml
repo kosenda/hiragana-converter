@@ -156,7 +156,7 @@ jobs:
             echo "export PR_NUMBER=${pr_number}" >> $BASH_ENV
       - aws-s3/sync:
           from: ./build/outputs/roborazzi/compareProdDebug/roborazzi
-          to: s3://hiraganaconverter-roborazzi/image/$PR_NUMBER
+          to: s3://hiraganaconverter-roborazzi/image/pr/$PR_NUMBER
       - run:
           name: create comments
           command: |
@@ -175,7 +175,7 @@ jobs:
                 echo "base name: $(basename $file)"
                 base_name=$(basename $file)
                 name=$(echo $base_name | rev | cut -d. -f-2 | rev )
-                echo "| $name | <img src=\"https://hiraganaconverter-roborazzi.s3.ap-northeast-1.amazonaws.com/image/$PR_NUMBER/$base_name\" width=\"600\"> |" >> comments
+                echo "| $name | <img src=\"https://hiraganaconverter-roborazzi.s3.ap-northeast-1.amazonaws.com/image/pr/$PR_NUMBER/$base_name\" width=\"600\"> |" >> comments
               fi
             done
       - run:
