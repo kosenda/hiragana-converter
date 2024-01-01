@@ -31,59 +31,10 @@ commands:
           paths:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
-
-jobs:
-  build-and-test-prod:
-    executor: android
+  set-github-access-token:
     steps:
-      - checkout
-      - set-locale-properties
-      - restore-and-save-gradle-cache
       - run:
-          neme: gem install bundler
-          command: sudo gem install bundler:2.4.12
-      - run:
-          # Specify Gemfile path and then run bundle install
-          name: bundle install
-          command: |
-            bundle config set --local path 'vendor/bundle'
-            bundle install
-      - run:
-          name: ktlint-check
-          command: ./gradlew --continue ktlintCheck
-      - run:
-          name: test
-          command: ./gradlew testProdDebug --stacktrace
-      - aws-cli/setup:
-          aws_access_key_id: AWS_ACCESS_KEY_ID
-          aws_secret_access_key: AWS_SECRET_ACCESS_KEY
-          region: AWS_REGION
-      - aws-s3/copy:
-          arguments: --recursive
-          from: s3://hiraganaconverter-roborazzi/image
-          to: ./app/build/outputs/roborazzi
-      - run:
-          name: compare screenshots
-          command: ./gradlew compareRoborazziProdDebug --stacktrace
-      - run:
-          name: jacoco-report
-          command: ./gradlew jacocoTestReport
-      - run:
-          name: jacoco-report to zip
-          command: zip -r jacocoTestReport.zip ./build/reports/jacoco/jacocoTestReport/html
-      - store_artifacts:
-          path: jacocoTestReport.zip
-      - run:
-          name: run-danger-file
-          command: bundle exec danger --verbose
-      - run:
-          name: move screenshots files
-          command: |
-            mkdir -p ./build/outputs/roborazzi/compareProdDebug
-            mv ./app/build/outputs/roborazzi ./build/outputs/roborazzi/compareProdDebug
-      - gh/install
-      - run:
-          name: gh login
+          name: set github access token
           # Create GitHub App Token using JWT and pass it with gh auth to login
           # ref: https://zenn.dev/gorohash/articles/e2c5f6ce50f4e6
           command: |
@@ -128,9 +79,75 @@ jobs:
                 | jq -r ".token"
               )
             )
-            # ◼ gh auth login
-            echo gh auth login
-            echo "$access_token" | gh auth login --with-token
+            
+            # ◼ set github access token
+            echo "export GITHUB_ACCESS_TOKEN='$(access_token)'" >> $BASH_ENV
+
+jobs:
+  build-and-test-prod:
+    executor: android
+    steps:
+      - checkout
+      - gh/install
+      - set-github-access-token
+      - run:
+          name: gh login
+          command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
+      - run:
+          name: get base branch name
+          # ref: https://discuss.circleci.com/t/how-to-retrieve-a-pull-requests-base-branch-name-github/36911
+          command: |
+            # ◼ get base branch name
+            pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
+            echo "PR=${pr}"
+            base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
+            echo "BASE_BRANCH_NAME=${base}"
+            echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
+      - set-locale-properties
+      - restore-and-save-gradle-cache
+      - run:
+          neme: gem install bundler
+          command: sudo gem install bundler:2.4.12
+      - run:
+          # Specify Gemfile path and then run bundle install
+          name: bundle install
+          command: |
+            bundle config set --local path 'vendor/bundle'
+            bundle install
+      - run:
+          name: ktlint-check
+          command: ./gradlew --continue ktlintCheck
+      - run:
+          name: test
+          command: ./gradlew testProdDebug --stacktrace
+      - aws-cli/setup:
+          aws_access_key_id: AWS_ACCESS_KEY_ID
+          aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+          region: AWS_REGION
+      - aws-s3/copy:
+          arguments: --recursive
+          ## TODO: マージ先のブランチ名から持ってくる
+          from: s3://hiraganaconverter-roborazzi/image
+          to: ./app/build/outputs/roborazzi
+      - run:
+          name: compare screenshots
+          command: ./gradlew compareRoborazziProdDebug --stacktrace
+      - run:
+          name: jacoco-report
+          command: ./gradlew jacocoTestReport
+      - run:
+          name: jacoco-report to zip
+          command: zip -r jacocoTestReport.zip ./build/reports/jacoco/jacocoTestReport/html
+      - store_artifacts:
+          path: jacocoTestReport.zip
+      - run:
+          name: run-danger-file
+          command: bundle exec danger --verbose
+      - run:
+          name: move screenshots files
+          command: |
+            mkdir -p ./build/outputs/roborazzi/compareProdDebug
+            mv ./app/build/outputs/roborazzi ./build/outputs/roborazzi/compareProdDebug
       - run:
           name: create comments
           command: |
@@ -155,12 +172,6 @@ jobs:
       - run:
           name: test comment
           command: gh pr comment "$CIRCLE_PULL_REQUEST" --edit-last -F ./comments || gh pr comment "$CIRCLE_PULL_REQUEST" -F ./comments
-      - run:
-          name: create screenshots
-          command: ./gradlew recordRoborazziProdDebug --stacktrace
-      - aws-s3/sync:
-          from: ./app/build/outputs/roborazzi
-          to: s3://hiraganaconverter-roborazzi/image
       - slack/notify:
           event: fail
           template: basic_fail_1
@@ -181,6 +192,19 @@ jobs:
           event: fail
           template: basic_fail_1
 
+  save-screen-shot:
+    executor: android
+    steps:
+      - checkout
+      - set-locale-properties
+      - restore-and-save-gradle-cache
+      - run:
+          name: create screenshots
+          command: ./gradlew recordRoborazziMockDebug --stacktrace
+      - aws-s3/sync:
+          from: ./app/build/outputs/roborazzi
+          to: s3://hiraganaconverter-roborazzi/image/$CIRCLE_BRANCH
+
 workflows:
   test:
     jobs:
@@ -188,6 +212,12 @@ workflows:
           context: slack-secrets
       - build-mock:
           context: slack-secrets
-
+      - save-screen-shot:
+          filters:
+            branches:
+              only:
+                - main
+                - develop
+                - feature/circleci-roborazzi
 # ■ memo ■
 # check command： circleci config validate
