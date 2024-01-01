@@ -1,9 +1,11 @@
 <component name="ProjectDictionaryState">
-    <dictionary name="dictionary">
-        <words>
-            <w>hiraganaconverter</w>
-            <w>ksnd</w>
-            <w>ktlint</w>
-        </words>
-    </dictionary>
+  <dictionary name="dictionary">
+    <words>
+      <w>Roborazzi</w>
+      <w>hiraganaconverter</w>
+      <w>ksnd</w>
+      <w>ktlint</w>
+      <w>roborazzi</w>
+    </words>
+  </dictionary>
 </component>
