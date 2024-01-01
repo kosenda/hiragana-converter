@@ -100,9 +100,8 @@ jobs:
           command: |
             # ◼ get base branch name
             pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
-            echo "PR=${pr}"
             base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
-            echo "BASE_BRANCH_NAME=${base}"
+            echo "base branch name: $base"
             echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
       - set-locale-properties
       - restore-and-save-gradle-cache
@@ -222,6 +221,5 @@ workflows:
               only:
                 - main
                 - develop
-                - feature/circleci-roborazzi
 # ■ memo ■
 # check command： circleci config validate
