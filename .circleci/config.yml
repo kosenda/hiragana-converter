@@ -127,8 +127,7 @@ jobs:
           region: AWS_REGION
       - aws-s3/copy:
           arguments: --recursive
-          ## TODO: マージ先のブランチ名から持ってくる
-          from: s3://hiraganaconverter-roborazzi/image
+          from: "s3://hiraganaconverter-roborazzi/image/$CIRCLE_BRANCH"
           to: ./app/build/outputs/roborazzi
       - run:
           name: compare screenshots
