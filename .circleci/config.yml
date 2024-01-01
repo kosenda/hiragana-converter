@@ -147,6 +147,11 @@ jobs:
           command: |
             mkdir -p ./build/outputs/roborazzi/compareProdDebug
             mv ./app/build/outputs/roborazzi ./build/outputs/roborazzi/compareProdDebug
+            # delete except *_Comparison.png
+            find ./build/outputs/roborazzi/compareProdDebug/roborazzi  -type f |  grep -v -e '.*_compare.png' | xargs rm -rf
+      - aws-s3/sync:
+          from: ./build/outputs/roborazzi/compareProdDebug/roborazzi
+          to: s3://hiraganaconverter-roborazzi/image/$CIRCLE_PR_NUMBER
       - run:
           name: create comments
           command: |
@@ -165,7 +170,7 @@ jobs:
                 echo "base name: $(basename $file)"
                 base_name=$(basename $file)
                 name=$(echo $base_name | rev | cut -d. -f-2 | rev )
-                echo "| $name | <img src=\"https://hiraganaconverter-roborazzi.s3.ap-northeast-1.amazonaws.com/image/$base_name\" width=\"600\"> |" >> comments
+                echo "| $name | <img src=\"https://hiraganaconverter-roborazzi.s3.ap-northeast-1.amazonaws.com/image/$CIRCLE_PR_NUMBER/$base_name\" width=\"600\"> |" >> comments
               fi
             done
       - run:
