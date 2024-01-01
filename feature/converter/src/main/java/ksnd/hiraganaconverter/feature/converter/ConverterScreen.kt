@@ -198,11 +198,11 @@ fun ConverterScreenContent(
                         contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         onClick = clearAllText,
                     )
-//                    ConvertButton(
-//                        modifier = Modifier.padding(start = 4.dp),
-//                        isConverting = uiState.isConverting,
-//                        onClick = convert,
-//                    )
+                    ConvertButton(
+                        modifier = Modifier.padding(start = 4.dp),
+                        isConverting = uiState.isConverting,
+                        onClick = convert,
+                    )
                 }
 
                 OfflineCard(visible = isConnectNetwork == false)
