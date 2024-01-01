@@ -31,6 +31,7 @@ commands:
           paths:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
+
   set-github-access-token:
     steps:
       - run:
@@ -81,7 +82,7 @@ commands:
             )
             
             # ◼ set github access token
-            echo "export GITHUB_ACCESS_TOKEN='$(access_token)'" >> $BASH_ENV
+            echo "export GITHUB_ACCESS_TOKEN='$access_token'" >> $BASH_ENV
 
 jobs:
   build-and-test-prod:
@@ -201,6 +202,10 @@ jobs:
       - run:
           name: create screenshots
           command: ./gradlew recordRoborazziMockDebug --stacktrace
+      - aws-cli/setup:
+          aws_access_key_id: AWS_ACCESS_KEY_ID
+          aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+          region: AWS_REGION
       - aws-s3/sync:
           from: ./app/build/outputs/roborazzi
           to: s3://hiraganaconverter-roborazzi/image/$CIRCLE_BRANCH
