@@ -126,7 +126,7 @@ jobs:
           region: AWS_REGION
       - aws-s3/copy:
           arguments: --recursive
-          from: "s3://hiraganaconverter-roborazzi/image/$CIRCLE_BRANCH"
+          from: "s3://hiraganaconverter-roborazzi/image/$BASE_BRANCH_NAME"
           to: ./app/build/outputs/roborazzi
       - run:
           name: compare screenshots
