@@ -23,7 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.core.resource.R
-import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.rememberButtonScaleState
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
@@ -68,9 +68,9 @@ fun DeleteButton(
     }
 }
 
-@UiModeAndLocalePreview
+@UiModePreview
 @Composable
-private fun PreviewDeleteButton() {
+fun PreviewDeleteButton() {
     HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(color = MaterialTheme.colorScheme.surface) {
             DeleteButton(onClick = {})

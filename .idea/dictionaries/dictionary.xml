@@ -2,10 +2,12 @@
   <dictionary name="dictionary">
     <words>
       <w>Roborazzi</w>
+      <w>Showkase</w>
       <w>hiraganaconverter</w>
       <w>ksnd</w>
       <w>ktlint</w>
       <w>roborazzi</w>
+      <w>showkase</w>
     </words>
   </dictionary>
 </component>

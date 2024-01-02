@@ -145,6 +145,11 @@ dependencies {
 
     // Navigation
     implementation(libs.androidx.navigation.compose)
+
+    // Showkase
+    debugImplementation(libs.showkase)
+    implementation(libs.showkase.annotation)
+    kspDebug(libs.showkase.processor)
 }
 
 tasks.create<JavaExec>("ktlintCheck") {

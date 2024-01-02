@@ -7,7 +7,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import ksnd.hiraganaconverter.core.resource.R
-import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
 @Composable
@@ -33,9 +33,9 @@ fun MovesToSiteDialog(onDismissRequest: () -> Unit, onClick: () -> Unit, url: St
     )
 }
 
-@UiModeAndLocalePreview
+@UiModePreview
 @Composable
-private fun PreviewMovesToSiteDialog() {
+fun PreviewMovesToSiteDialog() {
     HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         MovesToSiteDialog(
             onDismissRequest = {},

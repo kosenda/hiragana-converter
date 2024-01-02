@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.core.resource.R
-import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
 private const val OfflineAnimationDuration = 500
@@ -48,9 +48,9 @@ fun OfflineCard(visible: Boolean) {
     }
 }
 
-@UiModeAndLocalePreview
+@UiModePreview
 @Composable
-private fun PreviewOfflineCard() {
+fun PreviewOfflineCard() {
     HiraganaConverterTheme {
         OfflineCard(visible = true)
     }

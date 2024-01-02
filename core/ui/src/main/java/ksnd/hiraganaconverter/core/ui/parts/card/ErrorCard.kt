@@ -6,7 +6,6 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -26,7 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.extension.noRippleClickable
-import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.rememberButtonScaleState
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
@@ -79,9 +78,9 @@ fun ErrorCard(
     }
 }
 
-@UiModeAndLocalePreview
+@UiModePreview
 @Composable
-private fun PreviewErrorCard() {
+fun PreviewErrorCard() {
     HiraganaConverterTheme {
         ErrorCard(visible = true, errorText = stringResource(id = R.string.limit_exceeded), onClick = {})
     }

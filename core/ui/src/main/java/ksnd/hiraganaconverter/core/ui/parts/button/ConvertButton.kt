@@ -79,7 +79,7 @@ fun ConvertButton(
 
 @UiModePreview
 @Composable
-private fun PreviewConvertButton() {
+fun PreviewConvertButton() {
     HiraganaConverterTheme {
         ConvertButton(
             isConverting = false,
@@ -90,7 +90,7 @@ private fun PreviewConvertButton() {
 
 @UiModePreview
 @Composable
-private fun PreviewConvertButtonInConverting() {
+fun PreviewConvertButtonInConverting() {
     HiraganaConverterTheme {
         ConvertButton(
             isConverting = true,

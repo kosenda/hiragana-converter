@@ -36,7 +36,7 @@ import ksnd.hiraganaconverter.core.model.ConvertHistoryData
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.parts.dialog.DialogCloseButton
-import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
 @Composable
@@ -167,9 +167,9 @@ private fun BeforeOrAfterText(
     }
 }
 
-@UiModeAndLocalePreview
+@UiModePreview
 @Composable
-private fun PreviewConvertHistoryDetailDialogContent() {
+fun PreviewConvertHistoryDetailDialogContent() {
     HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Box(modifier = Modifier.fillMaxSize()) {
             ConvertHistoryDetailDialogContent(

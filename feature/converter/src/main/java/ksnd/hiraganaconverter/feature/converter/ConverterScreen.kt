@@ -72,7 +72,7 @@ import ksnd.hiraganaconverter.core.ui.parts.card.ConversionTypeCard
 import ksnd.hiraganaconverter.core.ui.parts.card.ErrorCard
 import ksnd.hiraganaconverter.core.ui.parts.card.ErrorCardAnimationDuration
 import ksnd.hiraganaconverter.core.ui.parts.card.OfflineCard
-import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import my.nanihadesuka.compose.ColumnScrollbar
 import my.nanihadesuka.compose.ScrollbarSelectionMode
@@ -349,9 +349,9 @@ private fun BeforeOrAfterTextField(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@UiModeAndLocalePreview
+@UiModePreview
 @Composable
-private fun PreviewConverterScreenContent() {
+fun PreviewConverterScreenContent() {
     HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         CompositionLocalProvider(LocalIsConnectNetwork provides false) {
             ConverterScreenContent(

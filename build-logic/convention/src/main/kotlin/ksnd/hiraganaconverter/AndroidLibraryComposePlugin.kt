@@ -11,6 +11,9 @@ import org.gradle.kotlin.dsl.getByType
 class AndroidLibraryComposePlugin: Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
+            with(pluginManager) {
+                apply("com.google.devtools.ksp")
+            }
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
             extensions.configure<LibraryExtension> {
                 buildFeatures {
@@ -28,6 +31,9 @@ class AndroidLibraryComposePlugin: Plugin<Project> {
                 add("implementation", libs.findLibrary("androidx.compose.ui.tooling.preview").get())
                 add("testImplementation", libs.findLibrary("androidx.compose.ui.test.junit4").get())
                 add("implementation", libs.findLibrary("androidx.lifecycle.runtime.compose").get())
+                add("debugImplementation", libs.findLibrary("showkase").get())
+                add("implementation", libs.findLibrary("showkase.annotation").get())
+                add("kspDebug", libs.findLibrary("showkase.processor").get())
             }
         }
     }
