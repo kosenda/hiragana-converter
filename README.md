@@ -48,8 +48,10 @@ https://labs.goo.ne.jp/apiusage/
 |Renovate|Automated project dependency updates|
 |Retrofit2|Library for API communications|
 |Robolectric|Unit Test Framework|
+|Roborazzi|Make JVM Android Integration Test Visible|
 |Room|Database|
 |Secrets gradle plugin|Reading API keys from `local.properties`|
+|Showkase|auto-generates a browser for Jetpack Compose UI|
 |Timber|Log output library|
 |Truth|Assertions used in testing|
 |Turbine|testing library for kotlinx.coroutines Flow|
