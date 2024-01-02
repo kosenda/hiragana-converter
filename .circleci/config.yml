@@ -145,7 +145,7 @@ jobs:
       - restore-and-save-gradle-cache
       - run:
           name: create screenshots
-          command: ./gradlew recordRoborazziMockDebug --stacktrace
+          command: ./gradlew recordRoborazziProdDebug --stacktrace
       - aws-cli/setup:
           aws_access_key_id: AWS_ACCESS_KEY_ID
           aws_secret_access_key: AWS_SECRET_ACCESS_KEY
@@ -153,17 +153,6 @@ jobs:
       - aws-s3/sync:
           from: ./app/build/outputs/roborazzi
           to: s3://hiraganaconverter-roborazzi/image/$CIRCLE_BRANCH
-      - aws-cli/setup:
-          aws_access_key_id: AWS_ACCESS_KEY_ID
-          aws_secret_access_key: AWS_SECRET_ACCESS_KEY
-          region: AWS_REGION
-      - aws-s3/copy:
-          arguments: --recursive
-          from: "s3://hiraganaconverter-roborazzi/image/$BASE_BRANCH_NAME"
-          to: ./app/build/outputs/roborazzi
-      - run:
-          name: compare screenshots
-          command: ./gradlew compareRoborazziProdDebug --stacktrace
 
   compare-screenshots:
     executor: android
@@ -185,6 +174,17 @@ jobs:
             base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
             echo "base branch name: $base"
             echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
+      - aws-cli/setup:
+          aws_access_key_id: AWS_ACCESS_KEY_ID
+          aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+          region: AWS_REGION
+      - aws-s3/copy:
+          arguments: --recursive
+          from: "s3://hiraganaconverter-roborazzi/image/$BASE_BRANCH_NAME"
+          to: ./app/build/outputs/roborazzi
+      - run:
+          name: compare screenshots
+          command: ./gradlew compareRoborazziProdDebug --stacktrace
       - run:
           name: move screenshots files
           command: |
