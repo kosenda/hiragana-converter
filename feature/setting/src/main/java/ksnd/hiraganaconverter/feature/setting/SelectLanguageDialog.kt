@@ -32,7 +32,7 @@ import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.card.LanguageCard
 import ksnd.hiraganaconverter.core.ui.parts.dialog.DialogCloseButton
-import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
 @Composable
@@ -96,9 +96,9 @@ private fun SelectLanguageDialogContent(
     }
 }
 
-@UiModeAndLocalePreview
+@UiModePreview
 @Composable
-private fun PreviewSelectLanguageDialogContent() {
+fun PreviewSelectLanguageDialogContent() {
     HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(modifier = Modifier.fillMaxSize()) {
             SelectLanguageDialogContent(

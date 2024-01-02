@@ -22,7 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.core.resource.R
-import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.core.ui.theme.contentBrush
 import ksnd.hiraganaconverter.core.ui.theme.primaryBrush
@@ -61,9 +61,9 @@ fun TitleCard(text: String, painter: Painter) {
     }
 }
 
-@UiModeAndLocalePreview
+@UiModePreview
 @Composable
-private fun PreviewTitleCard() {
+fun PreviewTitleCard() {
     HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         TitleCard(text = "Title", painter = painterResource(id = R.drawable.ic_outline_info_24))
     }

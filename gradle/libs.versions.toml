@@ -43,6 +43,7 @@ truth = "1.2.0"
 turbine = "1.0.0"
 mockk = "1.13.8"
 roborazzi = "1.7.0"
+showkase = "1.0.2"
 
 # ** I'm using it, so no deletions allowed. **
 androidxComposeCompiler = "1.5.6"
@@ -150,6 +151,11 @@ kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-pl
 
 # LazyColumnScrollbar
 lazyColumnScrollbar = { group = "com.github.nanihadesuka", name = "LazyColumnScrollbar", version.ref = "lazyColumnScrollbar" }
+
+# Showkase
+showkase = { group = "com.airbnb.android", name = "showkase", version.ref = "showkase" }
+showkase-annotation = { group = "com.airbnb.android", name = "showkase-annotation", version.ref = "showkase" }
+showkase-processor = { group = "com.airbnb.android", name = "showkase-processor", version.ref = "showkase" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

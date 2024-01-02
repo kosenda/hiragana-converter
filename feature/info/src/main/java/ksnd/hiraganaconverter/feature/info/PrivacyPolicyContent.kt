@@ -181,7 +181,7 @@ private fun ToTopFloatingButton(scrollState: ScrollState, sizeChangedHeight: (In
 
 @UiModePreview
 @Composable
-private fun PreviewPrivacyPolicyContent() {
+fun PreviewPrivacyPolicyContent() {
     HiraganaConverterTheme {
         PrivacyPolicyContent()
     }
@@ -189,7 +189,7 @@ private fun PreviewPrivacyPolicyContent() {
 
 @UiModePreview
 @Composable
-private fun PreviewDragHandler() {
+fun PreviewDragHandler() {
     HiraganaConverterTheme {
         DragHandle(navigator = rememberWebViewNavigator())
     }
@@ -197,7 +197,7 @@ private fun PreviewDragHandler() {
 
 @UiModePreview
 @Composable
-private fun PreviewToTopFloatingPlayer() {
+fun PreviewToTopFloatingPlayer() {
     HiraganaConverterTheme {
         ToTopFloatingButton(scrollState = rememberScrollState(), sizeChangedHeight = {})
     }

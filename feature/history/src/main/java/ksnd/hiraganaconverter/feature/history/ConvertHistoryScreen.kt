@@ -46,7 +46,7 @@ import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.BackTopBar
 import ksnd.hiraganaconverter.core.ui.parts.button.DeleteButton
 import ksnd.hiraganaconverter.core.ui.parts.card.ConvertHistoryCard
-import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
 @Composable
@@ -180,9 +180,9 @@ private fun EmptyHistoryImage() {
     }
 }
 
-@UiModeAndLocalePreview
+@UiModePreview
 @Composable
-private fun PreviewConvertHistoryScreeContent() {
+fun PreviewConvertHistoryScreeContent() {
     HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(
             color = MaterialTheme.colorScheme.surface,
@@ -200,9 +200,9 @@ private fun PreviewConvertHistoryScreeContent() {
     }
 }
 
-@UiModeAndLocalePreview
+@UiModePreview
 @Composable
-private fun PreviewConvertHistoryScreenContent_NoData() {
+fun PreviewConvertHistoryScreenContent_NoData() {
     HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(
             color = MaterialTheme.colorScheme.surface,
