@@ -48,10 +48,6 @@ showkase = "1.0.2"
 # ** I'm using it, so no deletions allowed. **
 androidxComposeCompiler = "1.5.6"
 jacoco = "0.8.10"
-core-ktx = "1.12.0"
-junit = "1.1.5"
-espresso-core = "3.5.1"
-material = "1.10.0"
 
 [libraries]
 # Accompanist
