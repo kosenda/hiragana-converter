@@ -1,5 +1,8 @@
 package ksnd.hiraganaconverter
 
+import android.content.res.Configuration
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalConfiguration
 import com.airbnb.android.showkase.models.Showkase
 import com.airbnb.android.showkase.models.ShowkaseBrowserComponent
 import com.github.takahirom.roborazzi.DEFAULT_ROBORAZZI_OUTPUT_DIR_PATH
@@ -25,7 +28,12 @@ class PreviewTest(
         val filePath =
             DEFAULT_ROBORAZZI_OUTPUT_DIR_PATH + "/" + showkaseBrowserComponent.group + "_" + componentName + ".png"
         captureRoboImage(filePath) {
-            showkaseBrowserComponent.component()
+            val newConfiguration = LocalConfiguration.current.apply {
+                uiMode = if (filePath.contains("Dark")) Configuration.UI_MODE_NIGHT_YES else Configuration.UI_MODE_NIGHT_NO
+            }
+            CompositionLocalProvider(LocalConfiguration provides newConfiguration) {
+                showkaseBrowserComponent.component()
+            }
         }
     }
 
