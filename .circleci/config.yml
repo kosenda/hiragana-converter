@@ -89,20 +89,6 @@ jobs:
     executor: android
     steps:
       - checkout
-      - gh/install
-      - set-github-access-token
-      - run:
-          name: gh login
-          command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
-      - run:
-          name: get base branch name
-          # ref: https://discuss.circleci.com/t/how-to-retrieve-a-pull-requests-base-branch-name-github/36911
-          command: |
-            # ◼ get base branch name
-            pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
-            base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
-            echo "base branch name: $base"
-            echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
       - set-locale-properties
       - restore-and-save-gradle-cache
       - run:
@@ -120,17 +106,6 @@ jobs:
       - run:
           name: test
           command: ./gradlew testProdDebug --stacktrace
-      - aws-cli/setup:
-          aws_access_key_id: AWS_ACCESS_KEY_ID
-          aws_secret_access_key: AWS_SECRET_ACCESS_KEY
-          region: AWS_REGION
-      - aws-s3/copy:
-          arguments: --recursive
-          from: "s3://hiraganaconverter-roborazzi/image/$BASE_BRANCH_NAME"
-          to: ./app/build/outputs/roborazzi
-      - run:
-          name: compare screenshots
-          command: ./gradlew compareRoborazziProdDebug --stacktrace
       - run:
           name: jacoco-report
           command: ./gradlew jacocoTestReport
@@ -142,6 +117,74 @@ jobs:
       - run:
           name: run-danger-file
           command: bundle exec danger --verbose
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+      - slack/notify:
+          event: pass
+          template: basic_success_1
+
+  build-mock:
+    executor: android
+    steps:
+      - checkout
+      - set-locale-properties
+      - restore-and-save-gradle-cache
+      - run:
+          name: build mock
+          command: ./gradlew compileMockDebugSource
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+
+  save-screenshots:
+    executor: android
+    steps:
+      - checkout
+      - set-locale-properties
+      - restore-and-save-gradle-cache
+      - run:
+          name: create screenshots
+          command: ./gradlew recordRoborazziProdDebug --stacktrace
+      - aws-cli/setup:
+          aws_access_key_id: AWS_ACCESS_KEY_ID
+          aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+          region: AWS_REGION
+      - aws-s3/sync:
+          from: ./app/build/outputs/roborazzi
+          to: s3://hiraganaconverter-roborazzi/image/$CIRCLE_BRANCH
+
+  compare-screenshots:
+    executor: android
+    steps:
+      - checkout
+      - set-locale-properties
+      - restore-and-save-gradle-cache
+      - gh/install
+      - set-github-access-token
+      - run:
+          name: gh login
+          command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
+      - run:
+          name: get base branch name
+          # ref: https://discuss.circleci.com/t/how-to-retrieve-a-pull-requests-base-branch-name-github/36911
+          command: |
+            # ◼ get base branch name
+            pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
+            base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
+            echo "base branch name: $base"
+            echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
+      - aws-cli/setup:
+          aws_access_key_id: AWS_ACCESS_KEY_ID
+          aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+          region: AWS_REGION
+      - aws-s3/copy:
+          arguments: --recursive
+          from: "s3://hiraganaconverter-roborazzi/image/$BASE_BRANCH_NAME"
+          to: ./app/build/outputs/roborazzi
+      - run:
+          name: compare screenshots
+          command: ./gradlew compareRoborazziProdDebug --stacktrace
       - run:
           name: move screenshots files
           command: |
@@ -182,42 +225,6 @@ jobs:
       - run:
           name: test comment
           command: gh pr comment "$CIRCLE_PULL_REQUEST" --edit-last -F ./comments || gh pr comment "$CIRCLE_PULL_REQUEST" -F ./comments
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
-      - slack/notify:
-          event: pass
-          template: basic_success_1
-
-  build-mock:
-    executor: android
-    steps:
-      - checkout
-      - set-locale-properties
-      - restore-and-save-gradle-cache
-      - run:
-          name: build mock
-          command: ./gradlew compileMockDebugSource
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
-
-  save-screen-shot:
-    executor: android
-    steps:
-      - checkout
-      - set-locale-properties
-      - restore-and-save-gradle-cache
-      - run:
-          name: create screenshots
-          command: ./gradlew recordRoborazziMockDebug --stacktrace
-      - aws-cli/setup:
-          aws_access_key_id: AWS_ACCESS_KEY_ID
-          aws_secret_access_key: AWS_SECRET_ACCESS_KEY
-          region: AWS_REGION
-      - aws-s3/sync:
-          from: ./app/build/outputs/roborazzi
-          to: s3://hiraganaconverter-roborazzi/image/$CIRCLE_BRANCH
 
 workflows:
   test:
@@ -226,10 +233,16 @@ workflows:
           context: slack-secrets
       - build-mock:
           context: slack-secrets
-      - save-screen-shot:
+      - save-screenshots:
           filters:
             branches:
               only:
+                - main
+                - develop
+      - compare-screenshots:
+          filters:
+            branches:
+              ignore:
                 - main
                 - develop
 # ■ memo ■
