@@ -24,7 +24,6 @@ class PreviewTest(
         val filePath =
             DEFAULT_ROBORAZZI_OUTPUT_DIR_PATH + "/" + showkaseBrowserComponent.group + "_" + showkaseBrowserComponent.componentName + ".png"
         captureRoboImage(filePath) {
-            println("filePath: $filePath")
             showkaseBrowserComponent.component()
         }
     }

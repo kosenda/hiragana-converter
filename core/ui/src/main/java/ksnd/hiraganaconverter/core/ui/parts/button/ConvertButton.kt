@@ -87,14 +87,3 @@ fun PreviewConvertButton() {
         )
     }
 }
-
-@UiModePreview
-@Composable
-fun PreviewConvertButtonInConverting() {
-    HiraganaConverterTheme {
-        ConvertButton(
-            isConverting = true,
-            onClick = {},
-        )
-    }
-}
