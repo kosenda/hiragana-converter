@@ -62,10 +62,10 @@ fun CustomButtonWithBackground(
 fun PreviewCustomButtonWithBackground() {
     HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         CustomButtonWithBackground(
-            id = R.drawable.ic_baseline_compare_arrows_24,
+            id = R.drawable.ic_reset,
             convertDescription = stringResource(id = R.string.conversion),
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
             onClick = {},
         )
     }
