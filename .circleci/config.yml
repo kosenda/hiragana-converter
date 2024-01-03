@@ -156,6 +156,7 @@ jobs:
           command: ./gradlew recordRoborazziProdDebug --stacktrace
       - aws-cli-setup
       - aws-s3/sync:
+          args: --delete
           from: ./app/build/outputs/roborazzi
           to: s3://hiraganaconverter-roborazzi/image/$CIRCLE_BRANCH
 
@@ -201,6 +202,7 @@ jobs:
             pr_number=$(basename $CIRCLE_PULL_REQUEST)
             echo "export PR_NUMBER=${pr_number}" >> $BASH_ENV
       - aws-s3/sync:
+          args: --delete
           from: ./build/outputs/roborazzi/compareProdDebug/roborazzi
           to: s3://hiraganaconverter-roborazzi/image/pr/$PR_NUMBER
       - run:
