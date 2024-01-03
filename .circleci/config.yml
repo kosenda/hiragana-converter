@@ -218,7 +218,7 @@ jobs:
             for file in $files_to_add; do
               compare_file_path=$(basename $file)
               echo "compare file path: $compare_file_path"
-              compare_file_name=$(echo $compare_file_nam | rev | cut -d. -f-2 | rev )
+              compare_file_name=$(echo $compare_file_path | rev | cut -d. -f-2 | rev )
               image_url="https://hiraganaconverter-roborazzi.s3.ap-northeast-1.amazonaws.com/image/pr/$PR_NUMBER/$compare_file_path"
               echo "| $compare_file_name | <img src=\"$image_url\" width=\"600\"> |" >> comments
             done
