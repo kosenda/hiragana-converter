@@ -8,8 +8,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import ksnd.hiraganaconverter.core.domain.inappupdate.InAppUpdateManager
-import ksnd.hiraganaconverter.core.data.inappupdate.InAppUpdateManagerImpl
 import javax.inject.Singleton
 
 @Module

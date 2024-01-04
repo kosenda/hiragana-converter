@@ -7,7 +7,6 @@
     <string name="after_conversion">After</string>
     <string name="input_hint">Enter text…</string>
     <string name="output_hint">Conversion results are displayed here…</string>
-    <string name="close">CLOSE</string>
     <string name="dark_mode">Dark mode</string>
     <string name="light_mode">Light mode</string>
     <string name="auto_mode">Auto mode</string>

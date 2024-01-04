@@ -2,7 +2,7 @@
 
 # Hiragana Converter （Japanese: ひらがな変換）
 
-<img src="https://github.com/kosenda/hiragana-converter/assets/60963155/206e8a60-988b-4815-a0a7-4a5b459b10b4" width="200">
+<img src="https://github.com/kosenda/hiragana-converter/assets/60963155/206e8a60-988b-4815-a0a7-4a5b459b10b4" width="200" alt="app icon">
 
 ## Summary
 This is an Android app that uses gooラボ's API ([Japanese Hiragana Conversion API](https://labs.goo.ne.jp/api/en/hiragana-translation/)) to convert Japanese strings, including kanji and alphabets, into hiragana/katakana.

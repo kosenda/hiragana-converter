@@ -68,7 +68,7 @@ fun TransitionButton(
 
 @UiModePreview
 @Composable
-fun TransitionButton() {
+fun PreviewTransitionButton() {
     HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
         Surface(color = MaterialTheme.colorScheme.surface) {
             TransitionButton(text = stringResource(R.string.oss_licenses), onClick = {})

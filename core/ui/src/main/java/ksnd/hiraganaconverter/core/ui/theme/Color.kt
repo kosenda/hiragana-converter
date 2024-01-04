@@ -35,9 +35,3 @@ fun Modifier.contentBrush(brush: Brush) = this
             drawRect(brush = brush, blendMode = BlendMode.SrcAtop)
         }
     }
-
-fun Color.changeBrightness(value: Float = 1f) = this.copy(
-    red = (this.red * value).coerceIn(0f, 1f),
-    blue = (this.blue * value).coerceIn(0f, 1f),
-    green = (this.green * value).coerceIn(0f, 1f),
-)

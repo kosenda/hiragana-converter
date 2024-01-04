@@ -13,6 +13,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import ksnd.hiraganaconverter.core.model.ReviewInfo
@@ -54,7 +56,7 @@ object ReviewInfoSerializer : Serializer<ReviewInfo> {
             throw CorruptionException("Unable to read data", serialization)
         }
     }
-    override suspend fun writeTo(t: ReviewInfo, output: OutputStream) {
+    override suspend fun writeTo(t: ReviewInfo, output: OutputStream) = withContext(Dispatchers.IO) {
         output.write(Json.encodeToString(ReviewInfo.serializer(), t).encodeToByteArray())
     }
 }
