@@ -93,12 +93,23 @@ commands:
           region: AWS_REGION
 
 jobs:
-  build-and-test-prod:
+  build:
     executor: android
     steps:
       - checkout
       - set-locale-properties
       - restore-and-save-gradle-cache
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+
+  test-prod:
+    executor: android
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
       - run:
           neme: gem install bundler
           command: sudo gem install bundler:2.4.12
@@ -132,12 +143,12 @@ jobs:
           event: pass
           template: basic_success_1
 
-  build-mock:
+  compile-mock:
     executor: android
     steps:
       - checkout
-      - set-locale-properties
-      - restore-and-save-gradle-cache
+      - attach_workspace:
+          at: .
       - run:
           name: build mock
           command: ./gradlew compileMockDebugSource
@@ -149,8 +160,8 @@ jobs:
     executor: android
     steps:
       - checkout
-      - set-locale-properties
-      - restore-and-save-gradle-cache
+      - attach_workspace:
+          at: .
       - run:
           name: create screenshots
           command: ./gradlew recordRoborazziProdDebug --stacktrace
@@ -164,8 +175,8 @@ jobs:
     executor: android
     steps:
       - checkout
-      - set-locale-properties
-      - restore-and-save-gradle-cache
+      - attach_workspace:
+          at: .
       - gh/install
       - set-github-access-token
       - run:
@@ -232,17 +243,26 @@ jobs:
 workflows:
   test:
     jobs:
-      - build-and-test-prod:
+      - build
+      - test-prod:
           context: slack-secrets
-      - build-mock:
+          requires:
+            - build
+      - compile-mock:
           context: slack-secrets
+          requires:
+            - build
       - save-screenshots:
+          requires:
+            - build
           filters:
             branches:
               only:
                 - main
                 - develop
       - compare-screenshots:
+          requires:
+            - build
           filters:
             branches:
               ignore:
