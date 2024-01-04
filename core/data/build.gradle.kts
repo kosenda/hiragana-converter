@@ -27,6 +27,9 @@ android {
             java.srcDirs("src/mock/java")
         }
     }
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
+    }
 }
 
 dependencies {

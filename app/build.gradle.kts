@@ -62,9 +62,6 @@ android {
             dimension = "env"
         }
     }
-    ksp {
-        arg("room.schemaLocation", "$projectDir/schemas")
-    }
     buildTypes {
         if (keystorePropertiesFile.exists()) {
             getByName("release") {
