@@ -43,7 +43,7 @@ class ConvertTextUseCaseTest {
     fun invoke_first_callCountUpTotalConvertCount() = runTest {
         coEvery { reviewInfoRepository.countUpTotalConvertCount() } returns TOTAL_CONVERT_COUNT
         coEvery { dataStoreRepository.checkIsExceedingMaxLimit() } returns false
-        coEvery { convertRepository.requestConvert(any(), any(), any()) } returns successResponse
+        coEvery { convertRepository.requestConvert(any(), any(), any()) } returns SUCCESS_RESPONSE
         useCase(inputText = INPUT_TXT, selectedTextType = SELECTED_TYPE)
         coVerify { reviewInfoRepository.countUpTotalConvertCount() }
     }
@@ -73,7 +73,7 @@ class ConvertTextUseCaseTest {
     fun invoke_error413_conversionFailedException() = runTest {
         coEvery { reviewInfoRepository.countUpTotalConvertCount() } returns TOTAL_CONVERT_COUNT
         coEvery { dataStoreRepository.checkIsExceedingMaxLimit() } returns false
-        coEvery { convertRepository.requestConvert(any(), any(), any()) } returns errorResponse
+        coEvery { convertRepository.requestConvert(any(), any(), any()) } returns ERROR_RESPONSE
         assertFailsWith<InterceptorError> {
             useCase(inputText = INPUT_TXT, selectedTextType = SELECTED_TYPE)
         }
@@ -84,7 +84,7 @@ class ConvertTextUseCaseTest {
     fun invoke_relaxed_outputConverted() = runTest {
         coEvery { reviewInfoRepository.countUpTotalConvertCount() } returns TOTAL_CONVERT_COUNT
         coEvery { dataStoreRepository.checkIsExceedingMaxLimit() } returns false
-        coEvery { convertRepository.requestConvert(any(), any(), any()) } returns successResponse
+        coEvery { convertRepository.requestConvert(any(), any(), any()) } returns SUCCESS_RESPONSE
         assertThat(useCase(inputText = INPUT_TXT, selectedTextType = SELECTED_TYPE)).isNotEmpty()
         coVerify(exactly = 1) { convertRepository.requestConvert(any(), any(), any()) }
     }
@@ -92,9 +92,9 @@ class ConvertTextUseCaseTest {
     companion object {
         private const val INPUT_TXT = "漢字"
         private val SELECTED_TYPE = HiraKanaType.HIRAGANA
-        private const val error413Json = """{"error": {"code": 413, "message": "TOO_MANY_CHARACTER"}"""
-        private val errorResponse: Response<ResponseData> = Response.error(413, error413Json.toResponseBody("application/json".toMediaType()))
-        private val successResponse: Response<ResponseData> = Response.success(
+        private const val ERROR_413_JSON = """{"error": {"code": 413, "message": "TOO_MANY_CHARACTER"}"""
+        private val ERROR_RESPONSE: Response<ResponseData> = Response.error(413, ERROR_413_JSON.toResponseBody("application/json".toMediaType()))
+        private val SUCCESS_RESPONSE: Response<ResponseData> = Response.success(
             ResponseData(converted = "かんじ", outputType = "hiragana", requestId = "labs.goo.ne.jp\temp\t0"),
         )
         private const val TOTAL_CONVERT_COUNT = 10
