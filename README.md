@@ -24,7 +24,8 @@ https://labs.goo.ne.jp/apiusage/
 2. Add the following to the bottom of `local.properties`  
 `apiKey=<API key obtained in 1.>`  （Example： apiKey=011222333333abcd）
 
-⚠️　Mock flavor is provided, so if you want to simulate API communication using Mock, you can test it by setting a meaningless value (such as "AAA") in apiKey.
+> [!WARNING]
+> Mock flavor is provided, so if you want to simulate API communication using Mock, you can test it by setting a meaningless value (such as "AAA") in apiKey.
 
 ## Typical libraries used  
 |Name|Brief description|
@@ -79,7 +80,8 @@ https://labs.goo.ne.jp/apiusage/
 
 ## Module Configurations
 
-⚠️ Excluding `:core:analytics`
+> [!WARNING]
+> Excluding `:core:analytics`
 
 ```mermaid
 flowchart LR
