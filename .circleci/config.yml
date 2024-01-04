@@ -93,7 +93,7 @@ commands:
           region: AWS_REGION
 
 jobs:
-  build:
+  dependencies:
     executor: android
     steps:
       - checkout
