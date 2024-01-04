@@ -13,7 +13,7 @@ inline fun Modifier.noRippleClickable(
     role: Role? = null,
     crossinline onClick: () -> Unit,
 ): Modifier = composed {
-    clickable(
+    this.clickable(
         interactionSource = remember { interactionSource },
         indication = null,
         onClickLabel = onClickLabel,
