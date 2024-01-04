@@ -243,18 +243,18 @@ jobs:
 workflows:
   test:
     jobs:
-      - build
+      - dependencies
       - test-prod:
           context: slack-secrets
           requires:
-            - build
+            - dependencies
       - compile-mock:
           context: slack-secrets
           requires:
-            - build
+            - dependencies
       - save-screenshots:
           requires:
-            - build
+            - dependencies
           filters:
             branches:
               only:
@@ -262,7 +262,7 @@ workflows:
                 - develop
       - compare-screenshots:
           requires:
-            - build
+            - dependencies
           filters:
             branches:
               ignore:
