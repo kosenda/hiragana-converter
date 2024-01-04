@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.di.module
+package ksnd.hiraganaconverter.core.data.di
 
 import dagger.Binds
 import dagger.Module
