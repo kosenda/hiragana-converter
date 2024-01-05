@@ -8,6 +8,6 @@ import retrofit2.http.POST
 
 interface ConvertApiClient {
 
-    @POST(" ")
+    @POST(".")
     suspend fun requestConvert(@Body body: RequestBody): Response<ResponseData>
 }
