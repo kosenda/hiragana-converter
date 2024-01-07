@@ -2,7 +2,6 @@ package ksnd.hiraganaconverter.core.ui.parts.button
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -73,7 +72,7 @@ fun CustomRadioButton(
 @UiModePreview
 @Composable
 fun PreviewCustomThemeRadioButton() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    HiraganaConverterTheme {
         Surface(color = MaterialTheme.colorScheme.surfaceVariant) {
             CustomRadioButton(
                 buttonText = stringResource(id = R.string.dark_mode),

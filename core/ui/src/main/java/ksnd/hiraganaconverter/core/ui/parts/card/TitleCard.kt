@@ -1,7 +1,6 @@
 package ksnd.hiraganaconverter.core.ui.parts.card
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
@@ -64,7 +63,7 @@ fun TitleCard(text: String, painter: Painter) {
 @UiModePreview
 @Composable
 fun PreviewTitleCard() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    HiraganaConverterTheme {
         TitleCard(text = "Title", painter = painterResource(id = R.drawable.ic_outline_info_24))
     }
 }

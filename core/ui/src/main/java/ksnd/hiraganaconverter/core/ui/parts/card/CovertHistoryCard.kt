@@ -1,7 +1,6 @@
 package ksnd.hiraganaconverter.core.ui.parts.card
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -102,7 +101,7 @@ private fun ConvertHistoryCardTimeText(timeText: String) {
 @UiModePreview
 @Composable
 fun PreviewConvertHistoryCard() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    HiraganaConverterTheme {
         ConvertHistoryCard(
             beforeText = "変換前文章",
             time = "2022/12/29 18:19",

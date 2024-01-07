@@ -3,7 +3,6 @@ package ksnd.hiraganaconverter.feature.converter
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -352,7 +351,7 @@ private fun BeforeOrAfterTextField(
 @UiModePreview
 @Composable
 fun PreviewConverterScreenContent() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    HiraganaConverterTheme {
         CompositionLocalProvider(LocalIsConnectNetwork provides false) {
             ConverterScreenContent(
                 uiState = ConvertUiState(

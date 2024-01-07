@@ -7,7 +7,6 @@ import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -65,7 +64,7 @@ fun MoveTopButton(scrollState: ScrollState) {
 @UiModePreview
 @Composable
 fun PreviewMoveTopButton_() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    HiraganaConverterTheme {
         val scrollState = rememberScrollState(initial = 1)
         Box(
             modifier = Modifier.padding(all = 16.dp),

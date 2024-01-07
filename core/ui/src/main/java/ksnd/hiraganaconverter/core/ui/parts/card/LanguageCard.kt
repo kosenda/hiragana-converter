@@ -1,6 +1,5 @@
 package ksnd.hiraganaconverter.core.ui.parts.card
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -66,7 +65,7 @@ fun LanguageCard(
 @UiModePreview
 @Composable
 fun PreviewLanguageCard() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    HiraganaConverterTheme {
         Column(Modifier.fillMaxWidth()) {
             LanguageCard(
                 displayLanguage = stringResource(id = R.string.display_en),

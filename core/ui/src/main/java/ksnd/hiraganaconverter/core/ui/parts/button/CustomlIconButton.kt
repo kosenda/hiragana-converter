@@ -1,7 +1,6 @@
 package ksnd.hiraganaconverter.core.ui.parts.button
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -64,7 +63,7 @@ fun CustomIconButton(
 @UiModePreview
 @Composable
 fun PreviewCustomIconButton() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    HiraganaConverterTheme {
         Surface(color = MaterialTheme.colorScheme.surface) {
             CustomIconButton(
                 contentDescription = "",

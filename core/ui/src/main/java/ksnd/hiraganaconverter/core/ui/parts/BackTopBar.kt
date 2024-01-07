@@ -63,8 +63,8 @@ fun BackTopBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @UiModePreview
 @Composable
-fun PreviewBackTopBar_Light() {
-    HiraganaConverterTheme(isDarkTheme = false) {
+fun PreviewBackTopBar() {
+    HiraganaConverterTheme {
         BackTopBar(TopAppBarDefaults.pinnedScrollBehavior()) {}
     }
 }

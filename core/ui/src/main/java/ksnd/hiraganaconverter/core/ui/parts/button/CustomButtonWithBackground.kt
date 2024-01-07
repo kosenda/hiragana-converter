@@ -3,7 +3,6 @@ package ksnd.hiraganaconverter.core.ui.parts.button
 import android.view.HapticFeedbackConstants.CONTEXT_CLICK
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.IconButton
@@ -60,7 +59,7 @@ fun CustomButtonWithBackground(
 @UiModePreview
 @Composable
 fun PreviewCustomButtonWithBackground() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    HiraganaConverterTheme {
         CustomButtonWithBackground(
             id = R.drawable.ic_reset,
             convertDescription = stringResource(id = R.string.conversion),

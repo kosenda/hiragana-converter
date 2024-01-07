@@ -1,7 +1,6 @@
 package ksnd.hiraganaconverter.core.ui.parts.button
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
@@ -71,7 +70,7 @@ fun DeleteButton(
 @UiModePreview
 @Composable
 fun PreviewDeleteButton() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    HiraganaConverterTheme {
         Surface(color = MaterialTheme.colorScheme.surface) {
             DeleteButton(onClick = {})
         }
