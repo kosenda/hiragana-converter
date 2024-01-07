@@ -42,7 +42,7 @@ fun ConvertButton(
     val buttonScaleState = rememberButtonScaleState()
     val localView = LocalView.current
     val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.animation_loading))
-    val animateCornerRadius = animateDpAsState(targetValue = if (isConverting) 16.dp else (BUTTON_SIZE / 2).dp, label = "")
+    val animateCornerRadius = animateDpAsState(targetValue = if (isConverting) 16.dp else (BUTTON_SIZE / 4).dp, label = "")
 
     Box(
         modifier = modifier
