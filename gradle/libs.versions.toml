@@ -41,7 +41,7 @@ secrets = "2.0.1"
 timber = "5.0.1"
 truth = "1.2.0"
 turbine = "1.0.0"
-mockk = "1.13.8"
+mockk = "1.13.9"
 roborazzi = "1.7.0"
 showkase = "1.0.2"
 
