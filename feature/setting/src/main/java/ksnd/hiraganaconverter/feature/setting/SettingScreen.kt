@@ -1,7 +1,6 @@
 package ksnd.hiraganaconverter.feature.setting
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -217,7 +216,7 @@ private fun SettingFontContent(
 @UiModePreview
 @Composable
 fun PreviewSettingScreenContent() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    HiraganaConverterTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
         ) {

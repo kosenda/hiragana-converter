@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -357,7 +356,7 @@ private fun UrlText(url: String, onURLClick: () -> Unit) {
 @UiModePreview
 @Composable
 fun PreviewInfoScreenContent() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    HiraganaConverterTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             InfoScreenContent(
                 versionName = "1.0.0",

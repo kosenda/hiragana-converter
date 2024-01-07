@@ -3,7 +3,6 @@ package ksnd.hiraganaconverter.feature.history
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -183,7 +182,7 @@ private fun EmptyHistoryImage() {
 @UiModePreview
 @Composable
 fun PreviewConvertHistoryScreeContent() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    HiraganaConverterTheme {
         Surface(
             color = MaterialTheme.colorScheme.surface,
             modifier = Modifier.fillMaxSize(),
@@ -203,7 +202,7 @@ fun PreviewConvertHistoryScreeContent() {
 @UiModePreview
 @Composable
 fun PreviewConvertHistoryScreenContent_NoData() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    HiraganaConverterTheme {
         Surface(
             color = MaterialTheme.colorScheme.surface,
             modifier = Modifier.fillMaxSize(),

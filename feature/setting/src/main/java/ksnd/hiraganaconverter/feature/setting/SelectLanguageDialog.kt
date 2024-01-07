@@ -3,7 +3,6 @@ package ksnd.hiraganaconverter.feature.setting
 import androidx.activity.compose.BackHandler
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.border
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -99,7 +98,7 @@ private fun SelectLanguageDialogContent(
 @UiModePreview
 @Composable
 fun PreviewSelectLanguageDialogContent() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    HiraganaConverterTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             SelectLanguageDialogContent(
                 onCloseClick = {},

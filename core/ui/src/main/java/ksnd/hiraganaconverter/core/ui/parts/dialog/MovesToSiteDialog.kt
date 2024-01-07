@@ -35,7 +35,7 @@ fun MovesToSiteDialog(onDismissRequest: () -> Unit, onClick: () -> Unit, url: St
 //@UiModePreview
 //@Composable
 //fun PreviewMovesToSiteDialog() {
-//    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+//    HiraganaConverterTheme {
 //        MovesToSiteDialog(
 //            onDismissRequest = {},
 //            onClick = {},

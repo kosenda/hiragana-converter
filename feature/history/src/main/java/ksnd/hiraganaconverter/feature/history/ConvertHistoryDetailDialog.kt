@@ -3,7 +3,6 @@ package ksnd.hiraganaconverter.feature.history
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.border
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -170,7 +169,7 @@ private fun BeforeOrAfterText(
 @UiModePreview
 @Composable
 fun PreviewConvertHistoryDetailDialogContent() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+    HiraganaConverterTheme {
         Box(modifier = Modifier.fillMaxSize()) {
             ConvertHistoryDetailDialogContent(
                 historyData = ConvertHistoryData(
