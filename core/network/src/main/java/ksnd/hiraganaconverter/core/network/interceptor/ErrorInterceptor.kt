@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.core.domain.interceptor
+package ksnd.hiraganaconverter.core.network.interceptor
 
 import ksnd.hiraganaconverter.core.model.ui.ConvertErrorType
 import okhttp3.Interceptor
