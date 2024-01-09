@@ -5,6 +5,16 @@ plugins {
 
 android {
     namespace = "ksnd.hiraganaconverter.core.ui"
+    flavorDimensions += "env"
+    productFlavors {
+        create("prod") {
+            isDefault = true
+            dimension = "env"
+        }
+        create("mock") {
+            dimension = "env"
+        }
+    }
 }
 
 dependencies {
