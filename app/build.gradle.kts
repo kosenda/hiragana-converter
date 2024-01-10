@@ -60,6 +60,7 @@ android {
         }
         create("mock") {
             dimension = "env"
+            applicationIdSuffix = ".mock"
         }
     }
     buildTypes {
