@@ -268,5 +268,6 @@ workflows:
               ignore:
                 - main
                 - develop
+                - refactor/test
 # ■ memo ■
 # check command： circleci config validate
