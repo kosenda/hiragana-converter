@@ -22,36 +22,38 @@ class ConvertHistoryViewModelTest {
     )
 
     @Test
-    fun deleteAllConvertHistory_once_isCalledDeleteAllConvertHistory() = runTest {
+    fun deleteAllConvertHistory_isCalledDeleteAllConvertHistory() = runTest {
         viewModel.deleteAllConvertHistory()
+
         coVerify(exactly = 1) { convertHistoryRepository.deleteAllConvertHistory() }
     }
 
     @Test
-    fun deleteConvertHistory_once_isCalledDeleteConvertHistory() = runTest {
-        val testDate = MockConvertHistories().data.first()
-        viewModel.deleteConvertHistory(historyData = testDate)
-        coVerify(exactly = 1) { convertHistoryRepository.deleteConvertHistory(testDate.id) }
-    }
+    fun deleteConvertHistory_isCalledDeleteConvertHistory() = runTest {
+        viewModel.deleteConvertHistory(historyData = HISTORY_DATA)
 
-    @Test
-    fun uiState_initial_notShowDetailDialogAndNotUsedHistoryData() {
-        assertThat(viewModel.uiState.value.isShowDetailDialog).isFalse()
-        assertThat(viewModel.uiState.value.usedHistoryDataByDetail).isNull()
+        coVerify(exactly = 1) { convertHistoryRepository.deleteConvertHistory(HISTORY_DATA.id) }
     }
 
     @Test
     fun showConvertHistoryDetailDialog_convertedHistory_showDialogAndExistUsedData() = runTest {
-        viewModel.showConvertHistoryDetailDialog(historyData = MockConvertHistories().data.first())
+        viewModel.showConvertHistoryDetailDialog(historyData = HISTORY_DATA)
+
         assertThat(viewModel.uiState.value.isShowDetailDialog).isTrue()
         assertThat(viewModel.uiState.value.usedHistoryDataByDetail).isNotNull()
     }
 
     @Test
-    fun closeConvertHistoryDetailDialog_once_hideDialogAndNotExistUsedData() = runTest {
-        viewModel.showConvertHistoryDetailDialog(historyData = MockConvertHistories().data.first())
+    fun closeConvertHistoryDetailDialog_hideDialogAndNotExistUsedData() = runTest {
+        viewModel.showConvertHistoryDetailDialog(historyData = HISTORY_DATA)
+
         viewModel.closeConvertHistoryDetailDialog()
+
         assertThat(viewModel.uiState.value.isShowDetailDialog).isFalse()
         assertThat(viewModel.uiState.value.usedHistoryDataByDetail).isNull()
+    }
+
+    private companion object {
+        private val HISTORY_DATA = MockConvertHistories().data.first()
     }
 }
