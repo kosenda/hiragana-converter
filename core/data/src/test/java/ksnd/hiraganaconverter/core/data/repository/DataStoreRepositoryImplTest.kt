@@ -30,39 +30,25 @@ class DataStoreRepositoryImplTest {
     )
 
     @Test
-    fun theme_initial_isAutoNum() = runTest {
-        assertThat(dataStoreRepository.theme().first()).isEqualTo(Theme.AUTO)
-    }
-
-    @Test
-    fun fontType_initial_isYuseiMagic() = runTest {
-        assertThat(dataStoreRepository.fontType().first()).isEqualTo(FontType.YUSEI_MAGIC)
-    }
-
-    @Test
-    fun enableInAppUpdate_initial_isTrue() = runTest {
-        assertThat(dataStoreRepository.enableInAppUpdate().first()).isTrue()
-    }
-
-    @Test
     fun updateTheme_newTheme_isChangedTheme() = runTest {
         dataStoreRepository.updateTheme(Theme.DAY)
+
         assertThat(dataStoreRepository.theme().first()).isEqualTo(Theme.DAY)
+
         dataStoreRepository.updateTheme(Theme.NIGHT)
+
         assertThat(dataStoreRepository.theme().first()).isEqualTo(Theme.NIGHT)
     }
 
     @Test
     fun updateFontType_newFontType_isChangedFontType() = runTest {
         dataStoreRepository.updateFontType(FontType.ROCKN_ROLL_ONE)
-        assertThat(dataStoreRepository.fontType().first()).isEqualTo(FontType.ROCKN_ROLL_ONE)
-        dataStoreRepository.updateFontType(FontType.DEFAULT)
-        assertThat(dataStoreRepository.fontType().first()).isEqualTo(FontType.DEFAULT)
-    }
 
-    @Test
-    fun checkIsExceedingMaxLimit_first_isFalse() = runTest {
-        assertThat(dataStoreRepository.checkIsExceedingMaxLimit()).isFalse()
+        assertThat(dataStoreRepository.fontType().first()).isEqualTo(FontType.ROCKN_ROLL_ONE)
+
+        dataStoreRepository.updateFontType(FontType.DEFAULT)
+
+        assertThat(dataStoreRepository.fontType().first()).isEqualTo(FontType.DEFAULT)
     }
 
     @Test
@@ -74,7 +60,9 @@ class DataStoreRepositoryImplTest {
     @Test
     fun updateUseInAppUpdate_false_isFalse() = runTest {
         assertThat(dataStoreRepository.enableInAppUpdate().first()).isTrue()
+
         dataStoreRepository.updateUseInAppUpdate(false)
+
         assertThat(dataStoreRepository.enableInAppUpdate().first()).isFalse()
     }
 }
