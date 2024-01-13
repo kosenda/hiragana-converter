@@ -27,10 +27,6 @@ import org.robolectric.annotation.GraphicsMode
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(qualifiers = RobolectricDeviceQualifiers.Pixel6Pro)
 class ConverterScreenTest {
-// FIXME: I have commented out the error since I started to Inject Firebase into MainActivity.
-//    @get:Rule
-//    val composeTestRule = createAndroidComposeRule<MainActivity>()
-
     @Test
     fun converterScreen_light() {
         captureRoboImage {
