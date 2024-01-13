@@ -22,9 +22,9 @@ class CompletedRequestReviewUseCaseTest {
     )
 
     @Test
-    fun useCase_completedRequestReview() = runTest {
-        coEvery { reviewInfoRepository.completedRequestReview() } just runs
+    fun invoke_completedRequestReview() = runTest {
         useCase()
+
         coVerify(exactly = 1) { reviewInfoRepository.completedRequestReview() }
     }
 }
