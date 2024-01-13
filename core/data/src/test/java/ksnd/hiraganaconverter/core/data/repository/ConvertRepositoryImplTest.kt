@@ -23,26 +23,34 @@ class ConvertRepositoryImplTest {
     @Test
     fun requestConvert_notError_returnResponse() = runTest {
         coEvery {
-            convertApiClient.requestConvert(any(), any(), any())
+            convertApiClient.requestConvert(
+                appId = APP_ID,
+                sentence = SENTENCE,
+                type = TYPE
+            )
         } returns retrofit2.Response.success(RESPONSE_DATA)
 
-        val response = repository.requestConvert(SENTENCE, TYPE, APP_ID)
+        val response = repository.requestConvert(sentence = SENTENCE, type = TYPE, appId = APP_ID)
 
         assertThat(response).isInstanceOf(retrofit2.Response::class.java)
         assertThat(response?.isSuccessful).isTrue()
-        coVerify(exactly = 1) { convertApiClient.requestConvert(any(), any(), any()) }
+        coVerify(exactly = 1) { convertApiClient.requestConvert(appId = APP_ID, sentence = SENTENCE, type = TYPE) }
     }
 
     @Test
     fun requestConvert_error_returnNull() = runTest {
         coEvery {
-            convertApiClient.requestConvert(any(), any(), any())
+            convertApiClient.requestConvert(
+                appId = APP_ID,
+                sentence = SENTENCE,
+                type = TYPE
+            )
         } throws Exception()
 
-        val response = repository.requestConvert(SENTENCE, TYPE, APP_ID)
+        val response = repository.requestConvert(sentence = SENTENCE, type = TYPE, appId = APP_ID)
 
         assertThat(response).isNull()
-        coVerify(exactly = 1) { convertApiClient.requestConvert(any(), any(), any()) }
+        coVerify(exactly = 1) { convertApiClient.requestConvert(appId = APP_ID, sentence = SENTENCE, type = TYPE) }
     }
 
     companion object {
