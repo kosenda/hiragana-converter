@@ -22,9 +22,9 @@ class CancelReviewUseCaseTest {
     )
 
     @Test
-    fun useCase_callUpdateLastRequestReviewLocalDate() = runTest {
-        coEvery { reviewInfoRepository.updateLastRequestReviewLocalDate() } just runs
+    fun invoke_callUpdateLastRequestReviewLocalDate() = runTest {
         useCase()
+
         coVerify(exactly = 1) { reviewInfoRepository.updateLastRequestReviewLocalDate() }
     }
 }

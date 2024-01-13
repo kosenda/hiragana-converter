@@ -29,13 +29,19 @@ class ObserveNeedRequestReviewUseCaseTest {
     @Test
     fun invoke_alreadyReview_isFalse() = runTest {
         every { reviewInfoRepository.reviewInfo } returns flowOf(ReviewInfo(isAlreadyReviewed = true))
-        assertThat(useCase().first()).isFalse()
+
+        val result = useCase().first()
+
+        assertThat(result).isFalse()
     }
 
     @Test
     fun invoke_firstConvert_isFalse() = runTest {
         every { reviewInfoRepository.reviewInfo } returns flowOf(ReviewInfo(isAlreadyReviewed = false, totalConvertCount = 1))
-        assertThat(useCase().first()).isFalse()
+
+        val result = useCase().first()
+
+        assertThat(result).isFalse()
     }
 
     @Test
@@ -47,7 +53,10 @@ class ObserveNeedRequestReviewUseCaseTest {
                 lastRequestReviewLocalDate = YesterdayLocalDate,
             )
         )
-        assertThat(useCase().first()).isFalse()
+
+        val result = useCase().first()
+
+        assertThat(result).isFalse()
     }
 
     @Test
@@ -59,13 +68,18 @@ class ObserveNeedRequestReviewUseCaseTest {
                 lastRequestReviewLocalDate = IntervalDateDaysAgoLocalDate,
             )
         )
-        assertThat(useCase().first()).isTrue()
+
+        val result = useCase().first()
+
+        assertThat(result).isTrue()
     }
 
-    companion object {
+    private companion object {
         val YesterdayLocalDate = Clock.System
-            .todayIn(TimeZone.currentSystemDefault()).minus(1, DateTimeUnit.DAY)
+            .todayIn(TimeZone.currentSystemDefault())
+            .minus(1, DateTimeUnit.DAY)
         val IntervalDateDaysAgoLocalDate = Clock.System
-            .todayIn(TimeZone.currentSystemDefault()).minus(INTERVAL_REQUEST_REVIEW_DATE + 1, DateTimeUnit.DAY)
+            .todayIn(TimeZone.currentSystemDefault())
+            .minus(INTERVAL_REQUEST_REVIEW_DATE + 1, DateTimeUnit.DAY)
     }
 }

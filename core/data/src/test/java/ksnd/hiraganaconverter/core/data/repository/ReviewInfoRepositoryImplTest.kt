@@ -38,7 +38,10 @@ class ReviewInfoRepositoryImplTest {
     fun countUpTotalConvertCount_first_is1() = runTest {
         repository.reviewInfo.test {
             assertThat(awaitItem()).isEqualTo(ReviewInfo())
-            assertThat(repository.countUpTotalConvertCount()).isEqualTo(1)
+
+            val result = repository.countUpTotalConvertCount()
+            assertThat(result).isEqualTo(1)
+
             assertThat(awaitItem()).isEqualTo(ReviewInfo().copy(totalConvertCount = 1))
         }
     }
@@ -48,7 +51,9 @@ class ReviewInfoRepositoryImplTest {
         repository.reviewInfo.test {
             assertThat(awaitItem()).isEqualTo(ReviewInfo())
             repeat(5) {
-                assertThat(repository.countUpTotalConvertCount()).isEqualTo(it + 1)
+                val result = repository.countUpTotalConvertCount()
+
+                assertThat(result).isEqualTo(it + 1)
                 assertThat(awaitItem()).isEqualTo(ReviewInfo().copy(totalConvertCount = it + 1))
             }
         }
@@ -58,7 +63,9 @@ class ReviewInfoRepositoryImplTest {
     fun updateLastRequestReviewLocalDate_isToday() = runTest {
         repository.reviewInfo.test {
             assertThat(awaitItem()).isEqualTo(ReviewInfo())
+
             repository.updateLastRequestReviewLocalDate()
+
             assertThat(awaitItem()).isEqualTo(ReviewInfo().copy(lastRequestReviewLocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())))
         }
     }
@@ -67,7 +74,9 @@ class ReviewInfoRepositoryImplTest {
     fun completedReview_isTrue() = runTest {
         repository.reviewInfo.test {
             assertThat(awaitItem().isAlreadyReviewed).isFalse()
+
             repository.completedRequestReview()
+
             assertThat(awaitItem().isAlreadyReviewed).isTrue()
         }
     }

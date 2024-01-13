@@ -30,6 +30,7 @@ class ConvertTextUseCaseTest {
     private val dataStoreRepository = mockk<DataStoreRepository>(relaxUnitFun = true)
     private val convertHistoryRepository = mockk<ConvertHistoryRepository>(relaxUnitFun = true)
     private val reviewInfoRepository = mockk<ReviewInfoRepository>(relaxUnitFun = true)
+
     private val useCase = ConvertTextUseCase(
         convertRepository = convertRepository,
         dataStoreRepository = dataStoreRepository,
@@ -44,17 +45,21 @@ class ConvertTextUseCaseTest {
         coEvery { reviewInfoRepository.countUpTotalConvertCount() } returns TOTAL_CONVERT_COUNT
         coEvery { dataStoreRepository.checkIsExceedingMaxLimit() } returns false
         coEvery { convertRepository.requestConvert(any(), any(), any()) } returns SUCCESS_RESPONSE
+
         useCase(inputText = INPUT_TXT, selectedTextType = SELECTED_TYPE)
-        coVerify { reviewInfoRepository.countUpTotalConvertCount() }
+
+        coVerify(exactly = 1) { reviewInfoRepository.countUpTotalConvertCount() }
     }
 
     @Test
     fun invoke_overConvertForReachedConvert_isReachedConvertMaxLimitException() = runTest {
         coEvery { reviewInfoRepository.countUpTotalConvertCount() } returns TOTAL_CONVERT_COUNT
         coEvery { dataStoreRepository.checkIsExceedingMaxLimit() } returns true
+
         assertFailsWith<IsReachedConvertMaxLimitException> {
             useCase(inputText = INPUT_TXT, selectedTextType = SELECTED_TYPE)
         }
+
         coVerify(exactly = 1) { dataStoreRepository.checkIsExceedingMaxLimit() }
     }
 
@@ -63,9 +68,11 @@ class ConvertTextUseCaseTest {
         coEvery { reviewInfoRepository.countUpTotalConvertCount() } returns TOTAL_CONVERT_COUNT
         coEvery { dataStoreRepository.checkIsExceedingMaxLimit() } returns false
         coEvery { convertRepository.requestConvert(any(), any(), any()) } returns null
+
         assertFailsWith<ConversionFailedException> {
             useCase(inputText = INPUT_TXT, selectedTextType = SELECTED_TYPE)
         }
+
         coVerify(exactly = 1) { convertRepository.requestConvert(any(), any(), any()) }
     }
 
@@ -74,9 +81,11 @@ class ConvertTextUseCaseTest {
         coEvery { reviewInfoRepository.countUpTotalConvertCount() } returns TOTAL_CONVERT_COUNT
         coEvery { dataStoreRepository.checkIsExceedingMaxLimit() } returns false
         coEvery { convertRepository.requestConvert(any(), any(), any()) } returns ERROR_RESPONSE
+
         assertFailsWith<InterceptorError> {
             useCase(inputText = INPUT_TXT, selectedTextType = SELECTED_TYPE)
         }
+
         coVerify(exactly = 1) { convertRepository.requestConvert(any(), any(), any()) }
     }
 
@@ -85,7 +94,10 @@ class ConvertTextUseCaseTest {
         coEvery { reviewInfoRepository.countUpTotalConvertCount() } returns TOTAL_CONVERT_COUNT
         coEvery { dataStoreRepository.checkIsExceedingMaxLimit() } returns false
         coEvery { convertRepository.requestConvert(any(), any(), any()) } returns SUCCESS_RESPONSE
-        assertThat(useCase(inputText = INPUT_TXT, selectedTextType = SELECTED_TYPE)).isNotEmpty()
+
+        val result = useCase(inputText = INPUT_TXT, selectedTextType = SELECTED_TYPE)
+
+        assertThat(result).isNotEmpty()
         coVerify(exactly = 1) { convertRepository.requestConvert(any(), any(), any()) }
     }
 
