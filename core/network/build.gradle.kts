@@ -17,6 +17,14 @@ android {
             dimension = "env"
         }
     }
+    sourceSets {
+        getByName("prod") {
+            java.srcDirs("src/prod/java")
+        }
+        getByName("mock") {
+            java.srcDirs("src/mock/java")
+        }
+    }
 }
 
 dependencies {

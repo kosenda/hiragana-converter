@@ -4,7 +4,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import ksnd.hiraganaconverter.core.data.repository.MockConvertRepository
+import ksnd.hiraganaconverter.core.data.repository.ConvertRepositoryImpl
 import ksnd.hiraganaconverter.core.domain.repository.ConvertRepository
 import javax.inject.Singleton
 
@@ -13,5 +13,5 @@ import javax.inject.Singleton
 abstract class ConvertRepositoryModule {
     @Singleton
     @Binds
-    abstract fun bindConvertRepository(impl: MockConvertRepository): ConvertRepository
+    abstract fun bindConvertRepository(impl: ConvertRepositoryImpl): ConvertRepository
 }

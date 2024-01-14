@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.core.data.mock
+package ksnd.hiraganaconverter.core.network.mock
 
 class MockConverted {
     val hiragana = "もっくでーた"
