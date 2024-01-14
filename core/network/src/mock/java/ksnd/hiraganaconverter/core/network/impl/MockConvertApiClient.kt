@@ -1,19 +1,15 @@
-package ksnd.hiraganaconverter.core.data.repository
+package ksnd.hiraganaconverter.core.netrwork.impl
 
 import kotlinx.coroutines.delay
-import ksnd.hiraganaconverter.core.data.mock.MockConverted
-import ksnd.hiraganaconverter.core.domain.repository.ConvertRepository
 import ksnd.hiraganaconverter.core.model.ResponseData
 import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
+import ksnd.hiraganaconverter.core.netrwork.mock.MockConverted
+import ksnd.hiraganaconverter.core.network.ConvertApiClient
 import retrofit2.Response
 import javax.inject.Inject
 
-class MockConvertRepository @Inject constructor() : ConvertRepository {
-    override suspend fun requestConvert(
-        sentence: String,
-        type: String,
-        appId: String,
-    ): Response<ResponseData>? {
+class MockConvertApiClient @Inject constructor() : ConvertApiClient {
+    override suspend fun requestConvert(appId: String, sentence: String, type: String): Response<ResponseData> {
         delay(1000)
         return Response.success(
             200,

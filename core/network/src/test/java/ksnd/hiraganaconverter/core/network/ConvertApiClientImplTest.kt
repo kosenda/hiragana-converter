@@ -5,7 +5,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import ksnd.hiraganaconverter.core.network.impl.ConvertApiClientImpl
+import ksnd.hiraganaconverter.core.netrwork.impl.ConvertApiClientImpl
 import ksnd.hiraganaconverter.core.network.interceptor.ErrorInterceptor
 import ksnd.hiraganaconverter.core.testing.MainDispatcherRule
 import okhttp3.MediaType.Companion.toMediaType

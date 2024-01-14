@@ -1,11 +1,11 @@
-package ksnd.hiraganaconverter.core.network.di
+package ksnd.hiraganaconverter.core.netrwork.di
 
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ksnd.hiraganaconverter.core.network.ConvertApiClient
-import ksnd.hiraganaconverter.core.network.impl.ConvertApiClientImpl
+import ksnd.hiraganaconverter.core.netrwork.impl.ConvertApiClientImpl
 import javax.inject.Singleton
 
 @Module
