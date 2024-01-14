@@ -1,9 +1,9 @@
-package ksnd.hiraganaconverter.core.netrwork.impl
+package ksnd.hiraganaconverter.core.network.impl
 
 import kotlinx.coroutines.delay
 import ksnd.hiraganaconverter.core.model.ResponseData
 import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
-import ksnd.hiraganaconverter.core.netrwork.mock.MockConverted
+import ksnd.hiraganaconverter.core.network.mock.MockConverted
 import ksnd.hiraganaconverter.core.network.ConvertApiClient
 import retrofit2.Response
 import javax.inject.Inject

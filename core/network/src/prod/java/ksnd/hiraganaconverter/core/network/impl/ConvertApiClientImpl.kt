@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.core.netrwork.impl
+package ksnd.hiraganaconverter.core.network.impl
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.encodeToString
