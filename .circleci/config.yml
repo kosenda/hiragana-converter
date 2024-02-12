@@ -221,7 +221,7 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${jwt}" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/kosenda/pull/${pr_number}/git/blobs \
+            https://api.github.com/repos/kosenda/hiragana-converter/pull/${pr_number}/git/blobs \
             -d '{"content":"Content of the blob","encoding":"utf-8"}'
 #      - aws-s3/sync:
 #          arguments: --delete
