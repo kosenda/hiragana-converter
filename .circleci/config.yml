@@ -216,13 +216,13 @@ jobs:
       - run:
           name: create a blob
           command: |
-            gh api \
-              --method POST \
+            curl -L \
+              -X POST \
+              -H "Authorization: Bearer ${jwt}" \
               -H "Accept: application/vnd.github+json" \
               -H "X-GitHub-Api-Version: 2022-11-28" \
-              /repos/kosenda/hiragana-converter/git/blobs \
-              -f content='Content of the blob' \
-              -f encoding='utf-8'
+              "https://api.github.com/repos/kosenda/hiragana-converter/git/blobs" \
+              -d '{"content":"Content of the blob","encoding":"utf-8"}'
 
 #      - aws-s3/sync:
 #          arguments: --delete
