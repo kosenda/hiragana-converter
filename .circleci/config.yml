@@ -212,33 +212,44 @@ jobs:
           command: |
             pr_number=$(basename $CIRCLE_PULL_REQUEST)
             echo "export PR_NUMBER=${pr_number}" >> $BASH_ENV
-      - aws-s3/sync:
-          arguments: --delete
-          from: ./build/outputs/roborazzi/compareProdDebug/roborazzi
-          to: s3://hiraganaconverter-roborazzi/image/pr/$PR_NUMBER
+
       - run:
-          name: create comments
+          name: create a blob
           command: |
-            cat \<< EOF > comments
-            |File name|Image|
-            |---|---|
-            EOF
-            
-            # Find all the files ending with _compare.png
-            files_to_add=$(find . -type f -path "./build/outputs/roborazzi/compareProdDebug/roborazzi/*" -name "*_compare.png")
-            
-            # Add compare image
-            for file in $files_to_add; do
-              compare_file_path=$(basename $file)
-              echo "compare file path: $compare_file_path"
-              compare_file_name=$(echo $compare_file_path | rev | cut -d. -f-2 | rev )
-              image_url="https://hiraganaconverter-roborazzi.s3.ap-northeast-1.amazonaws.com/image/pr/$PR_NUMBER/$compare_file_path"
-              echo "| $compare_file_name | <img src=\"$image_url\" width=\"600\"> |" >> comments
-            done
-      - run:
-          # ref: https://github.com/cli/cli/issues/6790
-          name: test comment
-          command: gh pr comment "$CIRCLE_PULL_REQUEST" --edit-last -F ./comments || gh pr comment "$CIRCLE_PULL_REQUEST" -F ./comments
+            curl -L \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${jwt}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/kosenda/pull/${pr_number}/git/blobs \
+            -d '{"content":"Content of the blob","encoding":"utf-8"}'
+#      - aws-s3/sync:
+#          arguments: --delete
+#          from: ./build/outputs/roborazzi/compareProdDebug/roborazzi
+#          to: s3://hiraganaconverter-roborazzi/image/pr/$PR_NUMBER
+#      - run:
+#          name: create comments
+#          command: |
+#            cat \<< EOF > comments
+#            |File name|Image|
+#            |---|---|
+#            EOF
+#
+#            # Find all the files ending with _compare.png
+#            files_to_add=$(find . -type f -path "./build/outputs/roborazzi/compareProdDebug/roborazzi/*" -name "*_compare.png")
+#
+#            # Add compare image
+#            for file in $files_to_add; do
+#              compare_file_path=$(basename $file)
+#              echo "compare file path: $compare_file_path"
+#              compare_file_name=$(echo $compare_file_path | rev | cut -d. -f-2 | rev )
+#              image_url="https://hiraganaconverter-roborazzi.s3.ap-northeast-1.amazonaws.com/image/pr/$PR_NUMBER/$compare_file_path"
+#              echo "| $compare_file_name | <img src=\"$image_url\" width=\"600\"> |" >> comments
+#            done
+#      - run:
+#          # ref: https://github.com/cli/cli/issues/6790
+#          name: test comment
+#          command: gh pr comment "$CIRCLE_PULL_REQUEST" --edit-last -F ./comments || gh pr comment "$CIRCLE_PULL_REQUEST" -F ./comments
 
 workflows:
   test:
