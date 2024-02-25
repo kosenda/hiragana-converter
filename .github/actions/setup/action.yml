@@ -6,24 +6,20 @@ inputs:
     description: "API Key"
     required: true
 
-
 runs:
   using: composite
   steps:
-    # マスクする
     - name: Mask API Key
       shell: bash
       run: |
         echo "::add-mask::${{ inputs.apiKey }}"
 
-    # ローカルプロパティの設定
     - name: Set local.properties
       shell: bash
       env:
         API_KEY: ${{ inputs.API_KEY }}
       run: echo "apiKey=${{env.API_KEY}}" >> ./local.properties
         
-    # JDKセットアップ
     - name: Setup JDK
       uses: actions/setup-java@v3
       with:
@@ -31,6 +27,5 @@ runs:
         java-version: 17
         cache: gradle
 
-    # Gradleセットアップ
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3

@@ -1,9 +1,6 @@
-# ワークフローの名前
 name: Test
 
-# ワークフローを実行するイベント定義
 on:
-  # プッシュが行われた時に実行
   push:
     branches:
       - main
@@ -12,31 +9,22 @@ on:
     paths-ignore:
       - README.md
 
-# ジョブへの権限の割り当て
-# ref: https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
 permissions:
-  # リポジトリの内容を操作
   contents: read
-  # GitHub Actionsを使用
   actions: read
 
 jobs:
   dependencies:
-    # ジョブを実行するマシンの種類を定義
-    # ref: https://docs.github.com/ja/actions/using-jobs/choosing-the-runner-for-a-job
     runs-on: ubuntu-latest
     steps:
-      # チェックアウト
       - name: Checkout sources
         uses: actions/checkout@v4
 
-      # セットアップ
       - name: Setup
         uses: ./.github/actions/setup
         with:
           api_key: ${{ secrets.API_KEY }}
 
-      # モックのコンパイル
       - name: Compile MockDebug
         run: |
           ./gradlew compileMockDebugSource
