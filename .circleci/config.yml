@@ -237,7 +237,12 @@ jobs:
           # ref: https://github.com/cli/cli/issues/6790
           name: test comment
           command: gh pr comment "$CIRCLE_PULL_REQUEST" --edit-last -F ./comments || gh pr comment "$CIRCLE_PULL_REQUEST" -F ./comments
-
+  no-op:
+    executor: android
+    steps:
+      - run:
+          name: No-op
+          command: echo "No-op"
 #workflows:
 #  test:
 #    jobs:
@@ -270,8 +275,7 @@ jobs:
 workflows:
   test:
     jobs:
-      - run:
-          echo: "CircleCI is running"
+      - no-op
 
 # ■ memo ■
 # check command： circleci config validate
