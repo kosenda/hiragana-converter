@@ -1,7 +1,7 @@
 name: Test
 
 on:
-  push:
+  pull_request:
     branches:
       - main
       - develop
@@ -26,6 +26,7 @@ jobs:
           api_key: ${{ secrets.API_KEY }}
 
   test-prod:
+    needs: dependencies
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
@@ -62,6 +63,7 @@ jobs:
           DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   compile-mock:
+    needs: dependencies
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
