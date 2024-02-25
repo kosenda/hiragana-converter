@@ -9,22 +9,24 @@ runs:
   using: composite
   steps:
     # マスクする
-    echo "::add-mask::${{ inputs.apiKey }}"
-      
+    - name: Mask API Key
+      run: |
+        echo "::add-mask::${{ inputs.apiKey }}"
+
     # ローカルプロパティの設定
     - name: Set local.properties
       env:
         API_KEY: ${{ inputs.API_KEY }}
       run: |
         echo "apiKey=${{env.API_KEY}}" >> ./local.properties
-
-    # JDKセットアップ
-    - name: Setup JDK
-      uses: actions/setup-java@v3
-      with:
-        distribution: temurin
-        java-version: 17
-        cache: gradle
+        
+        # JDKセットアップ
+        - name: Setup JDK
+          uses: actions/setup-java@v3
+          with:
+            distribution: temurin
+            java-version: 17
+            cache: gradle
 
     # Gradleセットアップ
     - name: Setup Gradle
