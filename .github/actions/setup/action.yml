@@ -1,12 +1,22 @@
+name: Setup
+
+inputs:
+  api_key:
+    description: "API Key"
+    required: true
+
 runs:
   using: composite
   steps:
+    # マスクする
+    echo "::add-mask::${{ inputs.apiKey }}"
+      
     # ローカルプロパティの設定
     - name: Set local.properties
       env:
-        API_KEY: ${{ secrets.API_KEY }}
+        API_KEY: ${{ inputs.API_KEY }}
       run: |
-        echo "apiKey=$API_KEY" >> ./local.properties
+        echo "apiKey=${{env.API_KEY}}" >> ./local.properties
 
     # JDKセットアップ
     - name: Setup JDK

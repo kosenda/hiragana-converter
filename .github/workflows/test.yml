@@ -33,6 +33,8 @@ jobs:
       # セットアップ
       - name: Setup
         uses: ./.github/actions/setup
+        with:
+          api_key: ${{ secrets.API_KEY }}
 
       # モックのコンパイル
       - name: Compile MockDebug
