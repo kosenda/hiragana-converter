@@ -22,6 +22,8 @@ jobs:
 
       - name: Setup
         uses: ./.github/actions/setup
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
         with:
           api_key: ${{ secrets.API_KEY }}
 
@@ -34,6 +36,8 @@ jobs:
 
       - name: Setup
         uses: ./.github/actions/setup
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
         with:
           api_key: ${{ secrets.API_KEY }}
 
@@ -60,7 +64,7 @@ jobs:
           danger_file: Dangerfile
           danger_id: danger-pr
         env:
-          DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
 
   compile-mock:
     needs: dependencies
@@ -71,6 +75,8 @@ jobs:
 
       - name: Setup
         uses: ./.github/actions/setup
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
         with:
           api_key: ${{ secrets.API_KEY }}
 
