@@ -1,9 +1,11 @@
 name: Setup
+description: "Setup Java and Gradle environment."
 
 inputs:
   api_key:
     description: "API Key"
     required: true
+
 
 runs:
   using: composite
