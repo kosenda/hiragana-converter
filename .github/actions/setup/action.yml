@@ -15,18 +15,18 @@ runs:
 
     # ローカルプロパティの設定
     - name: Set local.properties
+      shell: bash
       env:
         API_KEY: ${{ inputs.API_KEY }}
-      run: |
-        echo "apiKey=${{env.API_KEY}}" >> ./local.properties
+      run: echo "apiKey=${{env.API_KEY}}" >> ./local.properties
         
-        # JDKセットアップ
-        - name: Setup JDK
-          uses: actions/setup-java@v3
-          with:
-            distribution: temurin
-            java-version: 17
-            cache: gradle
+    # JDKセットアップ
+    - name: Setup JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 17
+        cache: gradle
 
     # Gradleセットアップ
     - name: Setup Gradle
