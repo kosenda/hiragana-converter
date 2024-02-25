@@ -9,10 +9,10 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Mask API Key
-      shell: bash
-      run: |
-        echo "::add-mask::${{ inputs.apiKey }}"
+#    - name: Mask API Key
+#      shell: bash
+#      run: |
+#        echo "::add-mask::"${{ inputs.apiKey }}""
 
     - name: Set local.properties
       shell: bash
