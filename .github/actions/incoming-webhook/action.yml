@@ -3,6 +3,11 @@
 name: Incoming Webhook
 description: "Send a message to Slack using an incoming webhook."
 
+inputs:
+  incoming_webhook_url:
+    description: "The URL of the incoming webhook."
+    required: true
+
 runs:
   using: composite
   steps:
@@ -39,4 +44,4 @@ runs:
           }
       env:
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_INCOMING_WEBHOOK_URL }}
+        SLACK_WEBHOOK_URL: ${{ inputs.incoming_webhook_url }}
