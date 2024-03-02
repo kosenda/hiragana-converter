@@ -23,12 +23,12 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
         with:
-          API_KEY: ${{ secrets.API_KEY }}
+          api-key: ${{ secrets.API_KEY }}
 
       - name: Slack notify
         uses: ./.github/actions/incoming-webhook
         with:
-          INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   test-prod:
     needs: dependencies

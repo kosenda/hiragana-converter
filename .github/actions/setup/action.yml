@@ -2,7 +2,7 @@ name: Setup
 description: "Setup Java and Gradle environment."
 
 inputs:
-  API_KEY:
+  api-key:
     description: "API Key"
     required: true
 
@@ -12,7 +12,7 @@ runs:
     - name: Set local.properties
       shell: bash
       env:
-        API_KEY: ${{ inputs.API_KEY }}
+        API_KEY: ${{ inputs.api-key }}
       run: echo "apiKey=${{env.API_KEY}}" >> ./local.properties
         
     - name: Setup JDK

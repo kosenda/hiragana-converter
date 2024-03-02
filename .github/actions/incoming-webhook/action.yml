@@ -4,16 +4,13 @@ name: Incoming Webhook
 description: "Send a message to Slack using an incoming webhook."
 
 inputs:
-  INCOMING_WEBHOOK_URL:
+  slack-webhook-url:
     description: "URL of incoming webhook for Slack"
     required: true
 
 runs:
   using: composite
   steps:
-    - name: Setup
-      shell: bash
-      run: echo ${{ inputs.INCOMING_WEBHOOK_URL }}
     # Start a Slack workflow using a webhook trigger
     # https://github.com/slackapi/slack-github-action
     - name: Send GitHub Action trigger data to Slack workflow
@@ -44,4 +41,4 @@ runs:
           }
       env:
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
-        SLACK_WEBHOOK_URL: ${{ inputs.INCOMING_WEBHOOK_URL }}
+        SLACK_WEBHOOK_URL: ${{ inputs.slack-webhook-url }}
