@@ -25,6 +25,9 @@ jobs:
         with:
           api_key: ${{ secrets.API_KEY }}
 
+      - name: Slack notify
+        uses: ./.github/actions/incoming-webhook
+
   test-prod:
     needs: dependencies
     runs-on: ubuntu-latest
