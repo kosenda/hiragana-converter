@@ -31,6 +31,8 @@ jobs:
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 100
 
       - name: Setup
         uses: ./.github/actions/setup
