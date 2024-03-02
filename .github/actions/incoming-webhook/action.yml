@@ -11,6 +11,9 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Setup
+      shell: bash
+      run: echo ${{ inputs.INCOMING_WEBHOOK_URL }}
     # Start a Slack workflow using a webhook trigger
     # https://github.com/slackapi/slack-github-action
     - name: Send GitHub Action trigger data to Slack workflow
