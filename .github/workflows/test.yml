@@ -46,6 +46,15 @@ jobs:
       - name: Report jacoco
         run: ./gradlew jacocoTestReport
 
+      - name: jacoco-report to zip
+        run: zip -r jacocoTestReport.zip ./build/reports/jacoco/jacocoTestReport/html
+
+      - name: Archive jacoco report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacocoTestReport
+          path: ./build/reports/jacoco/jacocoTestReport/html
+
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
