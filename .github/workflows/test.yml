@@ -25,11 +25,6 @@ jobs:
         with:
           api-key: ${{ secrets.API_KEY }}
 
-      - name: Slack notify
-        uses: ./.github/actions/incoming-webhook
-        with:
-          slack-webhook-url: ${{ secrets.SLACK_INCOMING_WEBHOOK_URL }}
-
   test-prod:
     needs: dependencies
     runs-on: ubuntu-latest
@@ -40,7 +35,7 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
         with:
-          api_key: ${{ secrets.API_KEY }}
+          api-key: ${{ secrets.API_KEY }}
 
       - name: ktlint-check
         run: ./gradlew --continue ktlintCheck
@@ -76,6 +71,11 @@ jobs:
         env:
           DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
 
+      - name: Slack notify
+        uses: ./.github/actions/incoming-webhook
+        with:
+          slack-webhook-url: ${{ secrets.SLACK_INCOMING_WEBHOOK_URL }}
+
   compile-mock:
     needs: dependencies
     runs-on: ubuntu-latest
@@ -86,7 +86,7 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
         with:
-          api_key: ${{ secrets.API_KEY }}
+          api-key: ${{ secrets.API_KEY }}
 
       - name: Compile MockDebug
         run: ./gradlew compileMockDebugSource
