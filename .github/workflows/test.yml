@@ -28,7 +28,7 @@ jobs:
       - name: Slack notify
         uses: ./.github/actions/incoming-webhook
         with:
-          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          slack-webhook-url: ${{ secrets.SLACK_INCOMING_WEBHOOK_URL }}
 
   test-prod:
     needs: dependencies
