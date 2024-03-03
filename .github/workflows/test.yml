@@ -117,8 +117,8 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         run: |
           # delete except *_compare.png
-          find ./app/build/outputs/roborazzi/compareProdDebug/roborazzi  -type f |  grep -v -e '.*_compare.png' | xargs rm -rf
-          mv ./app/build/outputs/roborazzi/compareProdDebug/roborazzi ./pr/${{ github.event.number }}/
+          find ./app/build/outputs/roborazzi  -type f |  grep -v -e '.*_compare.png' | xargs rm -rf
+          mv ./app/build/outputs/roborazzi ./pr/${{ github.event.number }}/
           ls ./pr/${{ github.event.number }}
 
       - name: Save screenshots
