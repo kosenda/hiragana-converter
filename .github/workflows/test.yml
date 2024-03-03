@@ -160,5 +160,5 @@ jobs:
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.number }}
-          body: ${{ ./comments }}
+          body: ./comments
           edit-mode: replace
