@@ -146,8 +146,6 @@ jobs:
 
       ## CompareScreenshotワークフローで生成された差分を取得
       - uses: actions/download-artifact@v4
-        env:
-          PR_NUMBER: ${{ env.PR_NUMBER }}
         with:
           name: pr directory
             
@@ -198,8 +196,28 @@ jobs:
 
       - name: Add or update comment on PR
         uses: peter-evans/create-or-update-comment@v4
+        env:
+          PR_NUMBER: ${{ env.PR_NUMBER }}
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
-          issue-number: ${{ github.event.number }}
+          issue-number: ${{ PR_NUMBER }}
           body: ${{ steps.create-comments.outputs.reports }}
           edit-mode: replace
+
+      - name: Cleanup outdated companion branches
+        run: |
+          # Find outdated companion branches with last commit date
+          git branch -r --format="%(refname:lstrip=3)" | grep companion_ | while read -r branch; do
+            last_commit_date_timestamp=$(git log -1 --format=%ct "origin/$branch")
+            now_timestamp=$(date +%s)
+            # Delete branch if it's older than 1 month
+            # if [ $((now_timestamp - last_commit_date_timestamp)) -gt 2592000 ]; then
+            # For testing purpose, delete branch if it's older than 1 second
+            echo "branch: $branch now_timestamp: $now_timestamp last_commit_date_timestamp: $last_commit_date_timestamp"
+            if [ $((now_timestamp - last_commit_date_timestamp)) -gt 1 ]; then
+              # Comment out for demonstration purpose
+              echo "Deleting $branch"
+          
+              # git push origin --delete "$branch"
+            fi
+          done
