@@ -130,10 +130,10 @@ jobs:
 
       - name: Create comments
         run: |
-          cat \<< EOF > comments
-          |File name|Image|
-          |---|---|
-          EOF
+          touch comments
+          echo "Snapshot diff report" >> comments
+          echo "|File name|Image|" >> comments
+          echo "|---|---|" >> comments
 
           # Find all the files ending with _compare.png
           files_to_add=$(find . -type f -path "./pr/${{ github.event.number }}/*" -name "*_compare.png")
@@ -143,7 +143,8 @@ jobs:
             compare_file_path=$(basename $file)
             echo "compare file path: $compare_file_path"
             compare_file_name=$(echo $compare_file_path | rev | cut -d. -f-2 | rev )
-            image_url="pr/$PR_NUMBER/$compare_file_path"
+            echo echo 'Artifact URL is ${{ steps.artifact-upload-step.outputs.artifact-url }}'
+            image_url="${{ steps.artifact-upload-step.outputs.artifact-url }}'/roborazzi/pr/$PR_NUMBER/$compare_file_path"
             echo "| $compare_file_name | <img src=\"$image_url\" width=\"600\"> |" >> comments
           done
 
