@@ -134,7 +134,6 @@ jobs:
           delimiter="$(openssl rand -hex 8)"
           {
             echo "comments<<${delimiter}"
-            echo comments<<"$(openssl rand -hex 8)"
             echo "Snapshot diff report" >> comments
             echo "|File name|Image|" >> comments
             echo "|---|---|" >> comments
