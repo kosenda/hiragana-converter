@@ -93,3 +93,36 @@ jobs:
 
       - name: Compile MockDebug
         run: ./gradlew compileMockDebugSource
+
+  compare-screnshots:
+    needs: dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          api-key: ${{ secrets.API_KEY }}
+
+      - name: compare screenshots
+        run: ./gradlew compareRoborazziProdDebug --stacktrace
+
+      - name: Make PR number directory for saving screenshots
+        if: ${{ github.event_name == 'pull_request' }}
+        run: mkdir -p ./pr/${{ github.event.number }}
+
+      - name: Move screenshots to PR number directory
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          # delete except *_compare.png
+          find ./app/build/outputs/roborazzi/compareProdDebug/roborazzi  -type f |  grep -v -e '.*_compare.png' | xargs rm -rf
+          mv ./app/build/outputs/roborazzi/compareProdDebug/roborazzi ./pr/${{ github.event.number }}/
+          ls ./pr/${{ github.event.number }}
+
+      - name: Save screenshots
+        uses: actions/upload-artifact@4
+        with:
+          name: pr directory
+          path: pr/${{ github.event.number }}/
