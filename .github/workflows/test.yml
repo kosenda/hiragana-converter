@@ -151,8 +151,9 @@ jobs:
               image_url="${{ steps.artifact-upload-step.outputs.artifact-url }}'/roborazzi/pr/$PR_NUMBER/$compare_file_path"
               echo "| $compare_file_name | <img src=\"$image_url\" width=\"600\"> |" >> comments
             done
+          
+            echo "${delimiter}" >> comments
           } >> "$GITHUB_OUTPUT"
-          echo "${delimiter}" >> "$GITHUB_OUTPUT"
 
       - name: Find Comment
         uses: peter-evans/find-comment@v3
