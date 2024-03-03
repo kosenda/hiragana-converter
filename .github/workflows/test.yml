@@ -122,7 +122,7 @@ jobs:
           ls ./pr/${{ github.event.number }}
 
       - name: Save screenshots
-        uses: actions/upload-artifact@4
+        uses: actions/upload-artifact@v4
         with:
           name: pr directory
           path: pr/${{ github.event.number }}/
