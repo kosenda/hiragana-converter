@@ -202,7 +202,7 @@ jobs:
           PR_NUMBER: ${{ env.PR_NUMBER }}
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
-          issue-number: ${{ PR_NUMBER }}
+          issue-number: ${{ env.PR_NUMBER }}
           body: ${{ steps.create-comments.outputs.reports }}
           edit-mode: replace
 
