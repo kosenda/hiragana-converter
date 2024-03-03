@@ -10,8 +10,9 @@ on:
       - README.md
 
 permissions:
-  contents: read
+  contents: write
   actions: read
+  pull-requests: write
 
 jobs:
   dependencies:
@@ -126,3 +127,38 @@ jobs:
         with:
           name: pr directory
           path: pr/${{ github.event.number }}/
+
+      - name: Create comments
+        run: |
+          cat \<< EOF > comments
+          |File name|Image|
+          |---|---|
+          EOF
+
+          # Find all the files ending with _compare.png
+          files_to_add=$(find . -type f -path "./pr/${{ github.event.number }}/*" -name "*_compare.png")
+
+          # Add compare image
+          for file in $files_to_add; do
+            compare_file_path=$(basename $file)
+            echo "compare file path: $compare_file_path"
+            compare_file_name=$(echo $compare_file_path | rev | cut -d. -f-2 | rev )
+            image_url="pr/$PR_NUMBER/$compare_file_path"
+            echo "| $compare_file_name | <img src=\"$image_url\" width=\"600\"> |" >> comments
+          done
+
+      - name: Find Comment
+        uses: peter-evans/find-comment@v3
+        id: fc
+        with:
+          issue-number: ${{ github.event.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Snapshot diff report
+
+      - name: Add or update comment on PR
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.number }}
+          body: ${{ ./comments }}
+          edit-mode: replace
