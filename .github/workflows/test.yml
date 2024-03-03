@@ -131,13 +131,11 @@ jobs:
       - name: Save pr number
         run: echo "PR_NUMBER=${{ github.event.number }}" >> $GITHUB_ENV
 
-      ## mainブランチに戻る
       - name: main checkout
         uses: actions/checkout@v4
         with:
           ref: main
 
-      ## コミット履歴を持たないブランチを作成
       - name: switch companion branch
         env:
           BRANCH_NAME: companion_${{ github.event.workflow_run.head_branch }}
@@ -152,7 +150,7 @@ jobs:
           PR_NUMBER: ${{ env.PR_NUMBER }}
         with:
           name: screenshots
-          path: pr/$PR_NUMBER
+          path: pr/$PR_NUMBER/
           run_id: ${{ github.event.workflow_run.id }}
             
       ## 差分の画像をcompanionブランチにpush
