@@ -152,6 +152,7 @@ jobs:
               echo "| $compare_file_name | <img src=\"$image_url\" width=\"600\"> |" >> comments
             done
           } >> "$GITHUB_OUTPUT"
+          echo "${delimiter}" >> "$GITHUB_OUTPUT"
 
       - name: Find Comment
         uses: peter-evans/find-comment@v3
