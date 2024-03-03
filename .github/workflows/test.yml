@@ -128,30 +128,68 @@ jobs:
           name: pr directory
           path: pr/${{ github.event.number }}/
 
+      - name: Save pr number
+        run: echo "PR_NUMBER=${{ github.event.number }}" >> $GITHUB_ENV
+
+      ## mainブランチに戻る
+      - name: main checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      ## コミット履歴を持たないブランチを作成
+      - name: switch companion branch
+        env:
+          BRANCH_NAME: companion_${{ github.event.workflow_run.head_branch }}
+        run: |
+          git branch -D $BRANCH_NAME || true
+          git checkout --orphan $BRANCH_NAME
+          git rm -rf .
+
+      ## CompareScreenshotワークフローで生成された差分を取得
+      - uses: dawidd6/action-download-artifact@v3
+        env:
+          PR_NUMBER: ${{ env.PR_NUMBER }}
+        with:
+          name: screenshots
+          path: pr/$PR_NUMBER
+          run_id: ${{ github.event.workflow_run.id }}
+            
+      ## 差分の画像をcompanionブランチにpush
+      - id: push-screenshot-diff
+        env:
+          BRANCH_NAME: companion_${{ github.event.workflow_run.head_branch }}
+        run: |
+          files_to_add=$(find . -type f -name "*_compare.png")
+          
+          
+          for file in $files_to_add; do
+            if [[ $file =~ ^[a-zA-Z0-9_./-]+$ ]]; then
+              git add $file
+            fi
+          done
+          git config --global user.name ScreenshotBot
+          git config --global user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git commit -m "Add screenshot diff"
+          git push origin HEAD:$BRANCH_NAME -f
+
       - name: Create comments
         id: create-comments
         run: |
+          files=$(find . -type f -name "*_compare.png" | grep "roborazzi/" | grep -E "^[a-zA-Z0-9_./-]+$")
           delimiter="$(openssl rand -hex 8)"
           {
-            echo "comments<<${delimiter}"
-            echo "Snapshot diff report" >> comments
-            echo "|File name|Image|" >> comments
-            echo "|---|---|" >> comments
+            echo "reports<<${delimiter}"
+          
+            echo "Snapshot diff report"
+            echo "| File name | Image |"
+            echo "|-------|-------|"
           } >> "$GITHUB_OUTPUT"
-  
-          # Find all the files ending with _compare.png
-          files_to_add=$(find . -type f -path "./pr/${{ github.event.number }}/*" -name "*_compare.png")
-
-          # Add compare image
-          for file in $files_to_add; do
-            compare_file_path=$(basename $file)
-            echo "compare file path: $compare_file_path"
-            compare_file_name=$(echo $compare_file_path | rev | cut -d. -f-2 | rev )
-            echo 'Artifact URL is ${{ steps.artifact-upload-step.outputs.artifact-url }}'
-            image_url="${{ steps.artifact-upload-step.outputs.artifact-url }}'/roborazzi/pr/$PR_NUMBER/$compare_file_path"
-            echo "| $compare_file_name | <img src=\"$image_url\" width=\"600\"> |" >> "$GITHUB_OUTPUT"
+          
+          for file in $files; do
+            fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
+            echo "| [$fileName](https://github.com/${{ github.repository }}/blob/$BRANCH_NAME/$file) | ![](https://github.com/${{ github.repository }}/blob/$BRANCH_NAME/$file?raw=true) |" >> "$GITHUB_OUTPUT"
           done
-        
           echo "${delimiter}" >> "$GITHUB_OUTPUT"
 
       - name: Find Comment
@@ -167,5 +205,5 @@ jobs:
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ github.event.number }}
-          body: ${{ steps.create-comments.outputs.comments }}
+          body: ${{ steps.create-comments.outputs.reports }}
           edit-mode: replace
