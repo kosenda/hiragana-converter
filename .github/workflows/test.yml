@@ -137,22 +137,22 @@ jobs:
             echo "Snapshot diff report" >> comments
             echo "|File name|Image|" >> comments
             echo "|---|---|" >> comments
-  
-            # Find all the files ending with _compare.png
-            files_to_add=$(find . -type f -path "./pr/${{ github.event.number }}/*" -name "*_compare.png")
-  
-            # Add compare image
-            for file in $files_to_add; do
-              compare_file_path=$(basename $file)
-              echo "compare file path: $compare_file_path"
-              compare_file_name=$(echo $compare_file_path | rev | cut -d. -f-2 | rev )
-              echo echo 'Artifact URL is ${{ steps.artifact-upload-step.outputs.artifact-url }}'
-              image_url="${{ steps.artifact-upload-step.outputs.artifact-url }}'/roborazzi/pr/$PR_NUMBER/$compare_file_path"
-              echo "| $compare_file_name | <img src=\"$image_url\" width=\"600\"> |" >> comments
-            done
-          
-            echo "${delimiter}" >> comments
           } >> "$GITHUB_OUTPUT"
+  
+          # Find all the files ending with _compare.png
+          files_to_add=$(find . -type f -path "./pr/${{ github.event.number }}/*" -name "*_compare.png")
+
+          # Add compare image
+          for file in $files_to_add; do
+            compare_file_path=$(basename $file)
+            echo "compare file path: $compare_file_path"
+            compare_file_name=$(echo $compare_file_path | rev | cut -d. -f-2 | rev )
+            echo 'Artifact URL is ${{ steps.artifact-upload-step.outputs.artifact-url }}'
+            image_url="${{ steps.artifact-upload-step.outputs.artifact-url }}'/roborazzi/pr/$PR_NUMBER/$compare_file_path"
+            echo "| $compare_file_name | <img src=\"$image_url\" width=\"600\"> |" >> "$GITHUB_OUTPUT"
+          done
+        
+          echo "${delimiter}" >> "$GITHUB_OUTPUT"
 
       - name: Find Comment
         uses: peter-evans/find-comment@v3
