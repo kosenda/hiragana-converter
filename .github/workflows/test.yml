@@ -145,13 +145,11 @@ jobs:
           git rm -rf .
 
       ## CompareScreenshotワークフローで生成された差分を取得
-      - uses: dawidd6/action-download-artifact@v3
+      - uses: actions/download-artifact@v4
         env:
           PR_NUMBER: ${{ env.PR_NUMBER }}
         with:
-          name: screenshots
-          path: pr/$PR_NUMBER/
-          run_id: ${{ github.event.workflow_run.id }}
+          name: pr directory
             
       ## 差分の画像をcompanionブランチにpush
       - id: push-screenshot-diff
