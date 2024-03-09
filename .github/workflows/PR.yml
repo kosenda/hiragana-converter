@@ -127,8 +127,8 @@ jobs:
         env:
           BRANCH_NAME: companion_${{ github.event.workflow_run.head_branch }}
         run: |
-          git branch -D $BRANCH_NAME || true
-          git checkout --orphan $BRANCH_NAME
+          git branch -D ${{ BRANCH_NAME }} || true
+          git checkout --orphan ${{ BRANCH_NAME }}
           git rm -rf .
 
       - name: Download screenshots from PR number directory
@@ -152,7 +152,7 @@ jobs:
           git config --global user.name ScreenshotBot
           git config --global user.email 41898282+github-actions[bot]@users.noreply.github.com
           git commit -m "Add screenshot diff"
-          git push origin HEAD:$BRANCH_NAME -f
+          git push origin HEAD:${{ BRANCH_NAME }} -f
 
       - name: Create comments
         id: create-comments
@@ -171,7 +171,7 @@ jobs:
           
           for file in $files; do
             fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
-            echo "| [$fileName](https://github.com/${{ github.repository }}/blob/$BRANCH_NAME/$file) | ![](https://github.com/${{ github.repository }}/blob/$BRANCH_NAME/$file?raw=true) |" >> "$GITHUB_OUTPUT"
+            echo "| [$fileName](https://github.com/${{ github.repository }}/blob/${{ BRANCH_NAME }}/$file) | ![](https://github.com/${{ github.repository }}/blob/${{ BRANCH_NAME }}/$file?raw=true) |" >> "$GITHUB_OUTPUT"
           done
           echo "${delimiter}" >> "$GITHUB_OUTPUT"
 
@@ -210,3 +210,8 @@ jobs:
               # git push origin --delete "$branch"
             fi
           done
+
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
