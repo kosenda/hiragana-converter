@@ -1,4 +1,4 @@
-name: OnlyMerge
+name: SaveScreenshot
 
 on:
   pull_request:
