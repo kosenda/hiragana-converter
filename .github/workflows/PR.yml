@@ -211,7 +211,7 @@ jobs:
             fi
           done
 
-      - name: Checkout main branch
+      - name: Checkout pr branch
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
