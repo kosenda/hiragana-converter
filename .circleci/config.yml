@@ -24,7 +24,7 @@ commands:
       - restore_cache:
           key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
       - run:
-          name: Download dependencies
+          name: Download Dependencies.yml
           command: ./gradlew androidDependencies
       - save_cache:
           paths:
@@ -246,18 +246,18 @@ jobs:
 #workflows:
 #  test:
 #    jobs:
-#      - dependencies
+#      - Dependencies.yml
 #      - test-prod:
 #          context: slack-secrets
 #          requires:
-#            - dependencies
+#            - Dependencies.yml
 #      - compile-mock:
 #          context: slack-secrets
 #          requires:
-#            - dependencies
+#            - Dependencies.yml
 #      - save-screenshots:
 #          requires:
-#            - dependencies
+#            - Dependencies.yml
 #          filters:
 #            branches:
 #              only:
@@ -265,7 +265,7 @@ jobs:
 #                - develop
 #      - compare-screenshots:
 #          requires:
-#            - dependencies
+#            - Dependencies.yml
 #          filters:
 #            branches:
 #              ignore:
