@@ -28,5 +28,5 @@ jobs:
         with:
           name: base/${{ github.head_ref }}
           path: |
-            **/build/outputs/roborazzi
+            **/build/outputs/roborazzi/
           retention-days: 30
