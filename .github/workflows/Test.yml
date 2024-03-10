@@ -111,8 +111,8 @@ jobs:
         continue-on-error: true
         run: |
           exist_screenshot_diff="false"
-          ls ./app/build/outputs/roborazzi/*_compare.png >/dev/null 2>&1
-          if [ $? -e 0 ]; then
+          ls ./app/build/outputs/roborazzi/*_compare.png
+          if [ $? -ne 0 ]; then
             exist_screenshot_diff="true"
           fi
           echo "EXIST_SCREENSHOT_DIFF=${exist_screenshot_diff}" >> $GITHUB_ENV
