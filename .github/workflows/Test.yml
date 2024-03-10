@@ -121,8 +121,10 @@ jobs:
           name: pr directory
           path: pr/${{ github.event.number }}/
 
-      - name: Save pr number
-        run: echo "PR_NUMBER=${{ github.event.number }}" >> $GITHUB_ENV
+      - name: Save pr number and branch name
+        run: |
+          echo "PR_NUMBER=${{ github.event.number }}" >> $GITHUB_ENV
+          echo "BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV
 
       - name: Checkout main branch
         uses: actions/checkout@v4
@@ -130,8 +132,6 @@ jobs:
           ref: main
 
       - name: Checkout companion branch
-        env:
-          BRANCH_NAME: companion_${{ github.event.workflow_run.head_branch }}
         run: |
           git branch -D ${{ env.BRANCH_NAME }} || true
           git checkout --orphan ${{ env.BRANCH_NAME }}
@@ -144,8 +144,6 @@ jobs:
             
       - name: Push screenshots to companion branch
         id: push-screenshot-diff
-        env:
-          BRANCH_NAME: companion_${{ github.event.workflow_run.head_branch }}
         run: |
           files_to_add=$(find . -type f -name "*_compare.png")
           
@@ -162,8 +160,6 @@ jobs:
 
       - name: Create comments
         id: create-comments
-        env:
-          BRANCH_NAME: companion_${{ github.event.workflow_run.head_branch }}
         run: |
           files=$(find . -type f -name "*_compare.png" | grep "roborazzi/" | grep -E "^[a-zA-Z0-9_./-]+$")
           delimiter="$(openssl rand -hex 8)"
@@ -191,8 +187,6 @@ jobs:
 
       - name: Add or update comment on PR
         uses: peter-evans/create-or-update-comment@v4
-        env:
-          PR_NUMBER: ${{ env.PR_NUMBER }}
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ env.PR_NUMBER }}
