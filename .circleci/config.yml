@@ -250,6 +250,22 @@ workflows:
           context: slack-secrets
           requires:
             - dependencies
+      - save-screenshots:
+          requires:
+            - dependencies
+          filters:
+            branches:
+              only:
+                - main
+                - develop
+      - compare-screenshots:
+          requires:
+            - dependencies
+          filters:
+            branches:
+              ignore:
+                - main
+                - develop
 
 # ■ memo ■
 # check command： circleci config validate
