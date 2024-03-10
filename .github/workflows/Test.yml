@@ -108,11 +108,13 @@ jobs:
         run: ./gradlew compareRoborazziProdDebug --stacktrace
 
       - name: Check screenshot diff
-        continue-on-error: true
         run: |
+          # To avoid "No such file or directory"
+          mkdir -p ./app/build/outputs/roborazzi
+          
+          file_size=$(find ./app/build/outputs/roborazzi  -type f |  grep -v -e '.*_compare.png' | wc -l | echo -e 0)
           exist_screenshot_diff="false"
-          ls ./app/build/outputs/roborazzi/*_compare.png
-          if [ $? -ne 0 ]; then
+          if [ $file_size -ne 0 ]; then
             exist_screenshot_diff="true"
           fi
           echo "EXIST_SCREENSHOT_DIFF=${exist_screenshot_diff}" >> $GITHUB_ENV
