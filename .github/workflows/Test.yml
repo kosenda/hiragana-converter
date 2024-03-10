@@ -142,11 +142,10 @@ jobs:
           git rm -rf .
 
       - name: Download screenshots from PR number directory
-        uses: dawidd6/action-download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: pr directory
-          workflow: Test.yml
-
+            
       - name: Push screenshots to companion branch
         id: push-screenshot-diff
         run: |
