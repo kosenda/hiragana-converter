@@ -249,3 +249,8 @@ jobs:
               # git push origin --delete "$branch"
             fi
           done
+
+      - name: Checkout pr branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
