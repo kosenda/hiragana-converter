@@ -177,7 +177,6 @@ jobs:
           git push origin HEAD:${{ env.COMPANION_BRANCH_NAME }} -f
 
       - name: Create comments
-        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
         id: create-comments
         run: |
           if [ env.EXIST_SCREENSHOT_DIFF == 'true' ]; then
