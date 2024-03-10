@@ -11,7 +11,6 @@ import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.qualifiers.ActivityContext
 import ksnd.hiraganaconverter.core.data.inappreview.InAppReviewManagerImpl
 import ksnd.hiraganaconverter.core.domain.inappreview.InAppReviewManager
-import javax.inject.Singleton
 
 @Module
 @InstallIn(ActivityComponent::class)

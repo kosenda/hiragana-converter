@@ -4,9 +4,18 @@ import ksnd.hiraganaconverter.core.model.ui.ConvertErrorType
 import timber.log.Timber
 
 sealed class ConvertTextUseCaseError : RuntimeException()
-data object IsReachedConvertMaxLimitException : ConvertTextUseCaseError()
-data object ConversionFailedException : ConvertTextUseCaseError()
-data object InterceptorError : ConvertTextUseCaseError()
+
+data object IsReachedConvertMaxLimitException : ConvertTextUseCaseError() {
+    private fun readResolve(): Any = IsReachedConvertMaxLimitException
+}
+
+data object ConversionFailedException : ConvertTextUseCaseError() {
+    private fun readResolve(): Any = ConversionFailedException
+}
+
+data object InterceptorError : ConvertTextUseCaseError() {
+    private fun readResolve(): Any = InterceptorError
+}
 
 fun Throwable.toConvertErrorType(): ConvertErrorType = when (this) {
     is IsReachedConvertMaxLimitException -> ConvertErrorType.REACHED_CONVERT_MAX_LIMIT
@@ -22,6 +31,7 @@ fun Throwable.toConvertErrorType(): ConvertErrorType = when (this) {
             ConvertErrorType.CONVERSION_FAILED
         }
     }
+
     else -> {
         Timber.e("Not defined ConvertTextUseCaseException! throwable: $this")
         ConvertErrorType.CONVERSION_FAILED

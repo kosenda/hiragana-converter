@@ -1,7 +1,6 @@
 package ksnd.hiraganaconverter.core.ui.parts.button
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
@@ -21,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.extension.noRippleClickable
-import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.rememberButtonScaleState
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
@@ -66,10 +65,10 @@ fun TransitionButton(
     }
 }
 
-@UiModeAndLocalePreview
+@UiModePreview
 @Composable
-fun TransitionButton() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+fun PreviewTransitionButton() {
+    HiraganaConverterTheme {
         Surface(color = MaterialTheme.colorScheme.surface) {
             TransitionButton(text = stringResource(R.string.oss_licenses), onClick = {})
         }

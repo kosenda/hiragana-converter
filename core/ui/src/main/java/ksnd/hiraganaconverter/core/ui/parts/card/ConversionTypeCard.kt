@@ -1,7 +1,6 @@
 package ksnd.hiraganaconverter.core.ui.parts.card
 
 import android.view.HapticFeedbackConstants
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -22,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.extension.noRippleClickable
-import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.rememberButtonScaleState
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
@@ -78,10 +77,10 @@ private fun ConversionTypeSpinnerCardContent(selectedTextType: HiraKanaType) {
     }
 }
 
-@UiModeAndLocalePreview
+@UiModePreview
 @Composable
-private fun PreviewConversionTypeCard() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+fun PreviewConversionTypeCard() {
+    HiraganaConverterTheme {
         ConversionTypeCard(onSelectedChange = {})
     }
 }

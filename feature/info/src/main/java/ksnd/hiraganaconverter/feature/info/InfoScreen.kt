@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -63,7 +62,7 @@ import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.parts.button.TransitionButton
 import ksnd.hiraganaconverter.core.ui.parts.card.TitleCard
 import ksnd.hiraganaconverter.core.ui.parts.dialog.MovesToSiteDialog
-import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.core.ui.theme.urlColor
 
@@ -354,10 +353,10 @@ private fun UrlText(url: String, onURLClick: () -> Unit) {
     )
 }
 
-@UiModeAndLocalePreview
+@UiModePreview
 @Composable
-private fun PreviewInfoScreenContent() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+fun PreviewInfoScreenContent() {
+    HiraganaConverterTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             InfoScreenContent(
                 versionName = "1.0.0",

@@ -19,13 +19,8 @@ android {
             dimension = "env"
         }
     }
-    sourceSets {
-        getByName("prod") {
-            java.srcDirs("src/prod/java")
-        }
-        getByName("mock") {
-            java.srcDirs("src/mock/java")
-        }
+    ksp {
+        arg("room.schemaLocation", "$projectDir/schemas")
     }
 }
 
@@ -33,16 +28,14 @@ dependencies {
     implementation(project(":core:resource"))
     implementation(project(":core:model"))
     implementation(project(":core:domain"))
+    implementation(project(":core:network"))
     testImplementation(project(":core:testing"))
     implementation(libs.androidx.dataStore.preferences)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.timber)
     implementation(libs.retrofit)
-    implementation(libs.retrofit.kotlinx.serialization.converter)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.datetime)
-    implementation(libs.okhttp3)
-    implementation(libs.okhttp3.logging.interceptor)
 
     // App Update
     implementation(libs.app.update)

@@ -5,13 +5,9 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import ksnd.hiraganaconverter.core.domain.interceptor.ErrorInterceptor
+import ksnd.hiraganaconverter.core.model.ResponseData
+import ksnd.hiraganaconverter.core.network.ConvertApiClient
 import ksnd.hiraganaconverter.core.testing.MainDispatcherRule
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.Protocol
-import okhttp3.Request
-import okhttp3.Response
-import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Rule
 import org.junit.Test
 
@@ -19,52 +15,48 @@ class ConvertRepositoryImplTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    private val errorInterceptor = mockk<ErrorInterceptor>()
+    private val convertApiClient = mockk<ConvertApiClient>()
     private val repository = ConvertRepositoryImpl(
-        errorInterceptor = errorInterceptor,
+        convertApiClient = convertApiClient,
     )
 
     @Test
-    fun requestConvert_success_isSuccessfulIsTrue() = runTest {
+    fun requestConvert_notError_returnResponse() = runTest {
         coEvery {
-            errorInterceptor.intercept(any())
-        } returns Response.Builder()
-            .request(Request.Builder().url("https://labs.goo.ne.jp/api/hiragana/").build())
-            .code(200)
-            .protocol(Protocol.HTTP_2)
-            .message("OK")
-            .body(successResponse)
-            .build()
-        val response = repository.requestConvert(SENTENCE, TYPE, APP_ID)
+            convertApiClient.requestConvert(
+                appId = APP_ID,
+                sentence = SENTENCE,
+                type = TYPE
+            )
+        } returns retrofit2.Response.success(RESPONSE_DATA)
+
+        val response = repository.requestConvert(sentence = SENTENCE, type = TYPE, appId = APP_ID)
+
         assertThat(response).isInstanceOf(retrofit2.Response::class.java)
         assertThat(response?.isSuccessful).isTrue()
-        coVerify(exactly = 1) { errorInterceptor.intercept(any()) }
+        coVerify(exactly = 1) { convertApiClient.requestConvert(appId = APP_ID, sentence = SENTENCE, type = TYPE) }
     }
 
     @Test
-    fun requestConvert_error_isSuccessfulIsFalse() = runTest {
+    fun requestConvert_error_returnNull() = runTest {
         coEvery {
-            errorInterceptor.intercept(any())
-        } returns Response.Builder()
-            .request(Request.Builder().url("https://labs.goo.ne.jp/api/hiragana/").build())
-            .code(413)
-            .protocol(Protocol.HTTP_2)
-            .message("NG")
-            .body(error413response)
-            .build()
-        val response = repository.requestConvert(SENTENCE, TYPE, APP_ID)
-        assertThat(response).isInstanceOf(retrofit2.Response::class.java)
-        assertThat(response?.isSuccessful).isFalse()
-        coVerify(exactly = 1) { errorInterceptor.intercept(any()) }
+            convertApiClient.requestConvert(
+                appId = APP_ID,
+                sentence = SENTENCE,
+                type = TYPE
+            )
+        } throws Exception()
+
+        val response = repository.requestConvert(sentence = SENTENCE, type = TYPE, appId = APP_ID)
+
+        assertThat(response).isNull()
+        coVerify(exactly = 1) { convertApiClient.requestConvert(appId = APP_ID, sentence = SENTENCE, type = TYPE) }
     }
 
     companion object {
         private const val SENTENCE = "sentence"
         private const val TYPE = "type"
         private const val APP_ID = "appId"
-        private val successResponse = """{"converted": "かんじ", "output_type": "hiragana", "request_id": "test"}"""
-            .toResponseBody("application/json".toMediaType())
-        private val error413response = """{"error": {"code": 413, "message": "TOO_MANY_CHARACTER"}"""
-            .toResponseBody("application/json".toMediaType())
+        private val RESPONSE_DATA = ResponseData("かんじ", "hiragana", "test")
     }
 }

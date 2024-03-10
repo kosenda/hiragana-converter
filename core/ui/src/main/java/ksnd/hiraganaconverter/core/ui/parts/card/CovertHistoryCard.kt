@@ -1,7 +1,6 @@
 package ksnd.hiraganaconverter.core.ui.parts.card
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,7 +24,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.core.ui.extension.noRippleClickable
-import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.rememberButtonScaleState
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
@@ -99,10 +98,10 @@ private fun ConvertHistoryCardTimeText(timeText: String) {
     }
 }
 
-@UiModeAndLocalePreview
+@UiModePreview
 @Composable
-private fun PreviewConvertHistoryCard() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+fun PreviewConvertHistoryCard() {
+    HiraganaConverterTheme {
         ConvertHistoryCard(
             beforeText = "変換前文章",
             time = "2022/12/29 18:19",

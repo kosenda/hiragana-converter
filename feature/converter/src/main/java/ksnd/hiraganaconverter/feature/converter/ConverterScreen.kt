@@ -3,7 +3,6 @@ package ksnd.hiraganaconverter.feature.converter
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -72,7 +71,7 @@ import ksnd.hiraganaconverter.core.ui.parts.card.ConversionTypeCard
 import ksnd.hiraganaconverter.core.ui.parts.card.ErrorCard
 import ksnd.hiraganaconverter.core.ui.parts.card.ErrorCardAnimationDuration
 import ksnd.hiraganaconverter.core.ui.parts.card.OfflineCard
-import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import my.nanihadesuka.compose.ColumnScrollbar
 import my.nanihadesuka.compose.ScrollbarSelectionMode
@@ -349,10 +348,10 @@ private fun BeforeOrAfterTextField(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@UiModeAndLocalePreview
+@UiModePreview
 @Composable
-private fun PreviewConverterScreenContent() {
-    HiraganaConverterTheme(isDarkTheme = isSystemInDarkTheme()) {
+fun PreviewConverterScreenContent() {
+    HiraganaConverterTheme {
         CompositionLocalProvider(LocalIsConnectNetwork provides false) {
             ConverterScreenContent(
                 uiState = ConvertUiState(

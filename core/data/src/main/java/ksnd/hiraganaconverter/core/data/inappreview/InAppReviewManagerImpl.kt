@@ -7,7 +7,6 @@ import com.google.android.play.core.ktx.requestReview
 import com.google.android.play.core.review.ReviewManager
 import dagger.hilt.android.qualifiers.ActivityContext
 import ksnd.hiraganaconverter.core.domain.inappreview.InAppReviewManager
-import okhttp3.internal.wait
 import javax.inject.Inject
 
 class InAppReviewManagerImpl @Inject constructor(

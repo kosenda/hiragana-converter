@@ -30,6 +30,7 @@ class ConvertTextUseCaseTest {
     private val dataStoreRepository = mockk<DataStoreRepository>(relaxUnitFun = true)
     private val convertHistoryRepository = mockk<ConvertHistoryRepository>(relaxUnitFun = true)
     private val reviewInfoRepository = mockk<ReviewInfoRepository>(relaxUnitFun = true)
+
     private val useCase = ConvertTextUseCase(
         convertRepository = convertRepository,
         dataStoreRepository = dataStoreRepository,
@@ -43,18 +44,22 @@ class ConvertTextUseCaseTest {
     fun invoke_first_callCountUpTotalConvertCount() = runTest {
         coEvery { reviewInfoRepository.countUpTotalConvertCount() } returns TOTAL_CONVERT_COUNT
         coEvery { dataStoreRepository.checkIsExceedingMaxLimit() } returns false
-        coEvery { convertRepository.requestConvert(any(), any(), any()) } returns successResponse
+        coEvery { convertRepository.requestConvert(any(), any(), any()) } returns SUCCESS_RESPONSE
+
         useCase(inputText = INPUT_TXT, selectedTextType = SELECTED_TYPE)
-        coVerify { reviewInfoRepository.countUpTotalConvertCount() }
+
+        coVerify(exactly = 1) { reviewInfoRepository.countUpTotalConvertCount() }
     }
 
     @Test
     fun invoke_overConvertForReachedConvert_isReachedConvertMaxLimitException() = runTest {
         coEvery { reviewInfoRepository.countUpTotalConvertCount() } returns TOTAL_CONVERT_COUNT
         coEvery { dataStoreRepository.checkIsExceedingMaxLimit() } returns true
+
         assertFailsWith<IsReachedConvertMaxLimitException> {
             useCase(inputText = INPUT_TXT, selectedTextType = SELECTED_TYPE)
         }
+
         coVerify(exactly = 1) { dataStoreRepository.checkIsExceedingMaxLimit() }
     }
 
@@ -63,9 +68,11 @@ class ConvertTextUseCaseTest {
         coEvery { reviewInfoRepository.countUpTotalConvertCount() } returns TOTAL_CONVERT_COUNT
         coEvery { dataStoreRepository.checkIsExceedingMaxLimit() } returns false
         coEvery { convertRepository.requestConvert(any(), any(), any()) } returns null
+
         assertFailsWith<ConversionFailedException> {
             useCase(inputText = INPUT_TXT, selectedTextType = SELECTED_TYPE)
         }
+
         coVerify(exactly = 1) { convertRepository.requestConvert(any(), any(), any()) }
     }
 
@@ -73,10 +80,12 @@ class ConvertTextUseCaseTest {
     fun invoke_error413_conversionFailedException() = runTest {
         coEvery { reviewInfoRepository.countUpTotalConvertCount() } returns TOTAL_CONVERT_COUNT
         coEvery { dataStoreRepository.checkIsExceedingMaxLimit() } returns false
-        coEvery { convertRepository.requestConvert(any(), any(), any()) } returns errorResponse
+        coEvery { convertRepository.requestConvert(any(), any(), any()) } returns ERROR_RESPONSE
+
         assertFailsWith<InterceptorError> {
             useCase(inputText = INPUT_TXT, selectedTextType = SELECTED_TYPE)
         }
+
         coVerify(exactly = 1) { convertRepository.requestConvert(any(), any(), any()) }
     }
 
@@ -84,17 +93,20 @@ class ConvertTextUseCaseTest {
     fun invoke_relaxed_outputConverted() = runTest {
         coEvery { reviewInfoRepository.countUpTotalConvertCount() } returns TOTAL_CONVERT_COUNT
         coEvery { dataStoreRepository.checkIsExceedingMaxLimit() } returns false
-        coEvery { convertRepository.requestConvert(any(), any(), any()) } returns successResponse
-        assertThat(useCase(inputText = INPUT_TXT, selectedTextType = SELECTED_TYPE)).isNotEmpty()
+        coEvery { convertRepository.requestConvert(any(), any(), any()) } returns SUCCESS_RESPONSE
+
+        val result = useCase(inputText = INPUT_TXT, selectedTextType = SELECTED_TYPE)
+
+        assertThat(result).isNotEmpty()
         coVerify(exactly = 1) { convertRepository.requestConvert(any(), any(), any()) }
     }
 
     companion object {
         private const val INPUT_TXT = "漢字"
         private val SELECTED_TYPE = HiraKanaType.HIRAGANA
-        private const val error413Json = """{"error": {"code": 413, "message": "TOO_MANY_CHARACTER"}"""
-        private val errorResponse: Response<ResponseData> = Response.error(413, error413Json.toResponseBody("application/json".toMediaType()))
-        private val successResponse: Response<ResponseData> = Response.success(
+        private const val ERROR_413_JSON = """{"error": {"code": 413, "message": "TOO_MANY_CHARACTER"}"""
+        private val ERROR_RESPONSE: Response<ResponseData> = Response.error(413, ERROR_413_JSON.toResponseBody("application/json".toMediaType()))
+        private val SUCCESS_RESPONSE: Response<ResponseData> = Response.success(
             ResponseData(converted = "かんじ", outputType = "hiragana", requestId = "labs.goo.ne.jp\temp\t0"),
         )
         private const val TOTAL_CONVERT_COUNT = 10

@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.GooCreditImage
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
-import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -77,9 +77,9 @@ fun TopBar(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@UiModeAndLocalePreview
+@UiModePreview
 @Composable
-private fun PreviewTopBar() {
+fun PreviewTopBar() {
     TopBar(
         scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState()),
         transitionHistory = {},

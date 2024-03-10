@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.core.resource.R
-import ksnd.hiraganaconverter.core.ui.preview.UiModeAndLocalePreview
+import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,10 +61,10 @@ fun BackTopBar(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@UiModeAndLocalePreview
+@UiModePreview
 @Composable
-private fun PreviewBackTopBar_Light() {
-    HiraganaConverterTheme(isDarkTheme = false) {
+fun PreviewBackTopBar() {
+    HiraganaConverterTheme {
         BackTopBar(TopAppBarDefaults.pinnedScrollBehavior()) {}
     }
 }

@@ -2,7 +2,7 @@
 
 # Hiragana Converter （Japanese: ひらがな変換）
 
-<img src="https://github.com/kosenda/hiragana-converter/assets/60963155/206e8a60-988b-4815-a0a7-4a5b459b10b4" width="200">
+<img src="https://github.com/kosenda/hiragana-converter/assets/60963155/206e8a60-988b-4815-a0a7-4a5b459b10b4" width="200" alt="app icon">
 
 ## Summary
 This is an Android app that uses gooラボ's API ([Japanese Hiragana Conversion API](https://labs.goo.ne.jp/api/en/hiragana-translation/)) to convert Japanese strings, including kanji and alphabets, into hiragana/katakana.
@@ -24,7 +24,8 @@ https://labs.goo.ne.jp/apiusage/
 2. Add the following to the bottom of `local.properties`  
 `apiKey=<API key obtained in 1.>`  （Example： apiKey=011222333333abcd）
 
-⚠️　Mock flavor is provided, so if you want to simulate API communication using Mock, you can test it by setting a meaningless value (such as "AAA") in apiKey.
+> [!WARNING]
+> Mock flavor is provided, so if you want to simulate API communication using Mock, you can test it by setting a meaningless value (such as "AAA") in apiKey.
 
 ## Typical libraries used  
 |Name|Brief description|
@@ -48,8 +49,10 @@ https://labs.goo.ne.jp/apiusage/
 |Renovate|Automated project dependency updates|
 |Retrofit2|Library for API communications|
 |Robolectric|Unit Test Framework|
+|Roborazzi|Make JVM Android Integration Test Visible|
 |Room|Database|
 |Secrets gradle plugin|Reading API keys from `local.properties`|
+|Showkase|auto-generates a browser for Jetpack Compose UI|
 |Timber|Log output library|
 |Truth|Assertions used in testing|
 |Turbine|testing library for kotlinx.coroutines Flow|
@@ -74,76 +77,3 @@ https://labs.goo.ne.jp/apiusage/
 |Info screen(Light)|Info screen(Dark)|
 |:-:|:-:|
 |<img width="280" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/708f10fb-d93c-4d28-91d1-7b5a25c543ec">|<img width="280" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/718a2722-3ab9-48f7-95be-65efe6a9112c">|
-
-## Module Configurations
-
-⚠️ Excluding `:core:analytics`
-
-```mermaid
-flowchart LR
-
-  classDef appModule fill:#AEFFDA,color:#000
-  classDef featureModule fill:#FFDAAE,color:#000
-  classDef coreModule fill:#DAAEFF,color:#000
-
-  subgraph :app
-    app([:app]):::appModule
-  end
-
-  subgraph :feature 
-    app --> converter([:converter]):::featureModule
-    app --> history([:history]):::featureModule
-    app --> info([:info]):::featureModule
-    app --> setting([:setting]):::featureModule
-
-    linkStyle 0 stroke:#FF2266,stroke-width:2px
-    linkStyle 1 stroke:#FF2266,stroke-width:2px
-    linkStyle 2 stroke:#FF2266,stroke-width:2px
-    linkStyle 3 stroke:#FF2266,stroke-width:2px
-  end
-  
-  subgraph  :core
-    converter --> model([:model]):::coreModule 
-    converter --> domain([:domain]):::coreModule
-    converter --> resource([:resource]):::coreModule
-    converter --> ui([:ui]):::coreModule
-    converter --> testing([:testing]):::coreModule
-    linkStyle 4 stroke:#FF00FF,stroke-width:2px
-    linkStyle 5 stroke:#FF00FF,stroke-width:2px
-    linkStyle 6 stroke:#FF00FF,stroke-width:2px
-    linkStyle 7 stroke:#FF00FF,stroke-width:2px
-    linkStyle 8 stroke:#FF00FF,stroke-width:2px
-    
-    history --> model
-    history --> domain
-    history --> resource
-    history --> ui
-    history --> testing
-    linkStyle 9 stroke:#2266FF,stroke-width:2px
-    linkStyle 10 stroke:#2266FF,stroke-width:2px
-    linkStyle 11 stroke:#2266FF,stroke-width:2px
-    linkStyle 12 stroke:#2266FF,stroke-width:2px
-    linkStyle 13 stroke:#2266FF,stroke-width:2px
-  
-    info --> ui
-    info --> resource
-    info --> model
-    linkStyle 14 stroke:#00FFFF,stroke-width:2px
-    linkStyle 15 stroke:#00FFFF,stroke-width:2px
-    linkStyle 16 stroke:#00FFFF,stroke-width:2px
-    
-    setting --> ui
-    setting --> resource
-    setting --> model
-    setting --> domain
-    setting --> testing
-    linkStyle 17 stroke:#FF8811,stroke-width:2px
-    linkStyle 18 stroke:#FF8811,stroke-width:2px
-    linkStyle 19 stroke:#FF8811,stroke-width:2px
-    linkStyle 20 stroke:#FF8811,stroke-width:2px
-    linkStyle 21 stroke:#FF8811,stroke-width:2px
-  
-    data([:core:data]):::coreModule
-
-  end
-```

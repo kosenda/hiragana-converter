@@ -73,7 +73,7 @@ object Analytics {
         )
     }
 
-    class RequestReview() : AnalyticsEvent() {
+    class RequestReview : AnalyticsEvent() {
         override val event = Event.REQUEST_REVIEW
     }
 }

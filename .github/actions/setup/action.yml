@@ -1,0 +1,26 @@
+name: Setup
+description: "Setup Java and Gradle environment."
+
+inputs:
+  api-key:
+    description: "API Key"
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Set local.properties
+      shell: bash
+      env:
+        API_KEY: ${{ inputs.api-key }}
+      run: echo "apiKey=${{env.API_KEY}}" >> ./local.properties
+        
+    - name: Setup JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 17
+        cache: gradle
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3

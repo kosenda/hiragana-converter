@@ -1,14 +1,14 @@
 [versions]
-accompanist = "0.32.0"
+accompanist = "0.34.0"
 activity = "1.8.2"
 androidGradlePlugin = "8.1.4"
 androidxAppCompat = "1.7.0-alpha03"
-androidxCompose = "1.6.0-beta03"
-androidxComposeMaterial3 = "1.2.0-beta01"
+androidxCompose = "1.6.0-rc01"
+androidxComposeMaterial3 = "1.2.0-beta02"
 androidxCoreSplashscreen = "1.0.1"
 androidxDataStore = "1.0.0"
 androidxHilt = "1.1.0"
-androidxLifecycle = "2.6.2"
+androidxLifecycle = "2.7.0"
 androidxNavigation = "2.7.6"
 androidxTestCore = "1.5.0"
 appUpdate = "2.1.0"
@@ -17,7 +17,7 @@ coroutines = "1.7.3"
 coroutineTest = "1.7.3"
 dokka = "1.9.10"
 gmsPlugin = "4.4.0"
-firebaseBom = "32.7.0"
+firebaseBom = "32.7.2"
 firebaseCrashlyticsPlugin = "2.9.9"
 firebasePerfPlugin = "1.4.2"
 hilt = "2.50"
@@ -26,9 +26,9 @@ kotlin = "1.9.21"
 kotlinxSerializationJson = "1.6.2"
 kotlinxDatetime = "0.5.0"
 ksp = "1.9.21-1.0.16"
-ktlint = "1.1.0"
+ktlint = "1.1.1"
 lazyColumnScrollbar = "1.9.0"
-lottie = "6.2.0"
+lottie = "6.3.0"
 okhttp3 = "4.12.0"
 ossLicenses = "17.0.1"
 ossLicensesPlugin = "0.10.6"
@@ -39,10 +39,11 @@ robolectric = "4.11.1"
 room = "2.6.1"
 secrets = "2.0.1"
 timber = "5.0.1"
-truth = "1.2.0"
+truth = "1.4.2"
 turbine = "1.0.0"
-mockk = "1.13.8"
-roborazzi = "1.7.0"
+mockk = "1.13.9"
+roborazzi = "1.9.0"
+showkase = "1.0.2"
 
 # ** I'm using it, so no deletions allowed. **
 androidxComposeCompiler = "1.5.6"
@@ -150,6 +151,11 @@ kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-pl
 
 # LazyColumnScrollbar
 lazyColumnScrollbar = { group = "com.github.nanihadesuka", name = "LazyColumnScrollbar", version.ref = "lazyColumnScrollbar" }
+
+# Showkase
+showkase = { group = "com.airbnb.android", name = "showkase", version.ref = "showkase" }
+showkase-annotation = { group = "com.airbnb.android", name = "showkase-annotation", version.ref = "showkase" }
+showkase-processor = { group = "com.airbnb.android", name = "showkase-processor", version.ref = "showkase" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
