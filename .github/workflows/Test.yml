@@ -108,10 +108,9 @@ jobs:
         run: ./gradlew compareRoborazziProdDebug --stacktrace
 
       - name: Check screenshot diff
-        continue-on-error: true
         run: |
           exist_screenshot_diff="false"
-          ls ./app/build/outputs/roborazzi/.*_compare.png >/dev/null 2>&1
+          ls ./app/build/outputs/roborazzi/*_compare.png >/dev/null 2>&1
           if [ $? -e 0 ]; then
             exist_screenshot_diff="true"
           fi
@@ -196,7 +195,7 @@ jobs:
             done
             echo "${delimiter}" >> "$GITHUB_OUTPUT"
           else
-            echo "reports=No screenshot diff" >> "$GITHUB_OUTPUT"
+            echo "reports="Snapshot diff report" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Find Comment
