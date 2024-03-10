@@ -176,7 +176,7 @@ jobs:
           git commit -m "Add screenshot diff"
           git push origin HEAD:${{ env.COMPANION_BRANCH_NAME }} -f
 
-      - name: Create comments
+      - name: Create comments (Exist screenshot diff)
         if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
         id: create-comments
         run: |
@@ -196,6 +196,11 @@ jobs:
           done
           echo "${delimiter}" >> "$GITHUB_OUTPUT"
 
+      - name: Create comments (Not Exist screenshot diff)
+        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'false' }}
+        id: create-comments
+        run: echo "No screenshot diff" >> "$GITHUB_OUTPUT"
+
       - name: Find Comment
         uses: peter-evans/find-comment@v3
         id: fc
@@ -209,14 +214,7 @@ jobs:
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ env.PR_NUMBER }}
-          body: |
-            $(
-              if [ ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }} ];then
-                ${{ steps.create-comments.outputs.reports }}
-              else
-                echo "No screenshot diff"
-              fi
-            )
+          body: ${{ steps.create-comments.outputs.reports }}
           edit-mode: replace
 
       - name: Cleanup outdated companion branches
