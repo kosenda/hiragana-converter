@@ -94,6 +94,11 @@ jobs:
         with:
           api-key: ${{ secrets.API_KEY }}
 
+      - name: Download screenshots from base branch
+        uses: actions/download-artifact@v4
+        with:
+          name: base/${{ github.base_ref }}
+
       - name: compare screenshots
         run: ./gradlew compareRoborazziProdDebug --stacktrace
 
@@ -211,6 +216,7 @@ jobs:
             fi
           done
 
+      # TODO Mainブランチにマージ後削除
       - name: Checkout pr branch
         uses: actions/checkout@v4
         with:
