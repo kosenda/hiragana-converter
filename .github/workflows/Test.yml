@@ -180,6 +180,7 @@ jobs:
           git push origin HEAD:${{ env.COMPANION_BRANCH_NAME }} -f
 
       - name: Create comments
+        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
         id: create-comments
         run: |
           files=$(find . -type f -name ".*_compare.png" | grep "roborazzi/" | grep -E "^[a-zA-Z0-9_./-]+$")
@@ -198,6 +199,11 @@ jobs:
           done
           echo "${delimiter}" >> "$GITHUB_OUTPUT"
 
+      - name: Create comments (not exist screenshot diff)
+        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'false' }}
+        id: create-comments-not-exist-screenshot-diff
+        run: echo "reports=Snapshot diff report" >> $GITHUB_ENV
+
       - name: Find Comment
         uses: peter-evans/find-comment@v3
         id: fc
@@ -207,11 +213,21 @@ jobs:
           body-includes: Snapshot diff report
 
       - name: Add or update comment on PR
+        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
         uses: peter-evans/create-or-update-comment@v4
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ env.PR_NUMBER }}
           body: ${{ steps.create-comments.outputs.reports }}
+          edit-mode: replace
+
+      - name: Add or update comment on PR (not exist screenshot diff)
+        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'false' }}
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ env.PR_NUMBER }}
+          body: ${{ steps.create-comments-not-exist-screenshot-diff.outputs.reports }}
           edit-mode: replace
 
       - name: Cleanup outdated companion branches
