@@ -108,11 +108,14 @@ jobs:
         run: ./gradlew compareRoborazziProdDebug --stacktrace
 
       - name: Check screenshot diff
-        continue-on-error: true
         run: |
+          # To avoid "No such file or directory"
+          mkdir -p ./app/build/outputs/roborazzi
+          
+          file_size=$(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/[^0-9]//g')
           exist_screenshot_diff="false"
-          ls ./app/build/outputs/roborazzi/.*_compare.png >/dev/null 2>&1
-          if [ $? -e 0 ]; then
+          if [ $file_size -ne 0 ]; then
+            echo "file_size=$file_size"
             exist_screenshot_diff="true"
           fi
           echo "EXIST_SCREENSHOT_DIFF=${exist_screenshot_diff}" >> $GITHUB_ENV
@@ -177,27 +180,29 @@ jobs:
           git push origin HEAD:${{ env.COMPANION_BRANCH_NAME }} -f
 
       - name: Create comments
+        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
         id: create-comments
         run: |
-          if [ env.EXIST_SCREENSHOT_DIFF == 'true' ]; then
-            files=$(find . -type f -name "*_compare.png" | grep "roborazzi/" | grep -E "^[a-zA-Z0-9_./-]+$")
-            delimiter="$(openssl rand -hex 8)"
-            {
-              echo "reports<<${delimiter}"
-          
-              echo "Snapshot diff report"
-              echo "| File name | Image |"
-              echo "|-------|-------|"
-            } >> "$GITHUB_OUTPUT"
-          
-            for file in $files; do
-              fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
-              echo "| [$fileName](https://github.com/${{ github.repository }}/blob/${{ env.COMPANION_BRANCH_NAME }}/$file) | ![](https://github.com/${{ github.repository }}/blob/${{ env.COMPANION_BRANCH_NAME }}/$file?raw=true) |" >> "$GITHUB_OUTPUT"
-            done
-            echo "${delimiter}" >> "$GITHUB_OUTPUT"
-          else
-            echo "reports=No screenshot diff" >> "$GITHUB_OUTPUT"
-          fi
+          files=$(find . -type f -name ".*_compare.png" | grep "roborazzi/" | grep -E "^[a-zA-Z0-9_./-]+$")
+          delimiter="$(openssl rand -hex 8)"
+          {
+            echo "reports<<${delimiter}"
+        
+            echo "Snapshot diff report"
+            echo "| File name | Image |"
+            echo "|-------|-------|"
+          } >> "$GITHUB_OUTPUT"
+        
+          for file in $files; do
+            fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
+            echo "| [$fileName](https://github.com/${{ github.repository }}/blob/${{ env.COMPANION_BRANCH_NAME }}/$file) | ![](https://github.com/${{ github.repository }}/blob/${{ env.COMPANION_BRANCH_NAME }}/$file?raw=true) |" >> "$GITHUB_OUTPUT"
+          done
+          echo "${delimiter}" >> "$GITHUB_OUTPUT"
+
+      - name: Create comments (not exist screenshot diff)
+        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'false' }}
+        id: create-comments-not-exist-screenshot-diff
+        run: echo "reports=Snapshot diff report" >> "$GITHUB_OUTPUT"
 
       - name: Find Comment
         uses: peter-evans/find-comment@v3
@@ -208,11 +213,21 @@ jobs:
           body-includes: Snapshot diff report
 
       - name: Add or update comment on PR
+        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
         uses: peter-evans/create-or-update-comment@v4
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ env.PR_NUMBER }}
           body: ${{ steps.create-comments.outputs.reports }}
+          edit-mode: replace
+
+      - name: Add or update comment on PR (not exist screenshot diff)
+        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'false' }}
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ env.PR_NUMBER }}
+          body: ${{ steps.create-comments-not-exist-screenshot-diff.outputs.reports }}
           edit-mode: replace
 
       - name: Cleanup outdated companion branches
