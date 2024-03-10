@@ -83,7 +83,7 @@ jobs:
         run: ./gradlew compileMockDebugSource
 
   compare-screnshots:
-    if: github.event.pull_request.merged == false
+    if: github.event.pull_request.merged == false && ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
@@ -104,15 +104,23 @@ jobs:
           name: ${{ env.DOWNLOAD_NAME }}
           workflow: SaveScreenshot.yml
 
-      - name: compare screenshots
+      - name: Compare screenshots
         run: ./gradlew compareRoborazziProdDebug --stacktrace
 
+      - name: Check screenshot diff
+        run: |
+          exist_screenshot_diff="false"
+          if [ -e "./app/build/outputs/roborazzi" ]; then
+            exist_screenshot_diff="true"
+          fi
+          echo "EXIST_SCREENSHOT_DIFF=${exist_screenshot_diff}" >> $GITHUB_ENV
+
       - name: Make PR number directory for saving screenshots
-        if: ${{ github.event_name == 'pull_request' }}
+        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
         run: mkdir -p ./pr/${{ github.event.number }}
 
       - name: Move screenshots to PR number directory
-        if: ${{ github.event_name == 'pull_request' }}
+        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
         run: |
           # delete except *_compare.png
           find ./app/build/outputs/roborazzi  -type f |  grep -v -e '.*_compare.png' | xargs rm -rf
@@ -120,33 +128,39 @@ jobs:
           ls ./pr/${{ github.event.number }}
 
       - name: Save screenshots
+        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: pr directory
           path: pr/${{ github.event.number }}/
 
       - name: Save pr number and branch name
+        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
         run: |
           echo "PR_NUMBER=${{ github.event.number }}" >> $GITHUB_ENV
           echo "COMPANION_BRANCH_NAME=companion_${{ github.head_ref }}" >> $GITHUB_ENV
 
       - name: Checkout main branch
+        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
         uses: actions/checkout@v4
         with:
           ref: main
 
       - name: Checkout companion branch
+        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
         run: |
           git branch -D ${{ env.COMPANION_BRANCH_NAME }} || true
           git checkout --orphan ${{ env.COMPANION_BRANCH_NAME }}
           git rm -rf .
 
       - name: Download screenshots from PR number directory
+        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
         uses: actions/download-artifact@v4
         with:
           name: pr directory
             
       - name: Push screenshots to companion branch
+        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
         id: push-screenshot-diff
         run: |
           files_to_add=$(find . -type f -name "*_compare.png")
@@ -163,6 +177,7 @@ jobs:
           git push origin HEAD:${{ env.COMPANION_BRANCH_NAME }} -f
 
       - name: Create comments
+        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
         id: create-comments
         run: |
           files=$(find . -type f -name "*_compare.png" | grep "roborazzi/" | grep -E "^[a-zA-Z0-9_./-]+$")
@@ -182,6 +197,7 @@ jobs:
           echo "${delimiter}" >> "$GITHUB_OUTPUT"
 
       - name: Find Comment
+        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
         uses: peter-evans/find-comment@v3
         id: fc
         with:
@@ -190,6 +206,7 @@ jobs:
           body-includes: Snapshot diff report
 
       - name: Add or update comment on PR
+        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
         uses: peter-evans/create-or-update-comment@v4
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
