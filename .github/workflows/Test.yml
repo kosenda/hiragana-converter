@@ -179,7 +179,7 @@ jobs:
       - name: Create comments
         id: create-comments
         run: |
-          if [ env.EXIST_SCREENSHOT_DIFF == 'true' ]; then
+          if [ env.EXIST_SCREENSHOT_DIFF = 'true' ]; then
             files=$(find . -type f -name "*_compare.png" | grep "roborazzi/" | grep -E "^[a-zA-Z0-9_./-]+$")
             delimiter="$(openssl rand -hex 8)"
             {
