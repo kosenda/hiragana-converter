@@ -158,7 +158,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: pr directory
-            
+
       - name: Push screenshots to companion branch
         if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
         id: push-screenshot-diff
@@ -176,30 +176,29 @@ jobs:
           git commit -m "Add screenshot diff"
           git push origin HEAD:${{ env.COMPANION_BRANCH_NAME }} -f
 
-      - name: Create comments (Exist screenshot diff)
+      - name: Create comments
         if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
         id: create-comments
         run: |
-          files=$(find . -type f -name "*_compare.png" | grep "roborazzi/" | grep -E "^[a-zA-Z0-9_./-]+$")
-          delimiter="$(openssl rand -hex 8)"
-          {
-            echo "reports<<${delimiter}"
+          if [ env.EXIST_SCREENSHOT_DIFF == 'true' ]; then
+            files=$(find . -type f -name "*_compare.png" | grep "roborazzi/" | grep -E "^[a-zA-Z0-9_./-]+$")
+            delimiter="$(openssl rand -hex 8)"
+            {
+              echo "reports<<${delimiter}"
           
-            echo "Snapshot diff report"
-            echo "| File name | Image |"
-            echo "|-------|-------|"
-          } >> "$GITHUB_OUTPUT"
+              echo "Snapshot diff report"
+              echo "| File name | Image |"
+              echo "|-------|-------|"
+            } >> "$GITHUB_OUTPUT"
           
-          for file in $files; do
-            fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
-            echo "| [$fileName](https://github.com/${{ github.repository }}/blob/${{ env.COMPANION_BRANCH_NAME }}/$file) | ![](https://github.com/${{ github.repository }}/blob/${{ env.COMPANION_BRANCH_NAME }}/$file?raw=true) |" >> "$GITHUB_OUTPUT"
-          done
-          echo "${delimiter}" >> "$GITHUB_OUTPUT"
-
-      - name: Create comments (Not Exist screenshot diff)
-        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'false' }}
-        id: create-comments
-        run: echo "No screenshot diff" >> "$GITHUB_OUTPUT"
+            for file in $files; do
+              fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
+              echo "| [$fileName](https://github.com/${{ github.repository }}/blob/${{ env.COMPANION_BRANCH_NAME }}/$file) | ![](https://github.com/${{ github.repository }}/blob/${{ env.COMPANION_BRANCH_NAME }}/$file?raw=true) |" >> "$GITHUB_OUTPUT"
+            done
+            echo "${delimiter}" >> "$GITHUB_OUTPUT"
+          else
+            echo "reports=No screenshot diff" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Find Comment
         uses: peter-evans/find-comment@v3
