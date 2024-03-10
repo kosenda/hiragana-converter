@@ -191,7 +191,7 @@ fun ConverterScreenContent(
                     ConversionTypeCard(onSelectedChange = changeHiraKanaType)
                     Spacer(modifier = Modifier.weight(1f))
                     CustomButtonWithBackground(
-                        id = R.drawable.ic_reset,
+                        id = R.drawable.baseline_share_24,
                         convertDescription = "reset",
                         containerColor = MaterialTheme.colorScheme.surfaceVariant,
                         contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
