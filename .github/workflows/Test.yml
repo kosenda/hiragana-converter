@@ -95,6 +95,7 @@ jobs:
           api-key: ${{ secrets.API_KEY }}
 
       - name: Download screenshots from base branch
+        continue-on-error: true
         uses: actions/download-artifact@v4
         with:
           name: base/${{ github.base_ref }}
