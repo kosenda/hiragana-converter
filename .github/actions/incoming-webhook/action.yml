@@ -1,0 +1,44 @@
+# ref: https://qiita.com/seratch/items/28d09eacada09134c96c#incoming-webhooks-%E3%81%A7-slack-%E3%81%AB%E9%80%9A%E7%9F%A5%E3%81%99%E3%82%8B
+
+name: Incoming Webhook
+description: "Send a message to Slack using an incoming webhook."
+
+inputs:
+  slack-webhook-url:
+    description: "URL of incoming webhook for Slack"
+    required: true
+
+runs:
+  using: composite
+  steps:
+    # Start a Slack workflow using a webhook trigger
+    # https://github.com/slackapi/slack-github-action
+    - name: Send GitHub Action trigger data to Slack workflow
+      id: slack
+      uses: slackapi/slack-github-action@v1.25.0
+      with:
+        payload: |
+          {
+            "text": ":thumbsup_all: CI結果: ${{ job.status }}\n\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+            "blocks": [
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": ":thumbsup_all: CI結果: ${{ job.status }}\n\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                }
+              },
+              {
+                "type": "context",
+                "elements": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "Author: <https://github.com/${{ github.event.sender.login }}|@${{ github.event.sender.login }}>"
+                  }
+                ]
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        SLACK_WEBHOOK_URL: ${{ inputs.slack-webhook-url }}

@@ -19,7 +19,6 @@ commands:
           command: |
             LOCAL_PROPERTIES_PATH=./local.properties
             echo "apiKey=$.Environment.DEBUG_AD_APPLICATION_ID" >> $LOCAL_PROPERTIES_PATH
-
   restore-and-save-gradle-cache:
     steps:
       - restore_cache:
@@ -84,7 +83,6 @@ commands:
             
             # set github access token
             echo "export GITHUB_ACCESS_TOKEN='$access_token'" >> $BASH_ENV
-
   aws-cli-setup:
     steps:
       - aws-cli/setup:
@@ -223,10 +221,10 @@ jobs:
             |File name|Image|
             |---|---|
             EOF
-            
+
             # Find all the files ending with _compare.png
             files_to_add=$(find . -type f -path "./build/outputs/roborazzi/compareProdDebug/roborazzi/*" -name "*_compare.png")
-            
+
             # Add compare image
             for file in $files_to_add; do
               compare_file_path=$(basename $file)

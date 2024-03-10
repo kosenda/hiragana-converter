@@ -1,0 +1,218 @@
+name: Test
+
+on:
+  pull_request:
+    paths-ignore:
+      - README.md
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  actions: read
+  pull-requests: write
+
+jobs:
+  test-prod:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+        with:
+          # ref: https://github.com/danger/danger/issues/913
+          fetch-depth: 100
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          api-key: ${{ secrets.API_KEY }}
+
+      - name: ktlint-check
+        run: ./gradlew --continue ktlintCheck
+
+      - name: Test ProdDebug
+        run: ./gradlew testProdDebugUnitTest
+
+      - name: Report jacoco
+        run: ./gradlew jacocoTestReport
+
+      - name: jacoco-report to zip
+        run: zip -r jacocoTestReport.zip ./build/reports/jacoco/jacocoTestReport/html
+
+      - name: Archive jacoco report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacocoTestReport
+          path: ./build/reports/jacoco/jacocoTestReport/html
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.2
+          bundler-cache: true
+
+      - name: Danger
+        uses: MeilCli/danger-action@v5
+        with:
+          plugins_file: Gemfile
+          install_path: vendor/bundle
+          danger_file: Dangerfile
+          danger_id: danger-pr
+        env:
+          DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
+
+      - name: Slack notify
+        uses: ./.github/actions/incoming-webhook
+        with:
+          slack-webhook-url: ${{ secrets.SLACK_INCOMING_WEBHOOK_URL }}
+
+  compile-mock:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          api-key: ${{ secrets.API_KEY }}
+
+      - name: Compile MockDebug
+        run: ./gradlew compileMockDebugSource
+
+  compare-screnshots:
+    if: github.event.pull_request.merged == false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          api-key: ${{ secrets.API_KEY }}
+
+      - name: Download screenshots from base branch
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: base/${{ github.base_ref }}
+
+      - name: compare screenshots
+        run: ./gradlew compareRoborazziProdDebug --stacktrace
+
+      - name: Make PR number directory for saving screenshots
+        if: ${{ github.event_name == 'pull_request' }}
+        run: mkdir -p ./pr/${{ github.event.number }}
+
+      - name: Move screenshots to PR number directory
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          # delete except *_compare.png
+          find ./app/build/outputs/roborazzi  -type f |  grep -v -e '.*_compare.png' | xargs rm -rf
+          mv ./app/build/outputs/roborazzi ./pr/${{ github.event.number }}/
+          ls ./pr/${{ github.event.number }}
+
+      - name: Save screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr directory
+          path: pr/${{ github.event.number }}/
+
+      - name: Save pr number and branch name
+        run: |
+          echo "PR_NUMBER=${{ github.event.number }}" >> $GITHUB_ENV
+          echo "COMPANION_BRANCH_NAME=companion_${{ github.head_ref }}" >> $GITHUB_ENV
+
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Checkout companion branch
+        run: |
+          git branch -D ${{ env.COMPANION_BRANCH_NAME }} || true
+          git checkout --orphan ${{ env.COMPANION_BRANCH_NAME }}
+          git rm -rf .
+
+      - name: Download screenshots from PR number directory
+        uses: actions/download-artifact@v4
+        with:
+          name: pr directory
+            
+      - name: Push screenshots to companion branch
+        id: push-screenshot-diff
+        run: |
+          files_to_add=$(find . -type f -name "*_compare.png")
+          
+          
+          for file in $files_to_add; do
+            if [[ $file =~ ^[a-zA-Z0-9_./-]+$ ]]; then
+              git add $file
+            fi
+          done
+          git config --global user.name ScreenshotBot
+          git config --global user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git commit -m "Add screenshot diff"
+          git push origin HEAD:${{ env.COMPANION_BRANCH_NAME }} -f
+
+      - name: Create comments
+        id: create-comments
+        run: |
+          files=$(find . -type f -name "*_compare.png" | grep "roborazzi/" | grep -E "^[a-zA-Z0-9_./-]+$")
+          delimiter="$(openssl rand -hex 8)"
+          {
+            echo "reports<<${delimiter}"
+          
+            echo "Snapshot diff report"
+            echo "| File name | Image |"
+            echo "|-------|-------|"
+          } >> "$GITHUB_OUTPUT"
+          
+          for file in $files; do
+            fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
+            echo "| [$fileName](https://github.com/${{ github.repository }}/blob/${{ env.COMPANION_BRANCH_NAME }}/$file) | ![](https://github.com/${{ github.repository }}/blob/${{ env.COMPANION_BRANCH_NAME }}/$file?raw=true) |" >> "$GITHUB_OUTPUT"
+          done
+          echo "${delimiter}" >> "$GITHUB_OUTPUT"
+
+      - name: Find Comment
+        uses: peter-evans/find-comment@v3
+        id: fc
+        with:
+          issue-number: ${{ github.event.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Snapshot diff report
+
+      - name: Add or update comment on PR
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ env.PR_NUMBER }}
+          body: ${{ steps.create-comments.outputs.reports }}
+          edit-mode: replace
+
+      - name: Cleanup outdated companion branches
+        run: |
+          # Find outdated companion branches with last commit date
+          git branch -r --format="%(refname:lstrip=3)" | grep companion_ | while read -r branch; do
+            last_commit_date_timestamp=$(git log -1 --format=%ct "origin/$branch")
+            now_timestamp=$(date +%s)
+            # Delete branch if it's older than 1 month
+            # if [ $((now_timestamp - last_commit_date_timestamp)) -gt 2592000 ]; then
+            # For testing purpose, delete branch if it's older than 1 second
+            echo "branch: $branch now_timestamp: $now_timestamp last_commit_date_timestamp: $last_commit_date_timestamp"
+            if [ $((now_timestamp - last_commit_date_timestamp)) -gt 1 ]; then
+              # Comment out for demonstration purpose
+              echo "Deleting $branch"
+          
+              # git push origin --delete "$branch"
+            fi
+          done
+
+      # TODO Mainブランチにマージ後削除
+      - name: Checkout pr branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
