@@ -124,7 +124,7 @@ jobs:
       - name: Save pr number and branch name
         run: |
           echo "PR_NUMBER=${{ github.event.number }}" >> $GITHUB_ENV
-          echo "COMPANION_BRANCH_NAME=companion_{{ github.head_ref }}" >> $GITHUB_ENV
+          echo "COMPANION_BRANCH_NAME=companion_${{ github.head_ref }}" >> $GITHUB_ENV
 
       - name: Checkout main branch
         uses: actions/checkout@v4
