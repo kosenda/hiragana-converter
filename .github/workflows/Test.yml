@@ -179,25 +179,21 @@ jobs:
       - name: Create comments
         id: create-comments
         run: |
-          if [ env.EXIST_SCREENSHOT_DIFF = 'true' ]; then
-            files=$(find . -type f -name "*_compare.png" | grep "roborazzi/" | grep -E "^[a-zA-Z0-9_./-]+$")
-            delimiter="$(openssl rand -hex 8)"
-            {
-              echo "reports<<${delimiter}"
-          
-              echo "Snapshot diff report"
-              echo "| File name | Image |"
-              echo "|-------|-------|"
-            } >> "$GITHUB_OUTPUT"
-          
-            for file in $files; do
-              fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
-              echo "| [$fileName](https://github.com/${{ github.repository }}/blob/${{ env.COMPANION_BRANCH_NAME }}/$file) | ![](https://github.com/${{ github.repository }}/blob/${{ env.COMPANION_BRANCH_NAME }}/$file?raw=true) |" >> "$GITHUB_OUTPUT"
-            done
-            echo "${delimiter}" >> "$GITHUB_OUTPUT"
-          else
-            echo "reports="Snapshot diff report" >> "$GITHUB_OUTPUT"
-          fi
+          files=$(find . -type f -name "*_compare.png" | grep "roborazzi/" | grep -E "^[a-zA-Z0-9_./-]+$")
+          delimiter="$(openssl rand -hex 8)"
+          {
+            echo "reports<<${delimiter}"
+        
+            echo "Snapshot diff report"
+            echo "| File name | Image |"
+            echo "|-------|-------|"
+          } >> "$GITHUB_OUTPUT"
+        
+          for file in $files; do
+            fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
+            echo "| [$fileName](https://github.com/${{ github.repository }}/blob/${{ env.COMPANION_BRANCH_NAME }}/$file) | ![](https://github.com/${{ github.repository }}/blob/${{ env.COMPANION_BRANCH_NAME }}/$file?raw=true) |" >> "$GITHUB_OUTPUT"
+          done
+          echo "${delimiter}" >> "$GITHUB_OUTPUT"
 
       - name: Find Comment
         uses: peter-evans/find-comment@v3
