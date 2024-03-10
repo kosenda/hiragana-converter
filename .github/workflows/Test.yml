@@ -177,6 +177,7 @@ jobs:
           git push origin HEAD:${{ env.COMPANION_BRANCH_NAME }} -f
 
       - name: Create comments
+        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
         id: create-comments
         run: |
           files=$(find . -type f -name "*_compare.png" | grep "roborazzi/" | grep -E "^[a-zA-Z0-9_./-]+$")
@@ -208,7 +209,12 @@ jobs:
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ env.PR_NUMBER }}
-          body: ${{ steps.create-comments.outputs.reports }}
+          body: |
+            if [ ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }} ];then
+              ${{ steps.create-comments.outputs.reports }}
+            else
+              echo "No screenshot diff"
+            fi
           edit-mode: replace
 
       - name: Cleanup outdated companion branches
