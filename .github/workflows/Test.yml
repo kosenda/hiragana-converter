@@ -99,7 +99,7 @@ jobs:
 
       - name: Download screenshots from base branch
         continue-on-error: true
-        uses: actions/download-artifact@v4
+        uses: adawidd6/action-download-artifact@v3
         with:
           name: ${{ env.DOWNLOAD_NAME }}
 
