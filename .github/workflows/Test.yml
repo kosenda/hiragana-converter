@@ -110,7 +110,7 @@ jobs:
       - name: Check screenshot diff
         run: |
           exist_screenshot_diff="false"
-          if [ -d ./app/build/outputs/roborazzi  ]; then
+          if [ -d ./app/build/outputs/roborazzi ]; then
             exist_screenshot_diff="true"
           fi
           echo "EXIST_SCREENSHOT_DIFF=${exist_screenshot_diff}" >> $GITHUB_ENV
