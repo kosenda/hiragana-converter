@@ -135,7 +135,6 @@ jobs:
           path: pr/${{ github.event.number }}/
 
       - name: Save pr number and branch name
-        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
         run: |
           echo "PR_NUMBER=${{ github.event.number }}" >> $GITHUB_ENV
           echo "COMPANION_BRANCH_NAME=companion_${{ github.head_ref }}" >> $GITHUB_ENV
