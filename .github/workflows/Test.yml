@@ -1,4 +1,4 @@
-# ref: hiragana-converter/REFERENCE.md
+# ref: https://github.com/kosenda/hiragana-converter/blob/develop/REFERENCE.md
 
 name: Test
 
@@ -249,9 +249,3 @@ jobs:
               # git push origin --delete "$branch"
             fi
           done
-
-      # TODO Mainブランチにマージ後削除
-      - name: Checkout pr branch
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_branch }}
