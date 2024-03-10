@@ -111,7 +111,7 @@ jobs:
         run: |
           exist_screenshot_diff="false"
           ls ./app/build/outputs/roborazzi/* >/dev/null 2>&1
-          if [ $0 -e 0 ]; then
+          if [ $? -e 0 ]; then
             exist_screenshot_diff="true"
           fi
           echo "EXIST_SCREENSHOT_DIFF=${exist_screenshot_diff}" >> $GITHUB_ENV
