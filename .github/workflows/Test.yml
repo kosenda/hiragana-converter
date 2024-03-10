@@ -4,6 +4,7 @@ on:
   pull_request:
     paths-ignore:
       - README.md
+    types: [ opened, synchronize, reopened, closed ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -13,7 +14,6 @@ permissions:
   contents: write
   actions: read
   pull-requests: write
-
 jobs:
   test-prod:
     runs-on: ubuntu-latest
