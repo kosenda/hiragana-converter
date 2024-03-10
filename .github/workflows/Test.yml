@@ -115,6 +115,7 @@ jobs:
           file_size=$(find ./app/build/outputs/roborazzi -type f | grep -v -e '.*_compare.png' | wc -l | sed -e 's/[^0-9]//g')
           exist_screenshot_diff="false"
           if [ $file_size -ne 0 ]; then
+            echo "file_size=$file_size"
             exist_screenshot_diff="true"
           fi
           echo "EXIST_SCREENSHOT_DIFF=${exist_screenshot_diff}" >> $GITHUB_ENV
