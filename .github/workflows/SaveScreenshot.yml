@@ -23,10 +23,13 @@ jobs:
       - name: create screenshots
         run: ./gradlew recordRoborazziProdDebug --stacktrace
 
+      - name: Save SAVE_NAME
+        run: echo "SAVE_NAME=$( echo screenshot-${{ github.head_ref }} | sed "s/\//-/g" )" >> $GITHUB_ENV
+
       - name: Save screenshots
         uses: actions/upload-artifact@v4
         with:
-          name: base/${{ github.head_ref }}
+          name: ${{ env.SAVE_NAME }}
           path: |
             **/build/outputs/roborazzi/
           retention-days: 30

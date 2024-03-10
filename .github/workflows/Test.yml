@@ -94,11 +94,14 @@ jobs:
         with:
           api-key: ${{ secrets.API_KEY }}
 
+      - name: Save DOWNLOAD_NAME
+        run: echo "DOWNLOAD_NAME=$( echo screenshot_${{ github.base_ref }} | sed "s/\//-/g" )" >> $GITHUB_ENV
+
       - name: Download screenshots from base branch
         continue-on-error: true
         uses: actions/download-artifact@v4
         with:
-          name: base/${{ github.base_ref }}
+          name: ${{ env.DOWNLOAD_NAME }}
 
       - name: compare screenshots
         run: ./gradlew compareRoborazziProdDebug --stacktrace
