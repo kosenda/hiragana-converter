@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/circleci/circleci-docs.svg?style=svg)](https://github.com/kosenda/hiragana-converter)　[![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg?style=flat)](https://renovatebot.com)　
+[![Test](https://github.com/kosenda/hiragana-converter/actions/workflows/Test.yml/badge.svg)](https://github.com/kosenda/hiragana-converter/actions/workflows/Test.yml)　[![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg?style=flat)](https://renovatebot.com)　
 
 # Hiragana Converter （Japanese: ひらがな変換）
 
