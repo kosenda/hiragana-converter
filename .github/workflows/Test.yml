@@ -210,11 +210,13 @@ jobs:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ env.PR_NUMBER }}
           body: |
-            if [ ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }} ];then
-              ${{ steps.create-comments.outputs.reports }}
-            else
-              echo "No screenshot diff"
-            fi
+            $(
+              if [ ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }} ];then
+                ${{ steps.create-comments.outputs.reports }}
+              else
+                echo "No screenshot diff"
+              fi
+            )
           edit-mode: replace
 
       - name: Cleanup outdated companion branches
