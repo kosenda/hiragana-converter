@@ -24,7 +24,7 @@ jobs:
         run: ./gradlew recordRoborazziProdDebug --stacktrace
 
       - name: Save SAVE_NAME
-        run: echo "SAVE_NAME=$( echo screenshot-${{ github.head_ref }} | sed "s/\//-/g" )" >> $GITHUB_ENV
+        run: echo "SAVE_NAME=$( echo screenshot-${{ github.base_ref }} | sed "s/\//-/g" )" >> $GITHUB_ENV
 
       - name: Save screenshots
         uses: actions/upload-artifact@v4
