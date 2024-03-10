@@ -124,7 +124,7 @@ jobs:
       - name: Save pr number and branch name
         run: |
           echo "PR_NUMBER=${{ github.event.number }}" >> $GITHUB_ENV
-          echo "BRANCH_NAME=${{ github.head_ref }}" >> $GITHUB_ENV
+          echo "COMPANION_BRANCH_NAME=companion_{{ github.head_ref }}" >> $GITHUB_ENV
 
       - name: Checkout main branch
         uses: actions/checkout@v4
@@ -133,8 +133,8 @@ jobs:
 
       - name: Checkout companion branch
         run: |
-          git branch -D ${{ env.BRANCH_NAME }} || true
-          git checkout --orphan ${{ env.BRANCH_NAME }}
+          git branch -D ${{ env.COMPANION_BRANCH_NAME }} || true
+          git checkout --orphan ${{ env.COMPANION_BRANCH_NAME }}
           git rm -rf .
 
       - name: Download screenshots from PR number directory
@@ -156,7 +156,7 @@ jobs:
           git config --global user.name ScreenshotBot
           git config --global user.email 41898282+github-actions[bot]@users.noreply.github.com
           git commit -m "Add screenshot diff"
-          git push origin HEAD:${{ env.BRANCH_NAME }} -f
+          git push origin HEAD:${{ env.COMPANION_BRANCH_NAME }} -f
 
       - name: Create comments
         id: create-comments
@@ -173,7 +173,7 @@ jobs:
           
           for file in $files; do
             fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
-            echo "| [$fileName](https://github.com/${{ github.repository }}/blob/${{ env.BRANCH_NAME }}/$file) | ![](https://github.com/${{ github.repository }}/blob/${{ env.BRANCH_NAME }}/$file?raw=true) |" >> "$GITHUB_OUTPUT"
+            echo "| [$fileName](https://github.com/${{ github.repository }}/blob/${{ env.COMPANION_BRANCH_NAME }}/$file) | ![](https://github.com/${{ github.repository }}/blob/${{ env.COMPANION_BRANCH_NAME }}/$file?raw=true) |" >> "$GITHUB_OUTPUT"
           done
           echo "${delimiter}" >> "$GITHUB_OUTPUT"
 
