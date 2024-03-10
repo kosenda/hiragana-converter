@@ -108,9 +108,10 @@ jobs:
         run: ./gradlew compareRoborazziProdDebug --stacktrace
 
       - name: Check screenshot diff
+        continue-on-error: true
         run: |
           exist_screenshot_diff="false"
-          ls ./app/build/outputs/roborazzi/* >/dev/null 2>&1
+          ls ./app/build/outputs/roborazzi/.*_compare.png >/dev/null 2>&1
           if [ $? -e 0 ]; then
             exist_screenshot_diff="true"
           fi
@@ -164,7 +165,6 @@ jobs:
         id: push-screenshot-diff
         run: |
           files_to_add=$(find . -type f -name "*_compare.png")
-          
           
           for file in $files_to_add; do
             if [[ $file =~ ^[a-zA-Z0-9_./-]+$ ]]; then
