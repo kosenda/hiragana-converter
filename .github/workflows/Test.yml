@@ -102,6 +102,7 @@ jobs:
         uses: dawidd6/action-download-artifact@v3
         with:
           name: ${{ env.DOWNLOAD_NAME }}
+          workflow: SaveScreenshot.yml
 
       - name: compare screenshots
         run: ./gradlew compareRoborazziProdDebug --stacktrace
