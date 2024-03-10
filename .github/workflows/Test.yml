@@ -95,7 +95,9 @@ jobs:
           api-key: ${{ secrets.API_KEY }}
 
       - name: Save download screenshots name
-        run: DOWNLOAD_NAME=$( echo ${{ github.base_ref }} | sed "s/\//-/g" ) >> $GITHUB_ENV
+        run: |
+          DOWNLOAD_NAME=$( echo ${{ github.base_ref }} | sed "s/\//-/g" )
+          echo DOWNLOAD_NAME >> $GITHUB_ENV
 
       - name: Download screenshots from base branch
         continue-on-error: true
