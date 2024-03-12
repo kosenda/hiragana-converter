@@ -27,6 +27,9 @@ https://labs.goo.ne.jp/apiusage/
 > [!WARNING]
 > Mock flavor is provided, so if you want to simulate API communication using Mock, you can test it by setting a meaningless value (such as "AAA") in apiKey.
 
+## Reference sites
+https://github.com/kosenda/hiragana-converter/blob/develop/REFERENCE.md
+
 ## Typical libraries used  
 |Name|Brief description|
 |:--|:--|
