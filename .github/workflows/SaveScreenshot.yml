@@ -45,11 +45,13 @@ jobs:
           git branch -D ${{ env.SCREENSHOTS_BRANCH_NAME }} || true
           git checkout --orphan ${{ env.SCREENSHOTS_BRANCH_NAME }}
           git rm -rf .
+          mkdir -p ./app/build/outputs/roborazzi
 
       - name: Download screenshots
         uses: actions/download-artifact@v4
         with:
           name: screenshots
+          path: ./app/build/outputs/roborazzi/
 
       - name: Push screenshots to screenshots branch
         id: push-screenshot-diff
