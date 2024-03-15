@@ -100,12 +100,12 @@ jobs:
         run: echo "DOWNLOAD_NAME=$( echo screenshot-${{ github.base_ref }} | sed "s/\//-/g" )" >> $GITHUB_ENV
 
       - name: Download screenshots from base branch
-        continue-on-error: true
         uses: dawidd6/action-download-artifact@v3
         with:
           name: ${{ env.DOWNLOAD_NAME }}
           workflow: SaveScreenshot.yml
           branch: ${{ github.base_ref }}
+          if_no_artifact_found: ignore
 
       - name: Compare screenshots
         run: ./gradlew compareRoborazziProdDebug --stacktrace
