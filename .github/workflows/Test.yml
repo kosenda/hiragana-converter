@@ -214,7 +214,7 @@ jobs:
         if: ${{ steps.check-screenshot-diff.outputs.is_exist == 'true' }}
         id: create-comments
         run: |
-          files=$(find . -type f -name "*_compare.png" | grep "roborazzi/" | grep -E "^[a-zA-Z0-9_./-]+$")
+          files=$(find . -type f -name "*_compare.png")
           delimiter="$(openssl rand -hex 8)"
           {
             echo "reports<<${delimiter}"
@@ -240,7 +240,7 @@ jobs:
         uses: peter-evans/find-comment@v3
         id: fc
         with:
-          issue-number: ${{ github.event.number }}x
+          issue-number: ${{ github.event.number }}
           comment-author: 'github-actions[bot]'
           body-includes: Snapshot diff report
 
