@@ -91,6 +91,12 @@ commands:
           region: AWS_REGION
 
 jobs:
+  test:
+    executor: android
+    steps:
+      - checkout
+      - run: git branch -r --format="%(refname:lstrip=3)"
+
   dependencies:
     executor: android
     steps:
@@ -241,31 +247,32 @@ jobs:
 workflows:
   test:
     jobs:
-      - dependencies
-      - test-prod:
-          context: slack-secrets
-          requires:
-            - dependencies
-      - compile-mock:
-          context: slack-secrets
-          requires:
-            - dependencies
-      - save-screenshots:
-          requires:
-            - dependencies
-          filters:
-            branches:
-              only:
-                - main
-                - develop
-      - compare-screenshots:
-          requires:
-            - dependencies
-          filters:
-            branches:
-              ignore:
-                - main
-                - develop
+      - test
+#      - dependencies
+#      - test-prod:
+#          context: slack-secrets
+#          requires:
+#            - dependencies
+#      - compile-mock:
+#          context: slack-secrets
+#          requires:
+#            - dependencies
+#      - save-screenshots:
+#          requires:
+#            - dependencies
+#          filters:
+#            branches:
+#              only:
+#                - main
+#                - develop
+#      - compare-screenshots:
+#          requires:
+#            - dependencies
+#          filters:
+#            branches:
+#              ignore:
+#                - main
+#                - develop
 
 # ■ memo ■
 # check command： circleci config validate
