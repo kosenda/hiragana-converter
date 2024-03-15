@@ -230,11 +230,6 @@ jobs:
           done
           echo "${delimiter}" >> "$GITHUB_OUTPUT"
 
-      - name: Create comments (not exist screenshot diff)
-        if: steps.check-screenshot-diff.outputs.is_exist == 'false'
-        id: create-comments-not-exist-screenshot-diff
-        run: echo "reports=Snapshot diff report" >> "$GITHUB_OUTPUT"
-
       - name: Find comment
         continue-on-error: true
         uses: peter-evans/find-comment@v3
@@ -259,7 +254,7 @@ jobs:
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ env.PR_NUMBER }}
-          body: ${{ steps.create-comments-not-exist-screenshot-diff.outputs.reports }}
+          body: Snapshot diff report
           edit-mode: replace
 
       - name: Cleanup outdated companion or screenshots branches
