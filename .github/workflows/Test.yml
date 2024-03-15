@@ -207,7 +207,8 @@ jobs:
         id: create-comments-not-exist-screenshot-diff
         run: echo "reports=Snapshot diff report" >> "$GITHUB_OUTPUT"
 
-      - name: Find Comment
+      - name: Find comment
+        continue-on-error: true
         uses: peter-evans/find-comment@v3
         id: fc
         with:
