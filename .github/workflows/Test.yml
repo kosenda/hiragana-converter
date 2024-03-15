@@ -91,21 +91,48 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v4
 
+      - name: Check exist screenshots branch
+        run: |
+          isExistingScreenshotsBranch=$(
+            git fetch origin screenshots_${{ github.base_ref }} &&
+            echo true || echo false
+          )
+          echo "IS_EXISTING_SCREENSHOTS_BRANCH=${isExistingScreenshotsBranch}" >> $GITHUB_ENV
+
+      - name: Checkout screenshots branch
+        if: ${{ env.IS_EXISTING_SCREENSHOTS_BRANCH == 'true' }}
+        uses: actions/checkout@v4
+        with:
+          ref: screenshots_${{ github.base_ref }}
+
+      - name: Make screenshots directory
+        run: mkdir -p ./app/build/outputs/roborazzi
+
+      - name: Upload screenshots
+        if: ${{ env.IS_EXISTING_SCREENSHOTS_BRANCH == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: ./app/build/outputs/roborazzi/
+          retention-days: 1
+
+      - name: Checkout pr branch
+        if: ${{ env.IS_EXISTING_SCREENSHOTS_BRANCH == 'true' }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
       - name: Setup
         uses: ./.github/actions/setup
         with:
           api-key: ${{ secrets.API_KEY }}
 
-      - name: Save DOWNLOAD_NAME
-        run: echo "DOWNLOAD_NAME=$( echo screenshot-${{ github.base_ref }} | sed "s/\//-/g" )" >> $GITHUB_ENV
-
-      - name: Download screenshots from base branch
+      - name: Download screenshots from PR number directory
         continue-on-error: true
-        uses: dawidd6/action-download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
-          name: ${{ env.DOWNLOAD_NAME }}
-          workflow: SaveScreenshot.yml
-          branch: ${{ github.base_ref }}
+          name: screenshots
+          path: ./app/build/outputs/roborazzi/
 
       - name: Compare screenshots
         run: ./gradlew compareRoborazziProdDebug --stacktrace
