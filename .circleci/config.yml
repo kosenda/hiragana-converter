@@ -91,12 +91,6 @@ commands:
           region: AWS_REGION
 
 jobs:
-  test:
-    executor: android
-    steps:
-      - checkout
-      - run: git branch -r --format="%(refname:lstrip=3)"
-
   dependencies:
     executor: android
     steps:
@@ -240,6 +234,18 @@ jobs:
           name: test comment
           command: gh pr comment "$CIRCLE_PULL_REQUEST" --edit-last -F ./comments || gh pr comment "$CIRCLE_PULL_REQUEST" -F ./comments
 
+  test:
+    executor: android
+    steps:
+      - checkout
+      - run:
+         name: test
+         command: |
+           echo "temp=Hello, World!"
+         run:
+            name: test
+            command: echo $temp
+
   compare-screenshots_new:
     executor: android
     steps:
@@ -289,6 +295,7 @@ jobs:
 workflows:
   test:
     jobs:
+      - test
       - dependencies
 #      - test-prod:
 #          context: slack-secrets
