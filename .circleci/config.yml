@@ -244,8 +244,6 @@ jobs:
     executor: android
     steps:
       - checkout
-      - set-locale-properties
-      - restore-and-save-gradle-cache
       - gh/install
       - set-github-access-token
       - run:
@@ -265,6 +263,27 @@ jobs:
               echo true || echo false
             )
             echo "export IS_EXIST_SCREENSHOTS=${isExistScreenshots}" >> $BASH_ENV
+      - when:
+          condition:
+            equal: ["$IS_EXIST_SCREENSHOTS", "true"]
+          steps:
+            - run:
+                name: checkout screenshots branch
+                command: |
+                  git checkout screenshots_${BASE_BRANCH_NAME}
+            - persist_to_workspace:
+                root: ./app/build/outputs/roborazzi
+                paths:
+                  - .
+            - run:
+                name: checkout pr branch
+                command: |
+                  git checkout $CIRCLE_BRANCH
+      - set-locale-properties
+      - restore-and-save-gradle-cache
+      - run:
+          name: compare screenshots
+          command: ./gradlew compareRoborazziProdDebug --stacktrace
 
 workflows:
   test:
