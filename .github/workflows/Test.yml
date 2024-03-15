@@ -138,24 +138,25 @@ jobs:
         run: ./gradlew compareRoborazziProdDebug --stacktrace
 
       - name: Check screenshot diff
+        id: check-screenshot-diff
         run: |
           # To avoid "No such file or directory"
           mkdir -p ./app/build/outputs/roborazzi
           
           file_size=$(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/[^0-9]//g')
-          exist_screenshot_diff="false"
+          is_exist_screenshot_diff="false"
           if [ $file_size -ne 0 ]; then
             echo "file_size=$file_size"
-            exist_screenshot_diff="true"
+            is_exist_screenshot_diff="true"
           fi
-          echo "EXIST_SCREENSHOT_DIFF=${exist_screenshot_diff}" >> $GITHUB_ENV
+          echo "is_exist=${is_exist_screenshot_diff}" >> "$GITHUB_OUTPUT"
 
       - name: Make PR number directory for saving screenshots
-        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
+        if: ${{ steps.check-screenshot-diff.outputs.is_exist == 'true' }}
         run: mkdir -p ./pr/${{ github.event.number }}
 
       - name: Move screenshots to PR number directory
-        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
+        if: ${{ steps.check-screenshot-diff.outputs.is_exist == 'true' }}
         run: |
           # delete except *_compare.png
           find ./app/build/outputs/roborazzi  -type f |  grep -v -e '.*_compare.png' | xargs rm -rf
@@ -163,7 +164,7 @@ jobs:
           ls ./pr/${{ github.event.number }}
 
       - name: Save screenshots
-        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
+        if: ${{ steps.check-screenshot-diff.outputs.is_exist == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: pr directory
@@ -175,26 +176,26 @@ jobs:
           echo "COMPANION_BRANCH_NAME=companion_${{ github.head_ref }}" >> $GITHUB_ENV
 
       - name: Checkout main branch
-        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
+        if: ${{ steps.check-screenshot-diff.outputs.is_exist == 'true' }}
         uses: actions/checkout@v4
         with:
           ref: main
 
       - name: Checkout companion branch
-        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
+        if: ${{ steps.check-screenshot-diff.outputs.is_exist == 'true' }}
         run: |
           git branch -D ${{ env.COMPANION_BRANCH_NAME }} || true
           git checkout --orphan ${{ env.COMPANION_BRANCH_NAME }}
           git rm -rf .
 
       - name: Download screenshots from PR number directory
-        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
+        if: ${{ steps.check-screenshot-diff.outputs.is_existF == 'true' }}
         uses: actions/download-artifact@v4
         with:
           name: pr directory
 
       - name: Push screenshots to companion branch
-        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
+        if: ${{ steps.check-screenshot-diff.outputs.is_exist == 'true' }}
         id: push-screenshot-diff
         run: |
           files_to_add=$(find . -type f -name "*_compare.png")
@@ -210,7 +211,7 @@ jobs:
           git push origin HEAD:${{ env.COMPANION_BRANCH_NAME }} -f
 
       - name: Create comments
-        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
+        if: ${{ steps.check-screenshot-diff.outputs.is_exist == 'true' }}
         id: create-comments
         run: |
           files=$(find . -type f -name "*_compare.png" | grep "roborazzi/" | grep -E "^[a-zA-Z0-9_./-]+$")
@@ -230,7 +231,7 @@ jobs:
           echo "${delimiter}" >> "$GITHUB_OUTPUT"
 
       - name: Create comments (not exist screenshot diff)
-        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'false' }}
+        if: ${{ steps.check-screenshot-diff.outputs.is_exist == 'false' }}
         id: create-comments-not-exist-screenshot-diff
         run: echo "reports=Snapshot diff report" >> "$GITHUB_OUTPUT"
 
@@ -244,7 +245,7 @@ jobs:
           body-includes: Snapshot diff report
 
       - name: Add or update comment on PR
-        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'true' }}
+        if: ${{ steps.check-screenshot-diff.outputs.is_exist == 'true' }}
         uses: peter-evans/create-or-update-comment@v4
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
@@ -253,7 +254,7 @@ jobs:
           edit-mode: replace
 
       - name: Add or update comment on PR (not exist screenshot diff)
-        if: ${{ env.EXIST_SCREENSHOT_DIFF == 'false' }}
+        if: ${{ steps.check-screenshot-diff.outputs.is_exist == 'false' }}
         uses: peter-evans/create-or-update-comment@v4
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
