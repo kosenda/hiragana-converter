@@ -265,7 +265,7 @@ jobs:
             echo "export IS_EXIST_SCREENSHOTS=$isExistScreenshots" >> $BASH_ENV
       - when:
           condition:
-            equal: [true, "$IS_EXIST_SCREENSHOTS"]
+            equal: [ true, $IS_EXIST_SCREENSHOTS ]
           steps:
             - run:
                 name: checkout screenshots branch
