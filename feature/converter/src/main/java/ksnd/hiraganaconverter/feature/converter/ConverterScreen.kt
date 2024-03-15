@@ -189,7 +189,7 @@ fun ConverterScreenContent(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     ConversionTypeCard(onSelectedChange = changeHiraKanaType)
-                    Spacer(modifier = Modifier.weight(1f))
+                    Spacer(modifier = Modifier.weight(1f)) // test
                     CustomButtonWithBackground(
                         id = R.drawable.ic_reset,
                         convertDescription = "reset",
