@@ -263,49 +263,23 @@ jobs:
               echo true || echo false
             )
             echo "export IS_EXIST_SCREENSHOTS=$isExistScreenshots" >> $BASH_ENV
-      - when:
-          condition:
-            equal: [ true, $IS_EXIST_SCREENSHOTS ]
-          steps:
-            - run:
-                name: checkout screenshots branch
-                command: |
-                  git checkout screenshots_${BASE_BRANCH_NAME}
-            - persist_to_workspace:
-                root: ./app/build/outputs/roborazzi
-                paths:
-                  - .
-            - run:
-                name: checkout pr branch
-                command: |
-                  git checkout $CIRCLE_BRANCH
-      - when:
-          condition:
-            equal: [ false, $IS_EXIST_SCREENSHOTS ]
-          steps:
-            - run:
-                name: checkout screenshots branch
-                command: |
-                  echo test 1
-                  echo $IS_EXIST_SCREENSHOTS
-      - when:
-          condition:
-            equal: [ "true", $IS_EXIST_SCREENSHOTS ]
-          steps:
-            - run:
-                name: checkout screenshots branch
-                command: |
-                  echo test 2
-                  echo $IS_EXIST_SCREENSHOTS
-      - when:
-          condition:
-            equal: [ "false", $IS_EXIST_SCREENSHOTS ]
-          steps:
-            - run:
-                name: checkout screenshots branch
-                command: |
-                  echo test 3
-                  echo $IS_EXIST_SCREENSHOTS
+          run:
+            - when:
+                condition:
+                  equal: [ true, $IS_EXIST_SCREENSHOTS ]
+                steps:
+                  - run:
+                      name: checkout screenshots branch
+                      command: |
+                        git checkout screenshots_${BASE_BRANCH_NAME}
+                  - persist_to_workspace:
+                      root: ./app/build/outputs/roborazzi
+                      paths:
+                        - .
+                  - run:
+                      name: checkout pr branch
+                      command: |
+                        git checkout $CIRCLE_BRANCH
       - set-locale-properties
       - restore-and-save-gradle-cache
       - run:
