@@ -94,13 +94,13 @@ jobs:
       - name: Check exist screenshots branch
         id: check-exist-screenshots
         run: |
-          isExist=$(
+          is_exist=$(
             git fetch origin screenshots_${{ github.base_ref }} &&
             echo true || echo false
           ) >> "$GITHUB_OUTPUT"
 
       - name: Checkout screenshots branch
-        if: ${{ steps.check-exist-screenshots.outputs.isExist == 'true' }}
+        if: ${{ steps.check-exist-screenshots.outputs.is_exist == 'true' }}
         uses: actions/checkout@v4
         with:
           ref: screenshots_${{ github.base_ref }}
@@ -109,7 +109,7 @@ jobs:
         run: mkdir -p ./app/build/outputs/roborazzi
 
       - name: Upload screenshots
-        if: ${{ steps.check-exist-screenshots.outputs.isExist == 'true' }}
+        if: ${{ steps.check-exist-screenshots.outputs.is_exist == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: screenshots
@@ -117,7 +117,7 @@ jobs:
           retention-days: 1
 
       - name: Checkout pr branch
-        if: ${{ steps.check-exist-screenshots.outputs.isExist == 'true' }}
+        if: ${{ steps.check-exist-screenshots.outputs.is_exist == 'true' }}
         uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
