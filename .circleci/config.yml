@@ -103,17 +103,13 @@ jobs:
       - checkout
       - set-locale-properties
       - restore-and-save-gradle-cache
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
 
   test-prod:
     executor: android
     steps:
       - checkout
-      - attach_workspace:
-          at: .
+      - set-locale-properties
+      - restore-and-save-gradle-cache
       - run:
           neme: gem install bundler
           command: sudo gem install bundler:2.4.12
@@ -151,8 +147,8 @@ jobs:
     executor: android
     steps:
       - checkout
-      - attach_workspace:
-          at: .
+      - set-locale-properties
+      - restore-and-save-gradle-cache
       - run:
           name: build mock
           command: ./gradlew compileMockDebugSource
@@ -164,8 +160,8 @@ jobs:
     executor: android
     steps:
       - checkout
-      - attach_workspace:
-          at: .
+      - set-locale-properties
+      - restore-and-save-gradle-cache
       - run:
           name: create screenshots
           command: ./gradlew recordRoborazziProdDebug --stacktrace
@@ -179,8 +175,8 @@ jobs:
     executor: android
     steps:
       - checkout
-      - attach_workspace:
-          at: .
+      - set-locale-properties
+      - restore-and-save-gradle-cache
       - gh/install
       - set-github-access-token
       - run:
@@ -244,11 +240,38 @@ jobs:
           name: test comment
           command: gh pr comment "$CIRCLE_PULL_REQUEST" --edit-last -F ./comments || gh pr comment "$CIRCLE_PULL_REQUEST" -F ./comments
 
+  compare-screenshots_new:
+    executor: android
+    steps:
+      - checkout
+      - set-locale-properties
+      - restore-and-save-gradle-cache
+      - gh/install
+      - set-github-access-token
+      - run:
+          name: gh login
+          command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
+      - run:
+          name: get base branch name
+          command: |
+            pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
+            base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
+            echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
+            echo "BASE_BRANCH_NAME: ${BASE_BRANCH_NAME}"
+      - run:
+          name: check exist screenshots branch
+          command: |
+            echo IS_EXIST_SCREENSHOTS=$(
+              git fetch origin screenshots_${BASE_BRANCH_NAME} &&
+              echo true || echo false
+            ) >> $BASH_ENV
+            echo "IS_EXIST_SCREENSHOTS: ${IS_EXIST_SCREENSHOTS}"
+
+
 workflows:
   test:
     jobs:
-      - test
-#      - dependencies
+      - dependencies
 #      - test-prod:
 #          context: slack-secrets
 #          requires:
@@ -265,14 +288,14 @@ workflows:
 #              only:
 #                - main
 #                - develop
-#      - compare-screenshots:
-#          requires:
-#            - dependencies
-#          filters:
-#            branches:
-#              ignore:
-#                - main
-#                - develop
+      - compare-screenshots_new:
+          requires:
+            - dependencies
+          filters:
+            branches:
+              ignore:
+                - main
+                - develop
 
 # ■ memo ■
 # check command： circleci config validate
