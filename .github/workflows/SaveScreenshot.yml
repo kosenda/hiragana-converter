@@ -54,7 +54,13 @@ jobs:
       - name: Push screenshots to screenshots branch
         id: push-screenshot-diff
         run: |
+          git add -A
           git config --global user.name ScreenshotBot
           git config --global user.email 41898282+github-actions[bot]@users.noreply.github.com
           git commit -m "Add screenshots"
           git push origin HEAD:${{ env.SCREENSHOTS_BRANCH_NAME }} -f
+
+      - name: Checkout pr branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
