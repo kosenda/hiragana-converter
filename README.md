@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/circleci/circleci-docs.svg?style=svg)](https://github.com/kosenda/hiragana-converter)　[![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg?style=flat)](https://renovatebot.com)　
+[![Test](https://github.com/kosenda/hiragana-converter/actions/workflows/Test.yml/badge.svg)](https://github.com/kosenda/hiragana-converter/actions/workflows/Test.yml)　[![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg?style=flat)](https://renovatebot.com)　
 
 # Hiragana Converter （Japanese: ひらがな変換）
 
@@ -26,6 +26,9 @@ https://labs.goo.ne.jp/apiusage/
 
 > [!WARNING]
 > Mock flavor is provided, so if you want to simulate API communication using Mock, you can test it by setting a meaningless value (such as "AAA") in apiKey.
+
+## Reference sites
+https://github.com/kosenda/hiragana-converter/blob/develop/REFERENCE.md
 
 ## Typical libraries used  
 |Name|Brief description|

@@ -2,7 +2,7 @@
 
 ## GitHub Actions
 - [GitHub - DroidKaigi/conference-app-2023](https://github.com/DroidKaigi/conference-app-2023)
-- [GitHub - MeilCli/danger-action](https://github.com/MeilCli/danger-action)(https://github.com/MeilCli/danger-action)
+- [GitHub - MeilCli/danger-action](https://github.com/MeilCli/danger-action)
 - [GitHub Docs - コンカレンシーの使用](https://docs.github.com/ja/actions/using-jobs/using-concurrency)
 - [GitHub Docs - ギットハブ　アクション　のワークフロー構文](https://docs.github.com/ja/actions/using-workflows/workflow-syntax-for-github-actions)
 - [GitHub Docs - ワークフロー データを成果物として保存する](https://docs.github.com/ja/actions/using-workflows/storing-workflow-data-as-artifacts)

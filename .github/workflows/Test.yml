@@ -1,4 +1,4 @@
-# ref: hiragana-converter/REFERENCE.md
+# ref: https://github.com/kosenda/hiragana-converter/blob/develop/REFERENCE.md
 
 name: Test
 
@@ -105,6 +105,7 @@ jobs:
         with:
           name: ${{ env.DOWNLOAD_NAME }}
           workflow: SaveScreenshot.yml
+          branch: ${{ github.base_ref }}
 
       - name: Compare screenshots
         run: ./gradlew compareRoborazziProdDebug --stacktrace
@@ -206,11 +207,12 @@ jobs:
         id: create-comments-not-exist-screenshot-diff
         run: echo "reports=Snapshot diff report" >> "$GITHUB_OUTPUT"
 
-      - name: Find Comment
+      - name: Find comment
+        continue-on-error: true
         uses: peter-evans/find-comment@v3
         id: fc
         with:
-          issue-number: ${{ github.event.number }}
+          issue-number: ${{ github.event.number }}x
           comment-author: 'github-actions[bot]'
           body-includes: Snapshot diff report
 
@@ -250,7 +252,6 @@ jobs:
             fi
           done
 
-      # TODO Mainブランチにマージ後削除
       - name: Checkout pr branch
         uses: actions/checkout@v4
         with:
