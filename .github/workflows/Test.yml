@@ -110,6 +110,9 @@ jobs:
         with:
           ref: screenshots_${{ github.base_ref }}
 
+      - name: Make screenshots directory
+        run: mkdir -p ./app/build/outputs/roborazzi
+
       - name: Upload screenshots
         if: ${{ env.IS_EXISTING_SCREENSHOTS_BRANCH == 'true' }}
         uses: actions/upload-artifact@v4
@@ -129,6 +132,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: screenshots
+          path: ./app/build/outputs/roborazzi/
 
       - name: Compare screenshots
         run: ./gradlew compareRoborazziProdDebug --stacktrace
