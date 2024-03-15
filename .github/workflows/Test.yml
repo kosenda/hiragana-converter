@@ -85,7 +85,7 @@ jobs:
         run: ./gradlew compileMockDebugSource
 
   compare-screnshots:
-    if: github.event.pull_request.merged == false && ${{ github.event_name == 'pull_request' }}
+    if: ${{ github.event.pull_request.merged == false }} && ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
