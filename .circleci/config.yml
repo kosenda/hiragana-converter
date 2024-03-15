@@ -256,11 +256,12 @@ jobs:
           command: |
             pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
             base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
+            echo "base: $base"
       - run:
           name: check exist screenshots branch
           command: |
             isExistScreenshots=$(
-              git fetch origin screenshots_${BASE_BRANCH_NAME} &&
+              git fetch origin screenshots_$base &&
               echo true || echo false
             )
       - run:
