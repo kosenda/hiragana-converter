@@ -262,21 +262,14 @@ jobs:
           body: ${{ steps.create-comments-not-exist-screenshot-diff.outputs.reports }}
           edit-mode: replace
 
-      - name: Cleanup outdated companion branches
+      - name: Cleanup outdated companion or screenshots branches
         run: |
-          # Find outdated companion branches with last commit date
-          git branch -r --format="%(refname:lstrip=3)" | grep companion_ | while read -r branch; do
+          git branch -r --format="%(refname:lstrip=3)" | grep -e companion_ -e screenshots_ | while read -r branch; do
             last_commit_date_timestamp=$(git log -1 --format=%ct "origin/$branch")
             now_timestamp=$(date +%s)
-            # Delete branch if it's older than 1 month
-            # if [ $((now_timestamp - last_commit_date_timestamp)) -gt 2592000 ]; then
-            # For testing purpose, delete branch if it's older than 1 second
-            echo "branch: $branch now_timestamp: $now_timestamp last_commit_date_timestamp: $last_commit_date_timestamp"
-            if [ $((now_timestamp - last_commit_date_timestamp)) -gt 1 ]; then
-              # Comment out for demonstration purpose
-              echo "Deleting $branch"
-          
-              # git push origin --delete "$branch"
+            maximum_seconds_past=2592000 # 30 days
+            if [ $((now_timestamp - last_commit_date_timestamp)) -gt maximum_seconds_past ]; then
+              git push origin --delete "$branch"
             fi
           done
 
