@@ -261,18 +261,10 @@ jobs:
           name: check exist screenshots branch
           command: |
             isExistScreenshots=$(
-              git fetch origin screenshots_$base &&
+              git fetch origin screenshots_${BASE_BRANCH_NAME} &&
               echo true || echo false
             )
             echo "export IS_EXIST_SCREENSHOTS=${isExistScreenshots}" >> $BASH_ENV
-      - run:
-          name: test echo
-          command: |
-            echo "BASE_BRANCH_NAME: ${BASE_BRANCH_NAME}"
-            echo "IS_EXIST_SCREENSHOTS: ${IS_EXIST_SCREENSHOTS}"
-
-
-
 
 workflows:
   test:
