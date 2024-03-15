@@ -189,7 +189,7 @@ jobs:
           git rm -rf .
 
       - name: Download screenshots from PR number directory
-        if: ${{ steps.check-screenshot-diff.outputs.is_existF == 'true' }}
+        if: ${{ steps.check-screenshot-diff.outputs.is_exist == 'true' }}
         uses: actions/download-artifact@v4
         with:
           name: pr directory
