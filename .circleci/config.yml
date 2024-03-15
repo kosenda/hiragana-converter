@@ -257,7 +257,7 @@ jobs:
             pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
             base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
             echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
-            echo "BASE_BRANCH_NAME: ${BASE_BRANCH_NAME}"
+            echo "BASE_BRANCH_NAME: $BASE_BRANCH_NAME"
       - run:
           name: check exist screenshots branch
           command: |
@@ -265,7 +265,7 @@ jobs:
               git fetch origin screenshots_${BASE_BRANCH_NAME} &&
               echo true || echo false
             ) >> $BASH_ENV
-            echo "IS_EXIST_SCREENSHOTS: ${IS_EXIST_SCREENSHOTS}"
+            echo "IS_EXIST_SCREENSHOTS: $IS_EXIST_SCREENSHOTS"
 
 
 workflows:
