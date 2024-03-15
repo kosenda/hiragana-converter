@@ -1,6 +1,7 @@
 # Reference
 
 ## GitHub Actions
+- [DevelopersIO - [GitHub Actions] 指定のBranchの存在チェックをする（git-fetchコマンド）](https://dev.classmethod.jp/articles/github-actions-check-if-specific-branch-is-existing/)
 - [GitHub - DroidKaigi/conference-app-2023](https://github.com/DroidKaigi/conference-app-2023)
 - [GitHub - MeilCli/danger-action](https://github.com/MeilCli/danger-action)
 - [GitHub Docs - コンカレンシーの使用](https://docs.github.com/ja/actions/using-jobs/using-concurrency)
