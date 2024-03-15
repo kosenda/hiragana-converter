@@ -33,7 +33,7 @@ jobs:
           retention-days: 1
 
       - name: Save screenshots branch name
-        run: echo "SCREENSHOTS_BRANCH_NAME=screenshots_${{ github.head_ref }}" >> $GITHUB_ENV
+        run: echo "SCREENSHOTS_BRANCH_NAME=screenshots_${{ github.base_ref }}" >> $GITHUB_ENV
 
       - name: Checkout main branch
         uses: actions/checkout@v4
