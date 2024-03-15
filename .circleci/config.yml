@@ -262,7 +262,8 @@ jobs:
               git fetch origin screenshots_${BASE_BRANCH_NAME} &&
               echo true || echo false
             )
-            echo "export IS_EXIST_SCREENSHOTS=${isExistScreenshots}" >> $BASH_ENV
+            echo "export IS_EXIST_SCREENSHOTS=$isExistScreenshots" >> $BASH_ENV
+            echo "isExistScreenshots: $isExistScreenshots"
       - when:
           condition:
             equal: ["$IS_EXIST_SCREENSHOTS", "true"]
