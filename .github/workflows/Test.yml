@@ -94,7 +94,7 @@ jobs:
       - name: Check exist screenshots branch
         id: check-exist-screenshots
         run: |
-          is_exist=$(
+          echo is_exist=$(
             git fetch origin screenshots_${{ github.base_ref }} &&
             echo true || echo false
           ) >> "$GITHUB_OUTPUT"
