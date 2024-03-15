@@ -1,68 +1,68 @@
-# ref: https://github.com/kosenda/hiragana-converter/blob/develop/REFERENCE.md
-
-name: SaveScreenshot
-
-on:
-  pull_request:
-    types:
-      - closed
-    paths-ignore:
-      - README.md
-
-jobs:
-  save-screenshot:
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout sources
-        uses: actions/checkout@v4
-
-      - name: Setup
-        uses: ./.github/actions/setup
-        with:
-          api-key: ${{ secrets.API_KEY }}
-
-      - name: create screenshots
-        run: ./gradlew recordRoborazziProdDebug --stacktrace
-
-      - name: Upload screenshots
-        uses: actions/upload-artifact@v4
-        with:
-          name: screenshots
-          path: ./app/build/outputs/roborazzi/
-          retention-days: 1
-
-      - name: Save screenshots branch name
-        run: echo "SCREENSHOTS_BRANCH_NAME=screenshots_${{ github.base_ref }}" >> $GITHUB_ENV
-
-      - name: Checkout main branch
-        uses: actions/checkout@v4
-        with:
-          ref: main
-
-      - name: Checkout screenshots branch
-        run: |
-          git branch -D ${{ env.SCREENSHOTS_BRANCH_NAME }} || true
-          git checkout --orphan ${{ env.SCREENSHOTS_BRANCH_NAME }}
-          git rm -rf .
-          mkdir -p ./app/build/outputs/roborazzi
-
-      - name: Download screenshots
-        uses: actions/download-artifact@v4
-        with:
-          name: screenshots
-          path: ./app/build/outputs/roborazzi/
-
-      - name: Push screenshots to screenshots branch
-        id: push-screenshot-diff
-        run: |
-          git add -A
-          git config --global user.name ScreenshotBot
-          git config --global user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git commit -m "Add screenshots"
-          git push origin HEAD:${{ env.SCREENSHOTS_BRANCH_NAME }} -f
-
-      - name: Checkout pr branch
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_branch }}
+## ref: https://github.com/kosenda/hiragana-converter/blob/develop/REFERENCE.md
+#
+#name: SaveScreenshot
+#
+#on:
+#  pull_request:
+#    types:
+#      - closed
+#    paths-ignore:
+#      - README.md
+#
+#jobs:
+#  save-screenshot:
+#    if: github.event.pull_request.merged == true
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout sources
+#        uses: actions/checkout@v4
+#
+#      - name: Setup
+#        uses: ./.github/actions/setup
+#        with:
+#          api-key: ${{ secrets.API_KEY }}
+#
+#      - name: create screenshots
+#        run: ./gradlew recordRoborazziProdDebug --stacktrace
+#
+#      - name: Upload screenshots
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: screenshots
+#          path: ./app/build/outputs/roborazzi/
+#          retention-days: 1
+#
+#      - name: Save screenshots branch name
+#        run: echo "SCREENSHOTS_BRANCH_NAME=screenshots_${{ github.base_ref }}" >> $GITHUB_ENV
+#
+#      - name: Checkout main branch
+#        uses: actions/checkout@v4
+#        with:
+#          ref: main
+#
+#      - name: Checkout screenshots branch
+#        run: |
+#          git branch -D ${{ env.SCREENSHOTS_BRANCH_NAME }} || true
+#          git checkout --orphan ${{ env.SCREENSHOTS_BRANCH_NAME }}
+#          git rm -rf .
+#          mkdir -p ./app/build/outputs/roborazzi
+#
+#      - name: Download screenshots
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: screenshots
+#          path: ./app/build/outputs/roborazzi/
+#
+#      - name: Push screenshots to screenshots branch
+#        id: push-screenshot-diff
+#        run: |
+#          git add -A
+#          git config --global user.name ScreenshotBot
+#          git config --global user.email 41898282+github-actions[bot]@users.noreply.github.com
+#          git commit -m "Add screenshots"
+#          git push origin HEAD:${{ env.SCREENSHOTS_BRANCH_NAME }} -f
+#
+#      - name: Checkout pr branch
+#        uses: actions/checkout@v4
+#        with:
+#          ref: ${{ github.event.workflow_run.head_branch }}
