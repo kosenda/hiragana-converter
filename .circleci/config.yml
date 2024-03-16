@@ -94,6 +94,10 @@ commands:
       is_exist_screenshots:
         type: string
     steps:
+      - run:
+          name: test
+          command: |
+            echo "is_exist_screenshots: $is_exist_screenshots"
       - when:
           condition:
             equal: [ "true", <<parameters.is_exist_screenshots>> ]
