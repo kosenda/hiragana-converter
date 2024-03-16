@@ -89,7 +89,7 @@ commands:
           aws_access_key_id: AWS_ACCESS_KEY_ID
           aws_secret_access_key: AWS_SECRET_ACCESS_KEY
           region: AWS_REGION
-  save-screenshots-to-artifacts:
+  save-screenshots-to-cache:
     parameters:
       is_exist_screenshots:
         type: string
@@ -104,6 +104,7 @@ commands:
                 name: checkout screenshots branch
                 command: |
                   git checkout screenshots_${BASE_BRANCH_NAME}
+            - save_cache:
                 key: "screenshots_${CIRCLE_WORKFLOW_JOB_ID}"
                 paths:
                   - ./app/build/outputs/roborazzi
@@ -272,7 +273,7 @@ jobs:
             pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
             base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
             echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
-      - save-screenshots-to-artifacts:
+      - save-screenshots-to-cache:
           is_exist_screenshots: $(git fetch origin screenshots_${BASE_BRANCH_NAME} && echo true || echo false)
       - set-locale-properties
       - restore-and-save-gradle-cache
