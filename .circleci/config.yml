@@ -111,7 +111,6 @@ commands:
                   echo "screenshots_${CIRCLE_WORKFLOW_JOB_ID}
                   echo "screenshots_${CIRCLE_WORKING_DIRECTORY}
                   echo "screenshots_<<pipeline.schedule.id>>"
-                  echo "screenshots_<<pipeline.trigger_parameters.circleci.trigger_id>>"
             - save_cache:
                 key: "screenshots_${CIRCLE_WORKFLOW_JOB_ID}"
                 paths:
