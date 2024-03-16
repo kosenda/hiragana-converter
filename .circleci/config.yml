@@ -105,7 +105,7 @@ commands:
                 command: |
                   git checkout screenshots_${BASE_BRANCH_NAME}
             - save_cache:
-                key: screenshots_${CIRCLE_WORKFLOW_JOB_ID}
+                key: screenshots_${CIRCLE_BUILD_NUM}
                 paths:
                   - ./app/build/outputs/roborazzi
             - run:
@@ -279,7 +279,7 @@ jobs:
       - restore-and-save-gradle-cache
       - restore_cache:
           keys:
-            - "screenshots_${CIRCLE_WORKFLOW_JOB_ID}"
+            - screenshots_${CIRCLE_BUILD_NUM}
       - run:
           name: compare screenshots
           command: ./gradlew compareRoborazziProdDebug --stacktrace
