@@ -103,6 +103,9 @@ commands:
             equal: [ "true", <<parameters.is_exist_screenshots>> ]
           steps:
             - run:
+                name: when test
+                command: echo true
+            - run:
                 name: checkout screenshots branch
                 command: |
                   git checkout screenshots_${BASE_BRANCH_NAME}
@@ -114,12 +117,12 @@ commands:
                 name: checkout pr branch
                 command: |
                   git checkout $CIRCLE_BRANCH
-      - when:
+      - unless:
           condition:
             equal: [ "false", <<parameters.is_exist_screenshots>> ]
           steps:
             - run:
-                name: checkout screenshots branch
+                name: when test
                 command: echo false
 
 
