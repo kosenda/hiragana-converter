@@ -105,7 +105,7 @@ commands:
                 command: |
                   git checkout screenshots_${BASE_BRANCH_NAME}
             - save_cache:
-                key: "screenshots_${CIRCLE_WORKFLOW_JOB_ID}"
+                key: screenshots_${CIRCLE_WORKFLOW_JOB_ID}
                 paths:
                   - ./app/build/outputs/roborazzi
             - run:
@@ -277,8 +277,6 @@ jobs:
           is_exist_screenshots: $(git fetch origin screenshots_${BASE_BRANCH_NAME} && echo true || echo false)
       - set-locale-properties
       - restore-and-save-gradle-cache
-      - attach_workspace:
-          at: ./app/build/outputs/roborazzi
       - restore_cache:
           keys:
             - "screenshots_${CIRCLE_WORKFLOW_JOB_ID}"
