@@ -89,6 +89,35 @@ commands:
           aws_access_key_id: AWS_ACCESS_KEY_ID
           aws_secret_access_key: AWS_SECRET_ACCESS_KEY
           region: AWS_REGION
+  save-screenshots-to-artifacts:
+    parameters:
+      is_exist_screenshots:
+        type: string
+    steps:
+      - when:
+          condition:
+            equal: [ "true", <<parameters.is_exist_screenshots>> ]
+          steps:
+            - run:
+                name: checkout screenshots branch
+                command: |
+                  git checkout screenshots_${BASE_BRANCH_NAME}
+            - persist_to_workspace:
+                root: ./app/build/outputs/roborazzi
+                paths:
+                  - .
+            - run:
+                name: checkout pr branch
+                command: |
+                  git checkout $CIRCLE_BRANCH
+      - when:
+          condition:
+            equal: [ "false", <<parameters.is_exist_screenshots>> ]
+          steps:
+            - run:
+                name: checkout screenshots branch
+                command: echo false
+
 
 jobs:
   dependencies:
@@ -234,18 +263,6 @@ jobs:
           name: test comment
           command: gh pr comment "$CIRCLE_PULL_REQUEST" --edit-last -F ./comments || gh pr comment "$CIRCLE_PULL_REQUEST" -F ./comments
 
-  test:
-    executor: android
-    steps:
-      - checkout
-      - run:
-         name: test
-         command: |
-           echo "temp=Hello, World!"
-         run:
-            name: test
-            command: echo $temp
-
   compare-screenshots_new:
     executor: android
     steps:
@@ -269,23 +286,8 @@ jobs:
               echo true || echo false
             )
             echo "export IS_EXIST_SCREENSHOTS=$isExistScreenshots" >> $BASH_ENV
-          run:
-            - when:
-                condition:
-                  equal: [ true, $IS_EXIST_SCREENSHOTS ]
-                steps:
-                  - run:
-                      name: checkout screenshots branch
-                      command: |
-                        git checkout screenshots_${BASE_BRANCH_NAME}
-                  - persist_to_workspace:
-                      root: ./app/build/outputs/roborazzi
-                      paths:
-                        - .
-                  - run:
-                      name: checkout pr branch
-                      command: |
-                        git checkout $CIRCLE_BRANCH
+      - save-screenshots-to-artifacts:
+          is_exist_screenshots: $IS_EXIST_SCREENSHOTS
       - set-locale-properties
       - restore-and-save-gradle-cache
       - run:
@@ -295,7 +297,6 @@ jobs:
 workflows:
   test:
     jobs:
-      - test
       - dependencies
 #      - test-prod:
 #          context: slack-secrets
