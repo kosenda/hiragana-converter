@@ -278,16 +278,8 @@ jobs:
             pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
             base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
             echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
-      - run:
-          name: check exist screenshots branch
-          command: |
-            isExistScreenshots=$(
-              git fetch origin screenshots_${BASE_BRANCH_NAME} &&
-              echo true || echo false
-            )
-            echo "export IS_EXIST_SCREENSHOTS=$isExistScreenshots" >> $BASH_ENV
       - save-screenshots-to-artifacts:
-          is_exist_screenshots: $IS_EXIST_SCREENSHOTS
+          is_exist_screenshots: $(git fetch origin screenshots_${BASE_BRANCH_NAME} && echo true || echo false)
       - set-locale-properties
       - restore-and-save-gradle-cache
       - run:
