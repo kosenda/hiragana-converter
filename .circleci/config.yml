@@ -97,7 +97,7 @@ commands:
       - run:
           name: test
           command: |
-            echo "is_exist_screenshots: $is_exist_screenshots"
+            echo "is_exist_screenshots: <<parameters.is_exist_screenshots>>"
       - when:
           condition:
             equal: [ "true", <<parameters.is_exist_screenshots>> ]
