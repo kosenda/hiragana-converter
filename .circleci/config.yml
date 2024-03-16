@@ -104,10 +104,18 @@ commands:
                 name: checkout screenshots branch
                 command: |
                   git checkout screenshots_${BASE_BRANCH_NAME}
-            - persist_to_workspace:
-                root: ./app/build/outputs/roborazzi
+            - run:
+                name: pipeline test
+                command: |
+                  echo "screenshots_${CIRCLE_WORKFLOW_ID}
+                  echo "screenshots_${CIRCLE_WORKFLOW_JOB_ID}
+                  echo "screenshots_${CIRCLE_WORKING_DIRECTORY}
+                  echo "screenshots_<<pipeline.schedule.id>>"
+                  echo "screenshots_<<pipeline.trigger_parameters.circleci.trigger_id>>"
+            - save_cache:
+                key: "screenshots_${CIRCLE_WORKFLOW_JOB_ID}"
                 paths:
-                  - .
+                  - ./app/build/outputs/roborazzi
             - run:
                 name: checkout pr branch
                 command: |
@@ -279,6 +287,9 @@ jobs:
       - restore-and-save-gradle-cache
       - attach_workspace:
           at: ./app/build/outputs/roborazzi
+      - restore_cache:
+          keys:
+            - "screenshots_${CIRCLE_WORKFLOW_JOB_ID}"
       - run:
           name: compare screenshots
           command: ./gradlew compareRoborazziProdDebug --stacktrace
