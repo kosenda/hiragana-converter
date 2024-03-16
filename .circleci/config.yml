@@ -100,7 +100,7 @@ commands:
             echo "is_exist_screenshots: <<parameters.is_exist_screenshots>>"
       - when:
           condition:
-            equal: [ "true", <<parameters.is_exist_screenshots>> ]
+            equal: [ true, <<parameters.is_exist_screenshots>> ]
           steps:
             - run:
                 name: when test
@@ -119,11 +119,23 @@ commands:
                   git checkout $CIRCLE_BRANCH
       - unless:
           condition:
-            equal: [ "false", <<parameters.is_exist_screenshots>> ]
+            equal: [ false, <<parameters.is_exist_screenshots>> ]
           steps:
             - run:
-                name: when test
+                name: when test2
                 command: echo false
+      - unless:
+          condition: <<parameters.is_exist_screenshots>>
+          steps:
+            - run:
+                name: when test3
+                command: echo unless1
+      - when:
+          condition: <<parameters.is_exist_screenshots>>
+          steps:
+            - run:
+                name: when test3
+                command: echo unless2
 
 
 jobs:
