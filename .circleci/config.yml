@@ -104,14 +104,8 @@ commands:
                 name: checkout screenshots branch
                 command: |
                   git checkout screenshots_${BASE_BRANCH_NAME}
-            - run:
-                name: test
-                command: |
-                  echo "CIRCLE_BUILD_NUM: $CIRCLE_BUILD_NUM"
-                  echo "screenshots_${CIRCLE_BUILD_NUM}"
-                  echo screenshots_${CIRCLE_BUILD_NUM}
             - save_cache:
-                key: "screenshots_${CIRCLE_BUILD_NUM}"
+                key: screenshots_$CIRCLE_BUILD_NUM
                 paths:
                   - ./app/build/outputs/roborazzi
             - run:
@@ -284,8 +278,7 @@ jobs:
       - set-locale-properties
       - restore-and-save-gradle-cache
       - restore_cache:
-          keys:
-            - "screenshots_${CIRCLE_BUILD_NUM}"
+          key: screenshots_$CIRCLE_BUILD_NUM
       - run:
           name: compare screenshots
           command: ./gradlew compareRoborazziProdDebug --stacktrace
