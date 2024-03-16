@@ -104,14 +104,6 @@ commands:
                 name: checkout screenshots branch
                 command: |
                   git checkout screenshots_${BASE_BRANCH_NAME}
-            - run:
-                name: pipeline test
-                command: |
-                  echo "screenshots_${CIRCLE_WORKFLOW_ID}
-                  echo "screenshots_${CIRCLE_WORKFLOW_JOB_ID}
-                  echo "screenshots_${CIRCLE_WORKING_DIRECTORY}
-                  echo "screenshots_<<pipeline.schedule.id>>"
-            - save_cache:
                 key: "screenshots_${CIRCLE_WORKFLOW_JOB_ID}"
                 paths:
                   - ./app/build/outputs/roborazzi
