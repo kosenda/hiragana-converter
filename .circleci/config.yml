@@ -26,59 +26,6 @@ commands:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
 
-  set-github-access-token:
-    steps:
-      - run:
-          name: set github access token
-          # Create GitHub App Token using JWT and pass it with gh auth to login
-          # ref: https://zenn.dev/gorohash/articles/e2c5f6ce50f4e6
-          command: |
-            # create JWT
-            echo create JWT
-            # header
-            header=$(echo -n '{"alg":"RS256","typ":"JWT"}' | base64 -w 0)
-            # payload
-            # Current Unix time(Epoch)
-            now=$(date "+%s")
-            # Date and time token was issued (issued at) (Set 1 minute before the current time to account for the possibility of the clock being off)
-            iat=$((${now} - 60))
-            # Date and time when token expires (Expiration time) (10 minutes later)
-            exp=$((${now} + (10 * 60)))
-            # iss: GitHub App ID (issuer)
-            iss="$APP_ID"
-            payload=$(echo -n "{\"iat\":${iat},\"exp\":${exp},\"iss\":${iss}}" | base64 -w 0)
-            # signature
-            echo $COMMENT_GITHUB_API_TOKEN | base64 --decode > ./githubApps
-            signature=$(echo -n $(echo -n "${header}.${payload}" | openssl dgst -binary -sha256 -sign "./githubApps" | base64))
-            # jwt
-            jwt="${header}.${payload}.${signature}"
-            
-            # Generating an installation access token for a GitHub App
-            echo Generating an installation access token for a GitHub App
-            user_name="kosenda"
-            installation_id=$(
-              curl -s -G \
-                -H "Authorization: Bearer ${jwt}" \
-                -H "Accept: application/vnd.github+json" \
-                "https://api.github.com/app/installations" \
-                | jq -r ".[] | select(.account.login == \"${user_name}\" and .account.type == \"User\") | .id"
-            )
-            
-            # Get an installation access token
-            echo Get an installation access token
-            access_token=$(
-              echo $(
-                curl -s -X POST \
-                -H "Authorization: Bearer ${jwt}" \
-                -H "Accept: application/vnd.github+json" \
-                "https://api.github.com/app/installations/${installation_id}/access_tokens" \
-                | jq -r ".token"
-              )
-            )
-            
-            # set github access token
-            echo "export GITHUB_ACCESS_TOKEN='$access_token'" >> $BASH_ENV
-
 jobs:
   dependencies:
     executor: android
@@ -148,34 +95,32 @@ jobs:
     steps:
       - checkout
       - gh/install
-      - set-github-access-token
       - run:
           name: gh login
-          command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
+          command: echo "$DANGER_GITHUB_API_TOKEN" | gh auth login --with-token
       - run:
           name: use github actions workflow
-          command: gh workflow run "SaveScreenshot.yml" branch_name=${CIRCLE_BRANCH}
+          command: gh workflow run "SaveScreenshot.yml" branch_name=$CIRCLE_BRANCH
 
   compare-screenshots:
     executor: android
     steps:
       - checkout
       - gh/install
-      - set-github-access-token
       - run:
           name: gh login
-          command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
+          command: echo "$DANGER_GITHUB_API_TOKEN" | gh auth login --with-token
       - run:
           name: get base branch name
           command: |
             # ◼ get base branch name
             pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
-            base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
+            base=$(curl -s -H "Authorization: token ${DANGER_GITHUB_API_TOKEN}" $pr | jq '.base.ref')
             echo "base branch name: $base"
             echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
       - run:
           name: use github actions workflow
-          command: gh workflow run "CompareScreenshot.yml" pr_branch_name=${CIRCLE_BRANCH} pr_number=${CIRCLE_PR_NUMBER} base_branch_name=${BASE_BRANCH_NAME}
+          command: gh workflow run "CompareScreenshot.yml" pr_branch_name=$CIRCLE_BRANCH pr_number=$CIRCLE_PR_NUMBER base_branch_name=$BASE_BRANCH_NAME
 
 workflows:
   test:
