@@ -3,8 +3,6 @@ version: 2.1
 orbs:
   slack: circleci/slack@4.12.6
   gh: circleci/github-cli@2.3.0
-  aws-cli: circleci/aws-cli@4.1.3
-  aws-s3: circleci/aws-s3@4.0.0
 
 executors:
   android:
@@ -83,12 +81,6 @@ commands:
             
             # set github access token
             echo "export GITHUB_ACCESS_TOKEN='$access_token'" >> $BASH_ENV
-  aws-cli-setup:
-    steps:
-      - aws-cli/setup:
-          aws_access_key_id: AWS_ACCESS_KEY_ID
-          aws_secret_access_key: AWS_SECRET_ACCESS_KEY
-          region: AWS_REGION
 
 jobs:
   dependencies:
@@ -158,85 +150,27 @@ jobs:
     executor: android
     steps:
       - checkout
-      - attach_workspace:
-          at: .
-      - run:
-          name: create screenshots
-          command: ./gradlew recordRoborazziProdDebug --stacktrace
-      - aws-cli-setup
-      - aws-s3/sync:
-          arguments: --delete
-          from: ./app/build/outputs/roborazzi
-          to: s3://hiraganaconverter-roborazzi/image/$CIRCLE_BRANCH
-
-  compare-screenshots:
-    executor: android
-    steps:
-      - checkout
-      - attach_workspace:
-          at: .
       - gh/install
       - set-github-access-token
       - run:
           name: gh login
           command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
       - run:
-          name: get base branch name
-          # ref: https://discuss.circleci.com/t/how-to-retrieve-a-pull-requests-base-branch-name-github/36911
-          command: |
-            # ◼ get base branch name
-            pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
-            base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
-            echo "base branch name: $base"
-            echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
-      - aws-cli-setup
-      - aws-s3/copy:
-          arguments: --recursive
-          from: "s3://hiraganaconverter-roborazzi/image/$BASE_BRANCH_NAME"
-          to: ./app/build/outputs/roborazzi
-      - run:
-          name: compare screenshots
-          command: ./gradlew compareRoborazziProdDebug --stacktrace
-      - run:
-          name: move screenshots files
-          command: |
-            mkdir -p ./build/outputs/roborazzi/compareProdDebug
-            mv ./app/build/outputs/roborazzi ./build/outputs/roborazzi/compareProdDebug
-            # delete except *_compare.png
-            find ./build/outputs/roborazzi/compareProdDebug/roborazzi  -type f |  grep -v -e '.*_compare.png' | xargs rm -rf
-            ls ./build/outputs/roborazzi/compareProdDebug/roborazzi
-      - run:
-          name: set pr number
-          command: |
-            pr_number=$(basename $CIRCLE_PULL_REQUEST)
-            echo "export PR_NUMBER=${pr_number}" >> $BASH_ENV
-      - aws-s3/sync:
-          arguments: --delete
-          from: ./build/outputs/roborazzi/compareProdDebug/roborazzi
-          to: s3://hiraganaconverter-roborazzi/image/pr/$PR_NUMBER
-      - run:
-          name: create comments
-          command: |
-            cat \<< EOF > comments
-            |File name|Image|
-            |---|---|
-            EOF
+          name: use github actions workflow
+          command: gh workflow run "SaveScreenshot.yml"
 
-            # Find all the files ending with _compare.png
-            files_to_add=$(find . -type f -path "./build/outputs/roborazzi/compareProdDebug/roborazzi/*" -name "*_compare.png")
-
-            # Add compare image
-            for file in $files_to_add; do
-              compare_file_path=$(basename $file)
-              echo "compare file path: $compare_file_path"
-              compare_file_name=$(echo $compare_file_path | rev | cut -d. -f-2 | rev )
-              image_url="https://hiraganaconverter-roborazzi.s3.ap-northeast-1.amazonaws.com/image/pr/$PR_NUMBER/$compare_file_path"
-              echo "| $compare_file_name | <img src=\"$image_url\" width=\"600\"> |" >> comments
-            done
+  compare-screenshots:
+    executor: android
+    steps:
+      - checkout
+      - gh/install
+      - set-github-access-token
       - run:
-          # ref: https://github.com/cli/cli/issues/6790
-          name: test comment
-          command: gh pr comment "$CIRCLE_PULL_REQUEST" --edit-last -F ./comments || gh pr comment "$CIRCLE_PULL_REQUEST" -F ./comments
+          name: gh login
+          command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
+      - run:
+          name: use github actions workflow
+          command: gh workflow run "CompareScreenshot.yml"
 
 workflows:
   test:
