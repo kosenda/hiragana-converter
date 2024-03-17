@@ -97,7 +97,7 @@ jobs:
       - gh/install
       - run:
           name: gh login
-          command: echo "$DANGER_GITHUB_API_TOKEN" | gh auth login --with-token
+          command: echo "$WORKFLOW_TOKEN" | gh auth login --with-token
       - run:
           name: use github actions workflow
           command: gh workflow run "SaveScreenshot.yml" branch_name=$CIRCLE_BRANCH
@@ -109,13 +109,13 @@ jobs:
       - gh/install
       - run:
           name: gh login
-          command: echo "$DANGER_GITHUB_API_TOKEN" | gh auth login --with-token
+          command: echo "$WORKFLOW_TOKEN" | gh auth login --with-token
       - run:
           name: get base branch name
           command: |
             # ◼ get base branch name
             pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
-            base=$(curl -s -H "Authorization: token ${DANGER_GITHUB_API_TOKEN}" $pr | jq '.base.ref')
+            base=$(curl -s -H "Authorization: token ${WORKFLOW_TOKEN}" $pr | jq '.base.ref')
             echo "base branch name: $base"
             echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
       - run:
