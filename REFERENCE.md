@@ -15,3 +15,6 @@
 
 ## CircleCI
 - [circleci Discuss - How to Retrieve a Pull Request’s Base Branch Name [GitHub]](https://discuss.circleci.com/t/how-to-retrieve-a-pull-requests-base-branch-name-github/36911)
+
+## Shell
+- [Unix & Linux - print everything after a slash](https://unix.stackexchange.com/questions/247560/print-everything-after-a-slash)
