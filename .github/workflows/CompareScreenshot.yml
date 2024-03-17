@@ -2,7 +2,17 @@
 
 name: CompareScreenshot
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      pr_branch_name:
+        description: 'PR branch name'
+        type: string
+        required: true
+      base_branch_name:
+        description: 'Base branch name'
+        type: string
+        required: true
 
 permissions:
   contents: write
@@ -20,7 +30,7 @@ jobs:
         id: check-exist-screenshots
         run: |
           echo is_exist=$(
-            git fetch origin screenshots_${{ github.base_ref }} &&
+            git fetch origin screenshots_${{ inputs.base_branch_name }} &&
             echo true || echo false
           ) >> "$GITHUB_OUTPUT"
 
@@ -28,7 +38,7 @@ jobs:
         if: steps.check-exist-screenshots.outputs.is_exist == 'true'
         uses: actions/checkout@v4
         with:
-          ref: screenshots_${{ github.base_ref }}
+          ref: screenshots_${{ inputs.base_branch_name }}
 
       - name: Make screenshots directory
         run: mkdir -p ./app/build/outputs/roborazzi
@@ -45,7 +55,7 @@ jobs:
         if: steps.check-exist-screenshots.outputs.is_exist == 'true'
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref }}
+          ref: ${{ inputs.pr_branch_name }}
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -98,7 +108,7 @@ jobs:
       - name: Save pr number and branch name
         run: |
           echo "PR_NUMBER=${{ github.event.number }}" >> $GITHUB_ENV
-          echo "COMPANION_BRANCH_NAME=companion_${{ github.head_ref }}" >> $GITHUB_ENV
+          echo "COMPANION_BRANCH_NAME=companion_${{ inputs.pr_branch_name }}" >> $GITHUB_ENV
 
       - name: Checkout main branch
         if: steps.check-screenshot-diff.outputs.is_exist == 'true'
@@ -196,4 +206,4 @@ jobs:
       - name: Checkout pr branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.workflow_run.head_branch }}
+          ref: ${{ inputs.pr_branch_name }}
