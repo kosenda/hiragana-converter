@@ -175,7 +175,7 @@ jobs:
             echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
       - run:
           name: use github actions workflow
-          command: gh workflow run "CompareScreenshot.yml" pr_branch_name=${CIRCLE_BRANCH} base_branch_name=${BASE_BRANCH_NAME}
+          command: gh workflow run "CompareScreenshot.yml" pr_branch_name=${CIRCLE_BRANCH} pr_number=${CIRCLE_PR_NUMBER} base_branch_name=${BASE_BRANCH_NAME}
 
 workflows:
   test:
