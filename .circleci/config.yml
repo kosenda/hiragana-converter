@@ -172,7 +172,7 @@ jobs:
             base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
             pr_number=$(echo ${CIRCLE_PULL_REQUEST} | sed "s:.*/::")
             echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
-            echo "export PR_NUMBER=${pr_number} >> $BASH_ENV
+            echo "export PR_NUMBER=${pr_number}" >> $BASH_ENV
       - run:
           name: use github actions workflow
           command: gh workflow run "CompareScreenshot.yml" -f pr_branch_name=$CIRCLE_BRANCH -f pr_number=$PR_NUMBER -f base_branch_name=$BASE_BRANCH_NAME
