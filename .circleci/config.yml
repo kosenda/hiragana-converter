@@ -168,13 +168,14 @@ jobs:
           name: get base branch name
           command: |
             # ◼ get base branch name
-            pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
-            base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
+            pr_num=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
+            base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr_num | jq '.base.ref')
             echo "base branch name: $base"
             echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
+            echo "export PR_NUMBER=${pr_num}" >> $BASH_ENV
       - run:
           name: use github actions workflow
-          command: gh workflow run "CompareScreenshot.yml" -f pr_branch_name=$CIRCLE_BRANCH -f pr_number=$CIRCLE_PULL_REQUEST -f base_branch_name=$BASE_BRANCH_NAME
+          command: gh workflow run "CompareScreenshot.yml" -f pr_branch_name=$CIRCLE_BRANCH -f pr_number=$PR_NUMBER -f base_branch_name=$BASE_BRANCH_NAME
 
 workflows:
   test:
