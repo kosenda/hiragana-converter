@@ -102,7 +102,7 @@ commands:
                 command: |
                   mv ./app/build/outputs/roborazzi/* ./app/build/outputs/roborazzi/$BASE_BRANCH_NAME | mkdir ./app/build/outputs/roborazzi/$BASE_BRANCH_NAME
             - persist_to_workspace:
-                root: .
+                root: ./app/build/outputs/roborazzi/$BASE_BRANCH_NAME
                 paths:
                   - ./app/build/outputs/roborazzi/$BASE_BRANCH_NAME
             - run:
