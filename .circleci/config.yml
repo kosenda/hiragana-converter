@@ -95,12 +95,6 @@ commands:
           condition: <<parameters.is_exist_screenshots>>
           steps:
             - run:
-                name: when test
-                command: echo true
-            - run:
-                name: save base branch name
-                command: echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
-            - run:
                 name: checkout screenshots branch
                 command: git checkout screenshots_${BASE_BRANCH_NAME}
             - run:
