@@ -154,7 +154,7 @@ jobs:
           command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
       - run:
           name: use github actions workflow
-          command: gh workflow run "SaveScreenshot.yml" branch_name=${CIRCLE_BRANCH}
+          command: gh workflow run "SaveScreenshot.yml"
 
   compare-screenshots:
     executor: android
@@ -166,16 +166,8 @@ jobs:
           name: gh login
           command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
       - run:
-          name: get base branch name
-          command: |
-            # ◼ get base branch name
-            pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
-            base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
-            echo "base branch name: $base"
-            echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
-      - run:
           name: use github actions workflow
-          command: gh workflow run "CompareScreenshot.yml" pr_branch_name=${CIRCLE_BRANCH} pr_number=${CIRCLE_PR_NUMBER} base_branch_name=${BASE_BRANCH_NAME}
+          command: gh workflow run "CompareScreenshot.yml"
 
 workflows:
   test:

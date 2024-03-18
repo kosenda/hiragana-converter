@@ -12,6 +12,3 @@
 - [Qiita - 初めてGithub ActionsでCIとやらをやってみた](https://qiita.com/mi_iroha/items/d52d5ea670696fa49474)
 - [Qiita - GitHub ActionsによるktlintとDangerの導入事例](https://qiita.com/mgre_tanabe/items/04515dc1b678b4d21444)
 - [Zenn - GitHub Actionsの共通したアクションを切り出してシンプルに保つ](https://zenn.dev/stafes_blog/articles/ikkitang-a694b8afeb66f5)
-
-## CircleCI
-- [circleci Discuss - How to Retrieve a Pull Request’s Base Branch Name [GitHub]](https://discuss.circleci.com/t/how-to-retrieve-a-pull-requests-base-branch-name-github/36911)

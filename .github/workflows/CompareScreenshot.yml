@@ -2,21 +2,7 @@
 
 name: CompareScreenshot
 
-on:
-  workflow_dispatch:
-    inputs:
-      pr_branch_name:
-        description: 'PR branch name'
-        type: string
-        required: true
-      pr_number:
-        description: 'PR number'
-        type: string
-        required: true
-      base_branch_name:
-        description: 'Base branch name'
-        type: string
-        required: true
+on: workflow_dispatch
 
 permissions:
   contents: write
@@ -34,7 +20,7 @@ jobs:
         id: check-exist-screenshots
         run: |
           echo is_exist=$(
-            git fetch origin screenshots_${{ inputs.base_branch_name }} &&
+            git fetch origin screenshots_${{ github.base_ref }} &&
             echo true || echo false
           ) >> "$GITHUB_OUTPUT"
 
@@ -42,7 +28,7 @@ jobs:
         if: steps.check-exist-screenshots.outputs.is_exist == 'true'
         uses: actions/checkout@v4
         with:
-          ref: screenshots_${{ inputs.base_branch_name }}
+          ref: screenshots_${{ github.base_ref }}
 
       - name: Make screenshots directory
         run: mkdir -p ./app/build/outputs/roborazzi
@@ -59,7 +45,7 @@ jobs:
         if: steps.check-exist-screenshots.outputs.is_exist == 'true'
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.pr_branch_name }}
+          ref: ${{ github.head_ref }}
 
       - name: Setup
         uses: ./.github/actions/setup
@@ -92,26 +78,27 @@ jobs:
 
       - name: Make PR number directory for saving screenshots
         if: steps.check-screenshot-diff.outputs.is_exist == 'true'
-        run: mkdir -p ./pr/${{ inputs.pr_number }}
+        run: mkdir -p ./pr/${{ github.event.number }}
 
       - name: Move screenshots to PR number directory
         if: steps.check-screenshot-diff.outputs.is_exist == 'true'
         run: |
           # delete except *_compare.png
           find ./app/build/outputs/roborazzi  -type f |  grep -v -e '.*_compare.png' | xargs rm -rf
-          mv ./app/build/outputs/roborazzi ./pr/${{ inputs.pr_number }}/
-          ls ./pr/${{ inputs.pr_number }}
+          mv ./app/build/outputs/roborazzi ./pr/${{ github.event.number }}/
+          ls ./pr/${{ github.event.number }}
 
       - name: Save screenshots
         if: steps.check-screenshot-diff.outputs.is_exist == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: pr directory
-          path: pr/${{ inputs.pr_number }}/
+          path: pr/${{ github.event.number }}/
 
       - name: Save pr number and branch name
         run: |
-          echo "COMPANION_BRANCH_NAME=companion_${{ inputs.pr_branch_name }}" >> $GITHUB_ENV
+          echo "PR_NUMBER=${{ github.event.number }}" >> $GITHUB_ENV
+          echo "COMPANION_BRANCH_NAME=companion_${{ github.head_ref }}" >> $GITHUB_ENV
 
       - name: Checkout main branch
         if: steps.check-screenshot-diff.outputs.is_exist == 'true'
@@ -173,7 +160,7 @@ jobs:
         uses: peter-evans/find-comment@v3
         id: fc
         with:
-          issue-number: ${{ inputs.pr_number }}
+          issue-number: ${{ github.event.number }}
           comment-author: 'github-actions[bot]'
           body-includes: Snapshot diff report
 
@@ -182,7 +169,7 @@ jobs:
         uses: peter-evans/create-or-update-comment@v4
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
-          issue-number: ${{ inputs.pr_number }}
+          issue-number: ${{ env.PR_NUMBER }}
           body: ${{ steps.create-comments.outputs.reports }}
           edit-mode: replace
 
@@ -191,7 +178,7 @@ jobs:
         uses: peter-evans/create-or-update-comment@v4
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
-          issue-number: ${{ inputs.pr_number }}
+          issue-number: ${{ env.PR_NUMBER }}
           body: Snapshot diff report
           edit-mode: replace
 
@@ -209,4 +196,4 @@ jobs:
       - name: Checkout pr branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.pr_branch_name }}
+          ref: ${{ github.event.workflow_run.head_branch }}
