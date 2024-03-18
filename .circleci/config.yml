@@ -98,10 +98,9 @@ commands:
                 name: checkout screenshots branch
                 command: git checkout screenshots_${BASE_BRANCH_NAME}
             - run:
-                name: move screenshots files
+                name: move screenshots
                 command: |
-                  mkdir -p ./app/build/outputs/roborazzi/$BASE_BRANCH_NAME
-                  mv ./app/build/outputs/roborazzi ./app/build/outputs/roborazzi/$BASE_BRANCH_NAME
+                  mv ./app/build/outputs/roborazzi/* ./app/build/outputs/roborazzi/$BASE_BRANCH_NAME | mkdir ./app/build/outputs/roborazzi/$BASE_BRANCH_NAME
             - persist_to_workspace:
                 root: .
                 paths:
@@ -300,7 +299,7 @@ jobs:
           name: mv screenshots
           command:
             if [ -e ./app/build/outputs/roborazzi/$BASE_BRANCH_NAME ]; then
-            mv ./app/build/outputs/roborazzi/$BASE_BRANCH_NAME ./app/build/outputs/roborazzi
+              mv ./app/build/outputs/roborazzi/$BASE_BRANCH_NAME ./app/build/outputs/roborazzi
             fi
       - run:
           name: compare screenshots
