@@ -3,15 +3,15 @@
 name: SaveScreenshot
 
 on:
-  workflow_dispatch:
-    inputs:
-      branch_name:
-        description: 'Branch name'
-        type: string
-        required: true
+  pull_request:
+    types:
+      - closed
+    paths-ignore:
+      - README.md
 
 jobs:
   save-screenshot:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
@@ -33,7 +33,7 @@ jobs:
           retention-days: 1
 
       - name: Save screenshots branch name
-        run: echo "SCREENSHOTS_BRANCH_NAME=screenshots_${{ inputs.branch_name }}" >> $GITHUB_ENV
+        run: echo "SCREENSHOTS_BRANCH_NAME=screenshots_${{ github.base_ref }}" >> $GITHUB_ENV
 
       - name: Checkout main branch
         uses: actions/checkout@v4
@@ -65,4 +65,4 @@ jobs:
       - name: Checkout pr branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.branch_name }}
+          ref: ${{ github.event.workflow_run.head_branch }}
