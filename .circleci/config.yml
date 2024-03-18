@@ -98,12 +98,12 @@ commands:
                 name: checkout screenshots branch
                 command: git checkout screenshots_$BASE_BRANCH_NAME
             - run:
-                name: make directory
-                command: mkdir -p ./temp/screenshots/$BASE_BRANCH_NAME
+                name: move screenshots
+                command: mv ./app/build/outputs/roborazzi/* ./app/build/outputs/roborazzi/$BASE_BRANCH_NAME | mkdir ./app/build/outputs/roborazzi/$BASE_BRANCH_NAME
             - persist_to_workspace:
-                root: ./temp/screenshots/$BASE_BRANCH_NAME
+                root: ./app/build/outputs/roborazzi/
                 paths:
-                  - ./app/build/outputs/roborazzi/
+                  - ./$BASE_BRANCH_NAME
             - run:
                 name: checkout pr branch
                 command: |
