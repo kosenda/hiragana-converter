@@ -98,9 +98,9 @@ commands:
                 name: checkout screenshots branch
                 command: git checkout screenshots_${BASE_BRANCH_NAME}
             - persist_to_workspace:
-                root: /$BASE_BRANCH_NAME
+                root: ./$BASE_BRANCH_NAME
                 paths:
-                  - /app/build/outputs/roborazzi/
+                  - ./app/build/outputs/roborazzi/
             - run:
                 name: checkout pr branch
                 command: |
@@ -290,7 +290,7 @@ jobs:
       - set-locale-properties
       - restore-and-save-gradle-cache
       - attach_workspace:
-          at: /$BASE_BRANCH_NAME
+          at: ./$BASE_BRANCH_NAME
       - run:
           name: mv screenshots
           command:
