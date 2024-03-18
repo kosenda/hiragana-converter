@@ -2,7 +2,12 @@
 
 name: SaveScreenshot
 
-on: workflow_dispatch
+on:
+  pull_request:
+    types:
+      - closed
+    paths-ignore:
+      - README.md
 
 jobs:
   save-screenshot:
