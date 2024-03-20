@@ -1,0 +1,13 @@
+version: 2.1
+jobs:
+ no-op:
+  machine: true
+  steps:
+  - run: no-op
+workflows:
+ build:
+  jobs:
+   - no-op:
+      filters:
+       branches:
+        only: no-op
