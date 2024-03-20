@@ -290,7 +290,7 @@ jobs:
               git config --global user.email "$GITHUB_EMAIL"
               git push origin --delete companion_$BASE_BRANCH_NAME || true
 
-              git checkout -b companion_$BASE_BRANCH_NAME
+              git checkout --orphan companion_$BASE_BRANCH_NAME
               git rm --cached -r .
             
               add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*" -name "*_compare.png")
