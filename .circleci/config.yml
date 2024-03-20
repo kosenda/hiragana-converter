@@ -145,7 +145,7 @@ jobs:
             echo -e "version: 2.1\njobs:\n no-op:\n  machine: true\n  steps:\n  - run: no-op\nworkflows:\n build:\n  jobs:\n   - no-op:\n      filters:\n       branches:\n        only: no-op" > .circleci/config.yml
             git add .circleci/config.yml
 
-            git commit -m "Add screenshot [skip ci]"
+            git commit -m "Add screenshot"
             git clean -df
             git push origin HEAD:screenshots_$CIRCLE_BRANCH -f
 
@@ -200,7 +200,7 @@ jobs:
               echo -e "version: 2.1\njobs:\n no-op:\n  machine: true\n  steps:\n  - run: no-op\nworkflows:\n build:\n  jobs:\n   - no-op:\n      filters:\n       branches:\n        only: no-op" > .circleci/config.yml
               git add .circleci/config.yml
             
-              git commit -m "Add screenshot diff [skip ci]"
+              git commit -m "Add screenshot diff"
               git push origin HEAD:companion_$CIRCLE_BRANCH -f
 
               gh workflow run "CommentScreenshotDiff.yml" -f pr_branch_name=$CIRCLE_BRANCH -f pr_number=$(echo ${CIRCLE_PULL_REQUEST} | sed "s:.*/::")
