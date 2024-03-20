@@ -301,8 +301,8 @@ jobs:
       - run:
           name: mv screenshots
           command:
-            if [ -e ./temp/screenshots/$BASE_BRANCH_NAME ]; then
-              mv ./temp/screenshots/$BASE_BRANCH_NAME ./app/build/outputs/roborazzi
+            if [ -e ./develop ]; then
+              mv ./develop ./app/build/outputs/roborazzi
             fi
       - run:
           name: compare screenshots
