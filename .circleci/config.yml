@@ -87,7 +87,9 @@ commands:
           steps:
             - run:
                 name: checkout screenshots branch
-                command: git checkout screenshots_$BASE_BRANCH_NAME
+                command: |
+                  git fetch origin screenshots_$BASE_BRANCH_NAME
+                  git checkout screenshots_$BASE_BRANCH_NAME
             - run:
                 name: screenshots timestamp to env
                 command: echo "export SCREENSHOT_TIMESTAMP=$(cat timestamp)" >> $BASH_ENV
@@ -183,8 +185,12 @@ jobs:
             for file in $add_files; do
               git add -f $file
             done
+            
+            $(date +%s) >> timestamp
+            git add timestamp
 
             git commit -m "Add screenshot diff"
+            git clean -df
             git push origin HEAD:screenshots_$CIRCLE_BRANCH -f
 
   compare-screenshots:
@@ -203,7 +209,7 @@ jobs:
             base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
             echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
       - save-screenshots-to-cache:
-          is_exist_screenshots: $(git fetch origin screenshots_${BASE_BRANCH_NAME} && echo true || echo false)
+          is_exist_screenshots: $(git fetch origin screenshots_$BASE_BRANCH_NAME && echo true || echo false)
       - set-locale-properties
       - restore-and-save-gradle-cache
       - run:
@@ -221,9 +227,9 @@ jobs:
             if [ $file_size -ne 0 ]; then
               git config --global user.name "$GITHUB_NAME"
               git config --global user.email "$GITHUB_EMAIL"
-              git push origin --delete companion_$BASE_BRANCH_NAME || true
+              git push origin --delete companion_$CIRCLE_BRANCH || true
 
-              git checkout --orphan companion_$BASE_BRANCH_NAME
+              git checkout --orphan companion_$CIRCLE_BRANCH
               git rm --cached -r .
             
               add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*" -name "*_compare.png")
@@ -232,9 +238,9 @@ jobs:
               done
               
               git commit -m "Add screenshot diff"
-              git push origin HEAD:companion_$BASE_BRANCH_NAME -f
+              git push origin HEAD:companion_$CIRCLE_BRANCH -f
               
-              gh workflow run "CommentScreenshotDiff.yml" -f pr_branch_name=$CIRCLE_BRANCH -f pr_number=$PR_NUMBER
+              gh workflow run "CommentScreenshotDiff.yml" -f pr_branch_name=$CIRCLE_BRANCH -f pr_number=$(echo ${CIRCLE_PULL_REQUEST} | sed "s:.*/::")
             fi
 
 workflows:
