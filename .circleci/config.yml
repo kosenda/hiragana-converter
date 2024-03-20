@@ -289,6 +289,9 @@ jobs:
               # delete except *_compare.png and .git
               find ./app/build/outputs/roborazzi -type f | grep -v -e '.*_compare.png' |xargs rm -rf
               ls -A | grep -v -E './app/build/outputs/roborazzi/*' | grep -v '.git' | xargs rm -rf
+                     
+              git config --global user.name ScreenshotBot
+              git config --global user.email 41898282+github-actions[bot]@users.noreply.github.com
             
               git branch -D companion_$BASE_BRANCH_NAME || true
               git checkout --orphan companion_$BASE_BRANCH_NAME
