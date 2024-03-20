@@ -14,11 +14,6 @@ on:
         type: string
         required: true
 
-permissions:
-  contents: read
-  actions: read
-  pull-requests: write
-
 jobs:
   comment-screenshot-diff:
     runs-on: ubuntu-latest
