@@ -302,7 +302,7 @@ jobs:
           name: mv screenshots
           command:
             if [ -e ./develop ]; then
-              mv ./develop ./app/build/outputs/roborazzi
+              mv ./develop/* ./app/build/outputs/roborazzi
             fi
       - run:
           name: compare screenshots
