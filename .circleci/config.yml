@@ -186,7 +186,7 @@ jobs:
               git add -f $file
             done
             
-            $(date +%s) >> timestamp
+            echo $(date +%s) >> timestamp
             git add timestamp
 
             git commit -m "Add screenshot diff"
