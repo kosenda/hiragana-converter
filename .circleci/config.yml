@@ -295,7 +295,7 @@ jobs:
             file_size=$(find ./build/outputs/roborazzi/compareProdDebug/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/[^0-9]//g')
             echo "file_size=$file_size"
             if [ $file_size -ne 0 ]; then
-              ls -a | grep -v -E './build/outputs/roborazzi/compareProdDebug/roborazzi/*' | xargs rm -r
+              ls -a | grep -v -E './build/outputs/roborazzi/compareProdDebug/roborazzi/*' | xargs rm -rf
               git branch -D companion_$BASE_BRANCH_NAME || true
               git checkout --orphan companion_$BASE_BRANCH_NAME
               git commit -m "Add screenshot diff"
