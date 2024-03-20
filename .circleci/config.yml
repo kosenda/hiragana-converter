@@ -93,9 +93,14 @@ commands:
             - run:
                 name: screenshots timestamp to env
                 command: echo "export SCREENSHOT_TIMESTAMP=$(cat timestamp)" >> $BASH_ENV
+            - run:
+                name: zip screenshots
+                command: |
+                  mkdir -p ./temp/zip
+                  zip -r ./temp/zip/screenshots.zip ./app/build/outputs/roborazzi
             - save_cache:
                 paths:
-                  - ./app/build/outputs/roborazzi
+                  - ./temp/zip
                 key: screenshots-{{ checksum "timestamp" }}
             - run:
                 name: checkout pr branch
@@ -188,8 +193,12 @@ jobs:
             
             echo $(date +%s) >> timestamp
             git add timestamp
+            
+            mkdir .circleci
+            echo -e "version: 2.1\njobs:\n no-op:\n  machine: true\n  steps:\n  - run: no-op\nworkflows:\n build:\n  jobs:\n   - no-op:\n      filters:\n       branches:\n        only: no-op" > .circleci/config.yml
+            git add .circleci/config.yml
 
-            git commit -m "Add screenshot diff"
+            git commit -m "Add screenshot [skip ci]"
             git clean -df
             git push origin HEAD:screenshots_$CIRCLE_BRANCH -f
 
@@ -218,6 +227,11 @@ jobs:
       - restore_cache:
           key: screenshots-{{ checksum "timestamp" }}
       - run:
+          name: unzip screenshots
+          command: |
+            unzip ./temp/zip/screenshots.zip
+            rm -rf ./temp
+      - run:
           name: compare screenshots
           command: ./gradlew compareRoborazziProdDebug --stacktrace
       - run:
@@ -236,10 +250,13 @@ jobs:
               for file in $add_files; do
                 git add -f $file
               done
-              
-              git commit -m "Add screenshot diff"
+
+              echo -e "version: 2.1\njobs:\n no-op:\n  machine: true\n  steps:\n  - run: no-op\nworkflows:\n build:\n  jobs:\n   - no-op:\n      filters:\n       branches:\n        only: no-op" > .circleci/config.yml
+              git add .circleci/config.yml
+            
+              git commit -m "Add screenshot diff [skip ci]"
               git push origin HEAD:companion_$CIRCLE_BRANCH -f
-              
+
               gh workflow run "CommentScreenshotDiff.yml" -f pr_branch_name=$CIRCLE_BRANCH -f pr_number=$(echo ${CIRCLE_PULL_REQUEST} | sed "s:.*/::")
             fi
 
