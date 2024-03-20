@@ -282,28 +282,18 @@ jobs:
           name: compare screenshots
           command: ./gradlew compareRoborazziProdDebug --stacktrace
       - run:
-          name: create comments
+          name: push companion branch
           command: |
-            cat \<< EOF > comments
-            |File name|Image|
-            |---|---|
-            EOF
+            file_size=$(find ./build/outputs/roborazzi/compareProdDebug/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/[^0-9]//g')
+            echo "file_size=$file_size"
+            if [ $file_size -ne 0 ]; then
+              ls -a | grep -v -E './build/outputs/roborazzi/compareProdDebug/roborazzi/*' | xargs rm -r
+              git branch -D companion_$BASE_BRANCH_NAME || true
+              git checkout --orphan companion_$BASE_BRANCH_NAME
+              git commit -m "Add screenshot diff"
+              git push origin HEAD:companion_$BASE_BRANCH_NAME -f
+            fi
 
-            # Find all the files ending with _compare.png
-            files_to_add=$(find . -type f -path "./build/outputs/roborazzi/compareProdDebug/roborazzi/*" -name "*_compare.png")
-
-            # Add compare image
-            for file in $files_to_add; do
-              compare_file_path=$(basename $file)
-              echo "compare file path: $compare_file_path"
-              compare_file_name=$(echo $compare_file_path | rev | cut -d. -f-2 | rev )
-              image_url="https://hiraganaconverter-roborazzi.s3.ap-northeast-1.amazonaws.com/image/pr/$PR_NUMBER/$compare_file_path"
-              echo "| $compare_file_name | <img src=\"$image_url\" width=\"600\"> |" >> comments
-            done
-      - run:
-          # ref: https://github.com/cli/cli/issues/6790
-          name: test comment
-          command: gh pr comment "$CIRCLE_PULL_REQUEST" --edit-last -F ./comments || gh pr comment "$CIRCLE_PULL_REQUEST" -F ./comments
 
 workflows:
   test:
