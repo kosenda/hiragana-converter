@@ -297,7 +297,7 @@ jobs:
       - set-locale-properties
       - restore-and-save-gradle-cache
       - attach_workspace:
-          at: $BASE_BRANCH_NAME
+          at: develop
       - run:
           name: mv screenshots
           command:
