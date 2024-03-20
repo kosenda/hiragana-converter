@@ -286,16 +286,18 @@ jobs:
           command: |
             file_size=$(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/[^0-9]//g')
             if [ $file_size -ne 0 ]; then
-                     
-              git config --global user.name GITHUB_USER
-              git config --global user.email GITHUB_EMAIL
             
               git branch -D companion_$BASE_BRANCH_NAME || true
               git checkout --orphan companion_$BASE_BRANCH_NAME
             
+              git config --global --list
+            
+              git config --global user.name "$GITHUB_USER"
+              git config --global user.email "$GITHUB_EMAIL"
+            
               # delete except *_compare.png and .git
-              find ./app/build/outputs/roborazzi -type f | grep -v -e '.*_compare.png' |xargs rm -rf
-              ls -A | grep -v -E './app/build/outputs/roborazzi/*' | grep -v '.git' | xargs rm -rf
+              find ./app/build/outputs/roborazzi -type f | grep -v -e '.*_compare.png' | xargs rm -rf
+              ls -A | grep -v -E './app/build/outputs/roborazzi/*' | grep -v -x 'git' | xargs rm -rf
             
               git add -A
               git commit -m "Add screenshot diff"
