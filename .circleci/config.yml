@@ -181,7 +181,7 @@ jobs:
             git checkout --orphan screenshots_$CIRCLE_BRANCH
             git rm --cached -r .
 
-            add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*" -name "*_compare.png")
+            add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*")
             for file in $add_files; do
               git add -f $file
             done
