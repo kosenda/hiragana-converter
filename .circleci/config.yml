@@ -282,6 +282,14 @@ jobs:
           name: compare screenshots
           command: ./gradlew compareRoborazziProdDebug --stacktrace
       - run:
+          name: move compare files
+          command: |
+            mkdir -p ./build/outputs/roborazzi/compareProdDebug
+            mv ./app/build/outputs/roborazzi ./build/outputs/roborazzi/compareProdDebug
+            
+            # delete except *_compare.png
+            find ./build/outputs/roborazzi/compareProdDebug/roborazzi  -type f |  grep -v -e '.*_compare.png' | xargs rm -rf
+      - run:
           name: push companion branch
           command: |
             file_size=$(find ./build/outputs/roborazzi/compareProdDebug/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/[^0-9]//g')
