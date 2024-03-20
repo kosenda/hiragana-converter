@@ -251,7 +251,6 @@ jobs:
                 git add -f $file
               done
 
-              mkdir .circleci
               echo -e "version: 2.1\njobs:\n no-op:\n  machine: true\n  steps:\n  - run: no-op\nworkflows:\n build:\n  jobs:\n   - no-op:\n      filters:\n       branches:\n        only: no-op" > .circleci/config.yml
               git add .circleci/config.yml
             
