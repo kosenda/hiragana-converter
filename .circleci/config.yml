@@ -193,6 +193,10 @@ jobs:
             
             echo $(date +%s) >> timestamp
             git add timestamp
+            
+            mkdir .circleci
+            echo -e "version: 2.1\njobs:\n no-op:\n  machine: true\n  steps:\n  - run: no-op\nworkflows:\n build:\n  jobs:\n   - no-op:\n      filters:\n       branches:\n        only: no-op" > .circleci/config.yml
+            git add .circleci/config.yml
 
             git commit -m "Add screenshot [skip ci]"
             git clean -df
@@ -246,10 +250,14 @@ jobs:
               for file in $add_files; do
                 git add -f $file
               done
-              
+
+              mkdir .circleci
+              echo -e "version: 2.1\njobs:\n no-op:\n  machine: true\n  steps:\n  - run: no-op\nworkflows:\n build:\n  jobs:\n   - no-op:\n      filters:\n       branches:\n        only: no-op" > .circleci/config.yml
+              git add .circleci/config.yml
+            
               git commit -m "Add screenshot diff [skip ci]"
               git push origin HEAD:companion_$CIRCLE_BRANCH -f
-              
+
               gh workflow run "CommentScreenshotDiff.yml" -f pr_branch_name=$CIRCLE_BRANCH -f pr_number=$(echo ${CIRCLE_PULL_REQUEST} | sed "s:.*/::")
             fi
 
