@@ -97,8 +97,7 @@ commands:
                 name: zip screenshots
                 command: |
                   mkdir -p ./temp/zip
-                  zip -r screenshots.zip ./app/build/outputs/roborazzi
-                  mv screenshots.zip ./temp/zip
+                  zip -r ./temp/zip/screenshots.zip ./app/build/outputs/roborazzi
             - save_cache:
                 paths:
                   - ./temp/zip
