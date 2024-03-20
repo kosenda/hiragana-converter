@@ -86,7 +86,7 @@ commands:
           aws_access_key_id: AWS_ACCESS_KEY_ID
           aws_secret_access_key: AWS_SECRET_ACCESS_KEY
           region: AWS_REGION
-  save-screenshots-to-artifacts:
+  save-screenshots-to-cache:
     parameters:
       is_exist_screenshots:
         type: string
@@ -98,16 +98,12 @@ commands:
                 name: checkout screenshots branch
                 command: git checkout screenshots_$BASE_BRANCH_NAME
             - run:
-                name: move screenshots
-                command: |
-                  pwd
-                  ls -a
-                  mkdir -p /home/circleci/project/$BASE_BRANCH_NAME
-                  mv ./app/build/outputs/roborazzi/* /home/circleci/project/$BASE_BRANCH_NAME
-            - persist_to_workspace:
-                root: develop
+                name: screenshots timestamp to env
+                command: echo "export SCREENSHOT_TIMESTAMP=$(cat timestamp)" >> $BASH_ENV
+            - save_cache:
                 paths:
-                  - ./*
+                  - ./app/build/outputs/roborazzi
+                key: screenshots-{{ checksum "timestamp" }}
             - run:
                 name: checkout pr branch
                 command: |
@@ -188,27 +184,6 @@ jobs:
           arguments: --delete
           from: ./app/build/outputs/roborazzi
           to: s3://hiraganaconverter-roborazzi/image/$CIRCLE_BRANCH
-
-  store_screenshots_to_artifacts:
-    executor: android
-    steps:
-      - checkout
-      - gh/install
-      - set-github-access-token
-      - run:
-          name: gh login
-          command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
-      - run:
-          name: get base branch name
-          # ref: https://discuss.circleci.com/t/how-to-retrieve-a-pull-requests-base-branch-name-github/36911
-          command: |
-            # ◼ get base branch name
-            pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
-            base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
-            echo "base branch name: $base"
-            echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
-      - save-screenshots-to-artifacts:
-          is_exist_screenshots: $(git fetch origin screenshots_${BASE_BRANCH_NAME} && echo true || echo false)
 
   compare-screenshots:
     executor: android
@@ -294,10 +269,15 @@ jobs:
             pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
             base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
             echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
+      - save-screenshots-to-cache:
+          is_exist_screenshots: $(git fetch origin screenshots_${BASE_BRANCH_NAME} && echo true || echo false)
       - set-locale-properties
       - restore-and-save-gradle-cache
-      - attach_workspace:
-          at: develop
+      - run:
+          name: restore timestamp file
+          command: echo $SCREENSHOT_TIMESTAMP > timestamp
+      - restore_cache:
+          key: screenshots-{{ checksum "timestamp" }}
       - run:
           name: mv screenshots
           command:
@@ -351,17 +331,9 @@ workflows:
       #              only:
       #                - main
       #                - develop
-      - store_screenshots_to_artifacts:
-          requires:
-            - dependencies
-          filters:
-            branches:
-              ignore:
-                - main
-                - develop
       - compare-screenshots_new:
           requires:
-            - store_screenshots_to_artifacts
+            - dependencies
           filters:
             branches:
               ignore:
