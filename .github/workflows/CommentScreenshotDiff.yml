@@ -1,0 +1,107 @@
+## ref: https://github.com/kosenda/hiragana-converter/blob/develop/REFERENCE.md
+
+name: CommentScreenshotDiff
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_branch_name:
+        description: 'PR branch name'
+        type: string
+        required: true
+      pr_number:
+        description: 'PR number'
+        type: string
+        required: true
+
+permissions:
+  contents: write
+  actions: read
+  pull-requests: write
+
+jobs:
+  comment-screenshot-diff:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Check exist companion branch
+        id: check-exist-companion
+        run: |
+          echo is_exist=$(
+            git fetch origin companion_${{ inputs.pr_branch_name }} &&
+            echo true || echo false
+          ) >> $GITHUB_OUTPUT
+          if [is_exist == 'true']; then
+            echo "companion_branch_name=companion_${{ inputs.pr_branch_name }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Checkout screenshots branch
+        if: steps.check-exist-companion.outputs.is_exist == 'true'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.check-exist-companion.outputs.companion_branch_name }}
+
+      - name: Create comments
+        if: steps.check-exist-companion.outputs.is_exist == 'true'
+        id: create-comments
+        run: |
+          files=$(find . -type f -name "*_compare.png")
+          delimiter="$(openssl rand -hex 8)"
+          {
+            echo "reports<<${delimiter}"
+
+            echo "Snapshot diff report"
+            echo "| File name | Image |"
+            echo "|-------|-------|"
+          } >> "$GITHUB_OUTPUT"
+
+          for file in $files; do
+            fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
+            echo "| [$fileName](https://github.com/${{ github.repository }}/blob/${{ steps.check-exist-companion.outputs.companion_branch_name }}/$file) | ![](https://github.com/${{ github.repository }}/blob/${{ steps.check-exist-companion.outputs.companion_branch_name }}/$file?raw=true) |" >> "$GITHUB_OUTPUT"
+          done
+          echo "${delimiter}" >> "$GITHUB_OUTPUT"
+
+      - name: Find comment
+        continue-on-error: true
+        uses: peter-evans/find-comment@v3
+        id: fc
+        with:
+          issue-number: ${{ inputs.pr_number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Snapshot diff report
+
+      - name: Add or update comment on PR(exist screenshot diff)
+        if: steps.check-exist-companion.outputs.is_exist == 'true'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ inputs.pr_number }}
+          body: ${{ steps.create-comments.outputs.reports }}
+          edit-mode: replace
+
+      - name: Add or update comment on PR (not exist screenshot diff)
+        if: steps.check-exist-companion.outputs.is_exist == 'false'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ inputs.pr_number }}
+          body: Snapshot diff report
+          edit-mode: replace
+
+      - name: Cleanup outdated companion or screenshots branches
+        run: |
+          git branch -r --format="%(refname:lstrip=3)" | grep -e companion_ -e screenshots_ | while read -r branch; do
+            last_commit_date_timestamp=$(git log -1 --format=%ct "origin/$branch")
+            now_timestamp=$(date +%s)
+            maximum_seconds_past=2592000 # 30 days
+            if [ $((now_timestamp - last_commit_date_timestamp)) -gt maximum_seconds_past ]; then
+              git push origin --delete "$branch"
+            fi
+          done
+
+      - name: Checkout pr branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.pr_branch_name }}
