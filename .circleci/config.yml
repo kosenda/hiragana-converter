@@ -103,7 +103,7 @@ commands:
                   pwd
                   ls -a
                   mkdir -p /home/circleci/project/$BASE_BRANCH_NAME
-                  mv ./app/build/outputs/roborazzi/* $BASE_BRANCH_NAME
+                  mv ./app/build/outputs/roborazzi/* /home/circleci/project/$BASE_BRANCH_NAME
             - persist_to_workspace:
                 root: $BASE_BRANCH_NAME
                 paths:
