@@ -188,6 +188,7 @@ jobs:
             git add timestamp
 
             git commit -m "Add screenshot diff"
+            git clean -df
             git push origin HEAD:screenshots_$CIRCLE_BRANCH -f
 
   compare-screenshots:
