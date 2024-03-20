@@ -15,7 +15,7 @@ on:
         required: true
 
 permissions:
-  contents: write
+  contents: read
   actions: read
   pull-requests: write
 
