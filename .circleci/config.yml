@@ -286,7 +286,7 @@ jobs:
           command: |
             file_size=$(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/[^0-9]//g')
             if [ $file_size -ne 0 ]; then
-              git config --global user.name "$GITHUB_USER"
+              git config --global user.name "$GITHUB_NAME"
               git config --global user.email "$GITHUB_EMAIL"
               git push origin --delete companion_$BASE_BRANCH_NAME || true
 
@@ -297,15 +297,10 @@ jobs:
               ls -A | grep -v -E './app/build/outputs/roborazzi/*' | grep -v -x '.git' | xargs rm -rf
             
               git add -A
-              echo "commit"
               git commit -m "Add screenshot diff"
-              echo "push"
             
-              git config --global user.name "$GITHUB_USER"
-              git config --global user.email "$GITHUB_EMAIL"
               git push origin HEAD:companion_$BASE_BRANCH_NAME -f
             fi
-
 
 workflows:
   test:
