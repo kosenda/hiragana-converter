@@ -291,14 +291,14 @@ jobs:
               git push origin --delete companion_$BASE_BRANCH_NAME || true
 
               git checkout -b companion_$BASE_BRANCH_NAME
+              git rm --cached -r .
             
-              # delete except *_compare.png and .git
-              find ./app/build/outputs/roborazzi -type f | grep -v -e '.*_compare.png' | xargs rm -rf
-              ls -A | grep -v -E './app/build/outputs/roborazzi/*' | grep -v -x '.git' | xargs rm -rf
-            
-              git add -A
+              add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*" -name "*_compare.png")
+              for file in $add_files; do
+                git add $file
+              done
+              
               git commit -m "Add screenshot diff"
-            
               git push origin HEAD:companion_$BASE_BRANCH_NAME -f
             fi
 
