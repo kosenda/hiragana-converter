@@ -295,7 +295,7 @@ jobs:
             
               add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*" -name "*_compare.png")
               for file in $add_files; do
-                git add $file
+                git add -f $file
               done
               
               git commit -m "Add screenshot diff"
