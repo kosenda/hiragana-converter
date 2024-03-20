@@ -99,11 +99,13 @@ commands:
                 command: git checkout screenshots_$BASE_BRANCH_NAME
             - run:
                 name: move screenshots
-                command: mv ./app/build/outputs/roborazzi/* ./app/build/outputs/roborazzi/$BASE_BRANCH_NAME | mkdir ./app/build/outputs/roborazzi/$BASE_BRANCH_NAME
+                command: |
+                  mkdir -p $BASE_BRANCH_NAME
+                  mv ./app/build/outputs/roborazzi/* $BASE_BRANCH_NAME
             - persist_to_workspace:
-                root: .
+                root: $BASE_BRANCH_NAME
                 paths:
-                  - /app/build/outputs/roborazzi/$BASE_BRANCH_NAME
+                  - ./*
             - run:
                 name: checkout pr branch
                 command: |
@@ -293,7 +295,7 @@ jobs:
       - set-locale-properties
       - restore-and-save-gradle-cache
       - attach_workspace:
-          at: ./app/build/outputs/roborazzi/
+          at: $BASE_BRANCH_NAME
       - run:
           name: mv screenshots
           command:
