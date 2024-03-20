@@ -279,12 +279,6 @@ jobs:
       - restore_cache:
           key: screenshots-{{ checksum "timestamp" }}
       - run:
-          name: mv screenshots
-          command:
-            if [ -e ./develop ]; then
-              mv ./develop/* ./app/build/outputs/roborazzi
-            fi
-      - run:
           name: compare screenshots
           command: ./gradlew compareRoborazziProdDebug --stacktrace
       - run:
