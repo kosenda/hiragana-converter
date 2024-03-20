@@ -206,10 +206,10 @@ jobs:
     steps:
       - checkout
       - gh/install
-      - set-github-access-token
+#      - set-github-access-token
       - run:
           name: gh login
-          command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
+          command: echo "$DANGER_GITHUB_API_TOKEN" | gh auth login --with-token
       - run:
           name: get base branch name
           command: |
