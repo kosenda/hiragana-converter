@@ -33,15 +33,16 @@ jobs:
             git fetch origin companion_${{ inputs.pr_branch_name }} &&
             echo true || echo false
           ) >> $GITHUB_OUTPUT
-          if [is_exist == 'true']; then
-            echo "companion_branch_name=companion_${{ inputs.pr_branch_name }}" >> $GITHUB_OUTPUT
-          fi
 
-      - name: Checkout screenshots branch
+      - name: Save companion branch name
+        id: save-companion-branch-name
+        run: echo "name=companion_${{ inputs.pr_branch_name }}" >> $GITHUB_OUTPUT
+
+      - name: Checkout companion branch
         if: steps.check-exist-companion.outputs.is_exist == 'true'
         uses: actions/checkout@v4
         with:
-          ref: ${{ steps.check-exist-companion.outputs.companion_branch_name }}
+          ref: ${{ steps.save-companion-branch-name.outputs.name }}
 
       - name: Create comments
         if: steps.check-exist-companion.outputs.is_exist == 'true'
@@ -59,7 +60,7 @@ jobs:
 
           for file in $files; do
             fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
-            echo "| [$fileName](https://github.com/${{ github.repository }}/blob/${{ steps.check-exist-companion.outputs.companion_branch_name }}/$file) | ![](https://github.com/${{ github.repository }}/blob/${{ steps.check-exist-companion.outputs.companion_branch_name }}/$file?raw=true) |" >> "$GITHUB_OUTPUT"
+            echo "| [$fileName](https://github.com/${{ github.repository }}/blob/${{ steps.save-companion-branch-name.outputs.name }}/$file) | ![](https://github.com/${{ github.repository }}/blob/${{ steps.save-companion-branch-name.outputs.name }}/$file?raw=true) |" >> "$GITHUB_OUTPUT"
           done
           echo "${delimiter}" >> "$GITHUB_OUTPUT"
 
