@@ -286,14 +286,11 @@ jobs:
           command: |
             file_size=$(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/[^0-9]//g')
             if [ $file_size -ne 0 ]; then
-            
-              git branch -D companion_$BASE_BRANCH_NAME || true
-              git checkout --orphan companion_$BASE_BRANCH_NAME
-            
-              git config --global --list
-            
               git config --global user.name "$GITHUB_USER"
               git config --global user.email "$GITHUB_EMAIL"
+            
+              git push origin --delete companion_$BASE_BRANCH_NAME || true
+              git checkout -b companion_$BASE_BRANCH_NAME
             
               # delete except *_compare.png and .git
               find ./app/build/outputs/roborazzi -type f | grep -v -e '.*_compare.png' | xargs rm -rf
