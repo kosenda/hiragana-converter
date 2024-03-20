@@ -93,9 +93,15 @@ commands:
             - run:
                 name: screenshots timestamp to env
                 command: echo "export SCREENSHOT_TIMESTAMP=$(cat timestamp)" >> $BASH_ENV
+            - run:
+                name: zip screenshots
+                command: |
+                  mkdir -p ./temp/zip
+                  zip -r screenshots.zip ./app/build/outputs/roborazzi
+                  mv screenshots.zip ./temp/zip
             - save_cache:
                 paths:
-                  - ./app/build/outputs/roborazzi
+                  - ./temp/zip
                 key: screenshots-{{ checksum "timestamp" }}
             - run:
                 name: checkout pr branch
@@ -217,6 +223,11 @@ jobs:
           command: echo $SCREENSHOT_TIMESTAMP > timestamp
       - restore_cache:
           key: screenshots-{{ checksum "timestamp" }}
+      - run:
+          name: unzip screenshots
+          command: |
+            unzip ./temp/zip/screenshots.zip
+            rm -rf ./temp
       - run:
           name: compare screenshots
           command: ./gradlew compareRoborazziProdDebug --stacktrace
