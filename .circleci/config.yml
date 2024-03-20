@@ -87,7 +87,9 @@ commands:
           steps:
             - run:
                 name: checkout screenshots branch
-                command: git checkout screenshots_$BASE_BRANCH_NAME
+                command: |
+                  git fetch origin screenshots_$BASE_BRANCH_NAME
+                  git checkout screenshots_$BASE_BRANCH_NAME
             - run:
                 name: screenshots timestamp to env
                 command: echo "export SCREENSHOT_TIMESTAMP=$(cat timestamp)" >> $BASH_ENV
