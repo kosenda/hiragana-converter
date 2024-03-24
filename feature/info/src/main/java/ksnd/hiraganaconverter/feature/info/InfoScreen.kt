@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
@@ -256,6 +257,7 @@ private fun DeveloperInfoContent() {
 
 @Composable
 private fun APIInfoContent(onURLClick: () -> Unit) {
+    val isInspection = LocalInspectionMode.current
     TitleCard(
         text = stringResource(id = R.string.api_info_title),
         painter = painterResource(id = R.drawable.ic_outline_info_24),
@@ -268,13 +270,15 @@ private fun APIInfoContent(onURLClick: () -> Unit) {
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
     ) {
-        Column(
-            modifier = Modifier
-                .padding(start = 16.dp)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.Start,
-        ) {
-            GooCreditImage()
+        if (isInspection.not()) {
+            Column(
+                modifier = Modifier
+                    .padding(start = 16.dp)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.Start,
+            ) {
+                GooCreditImage()
+            }
         }
         Column(
             modifier = Modifier.padding(vertical = 16.dp),
