@@ -155,17 +155,13 @@ jobs:
           name: save IS_EXIST_SCREENSHOTS to env
           command: |
             is_exist=$(echo -n "$(git fetch origin screenshots_$BASE_BRANCH_NAME && echo true || echo false)")
-            echo "is_exist=${is_exist}" # TEST
             echo "export IS_EXIST_SCREENSHOTS=${is_exist}" >> $BASH_ENV
       - run:
           name: checkout screenshots branch
           command: |
             if [ $IS_EXIST_SCREENSHOTS = "true" ]; then
-              echo "A" # TEST
               git fetch origin screenshots_$BASE_BRANCH_NAME
               git checkout screenshots_$BASE_BRANCH_NAME
-            else 
-              echo "B" # TEST
             fi
       - run:
           name: save SCREENSHOTS_TIMESTAMP to env
