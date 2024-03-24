@@ -47,14 +47,14 @@ fun RequestReviewDialog(onLater: () -> Unit, onOk: () -> Unit) {
     )
 }
 
- @UiModePreview
- @Composable
- @ShowkaseComposable(skip = true)
- fun PreviewRequestReviewDialog() {
+@UiModePreview
+@Composable
+@ShowkaseComposable(skip = true)
+fun PreviewRequestReviewDialog() {
     HiraganaConverterTheme {
         RequestReviewDialog(
             onLater = {},
             onOk = {},
         )
     }
- }
+}
