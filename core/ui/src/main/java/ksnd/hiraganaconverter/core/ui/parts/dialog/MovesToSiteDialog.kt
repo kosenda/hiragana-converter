@@ -5,7 +5,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import com.airbnb.android.showkase.annotation.ShowkaseComposable
 import ksnd.hiraganaconverter.core.resource.R
+import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
+import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
 @Composable
 fun MovesToSiteDialog(onDismissRequest: () -> Unit, onClick: () -> Unit, url: String) {
@@ -30,16 +33,15 @@ fun MovesToSiteDialog(onDismissRequest: () -> Unit, onClick: () -> Unit, url: St
     )
 }
 
-// FIXME: AlertDialog does not yet support Showkase yet
-//  ref: https://github.com/airbnb/Showkase/issues/235
-//@UiModePreview
-//@Composable
-//fun PreviewMovesToSiteDialog() {
-//    HiraganaConverterTheme {
-//        MovesToSiteDialog(
-//            onDismissRequest = {},
-//            onClick = {},
-//            url = "架空のURL",
-//        )
-//    }
-//}
+@UiModePreview
+@Composable
+@ShowkaseComposable(skip = true)
+fun PreviewMovesToSiteDialog() {
+    HiraganaConverterTheme {
+        MovesToSiteDialog(
+            onDismissRequest = {},
+            onClick = {},
+            url = "架空のURL",
+        )
+    }
+}

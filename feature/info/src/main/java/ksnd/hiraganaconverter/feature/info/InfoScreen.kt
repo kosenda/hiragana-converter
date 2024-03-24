@@ -56,6 +56,7 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
 import ksnd.hiraganaconverter.core.analytics.Screen
 import ksnd.hiraganaconverter.core.resource.R
+import ksnd.hiraganaconverter.core.ui.isTest
 import ksnd.hiraganaconverter.core.ui.parts.BackTopBar
 import ksnd.hiraganaconverter.core.ui.parts.GooCreditImage
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
@@ -94,7 +95,8 @@ private fun InfoScreenContent(
     var isShowMovesToApiSiteDialog by remember { mutableStateOf(false) }
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
             .background(MaterialTheme.colorScheme.surface)
             .displayCutoutPadding(),
         topBar = {
@@ -268,13 +270,15 @@ private fun APIInfoContent(onURLClick: () -> Unit) {
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
     ) {
-        Column(
-            modifier = Modifier
-                .padding(start = 16.dp)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.Start,
-        ) {
-            GooCreditImage()
+        if (isTest().not()) {
+            Column(
+                modifier = Modifier
+                    .padding(start = 16.dp)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.Start,
+            ) {
+                GooCreditImage()
+            }
         }
         Column(
             modifier = Modifier.padding(vertical = 16.dp),
