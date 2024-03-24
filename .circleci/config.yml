@@ -215,7 +215,6 @@ jobs:
 
               git checkout --orphan companion_$CIRCLE_BRANCH
               git rm --cached -rf .
-              git rm -f timestamp
             
               add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*" -name "*_compare.png")
               for file in $add_files; do
