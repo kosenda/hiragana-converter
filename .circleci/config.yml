@@ -10,14 +10,14 @@ executors:
       - image: cimg/android:2024.01
 
 commands:
-  set-locale-properties:
+  set_locale_properties:
     steps:
       - run:
           name: set local.properties
           command: |
             LOCAL_PROPERTIES_PATH=./local.properties
             echo "apiKey=$.Environment.DEBUG_AD_APPLICATION_ID" >> $LOCAL_PROPERTIES_PATH
-  restore-and-save-gradle-cache:
+  restore_and_save_gradle_cache:
     steps:
       - restore_cache:
           key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
@@ -48,15 +48,15 @@ jobs:
     executor: android
     steps:
       - checkout
-      - set-locale-properties
-      - restore-and-save-gradle-cache
+      - set_locale_properties
+      - restore_and_save_gradle_cache
 
-  test-prod:
+  test_prod:
     executor: android
     steps:
       - checkout
-      - set-locale-properties
-      - restore-and-save-gradle-cache
+      - set_locale_properties
+      - restore_and_save_gradle_cache
       - run:
           neme: gem install bundler
           command: sudo gem install bundler:2.4.12
@@ -67,21 +67,21 @@ jobs:
             bundle config set --local path 'vendor/bundle'
             bundle install
       - run:
-          name: ktlint-check
+          name: ktlint check
           command: ./gradlew --continue ktlintCheck
       - run:
           name: test
           command: ./gradlew testProdDebug --stacktrace
       - run:
-          name: jacoco-report
+          name: report jacoco
           command: ./gradlew jacocoTestReport
       - run:
-          name: jacoco-report to zip
+          name: jacoco report to zip
           command: zip -r jacocoTestReport.zip ./build/reports/jacoco/jacocoTestReport/html
       - store_artifacts:
           path: jacocoTestReport.zip
       - run:
-          name: run-danger-file
+          name: run danger file
           command: bundle exec danger --verbose
       - slack/notify:
           event: fail
@@ -90,12 +90,12 @@ jobs:
           event: pass
           template: basic_success_1
 
-  compile-mock:
+  compile_mock:
     executor: android
     steps:
       - checkout
-      - set-locale-properties
-      - restore-and-save-gradle-cache
+      - set_locale_properties
+      - restore_and_save_gradle_cache
       - run:
           name: build mock
           command: ./gradlew compileMockDebugSource
@@ -103,12 +103,12 @@ jobs:
           event: fail
           template: basic_fail_1
 
-  save-screenshots:
+  save_screenshots:
     executor: android
     steps:
       - checkout
-      - set-locale-properties
-      - restore-and-save-gradle-cache
+      - set_locale_properties
+      - restore_and_save_gradle_cache
       - run:
           name: create screenshots
           command: ./gradlew recordRoborazziProdDebug --stacktrace
@@ -137,7 +137,7 @@ jobs:
             git clean -df
             git push origin HEAD:screenshots_$CIRCLE_BRANCH -f
 
-  compare-screenshots:
+  compare_screenshots:
     executor: android
     steps:
       - checkout
@@ -181,8 +181,8 @@ jobs:
       - run:
           name: checkout pr branch
           command: git checkout $CIRCLE_BRANCH
-      - set-locale-properties
-      - restore-and-save-gradle-cache
+      - set_locale_properties
+      - restore_and_save_gradle_cache
       - run:
           name: restore timestamp file
           command: echo $SCREENSHOTS_TIMESTAMP > timestamp
@@ -240,15 +240,15 @@ workflows:
   test:
     jobs:
       - dependencies
-      - test-prod:
+      - test_prod:
           context: slack-secrets
           requires:
             - dependencies
-      - compile-mock:
+      - compile_mock:
           context: slack-secrets
           requires:
             - dependencies
-      - save-screenshots:
+      - save_screenshots:
           requires:
             - dependencies
           filters:
@@ -256,7 +256,7 @@ workflows:
               only:
                 - main
                 - develop
-      - compare-screenshots:
+      - compare_screenshots:
           requires:
             - dependencies
           filters:
