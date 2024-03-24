@@ -216,8 +216,8 @@ jobs:
           command: |
             echo "test 0"
             # file_size=$(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/[^0-9]//g')
-            # echo "test 1 file_size: ${file_size}" # test
-            # if [ $file_size -ne 0 ]; then
+            echo "test 1 file_size: ${file_size}"
+            if [ $file_size -ne 0 ]; then
               echo "test 2"
 
               is_exist_diff_branch=$(echo -n "$(git fetch origin companion_$CIRCLE_BRANCH && echo true || echo false)")
@@ -244,7 +244,11 @@ jobs:
               git push origin HEAD:companion_$CIRCLE_BRANCH -f
 
               gh workflow run "CommentScreenshotDiff.yml" -f pr_branch_name=$CIRCLE_BRANCH -f pr_number=$(echo $CIRCLE_PULL_REQUEST | sed "s:.*/::")
-            # fi
+            fi
+            echo "1: $(find ./app/build/outputs/roborazzi -type f)"
+            echo "2: $(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png')"
+            echo "3: $(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l)"
+            echo "4: $(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/[^0-9]//g')"
       - cleanup_old_branch:
           prefix: companion_
           maximum_seconds_past: 2592000 # 30 days
