@@ -211,25 +211,18 @@ jobs:
           command: ./gradlew compareRoborazziProdDebug --stacktrace
       - setting_git_config
       - run:
-          name: Save IS_EXIST_COMPANION_BRANCH to env
-          command: |
-            is_exist=$(echo -n "$(git fetch origin companion_$CIRCLE_BRANCH && echo true || echo false)")
-            echo "export IS_EXIST_COMPANION_BRANCH=${is_exist}" >> $BASH_ENV
-      - run:
           name: Push companion branch
           command: |
-            echo "Start Push companion branch" # TEST
             file_size=$(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/[^0-9]//g')
             if [ $file_size -ne 0 ]; then
             
-              if [ $IS_EXIST_COMPANION_BRANCH = "true" ]; then
-                echo "delete companion branch" # TEST
+              is_exist_diff_branch=$(echo -n "$(git fetch origin companion_$CIRCLE_BRANCH && echo true || echo false)")
+              if [ $is_exist_diff_branch = "true" ]; then
                 git push origin --delete companion_$CIRCLE_BRANCH
               fi
 
               git checkout --orphan companion_$CIRCLE_BRANCH
               git rm --cached -rf .
-              echo "rm --cached -rf" # TEST
             
               add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*" -name "*_compare.png")
               for file in $add_files; do
@@ -239,11 +232,8 @@ jobs:
               echo -e "version: 2.1\njobs:\n no-op:\n  machine: true\n  steps:\n  - run: no-op\nworkflows:\n build:\n  jobs:\n   - no-op:\n      filters:\n       branches:\n        only: no-op" > .circleci/config.yml
               git add .circleci/config.yml
             
-              echo "commit" # TEST
               git commit -m "Add screenshot diff"
-              echo "clean -df" # TEST
               git clean -df
-              echo "push" # TEST
               git push origin HEAD:companion_$CIRCLE_BRANCH -f
 
               gh workflow run "CommentScreenshotDiff.yml" -f pr_branch_name=$CIRCLE_BRANCH -f pr_number=$(echo $CIRCLE_PULL_REQUEST | sed "s:.*/::")
