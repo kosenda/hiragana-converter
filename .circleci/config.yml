@@ -214,8 +214,8 @@ jobs:
       - run:
           name: Push companion branch
           command: |
-            file_size=$(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/[^0-9]//g')
-            if [ "$file_size" != 0 ]; then
+            file_size=$(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/ //g')
+            if [ "$file_size" != "0" ]; then
 
               is_exist_diff_branch=$(echo -n "$(git fetch origin companion_$CIRCLE_BRANCH && echo true || echo false)")
               if [ $is_exist_diff_branch = "true" ]; then
@@ -236,9 +236,8 @@ jobs:
               git commit -m "Add screenshot diff"
               git clean -df
               git push origin HEAD:companion_$CIRCLE_BRANCH -f
-
-              gh workflow run "CommentScreenshotDiff.yml" -f pr_branch_name=$CIRCLE_BRANCH -f pr_number=$(echo $CIRCLE_PULL_REQUEST | sed "s:.*/::")
             fi
+            gh workflow run "CommentScreenshotDiff.yml" -f pr_branch_name=$CIRCLE_BRANCH -f pr_number=$(echo $CIRCLE_PULL_REQUEST | sed "s:.*/::")
       - cleanup_old_branch:
           prefix: companion_
           maximum_seconds_past: 2592000 # 30 days
