@@ -214,6 +214,7 @@ jobs:
               fi
 
               git checkout --orphan companion_$CIRCLE_BRANCH
+              git update-ref HEAD companion_$CIRCLE_BRANCH
               git rm --cached -rf .
             
               add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*" -name "*_compare.png")
