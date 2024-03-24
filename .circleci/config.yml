@@ -33,14 +33,14 @@ commands:
       - run:
           name: checkout screenshots branch
           command: |
-            if [ $IS_EXIST_SCREENSHOTS == "true" ]; then
+            if [ $IS_EXIST_SCREENSHOTS = "true" ]; then
               git fetch origin screenshots_$BASE_BRANCH_NAME
               git checkout screenshots_$BASE_BRANCH_NAME
             fi
       - run:
           name: screenshots timestamp to env
           command: |
-            if [ $IS_EXIST_SCREENSHOTS == "true" ]; then
+            if [ $IS_EXIST_SCREENSHOTS = "true" ]; then
               echo "export SCREENSHOT_TIMESTAMP=$(cat timestamp)" >> $BASH_ENV
             else
               touch timestamp
@@ -49,7 +49,7 @@ commands:
           name: zip screenshots
           command: |
             mkdir -p ./temp/zip
-            if [ $IS_EXIST_SCREENSHOTS == "true" ]; then
+            if [ $IS_EXIST_SCREENSHOTS = "true" ]; then
               zip -r ./temp/zip/screenshots.zip ./app/build/outputs/roborazzi
             else
               touch ./temp/zip/no-op
@@ -194,7 +194,7 @@ jobs:
               git config --global user.name "$GITHUB_NAME"
               git config --global user.email "$GITHUB_EMAIL"
               
-              if [ $(echo -n "$(git fetch origin companion_$CIRCLE_BRANCH && echo true || echo false)") == "true" ]; then
+              if [ $(echo -n "$(git fetch origin companion_$CIRCLE_BRANCH && echo true || echo false)") = "true" ]; then
                 git push origin --delete companion_$CIRCLE_BRANCH
               fi
 
