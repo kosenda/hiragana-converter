@@ -46,7 +46,7 @@ commands:
     steps:
       - run:
           name: Setting git config
-          command: |
+          command: |            
             git config --global user.name "$GITHUB_NAME"
             git config --global user.email "$GITHUB_EMAIL"
 
@@ -123,8 +123,6 @@ jobs:
       - run:
           name: Push screenshots branch
           command: |
-            git config --global user.name "$GITHUB_NAME"
-            git config --global user.email "$GITHUB_EMAIL"
             git push origin --delete screenshots_$CIRCLE_BRANCH || true
 
             git checkout --orphan screenshots_$CIRCLE_BRANCH
@@ -213,33 +211,33 @@ jobs:
       - run:
           name: Push companion branch
           command: |
+            ls ./app/build/outputs/roborazzi
             file_size=$(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/[^0-9]//g')
-            echo $file_size
 
-#            if [ $file_size -ne 0 ]; then
-#
-#              is_exist_diff_branch=$(echo -n "$(git fetch origin companion_$CIRCLE_BRANCH && echo true || echo false)")
-#              if [ $is_exist_diff_branch = "true" ]; then
-#                git push origin --delete companion_$CIRCLE_BRANCH
-#              fi
-#
-#              git checkout --orphan companion_$CIRCLE_BRANCH
-#              git rm --cached -rf .
-#
-#              add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*" -name "*_compare.png")
-#              for file in $add_files; do
-#                git add -f $file
-#              done
-#
-#              echo -e "version: 2.1\njobs:\n no-op:\n  machine: true\n  steps:\n  - run: no-op\nworkflows:\n build:\n  jobs:\n   - no-op:\n      filters:\n       branches:\n        only: no-op" > .circleci/config.yml
-#              git add .circleci/config.yml
-#
-#              git commit -m "Add screenshot diff"
-#              git clean -df
-#              git push origin HEAD:companion_$CIRCLE_BRANCH -f
-#
-#              gh workflow run "CommentScreenshotDiff.yml" -f pr_branch_name=$CIRCLE_BRANCH -f pr_number=$(echo $CIRCLE_PULL_REQUEST | sed "s:.*/::")
-#            fi
+            if [ $file_size -ne 0 ]; then
+
+              is_exist_diff_branch=$(echo -n "$(git fetch origin companion_$CIRCLE_BRANCH && echo true || echo false)")
+              if [ $is_exist_diff_branch = "true" ]; then
+                git push origin --delete companion_$CIRCLE_BRANCH
+              fi
+
+              git checkout --orphan companion_$CIRCLE_BRANCH
+              git rm --cached -rf .
+
+              add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*" -name "*_compare.png")
+              for file in $add_files; do
+                git add -f $file
+              done
+
+              echo -e "version: 2.1\njobs:\n no-op:\n  machine: true\n  steps:\n  - run: no-op\nworkflows:\n build:\n  jobs:\n   - no-op:\n      filters:\n       branches:\n        only: no-op" > .circleci/config.yml
+              git add .circleci/config.yml
+
+              git commit -m "Add screenshot diff"
+              git clean -df
+              git push origin HEAD:companion_$CIRCLE_BRANCH -f
+
+              gh workflow run "CommentScreenshotDiff.yml" -f pr_branch_name=$CIRCLE_BRANCH -f pr_number=$(echo $CIRCLE_PULL_REQUEST | sed "s:.*/::")
+            fi
       - cleanup_old_branch:
           prefix: companion_
           maximum_seconds_past: 2592000 # 30 days
