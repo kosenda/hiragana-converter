@@ -60,10 +60,7 @@ commands:
           key: screenshots-{{ checksum "timestamp" }}
       - run:
           name: checkout pr branch
-          command: |
-            if [ $IS_EXIST_SCREENSHOTS == "true" ]; then
-              git checkout $CIRCLE_BRANCH
-            fi
+          command: git checkout $CIRCLE_BRANCH
 
 jobs:
   dependencies:
