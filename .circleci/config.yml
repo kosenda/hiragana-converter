@@ -26,33 +26,44 @@ commands:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
   save-screenshots-to-cache:
-    parameters:
-      is_exist_screenshots:
-        type: string
     steps:
-      - when:
-          condition: <<parameters.is_exist_screenshots>>
-          steps:
-            - run:
-                name: checkout screenshots branch
-                command: |
-                  git fetch origin screenshots_$BASE_BRANCH_NAME
-                  git checkout screenshots_$BASE_BRANCH_NAME
-            - run:
-                name: screenshots timestamp to env
-                command: echo "export SCREENSHOT_TIMESTAMP=$(cat timestamp)" >> $BASH_ENV
-            - run:
-                name: zip screenshots
-                command: |
-                  mkdir -p ./temp/zip
-                  zip -r ./temp/zip/screenshots.zip ./app/build/outputs/roborazzi
-            - save_cache:
-                paths:
-                  - ./temp/zip
-                key: screenshots-{{ checksum "timestamp" }}
-            - run:
-                name: checkout pr branch
-                command: git checkout $CIRCLE_BRANCH
+      - run:
+          name: screenshots branch exist to env
+          command: echo -n "IS_EXIST_SCREENSHOTS=$(git fetch origin screenshots_$BASE_BRANCH_NAME && echo true || echo false)" >> $BASH_ENV
+      - run:
+          name: checkout screenshots branch
+          command: |
+            if [ $IS_EXIST_SCREENSHOTS = "true" ]; then
+              git fetch origin screenshots_$BASE_BRANCH_NAME
+              git checkout screenshots_$BASE_BRANCH_NAME
+            fi
+      - run:
+          name: screenshots timestamp to env
+          command: |
+            if [ $IS_EXIST_SCREENSHOTS = "true" ]; then
+              echo "export SCREENSHOT_TIMESTAMP=$(cat timestamp)" >> $BASH_ENV
+            else
+              touch timestamp
+            fi
+      - run:
+          name: zip screenshots
+          command: |
+            mkdir -p ./temp/zip
+            if [ $IS_EXIST_SCREENSHOTS = "true" ]; then
+              zip -r ./temp/zip/screenshots.zip ./app/build/outputs/roborazzi
+            else
+              touch ./temp/zip/no-op
+            fi
+      - save_cache:
+          paths:
+            - ./temp/zip
+          key: screenshots-{{ checksum "timestamp" }}
+      - run:
+          name: checkout pr branch
+          command: |
+            if [ $IS_EXIST_SCREENSHOTS = "true" ]; then
+              git checkout $CIRCLE_BRANCH
+            fi
 
 jobs:
   dependencies:
@@ -162,8 +173,7 @@ jobs:
             pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
             base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
             echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
-      - save-screenshots-to-cache:
-          is_exist_screenshots: $(git fetch origin screenshots_$BASE_BRANCH_NAME && echo true || echo false)
+      - save-screenshots-to-cache
       - set-locale-properties
       - restore-and-save-gradle-cache
       - run:
@@ -186,7 +196,10 @@ jobs:
             if [ $file_size -ne 0 ]; then
               git config --global user.name "$GITHUB_NAME"
               git config --global user.email "$GITHUB_EMAIL"
-              git push origin --delete companion_$CIRCLE_BRANCH || true
+              
+              if [ $(echo -n "$(git fetch origin companion_$CIRCLE_BRANCH && echo true || echo false)") = "true" ]; then
+                git push origin --delete companion_$CIRCLE_BRANCH
+              fi
 
               git checkout --orphan companion_$CIRCLE_BRANCH
               git rm --cached -r .
