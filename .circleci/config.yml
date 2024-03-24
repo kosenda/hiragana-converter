@@ -191,8 +191,10 @@ jobs:
       - run:
           name: unzip screenshots
           command: |
-            unzip ./temp/zip/screenshots.zip
-            rm -rf ./temp
+            if [ -e ./temp/zip/screenshots.zip ]; then
+              unzip ./temp/zip/screenshots.zip
+              rm -rf ./temp
+            fi
       - run:
           name: compare screenshots
           command: ./gradlew compareRoborazziProdDebug --stacktrace
