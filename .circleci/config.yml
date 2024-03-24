@@ -123,10 +123,7 @@ jobs:
       - run:
           name: Push screenshots branch
           command: |
-            is_exist_screenshots_branch=$(echo -n "$(git fetch origin screenshots_$CIRCLE_BRANCH && echo true || echo false)")
-            if [ $is_exist_screenshots_branch = "true" ]; then
-              git push origin --delete screenshots_$CIRCLE_BRANCH || true
-            fi
+            git push origin --delete screenshots_$CIRCLE_BRANCH || true
 
             git checkout --orphan screenshots_$CIRCLE_BRANCH
             git rm --cached -r .
@@ -214,10 +211,7 @@ jobs:
       - run:
           name: Push companion branch
           command: |
-            is_exist_diff_branch=$(echo -n "$(git fetch origin companion_$CIRCLE_BRANCH && echo true || echo false)")
-            if [ $is_exist_diff_branch = "true" ]; then
-              git push origin --delete companion_$CIRCLE_BRANCH
-            fi
+            git push origin --delete companion_$CIRCLE_BRANCH || true
             
             fileSize=$(echo $(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/ //g'))
             if [ $fileSize -ne 0 ]; then
