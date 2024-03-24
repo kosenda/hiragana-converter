@@ -150,8 +150,8 @@ jobs:
           command: |
             pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
             base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
+            is_exist=$(echo -n "IS_EXIST_SCREENSHOTS=$(git fetch origin screenshots_${base} && echo true || echo false)")
             echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
-            is_exist=$(echo -n "IS_EXIST_SCREENSHOTS=$(git fetch origin screenshots_$BASE_BRANCH_NAME && echo true || echo false)")
             echo "export IS_EXIST_SCREENSHOTS=${is_exist}" >> $BASH_ENV
       - run:
           name: checkout screenshots branch
