@@ -214,12 +214,9 @@ jobs:
       - run:
           name: Push companion branch
           command: |
-            echo "1. $(find ./app/build/outputs/roborazzi -type f)"
-            echo "2. $(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png')"
-            echo "3. $(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l)"
-            echo "4. $(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/ //g')"
-            fileSize=$(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/ //g')
-            echo "5. $fileSize"
+            echo "start"
+            fileSize=$(echo -n $(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/ //g'))
+            echo "fileSize: $fileSize"
             
             if [ $fileSize -ne 0 ]; then
               is_exist_diff_branch=$(echo -n "$(git fetch origin companion_$CIRCLE_BRANCH && echo true || echo false)")
