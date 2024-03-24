@@ -13,7 +13,7 @@ commands:
   set_locale_properties:
     steps:
       - run:
-          name: set local.properties
+          name: Set local.properties
           command: |
             LOCAL_PROPERTIES_PATH=./local.properties
             echo "apiKey=$.Environment.DEBUG_AD_APPLICATION_ID" >> $LOCAL_PROPERTIES_PATH
@@ -33,7 +33,7 @@ commands:
         type: integer
     steps:
       - run:
-          name: cleanup old branch
+          name: Cleanup old branch
           command: |
             git branch -r --format="%(refname:lstrip=3)" | grep -e << parameters.prefix >> | while read -r branch; do
               last_commit_date_timestamp=$(git log -1 --format=%ct "origin/$branch")
@@ -42,6 +42,13 @@ commands:
                 git push origin --delete "$branch"
               fi
             done
+  setting_git_config:
+    steps:
+      - run:
+          name: Setting git config
+          command: |
+            git config --global user.name "$GITHUB_NAME"
+            git config --global user.email "$GITHUB_EMAIL"
 
 jobs:
   dependencies:
@@ -58,30 +65,30 @@ jobs:
       - set_locale_properties
       - restore_and_save_gradle_cache
       - run:
-          neme: gem install bundler
+          neme: Gem install bundler
           command: sudo gem install bundler:2.4.12
       - run:
           # Specify Gemfile path and then run bundle install
-          name: bundle install
+          name: Bundle install
           command: |
             bundle config set --local path 'vendor/bundle'
             bundle install
       - run:
-          name: ktlint check
+          name: Ktlint check
           command: ./gradlew --continue ktlintCheck
       - run:
-          name: test
+          name: Test
           command: ./gradlew testProdDebug --stacktrace
       - run:
-          name: report jacoco
+          name: Report jacoco
           command: ./gradlew jacocoTestReport
       - run:
-          name: jacoco report to zip
+          name: Zip jacoco report
           command: zip -r jacocoTestReport.zip ./build/reports/jacoco/jacocoTestReport/html
       - store_artifacts:
           path: jacocoTestReport.zip
       - run:
-          name: run danger file
+          name: Run danger file
           command: bundle exec danger --verbose
       - slack/notify:
           event: fail
@@ -97,7 +104,7 @@ jobs:
       - set_locale_properties
       - restore_and_save_gradle_cache
       - run:
-          name: build mock
+          name: Build mock
           command: ./gradlew compileMockDebugSource
       - slack/notify:
           event: fail
@@ -110,10 +117,11 @@ jobs:
       - set_locale_properties
       - restore_and_save_gradle_cache
       - run:
-          name: create screenshots
+          name: Create screenshots
           command: ./gradlew recordRoborazziProdDebug --stacktrace
+      - setting_git_config
       - run:
-          name: push screenshots branch
+          name: Push screenshots branch
           command: |
             git config --global user.name "$GITHUB_NAME"
             git config --global user.email "$GITHUB_EMAIL"
@@ -143,35 +151,35 @@ jobs:
       - checkout
       - gh/install
       - run:
-          name: gh login
+          name: Gh login
           command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
       - run:
-          name: save BASE_BRANCH_NAME to env
+          name: Save BASE_BRANCH_NAME to env
           command: |
             pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
             base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
             echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
       - run:
-          name: save IS_EXIST_SCREENSHOTS to env
+          name: Save IS_EXIST_SCREENSHOTS to env
           command: |
             is_exist=$(echo -n "$(git fetch origin screenshots_$BASE_BRANCH_NAME && echo true || echo false)")
             echo "export IS_EXIST_SCREENSHOTS=${is_exist}" >> $BASH_ENV
       - run:
-          name: checkout screenshots branch
+          name: Checkout screenshots branch
           command: |
             if [ $IS_EXIST_SCREENSHOTS = "true" ]; then
               git fetch origin screenshots_$BASE_BRANCH_NAME
               git checkout screenshots_$BASE_BRANCH_NAME
             fi
       - run:
-          name: save SCREENSHOTS_TIMESTAMP to env
+          name: Save SCREENSHOTS_TIMESTAMP to env
           command: |
             if [ $IS_EXIST_SCREENSHOTS = "false" ]; then
               touch timestamp
             fi
             echo "export SCREENSHOTS_TIMESTAMP=$(cat timestamp)" >> $BASH_ENV
       - run:
-          name: zip screenshots
+          name: Zip screenshots
           command: |
             mkdir -p ./temp/zip
             if [ $IS_EXIST_SCREENSHOTS = "true" ]; then
@@ -182,42 +190,46 @@ jobs:
             - ./temp/zip
           key: screenshots-{{ checksum "timestamp" }}
       - run:
-          name: checkout pr branch
+          name: Checkout pr branch
           command: git checkout $CIRCLE_BRANCH
       - set_locale_properties
       - restore_and_save_gradle_cache
       - run:
-          name: restore timestamp file
+          name: Restore timestamp file
           command: echo $SCREENSHOTS_TIMESTAMP > timestamp
       - restore_cache:
           key: screenshots-{{ checksum "timestamp" }}
       - run:
-          name: unzip screenshots
+          name: Unzip screenshots
           command: |
             if [ -e ./temp/zip/screenshots.zip ]; then
               unzip ./temp/zip/screenshots.zip
               rm -rf ./temp
             fi
       - run:
-          name: compare screenshots
+          name: Compare screenshots
           command: ./gradlew compareRoborazziProdDebug --stacktrace
+      - setting_git_config
       - run:
-          name: setting git config
+          name: Save IS_EXIST_COMPANION_BRANCH to env
           command: |
-            git config --global user.name "$GITHUB_NAME"
-            git config --global user.email "$GITHUB_EMAIL"
+            is_exist=$(echo -n "$(git fetch origin companion_$CIRCLE_BRANCH && echo true || echo false)")
+            echo "export IS_EXIST_COMPANION_BRANCH=${is_exist}" >> $BASH_ENV
       - run:
-          name: push companion branch
+          name: Push companion branch
           command: |
+            echo "Start Push companion branch" # TEST
             file_size=$(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/[^0-9]//g')
             if [ $file_size -ne 0 ]; then
             
-              if [ $(echo -n $(git fetch origin companion_$CIRCLE_BRANCH && echo true || echo false)) = "true" ]; then
+              if [ $IS_EXIST_COMPANION_BRANCH = "true" ]; then
+                echo "delete companion branch" # TEST
                 git push origin --delete companion_$CIRCLE_BRANCH
               fi
 
               git checkout --orphan companion_$CIRCLE_BRANCH
               git rm --cached -rf .
+              echo "rm --cached -rf" # TEST
             
               add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*" -name "*_compare.png")
               for file in $add_files; do
@@ -227,7 +239,11 @@ jobs:
               echo -e "version: 2.1\njobs:\n no-op:\n  machine: true\n  steps:\n  - run: no-op\nworkflows:\n build:\n  jobs:\n   - no-op:\n      filters:\n       branches:\n        only: no-op" > .circleci/config.yml
               git add .circleci/config.yml
             
+              echo "commit" # TEST
               git commit -m "Add screenshot diff"
+              echo "clean -df" # TEST
+              git clean -df
+              echo "push" # TEST
               git push origin HEAD:companion_$CIRCLE_BRANCH -f
 
               gh workflow run "CommentScreenshotDiff.yml" -f pr_branch_name=$CIRCLE_BRANCH -f pr_number=$(echo $CIRCLE_PULL_REQUEST | sed "s:.*/::")
