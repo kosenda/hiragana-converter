@@ -46,7 +46,7 @@ commands:
     steps:
       - run:
           name: Setting git config
-          command: |            
+          command: |
             git config --global user.name "$GITHUB_NAME"
             git config --global user.email "$GITHUB_EMAIL"
 
@@ -214,16 +214,22 @@ jobs:
       - run:
           name: Push companion branch
           command: |
+            echo "test 0"
             file_size=$(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/[^0-9]//g')
+            echo "test 1 file_size: ${file_size}" # test
             if [ $file_size -ne 0 ]; then
+              echo "test 2"
 
               is_exist_diff_branch=$(echo -n "$(git fetch origin companion_$CIRCLE_BRANCH && echo true || echo false)")
+              echo "test 3 is_exist_diff_branch: $is_exist_diff_branch"
               if [ $is_exist_diff_branch = "true" ]; then
                 git push origin --delete companion_$CIRCLE_BRANCH
+                echo "test 4"
               fi
 
               git checkout --orphan companion_$CIRCLE_BRANCH
               git rm --cached -rf .
+              echo "test 5"
 
               add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*" -name "*_compare.png")
               for file in $add_files; do
