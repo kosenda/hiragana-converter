@@ -1,3 +1,5 @@
+## ref: https://github.com/kosenda/hiragana-converter/blob/develop/REFERENCE.md
+
 version: 2.1
 
 orbs:
@@ -68,7 +70,6 @@ jobs:
           neme: Gem install bundler
           command: sudo gem install bundler:2.4.12
       - run:
-          # Specify Gemfile path and then run bundle install
           name: Bundle install
           command: |
             bundle config set --local path 'vendor/bundle'
@@ -123,10 +124,7 @@ jobs:
       - run:
           name: Push screenshots branch
           command: |
-            is_exist_screenshots_branch=$(echo -n "$(git fetch origin screenshots_$CIRCLE_BRANCH && echo true || echo false)")
-            if [ $is_exist_screenshots_branch = "true" ]; then
-              git push origin --delete screenshots_$CIRCLE_BRANCH || true
-            fi
+            git push origin --delete screenshots_$CIRCLE_BRANCH || true
 
             git checkout --orphan screenshots_$CIRCLE_BRANCH
             git rm --cached -r .
@@ -203,10 +201,8 @@ jobs:
       - run:
           name: Unzip screenshots
           command: |
-            if [ -e ./temp/zip/screenshots.zip ]; then
-              unzip ./temp/zip/screenshots.zip
-              rm -rf ./temp
-            fi
+            unzip ./temp/zip/screenshots.zip || true
+            rm -rf ./temp || true
       - run:
           name: Compare screenshots
           command: ./gradlew compareRoborazziProdDebug --stacktrace
@@ -214,10 +210,7 @@ jobs:
       - run:
           name: Push companion branch
           command: |
-            is_exist_diff_branch=$(echo -n "$(git fetch origin companion_$CIRCLE_BRANCH && echo true || echo false)")
-            if [ $is_exist_diff_branch = "true" ]; then
-              git push origin --delete companion_$CIRCLE_BRANCH
-            fi
+            git push origin --delete companion_$CIRCLE_BRANCH || true
             
             fileSize=$(echo $(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/ //g'))
             if [ $fileSize -ne 0 ]; then
@@ -273,5 +266,5 @@ workflows:
                 - main
                 - develop
 
-# ■ memo ■
+# ■ note ■
 # check command： circleci config validate
