@@ -68,7 +68,6 @@ jobs:
           neme: Gem install bundler
           command: sudo gem install bundler:2.4.12
       - run:
-          # Specify Gemfile path and then run bundle install
           name: Bundle install
           command: |
             bundle config set --local path 'vendor/bundle'
@@ -200,10 +199,8 @@ jobs:
       - run:
           name: Unzip screenshots
           command: |
-            if [ -e ./temp/zip/screenshots.zip ]; then
-              unzip ./temp/zip/screenshots.zip
-              rm -rf ./temp
-            fi
+            unzip ./temp/zip/screenshots.zip || true
+            rm -rf ./temp || true
       - run:
           name: Compare screenshots
           command: ./gradlew compareRoborazziProdDebug --stacktrace
