@@ -214,7 +214,6 @@ jobs:
               fi
 
               git checkout --orphan companion_$CIRCLE_BRANCH
-              git update-ref HEAD companion_$CIRCLE_BRANCH
               git rm --cached -rf .
             
               add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*" -name "*_compare.png")
@@ -226,6 +225,7 @@ jobs:
               git add .circleci/config.yml
             
               git commit -m "Add screenshot diff"
+              git update-ref HEAD companion_$CIRCLE_BRANCH
               git push origin HEAD:companion_$CIRCLE_BRANCH -f
 
               gh workflow run "CommentScreenshotDiff.yml" -f pr_branch_name=$CIRCLE_BRANCH -f pr_number=$(echo $CIRCLE_PULL_REQUEST | sed "s:.*/::")
