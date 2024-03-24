@@ -161,12 +161,12 @@ jobs:
               git checkout screenshots_$BASE_BRANCH_NAME
             fi
       - run:
-          name: save SCREENSHOT_TIMESTAMP to env
+          name: save SCREENSHOTS_TIMESTAMP to env
           command: |
             if [ $IS_EXIST_SCREENSHOTS = "false" ]; then
               touch timestamp
             fi
-            echo "export SCREENSHOT_TIMESTAMP=$(cat timestamp)" >> $BASH_ENV
+            echo "export SCREENSHOTS_TIMESTAMP=$(cat timestamp)" >> $BASH_ENV
       - run:
           name: zip screenshots
           command: |
@@ -183,7 +183,7 @@ jobs:
       - run: mkdir -p ./temp/temp
       - save_cache:
           paths:
-            - ./temp/zip
+            - ./temp/temp
           key: screenshots-{{ checksum "timestamp" }}
 
       - run:
@@ -193,7 +193,7 @@ jobs:
       - restore-and-save-gradle-cache
       - run:
           name: restore timestamp file
-          command: echo $SCREENSHOT_TIMESTAMP > timestamp
+          command: echo $SCREENSHOTS_TIMESTAMP > timestamp
       - restore_cache:
           key: screenshots-{{ checksum "timestamp" }}
       - run:
