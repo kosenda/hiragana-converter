@@ -214,6 +214,8 @@ jobs:
           name: Push companion branch
           command: |
             file_size=$(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/[^0-9]//g')
+            echo "file_size=$file_size"
+            
             if [ $file_size -ne 0 ]; then
             
               is_exist_diff_branch=$(echo -n "$(git fetch origin companion_$CIRCLE_BRANCH && echo true || echo false)")
