@@ -1,3 +1,5 @@
+## ref: https://github.com/kosenda/hiragana-converter/blob/develop/REFERENCE.md
+
 version: 2.1
 
 orbs:
@@ -264,5 +266,5 @@ workflows:
                 - main
                 - develop
 
-# ■ memo ■
+# ■ note ■
 # check command： circleci config validate
