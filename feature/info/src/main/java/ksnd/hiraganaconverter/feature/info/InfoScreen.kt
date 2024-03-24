@@ -43,7 +43,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
@@ -57,6 +56,7 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
 import ksnd.hiraganaconverter.core.analytics.Screen
 import ksnd.hiraganaconverter.core.resource.R
+import ksnd.hiraganaconverter.core.ui.isTest
 import ksnd.hiraganaconverter.core.ui.parts.BackTopBar
 import ksnd.hiraganaconverter.core.ui.parts.GooCreditImage
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
@@ -95,7 +95,8 @@ private fun InfoScreenContent(
     var isShowMovesToApiSiteDialog by remember { mutableStateOf(false) }
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
             .background(MaterialTheme.colorScheme.surface)
             .displayCutoutPadding(),
         topBar = {
@@ -257,7 +258,6 @@ private fun DeveloperInfoContent() {
 
 @Composable
 private fun APIInfoContent(onURLClick: () -> Unit) {
-    val isInspection = LocalInspectionMode.current
     TitleCard(
         text = stringResource(id = R.string.api_info_title),
         painter = painterResource(id = R.drawable.ic_outline_info_24),
@@ -270,7 +270,7 @@ private fun APIInfoContent(onURLClick: () -> Unit) {
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
     ) {
-        if (isInspection.not()) {
+        if (isTest().not()) {
             Column(
                 modifier = Modifier
                     .padding(start = 16.dp)
