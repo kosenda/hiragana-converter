@@ -47,14 +47,15 @@ fun RequestReviewDialog(onLater: () -> Unit, onOk: () -> Unit) {
     )
 }
 
-@UiModePreview
-@Composable
-@ShowkaseComposable(skip = true)
-fun PreviewRequestReviewDialog() {
-    HiraganaConverterTheme {
-        RequestReviewDialog(
-            onLater = {},
-            onOk = {},
-        )
-    }
-}
+// FIXME: Skip in ShowkaseComposable does not work.
+//@UiModePreview
+//@Composable
+//@ShowkaseComposable(skip = true)
+//fun PreviewRequestReviewDialog() {
+//    HiraganaConverterTheme {
+//        RequestReviewDialog(
+//            onLater = {},
+//            onOk = {},
+//        )
+//    }
+//}
