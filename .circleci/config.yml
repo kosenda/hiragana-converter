@@ -178,6 +178,14 @@ jobs:
           paths:
             - ./temp/zip
           key: screenshots-{{ checksum "timestamp" }}
+
+      # TEST
+      - run: mkdir -p ./temp/temp
+      - save_cache:
+          paths:
+            - ./temp/zip
+          key: screenshots-{{ checksum "timestamp" }}
+
       - run:
           name: checkout pr branch
           command: git checkout $CIRCLE_BRANCH
