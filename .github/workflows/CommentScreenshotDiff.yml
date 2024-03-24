@@ -23,11 +23,7 @@ jobs:
 
       - name: Check exist companion branch
         id: check-exist-companion
-        run: |
-          echo is_exist=$(
-            git fetch origin companion_${{ inputs.pr_branch_name }} &&
-            echo true || echo false
-          ) >> $GITHUB_OUTPUT
+        run: echo "is_exist=$(echo -n "$(git fetch origin companion_${{ inputs.pr_branch_name }} && echo true || echo false)")" >> $GITHUB_OUTPUT
 
       - name: Save companion branch name
         id: save-companion-branch-name
