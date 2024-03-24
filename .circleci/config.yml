@@ -187,6 +187,9 @@ jobs:
           name: compare screenshots
           command: ./gradlew compareRoborazziProdDebug --stacktrace
       - run:
+          name: companion branch exist to env
+          command: echo -n "IS_EXIST_DIFFERENT=$(git fetch origin companion_$CIRCLE_BRANCH && echo true || echo false)" >> $BASH_ENV
+      - run:
           name: push companion branch
           command: |
             file_size=$(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/[^0-9]//g')
@@ -194,8 +197,11 @@ jobs:
               git config --global user.name "$GITHUB_NAME"
               git config --global user.email "$GITHUB_EMAIL"
               
-              if [ $(echo -n "$(git fetch origin companion_$CIRCLE_BRANCH && echo true || echo false)") = "true" ]; then
+              if [ $IS_EXIST_DIFFERENT = "true" ]; then
                 git push origin --delete companion_$CIRCLE_BRANCH
+                echo "delete companion branch"
+              else
+                 echo "not delete companion branch"
               fi
 
               git checkout --orphan companion_$CIRCLE_BRANCH
