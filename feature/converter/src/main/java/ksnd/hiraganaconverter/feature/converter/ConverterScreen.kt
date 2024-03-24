@@ -3,7 +3,6 @@ package ksnd.hiraganaconverter.feature.converter
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,7 +21,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -191,6 +189,7 @@ fun ConverterScreenContent(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     ConversionTypeCard(onSelectedChange = changeHiraKanaType)
+                    Spacer(modifier = Modifier.weight(1f))
                     CustomButtonWithBackground(
                         id = R.drawable.ic_reset,
                         convertDescription = "reset",
