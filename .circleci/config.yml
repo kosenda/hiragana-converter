@@ -127,7 +127,7 @@ jobs:
             git push origin --delete screenshots_$CIRCLE_BRANCH || true
 
             git checkout --orphan screenshots_$CIRCLE_BRANCH
-            git rm --cached -r .
+            git rm --cached -rf .
 
             add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*")
             for file in $add_files; do
