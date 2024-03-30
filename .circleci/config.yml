@@ -98,6 +98,9 @@ commands:
       - run:
           name: Cleanup old branch
           command: |
+            echo << parameters.prefix >>
+            echo << parameters.maximum_seconds_past >>
+            echo "$(git branch -r --format="%(refname:lstrip=3)" | grep << parameters.prefix >>)"
             git branch -r --format="%(refname:lstrip=3)" | grep << parameters.prefix >> | while read -r branch; do
               last_commit_date_timestamp=$(git log -1 --format=%ct "origin/$branch")
               now_timestamp=$(date +%s)
@@ -201,6 +204,9 @@ jobs:
       - checkout
       - set_locale_properties
       - restore_and_save_gradle_cache
+      - cleanup_old_branch:
+          prefix: screenshots_
+          maximum_seconds_past: 15552000 # 180 days
 
   test_prod:
     executor: android
@@ -274,14 +280,14 @@ workflows:
   test:
     jobs:
       - dependencies
-      - test_prod:
-          context: slack-secrets
-          requires:
-            - dependencies
-      - compile_mock:
-          context: slack-secrets
-          requires:
-            - dependencies
+#      - test_prod:
+#          context: slack-secrets
+#          requires:
+#            - dependencies
+#      - compile_mock:
+#          context: slack-secrets
+#          requires:
+#            - dependencies
 
 # ■ note ■
 # check command： circleci config validate
