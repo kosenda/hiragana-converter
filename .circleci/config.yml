@@ -211,7 +211,7 @@ commands:
               echo "commentId: a${commentId}b"
               echo "prNumber: a${prNumber}b"
               echo "url: a${url}b"
-              comment="$(cat ./comment)
+              comment="$(cat ./comment)"
               echo "comment: a${comment}b"
               if [ -n "$commentId" ]; then
                 endpoint="/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/comments/$commentId"
