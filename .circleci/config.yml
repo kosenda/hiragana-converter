@@ -190,18 +190,14 @@ commands:
           name: Create comment
           command: |
             echo "Snapshot diff report" > comment
+            echo "| File name | Image |" >> comment
+            echo "|-------|-------|" >> comment
             
-            fileSize=$(echo $(find . -type f -name "*_compare.png" | wc -l | sed -e 's/ //g'))
-            if [ $fileSize -ne 0 ]; then
-              echo "| File name | Image |" >> comment
-              echo "|-------|-------|" >> comment
-            
-              files=$(find . -type f -name "*_compare.png")
-              for file in $files; do
-                fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
-                echo "| [$fileName](https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/blob/compare_$CIRCLE_BRANCH/$file) | ![](https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/blob/compare_$CIRCLE_BRANCH/$file?raw=true) |" >> comment
-              done
-            fi
+            files=$(find . -type f -name "*_compare.png")
+            for file in $files; do
+              fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
+              echo "| [$fileName](https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/blob/compare_$CIRCLE_BRANCH/$file) | ![](https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/blob/compare_$CIRCLE_BRANCH/$file?raw=true) |" >> comment
+            done
       - run:
           name: Comment screenshot diff
           command: |
