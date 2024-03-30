@@ -41,7 +41,11 @@ commands:
       - run:
           name: Save IS_EXIST_SCREENSHOTS to env
           command: |
-            is_exist=$(echo -n "$(git fetch origin screenshots_$BASE_BRANCH_NAME && echo true || echo false)")
+            if [ $IS_PR = "true" ]; then
+              is_exist=$(echo -n "$(git fetch origin screenshots_$BASE_BRANCH_NAME && echo true || echo false)")
+            else
+               is_exist=false
+            fi
             echo "is_exist: $is_exist"
             echo "export IS_EXIST_SCREENSHOTS=${is_exist}" >> $BASH_ENV
       - run:
@@ -234,7 +238,7 @@ jobs:
             roborazzi_option="-Proborazzi.test.record=true"
             if [ $IS_PR = "true" ]; then
               roborazzi_option="-Proborazzi.test.compare=true"
-            else
+            fi
             ./gradlew testProdDebug $roborazzi_option --stacktrace
       - run:
           name: Report jacoco
