@@ -169,7 +169,7 @@ commands:
                 git add -f $file
               done
             
-              echo $(date +%s) >> timestamp
+              echo $(date +%s) > timestamp
               git add -f timestamp
             
               echo -e "version: 2.1\njobs:\n no-op:\n  machine: true\n  steps:\n  - run: no-op\nworkflows:\n build:\n  jobs:\n   - no-op:\n      filters:\n       branches:\n        only: no-op" > .circleci/config.yml
@@ -208,6 +208,7 @@ commands:
               prNumber=$(echo $CIRCLE_PULL_REQUEST | sed "s:.*/::")
               url="https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/${prNumber}/comments"
               commentId=$(echo -n $(curl -s -H "Authorization: token $GITHUB_ACCESS_TOKEN" $url -v | jq '.[] | select(.body | test("^Snapshot diff report.*")) | .id'))
+              echo "commentId: $commentId"
               comment=$(cat ./comment)
               if [ -n "$commentId" ]; then
                 endpoint="/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/comments/$commentId"
