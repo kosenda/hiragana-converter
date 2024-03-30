@@ -227,6 +227,7 @@ jobs:
       - run:
           name: Ktlint check
           command: ./gradlew --continue ktlintCheck
+      - check_is_pr
       - run:
           name: Test
           command: |
@@ -247,7 +248,6 @@ jobs:
           name: Run danger file
           command: bundle exec danger --verbose
       - setting_git_config
-      - check_is_pr
       - push_screenshots_branch
       - push_compare_branch
       - comment_screenshot_diff
