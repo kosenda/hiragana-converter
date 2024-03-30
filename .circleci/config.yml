@@ -280,14 +280,14 @@ workflows:
   test:
     jobs:
       - dependencies
-#      - test_prod:
-#          context: slack-secrets
-#          requires:
-#            - dependencies
-#      - compile_mock:
-#          context: slack-secrets
-#          requires:
-#            - dependencies
+      - test_prod:
+          context: slack-secrets
+          requires:
+            - dependencies
+      - compile_mock:
+          context: slack-secrets
+          requires:
+            - dependencies
 
 # ■ note ■
 # check command： circleci config validate
