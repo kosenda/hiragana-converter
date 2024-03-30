@@ -189,11 +189,11 @@ commands:
       - run:
           name: Create comment
           command: |
-            "Snapshot diff report" > comment
+            echo "Snapshot diff report" > comment
             
             if [ $IS_PR = "true" ]; then
-              "| File name | Image |" >> comment
-              "|-------|-------|" >> comment
+              echo "| File name | Image |" >> comment
+              echo "|-------|-------|" >> comment
             
               files=$(find . -type f -name "*_compare.png")
               for file in $files; do
