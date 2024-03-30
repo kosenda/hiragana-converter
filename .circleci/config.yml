@@ -191,7 +191,7 @@ commands:
           command: |
             echo "Snapshot diff report" > comment
             
-            if [ $IS_PR = "true" ]; then
+            if [ $IS_EXIST_SCREENSHOTS = "true" ]; then
               echo "| File name | Image |" >> comment
               echo "|-------|-------|" >> comment
             
@@ -208,8 +208,11 @@ commands:
               prNumber=$(echo $CIRCLE_PULL_REQUEST | sed "s:.*/::")
               url="https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/${prNumber}/comments"
               commentId=$(echo -n $(curl -s -H "Authorization: token $GITHUB_ACCESS_TOKEN" $url -v | jq '.[] | select(.body | test("^Snapshot diff report.*")) | .id'))
-              echo "commentId: $commentId"
-              comment=$(cat ./comment)
+              echo "commentId: a${commentId}b"
+              echo "prNumber: a${prNumber}b"
+              echo "url: a${url}b"
+              comment="$(cat ./comment)
+              echo "comment: a${comment}b"
               if [ -n "$commentId" ]; then
                 endpoint="/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/comments/$commentId"
                 gh api --method PATCH -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" $endpoint -f body='$comment'
