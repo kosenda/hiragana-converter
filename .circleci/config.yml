@@ -101,14 +101,14 @@ commands:
             echo "test2: $(echo "<< parameters.maximum_seconds_past >>")"
             echo "test3: $(echo $(git branch -r --format="%(refname:lstrip=3)"))"
             echo "test4: $(echo $(git branch -r --format="%(refname:lstrip=3)" | grep << parameters.prefix >> ))"
-            # git branch -r --format="%(refname:lstrip=3)" | grep << parameters.prefix >> | while read -r branch; do
+            git branch -r --format="%(refname:lstrip=3)" | grep companion_ | while read -r branch; do
               # echo "branch: $branch"
               # last_commit_date_timestamp=$(git log -1 --format=%ct "origin/$branch")
               # now_timestamp=$(date +%s)
               # if [ $((now_timestamp - last_commit_date_timestamp)) -gt << parameters.maximum_seconds_past >> ]; then
               #   git push origin --delete "$branch"
               # fi
-            # done
+            done
 
   setting_git_config:
     steps:
