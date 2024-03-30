@@ -3,7 +3,6 @@
 version: 2.1
 
 orbs:
-  slack: circleci/slack@4.12.6
   gh: circleci/github-cli@2.3.0
 
 executors:
@@ -12,22 +11,17 @@ executors:
       - image: cimg/android:2024.01
 
 commands:
-  set_locale_properties:
+  check_is_pr:
     steps:
       - run:
-          name: Set local.properties
+          name: Save IS_PR to env
           command: |
-            LOCAL_PROPERTIES_PATH=./local.properties
-            echo "apiKey=$.Environment.DEBUG_AD_APPLICATION_ID" >> $LOCAL_PROPERTIES_PATH
-
-  restore_and_save_gradle_cache:
-    steps:
-      - restore_cache:
-          key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
+            is_pr=false
+            if [ -n "$CIRCLE_PULL_REQUEST" ]; then
+              is_pr=true
+            fi
+            echo "is_pr: $is_pr"
+            echo "export IS_PR=$is_pr" >> $BASH_ENV
 
   get_screenshots:
     steps:
@@ -87,23 +81,36 @@ commands:
             unzip ./temp/zip/screenshots.zip || true
             rm -rf ./temp || true
 
-  cleanup_old_branch:
-    parameters:
-      prefix:
-        type: string
-      maximum_seconds_past:
-        type: integer
+  set_locale_properties:
     steps:
       - run:
-          name: Cleanup old branch
+          name: Set local.properties
           command: |
-            git branch -r --format="%(refname:lstrip=3)" | grep << parameters.prefix >> | while read -r branch; do
-              last_commit_date_timestamp=$(git log -1 --format=%ct "origin/$branch")
-              now_timestamp=$(date +%s)
-              if [ $((now_timestamp - last_commit_date_timestamp)) -gt << parameters.maximum_seconds_past >> ]; then
-                git push origin --delete "$branch"
-              fi
-            done || true
+            LOCAL_PROPERTIES_PATH=./local.properties
+            echo "apiKey=$.Environment.DEBUG_AD_APPLICATION_ID" >> $LOCAL_PROPERTIES_PATH
+
+  restore_and_save_gradle_cache:
+    steps:
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
+
+  unit_test:
+    parameters:
+      build_variant:
+        type: string
+    steps:
+      - run:
+          name: Unit test
+          command: |
+            roborazzi_option="-Proborazzi.test.record=true"
+            if [ $IS_PR = "true" ]; then
+              roborazzi_option="-Proborazzi.test.compare=true"
+            fi
+            ./gradlew test<< parameters.build_variant >> $roborazzi_option --stacktrace
 
   setting_git_config:
     steps:
@@ -113,17 +120,32 @@ commands:
             git config --global user.name "$GITHUB_NAME"
             git config --global user.email "$GITHUB_EMAIL"
 
-  check_is_pr:
+  push_screenshots_branch:
     steps:
       - run:
-          name: Save IS_PR to env
+          name: Push screenshots branch
           command: |
-            is_pr=false
-            if [ -n "$CIRCLE_PULL_REQUEST" ]; then
-              is_pr=true
+            if [ $IS_PR = "false" ]; then
+              git push origin --delete screenshots_$CIRCLE_BRANCH || true
+            
+              git checkout --orphan screenshots_$CIRCLE_BRANCH
+              git rm --cached -rf .
+            
+              add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*")
+              for file in $add_files; do
+                git add -f $file
+              done
+            
+              echo $(date +%s) >> timestamp
+              git add -f timestamp
+            
+              echo -e "version: 2.1\njobs:\n no-op:\n  machine: true\n  steps:\n  - run: no-op\nworkflows:\n build:\n  jobs:\n   - no-op:\n      filters:\n       branches:\n        only: no-op" > .circleci/config.yml
+              git add -f .circleci/config.yml
+            
+              git commit -m "Add screenshot"
+              git clean -df
+              git push origin HEAD:screenshots_$CIRCLE_BRANCH -f
             fi
-            echo "is_pr: $is_pr"
-            echo "export IS_PR=$is_pr" >> $BASH_ENV
 
   push_compare_branch:
     steps:
@@ -153,33 +175,6 @@ commands:
               fi
             fi
 
-  push_screenshots_branch:
-    steps:
-      - run:
-          name: Push screenshots branch
-          command: |
-            if [ $IS_PR = "false" ]; then
-              git push origin --delete screenshots_$CIRCLE_BRANCH || true
-            
-              git checkout --orphan screenshots_$CIRCLE_BRANCH
-              git rm --cached -rf .
-            
-              add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*")
-              for file in $add_files; do
-                git add -f $file
-              done
-            
-              echo $(date +%s) >> timestamp
-              git add -f timestamp
-            
-              echo -e "version: 2.1\njobs:\n no-op:\n  machine: true\n  steps:\n  - run: no-op\nworkflows:\n build:\n  jobs:\n   - no-op:\n      filters:\n       branches:\n        only: no-op" > .circleci/config.yml
-              git add -f .circleci/config.yml
-            
-              git commit -m "Add screenshot"
-              git clean -df
-              git push origin HEAD:screenshots_$CIRCLE_BRANCH -f
-            fi
-
   comment_screenshot_diff:
     steps:
       - gh/install
@@ -193,14 +188,26 @@ commands:
               gh workflow run "CommentScreenshotDiff.yml" -f pr_branch_name=$CIRCLE_BRANCH -f pr_number=$(echo $CIRCLE_PULL_REQUEST | sed "s:.*/::")
             fi
 
-jobs:
-  dependencies:
-    executor: android
+  cleanup_old_branch:
+    parameters:
+      prefix:
+        type: string
+      maximum_seconds_past:
+        type: integer
+        default: 2592000 # 30 days
     steps:
-      - checkout
-      - set_locale_properties
-      - restore_and_save_gradle_cache
+      - run:
+          name: Cleanup old branch
+          command: |
+            git branch -r --format="%(refname:lstrip=3)" | grep << parameters.prefix >> | while read -r branch; do
+              last_commit_date_timestamp=$(git log -1 --format=%ct "origin/$branch")
+              now_timestamp=$(date +%s)
+              if [ $((now_timestamp - last_commit_date_timestamp)) -gt << parameters.maximum_seconds_past >> ]; then
+                git push origin --delete "$branch"
+              fi
+            done || true
 
+jobs:
   test_prod:
     executor: android
     steps:
@@ -209,78 +216,22 @@ jobs:
       - get_screenshots
       - set_locale_properties
       - restore_and_save_gradle_cache
-      - run:
-          neme: Gem install bundler
-          command: sudo gem install bundler:2.4.12
-      - run:
-          name: Bundle install
-          command: |
-            bundle config set --local path 'vendor/bundle'
-            bundle install
-      - run:
-          name: Ktlint check
-          command: ./gradlew --continue ktlintCheck
-      - run:
-          name: Test
-          command: |
-            roborazzi_option="-Proborazzi.test.record=true"
-            if [ $IS_PR = "true" ]; then
-              roborazzi_option="-Proborazzi.test.compare=true"
-            fi
-            ./gradlew testProdDebug $roborazzi_option --stacktrace
-      - run:
-          name: Report jacoco
-          command: ./gradlew jacocoTestReport
-      - run:
-          name: Zip jacoco report
-          command: zip -r jacocoTestReport.zip ./build/reports/jacoco/jacocoTestReport/html
-      - store_artifacts:
-          path: jacocoTestReport.zip
-      - run:
-          name: Run danger file
-          command: bundle exec danger --verbose
+      - unit_test:
+          build_variant: ProdDebug
       - setting_git_config
       - push_screenshots_branch
       - push_compare_branch
+      - comment_screenshot_diff
       - cleanup_old_branch:
           prefix: compare_
-          maximum_seconds_past: 2592000 # 30 days
       - cleanup_old_branch:
           prefix: screenshots_
           maximum_seconds_past: 15552000 # 180 days
-      - comment_screenshot_diff
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
-      - slack/notify:
-          event: pass
-          template: basic_success_1
-
-  compile_mock:
-    executor: android
-    steps:
-      - checkout
-      - set_locale_properties
-      - restore_and_save_gradle_cache
-      - run:
-          name: Build mock
-          command: ./gradlew compileMockDebugSource
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
 
 workflows:
   test:
     jobs:
-      - dependencies
-      - test_prod:
-          context: slack-secrets
-          requires:
-            - dependencies
-      - compile_mock:
-          context: slack-secrets
-          requires:
-            - dependencies
+      - test_prod
 
 # ■ note ■
 # check command： circleci config validate
