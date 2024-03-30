@@ -19,6 +19,7 @@ commands:
           command: |
             LOCAL_PROPERTIES_PATH=./local.properties
             echo "apiKey=$.Environment.DEBUG_AD_APPLICATION_ID" >> $LOCAL_PROPERTIES_PATH
+
   restore_and_save_gradle_cache:
     steps:
       - restore_cache:
@@ -27,141 +28,21 @@ commands:
           paths:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
-  cleanup_old_branch:
-    parameters:
-      prefix:
-        type: string
-      maximum_seconds_past:
-        type: integer
+
+  get_screenshots:
     steps:
-      - run:
-          name: Cleanup old branch
-          command: |
-            git branch -r --format="%(refname:lstrip=3)" | grep -e << parameters.prefix >> | while read -r branch; do
-              last_commit_date_timestamp=$(git log -1 --format=%ct "origin/$branch")
-              now_timestamp=$(date +%s)
-              if [ $((now_timestamp - last_commit_date_timestamp)) -gt << parameters.maximum_seconds_past >> ]; then
-                git push origin --delete "$branch"
-              fi
-            done
-  setting_git_config:
-    steps:
-      - run:
-          name: Setting git config
-          command: |
-            git config --global user.name "$GITHUB_NAME"
-            git config --global user.email "$GITHUB_EMAIL"
-
-jobs:
-  dependencies:
-    executor: android
-    steps:
-      - checkout
-      - set_locale_properties
-      - restore_and_save_gradle_cache
-
-  test_prod:
-    executor: android
-    steps:
-      - checkout
-      - set_locale_properties
-      - restore_and_save_gradle_cache
-      - run:
-          neme: Gem install bundler
-          command: sudo gem install bundler:2.4.12
-      - run:
-          name: Bundle install
-          command: |
-            bundle config set --local path 'vendor/bundle'
-            bundle install
-      - run:
-          name: Ktlint check
-          command: ./gradlew --continue ktlintCheck
-      - run:
-          name: Test
-          command: ./gradlew testProdDebug --stacktrace
-      - run:
-          name: Report jacoco
-          command: ./gradlew jacocoTestReport
-      - run:
-          name: Zip jacoco report
-          command: zip -r jacocoTestReport.zip ./build/reports/jacoco/jacocoTestReport/html
-      - store_artifacts:
-          path: jacocoTestReport.zip
-      - run:
-          name: Run danger file
-          command: bundle exec danger --verbose
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
-      - slack/notify:
-          event: pass
-          template: basic_success_1
-
-  compile_mock:
-    executor: android
-    steps:
-      - checkout
-      - set_locale_properties
-      - restore_and_save_gradle_cache
-      - run:
-          name: Build mock
-          command: ./gradlew compileMockDebugSource
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
-
-  save_screenshots:
-    executor: android
-    steps:
-      - checkout
-      - set_locale_properties
-      - restore_and_save_gradle_cache
-      - run:
-          name: Create screenshots
-          command: ./gradlew recordRoborazziProdDebug --stacktrace
-      - setting_git_config
-      - run:
-          name: Push screenshots branch
-          command: |
-            git push origin --delete screenshots_$CIRCLE_BRANCH || true
-
-            git checkout --orphan screenshots_$CIRCLE_BRANCH
-            git rm --cached -rf .
-
-            add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*")
-            for file in $add_files; do
-              git add -f $file
-            done
-            
-            echo $(date +%s) >> timestamp
-            git add -f timestamp
-            
-            echo -e "version: 2.1\njobs:\n no-op:\n  machine: true\n  steps:\n  - run: no-op\nworkflows:\n build:\n  jobs:\n   - no-op:\n      filters:\n       branches:\n        only: no-op" > .circleci/config.yml
-            git add -f .circleci/config.yml
-
-            git commit -m "Add screenshot"
-            git clean -df
-            git push origin HEAD:screenshots_$CIRCLE_BRANCH -f
-
-  compare_screenshots:
-    executor: android
-    steps:
-      - checkout
-      - gh/install
-      - run:
-          name: Gh login
-          command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
       - run:
           name: Save BASE_BRANCH_NAME to env
           command: |
             pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
             base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
+            echo "base: $base"
             echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
       - run:
           name: Save IS_EXIST_SCREENSHOTS to env
           command: |
             is_exist=$(echo -n "$(git fetch origin screenshots_$BASE_BRANCH_NAME && echo true || echo false)")
+            echo "is_exist: $is_exist"
             echo "export IS_EXIST_SCREENSHOTS=${is_exist}" >> $BASH_ENV
       - run:
           name: Checkout screenshots branch
@@ -204,38 +85,197 @@ jobs:
             unzip ./temp/zip/screenshots.zip || true
             rm -rf ./temp || true
       - run:
-          name: Compare screenshots
-          command: ./gradlew compareRoborazziProdDebug --stacktrace
-      - setting_git_config
+          name: Restore timestamp file
+          command: echo $SCREENSHOTS_TIMESTAMP > timestamp
+      - restore_cache:
+          key: screenshots-{{ checksum "timestamp" }}
       - run:
-          name: Push companion branch
+          name: Unzip screenshots
           command: |
-            git push origin --delete companion_$CIRCLE_BRANCH || true
-            
-            fileSize=$(echo $(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/ //g'))
-            if [ $fileSize -ne 0 ]; then
-              git checkout --orphan companion_$CIRCLE_BRANCH
-              git rm --cached -rf .
+            unzip ./temp/zip/screenshots.zip || true
+            rm -rf ./temp || true
 
-              add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*" -name "*_compare.png")
+  cleanup_old_branch:
+    parameters:
+      prefix:
+        type: string
+      maximum_seconds_past:
+        type: integer
+    steps:
+      - run:
+          name: Cleanup old branch
+          command: |
+            git branch -r --format="%(refname:lstrip=3)" | grep -e << parameters.prefix >> | while read -r branch; do
+              last_commit_date_timestamp=$(git log -1 --format=%ct "origin/$branch")
+              now_timestamp=$(date +%s)
+              if [ $((now_timestamp - last_commit_date_timestamp)) -gt << parameters.maximum_seconds_past >> ]; then
+                git push origin --delete "$branch"
+              fi
+            done
+
+  setting_git_config:
+    steps:
+      - run:
+          name: Setting git config
+          command: |
+            git config --global user.name "$GITHUB_NAME"
+            git config --global user.email "$GITHUB_EMAIL"
+
+  check_is_pr:
+    steps:
+      - run:
+          name: Check is PR
+          command: |
+            is_pr=false
+            if [ -n "$CIRCLE_PULL_REQUEST" ]; then
+              is_pr=true
+            fi
+            echo "is_pr: $is_pr"
+            echo "export IS_PR=$is_pr" >> $BASH_ENV
+
+  push_compare_branch:
+    steps:
+      - run:
+          name: Push compare branch
+          command: |
+            if [ "$IS_PR" = "true" ]; then
+              git push origin --delete compare_$CIRCLE_BRANCH || true
+            
+              fileSize=$(echo $(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/ //g'))
+              echo "fileSize: $fileSize"
+              if [ $fileSize -ne 0 ]; then
+                git checkout --orphan companion_$CIRCLE_BRANCH
+                git rm --cached -rf .
+            
+                add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*" -name "*_compare.png")
+                for file in $add_files; do
+                  git add -f $file
+                done
+            
+                echo -e "version: 2.1\njobs:\n no-op:\n  machine: true\n  steps:\n  - run: no-op\nworkflows:\n build:\n  jobs:\n   - no-op:\n      filters:\n       branches:\n        only: no-op" > .circleci/config.yml
+                git add .circleci/config.yml
+            
+                git commit -m "Add screenshot diff"
+                git clean -df
+                git push origin HEAD:companion_$CIRCLE_BRANCH -f
+              fi
+            fi
+
+  push_screenshots_branch:
+    steps:
+      - run:
+          name: Push screenshots branch
+          command: |
+            if [ $IS_PR = "false" ]; then
+              git push origin --delete screenshots_$CIRCLE_BRANCH || true
+            
+              git checkout --orphan screenshots_$CIRCLE_BRANCH
+              git rm --cached -rf .
+            
+              add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*")
               for file in $add_files; do
                 git add -f $file
               done
-
+            
+              echo $(date +%s) >> timestamp
+              git add -f timestamp
+            
               echo -e "version: 2.1\njobs:\n no-op:\n  machine: true\n  steps:\n  - run: no-op\nworkflows:\n build:\n  jobs:\n   - no-op:\n      filters:\n       branches:\n        only: no-op" > .circleci/config.yml
-              git add .circleci/config.yml
-
-              git commit -m "Add screenshot diff"
+              git add -f .circleci/config.yml
+            
+              git commit -m "Add screenshot"
               git clean -df
-              git push origin HEAD:companion_$CIRCLE_BRANCH -f
+              git push origin HEAD:screenshots_$CIRCLE_BRANCH -f
             fi
-            gh workflow run "CommentScreenshotDiff.yml" -f pr_branch_name=$CIRCLE_BRANCH -f pr_number=$(echo $CIRCLE_PULL_REQUEST | sed "s:.*/::")
+
+  comment_screenshot_diff:
+    steps:
+      - gh/install
+      - run:
+          name: Gh login
+          command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
+      - run:
+          name:
+          command: |
+            if [ $IS_PR = "true" ]; then
+              gh run workflow run "CommentScreenshotDiff.yml" -f pr_branch_name=$CIRCLE_BRANCH -f pr_number=$(echo $CIRCLE_PULL_REQUEST | sed "s:.*/::")
+            fi
+
+jobs:
+  dependencies:
+    executor: android
+    steps:
+      - checkout
+      - set_locale_properties
+      - restore_and_save_gradle_cache
+
+  test_prod:
+    executor: android
+    steps:
+      - checkout
+      - get_screenshots
+      - set_locale_properties
+      - restore_and_save_gradle_cache
+      - run:
+          neme: Gem install bundler
+          command: sudo gem install bundler:2.4.12
+      - run:
+          name: Bundle install
+          command: |
+            bundle config set --local path 'vendor/bundle'
+            bundle install
+      - run:
+          name: Ktlint check
+          command: ./gradlew --continue ktlintCheck
+      - run:
+          name: Test
+          command: |
+            roborazzi_option="-Proborazzi.test.record=true"
+            if [ $IS_PR = "true" ]; then
+              roborazzi_option="-Proborazzi.test.compare=true"
+            else
+            ./gradlew testProdDebug $roborazzi_option --stacktrace
+      - run:
+          name: Report jacoco
+          command: ./gradlew jacocoTestReport
+      - run:
+          name: Zip jacoco report
+          command: zip -r jacocoTestReport.zip ./build/reports/jacoco/jacocoTestReport/html
+      - store_artifacts:
+          path: jacocoTestReport.zip
+      - run:
+          name: Run danger file
+          command: bundle exec danger --verbose
+      - setting_git_config
+      - check_is_pr
+      - push_screenshots_branch
+      - push_compare_branch
+      - comment_screenshot_diff
       - cleanup_old_branch:
           prefix: companion_
           maximum_seconds_past: 2592000 # 30 days
       - cleanup_old_branch:
           prefix: screenshots_
           maximum_seconds_past: 15552000 # 180 days
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+      - slack/notify:
+          event: pass
+          template: basic_success_1
+
+  compile_mock:
+    executor: android
+    steps:
+      - checkout
+      - set_locale_properties
+      - restore_and_save_gradle_cache
+      - run:
+          name: Build mock
+          command: ./gradlew compileMockDebugSource
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
 
 workflows:
   test:
@@ -249,22 +289,6 @@ workflows:
           context: slack-secrets
           requires:
             - dependencies
-      - save_screenshots:
-          requires:
-            - dependencies
-          filters:
-            branches:
-              only:
-                - main
-                - develop
-      - compare_screenshots:
-          requires:
-            - dependencies
-          filters:
-            branches:
-              ignore:
-                - main
-                - develop
 
 # ■ note ■
 # check command： circleci config validate
