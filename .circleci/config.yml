@@ -97,7 +97,7 @@ commands:
       - run:
           name: Cleanup old branch
           command: |
-            git branch -r --format="%(refname:lstrip=3)" | grep compare_ | while read -r branch; do
+            git branch -r --format="%(refname:lstrip=3)" | grep << parameters.prefix >> | while read -r branch; do
               last_commit_date_timestamp=$(git log -1 --format=%ct "origin/$branch")
               now_timestamp=$(date +%s)
               if [ $((now_timestamp - last_commit_date_timestamp)) -gt << parameters.maximum_seconds_past >> ]; then
@@ -199,9 +199,6 @@ jobs:
     steps:
       - checkout
       - set_locale_properties
-      - cleanup_old_branch:
-          prefix: compare_
-          maximum_seconds_past: 2592000 # 30 days
       - restore_and_save_gradle_cache
 
   test_prod:
@@ -210,20 +207,11 @@ jobs:
       - checkout
       - check_is_pr
       - get_screenshots
-      - cleanup_old_branch:
-          prefix: compare_
-          maximum_seconds_past: 2592000 # 30 days
       - set_locale_properties
-      - cleanup_old_branch:
-          prefix: compare_
-          maximum_seconds_past: 2592000 # 30 days
       - restore_and_save_gradle_cache
       - run:
           neme: Gem install bundler
           command: sudo gem install bundler:2.4.12
-      - cleanup_old_branch:
-          prefix: compare_
-          maximum_seconds_past: 2592000 # 30 days
       - run:
           name: Bundle install
           command: |
@@ -232,9 +220,6 @@ jobs:
       - run:
           name: Ktlint check
           command: ./gradlew --continue ktlintCheck
-      - cleanup_old_branch:
-          prefix: compare_
-          maximum_seconds_past: 2592000 # 30 days
       - run:
           name: Test
           command: |
@@ -249,22 +234,13 @@ jobs:
       - run:
           name: Zip jacoco report
           command: zip -r jacocoTestReport.zip ./build/reports/jacoco/jacocoTestReport/html
-      - cleanup_old_branch:
-          prefix: compare_
-          maximum_seconds_past: 2592000 # 30 days
       - store_artifacts:
           path: jacocoTestReport.zip
       - run:
           name: Run danger file
           command: bundle exec danger --verbose
       - setting_git_config
-      - cleanup_old_branch:
-          prefix: compare_
-          maximum_seconds_past: 2592000 # 30 days
       - push_screenshots_branch
-      - cleanup_old_branch:
-          prefix: compare_
-          maximum_seconds_past: 2592000 # 30 days
       - push_compare_branch
       - cleanup_old_branch:
           prefix: compare_
