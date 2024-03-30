@@ -97,9 +97,9 @@ commands:
       - run:
           name: Cleanup old branch
           command: |
-            echo "test1: $(<< parameters.prefix >>")
-            echo "test2: $(<< parameters.maximum_seconds_past >>")
-            echo "test3: $(git branch -r --format="%(refname:lstrip=3)")"
+            echo "test1: $(<< parameters.prefix >>)"
+            echo "test2: $(<< parameters.maximum_seconds_past >>)"
+            echo "test3: $(git branch -r --format="%(refname:lstrip=3))"
             echo "test4: $(git branch -r --format="%(refname:lstrip=3) | grep << parameters.prefix >> )"
             git branch -r --format="%(refname:lstrip=3)" | grep << parameters.prefix >> | while read -r branch; do
               echo "branch: $branch"
