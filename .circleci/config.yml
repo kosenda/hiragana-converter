@@ -61,6 +61,7 @@ commands:
             if [ $IS_EXIST_SCREENSHOTS = "false" ]; then
               touch timestamp
             fi
+            echo "timestamp: $(cat timestamp)"
             echo "export SCREENSHOTS_TIMESTAMP=$(cat timestamp)" >> $BASH_ENV
       - run:
           name: Zip screenshots
@@ -76,8 +77,6 @@ commands:
       - run:
           name: Checkout pr branch
           command: git checkout $CIRCLE_BRANCH
-      - set_locale_properties
-      - restore_and_save_gradle_cache
       - run:
           name: Restore timestamp file
           command: echo $SCREENSHOTS_TIMESTAMP > timestamp
@@ -148,7 +147,7 @@ commands:
               fileSize=$(echo $(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/ //g'))
               echo "fileSize: $fileSize"
               if [ $fileSize -ne 0 ]; then
-                git checkout --orphan companion_$CIRCLE_BRANCH
+                git checkout --orphan compare_$CIRCLE_BRANCH
                 git rm --cached -rf .
             
                 add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*" -name "*_compare.png")
@@ -161,7 +160,7 @@ commands:
             
                 git commit -m "Add screenshot diff"
                 git clean -df
-                git push origin HEAD:companion_$CIRCLE_BRANCH -f
+                git push origin HEAD:compare_$CIRCLE_BRANCH -f
               fi
             fi
 
@@ -217,6 +216,7 @@ jobs:
     executor: android
     steps:
       - checkout
+      - check_is_pr
       - get_screenshots
       - set_locale_properties
       - restore_and_save_gradle_cache
@@ -231,7 +231,6 @@ jobs:
       - run:
           name: Ktlint check
           command: ./gradlew --continue ktlintCheck
-      - check_is_pr
       - run:
           name: Test
           command: |
@@ -256,7 +255,7 @@ jobs:
       - push_compare_branch
       - comment_screenshot_diff
       - cleanup_old_branch:
-          prefix: companion_
+          prefix: compare_
           maximum_seconds_past: 2592000 # 30 days
       - cleanup_old_branch:
           prefix: screenshots_
