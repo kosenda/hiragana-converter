@@ -87,16 +87,6 @@ commands:
           command: |
             unzip ./temp/zip/screenshots.zip || true
             rm -rf ./temp || true
-      - run:
-          name: Restore timestamp file
-          command: echo $SCREENSHOTS_TIMESTAMP > timestamp
-      - restore_cache:
-          key: screenshots-{{ checksum "timestamp" }}
-      - run:
-          name: Unzip screenshots
-          command: |
-            unzip ./temp/zip/screenshots.zip || true
-            rm -rf ./temp || true
 
   cleanup_old_branch:
     parameters:
