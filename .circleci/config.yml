@@ -127,7 +127,7 @@ commands:
   check_is_pr:
     steps:
       - run:
-          name: Check is PR
+          name: Save IS_PR to env
           command: |
             is_pr=false
             if [ -n "$CIRCLE_PULL_REQUEST" ]; then
