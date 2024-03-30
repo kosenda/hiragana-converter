@@ -99,6 +99,7 @@ commands:
           name: Cleanup old branch
           command: |
             git branch -r --format="%(refname:lstrip=3)" | grep << parameters.prefix >> | while read -r branch; do
+              echo "branch: $branch"
               last_commit_date_timestamp=$(git log -1 --format=%ct "origin/$branch")
               now_timestamp=$(date +%s)
               if [ $((now_timestamp - last_commit_date_timestamp)) -gt << parameters.maximum_seconds_past >> ]; then
@@ -183,6 +184,10 @@ commands:
 
   comment_screenshot_diff:
     steps:
+      - gh/install
+      - run:
+          name: Gh login
+          command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
       - run:
           name: Comment screenshot diff
           command: |
@@ -197,20 +202,19 @@ jobs:
       - checkout
       - set_locale_properties
       - restore_and_save_gradle_cache
-      - cleanup_old_branch:
-          prefix: screenshots_
-          maximum_seconds_past: 15552000 # 180 days
 
   test_prod:
     executor: android
     steps:
       - checkout
-      - gh/install
-      - run:
-          name: Gh login
-          command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
+      - cleanup_old_branch:
+          prefix: screenshots_
+          maximum_seconds_past: 15552000 # 180 days
       - check_is_pr
       - get_screenshots
+      - cleanup_old_branch:
+          prefix: screenshots_
+          maximum_seconds_past: 15552000 # 180 days
       - set_locale_properties
       - restore_and_save_gradle_cache
       - run:
@@ -224,6 +228,9 @@ jobs:
       - run:
           name: Ktlint check
           command: ./gradlew --continue ktlintCheck
+      - cleanup_old_branch:
+          prefix: screenshots_
+          maximum_seconds_past: 15552000 # 180 days
       - run:
           name: Test
           command: |
@@ -243,8 +250,14 @@ jobs:
       - run:
           name: Run danger file
           command: bundle exec danger --verbose
+      - cleanup_old_branch:
+          prefix: screenshots_
+          maximum_seconds_past: 15552000 # 180 days
       - setting_git_config
       - push_screenshots_branch
+      - cleanup_old_branch:
+          prefix: screenshots_
+          maximum_seconds_past: 15552000 # 180 days
       - push_compare_branch
       - cleanup_old_branch:
           prefix: compare_
