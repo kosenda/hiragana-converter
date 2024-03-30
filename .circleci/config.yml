@@ -41,10 +41,9 @@ commands:
       - run:
           name: Save IS_EXIST_SCREENSHOTS to env
           command: |
+            is_exist=false
             if [ $IS_PR = "true" ]; then
               is_exist=$(echo -n "$(git fetch origin screenshots_$BASE_BRANCH_NAME && echo true || echo false)")
-            else
-               is_exist=false
             fi
             echo "is_exist: $is_exist"
             echo "export IS_EXIST_SCREENSHOTS=${is_exist}" >> $BASH_ENV
@@ -61,8 +60,8 @@ commands:
             if [ $IS_EXIST_SCREENSHOTS = "false" ]; then
               touch timestamp
             fi
-            echo "timestamp: $(cat timestamp)"
-            echo "export SCREENSHOTS_TIMESTAMP=$(cat timestamp)" >> $BASH_ENV
+            echo "timestamp: $timestamp"
+            echo "export SCREENSHOTS_TIMESTAMP=$(echo -n $(cat timestamp))" >> $BASH_ENV
       - run:
           name: Zip screenshots
           command: |
@@ -104,7 +103,7 @@ commands:
               if [ $((now_timestamp - last_commit_date_timestamp)) -gt << parameters.maximum_seconds_past >> ]; then
                 git push origin --delete "$branch"
               fi
-            done
+            done || true
 
   setting_git_config:
     steps:
@@ -243,13 +242,13 @@ jobs:
       - setting_git_config
       - push_screenshots_branch
       - push_compare_branch
-      - comment_screenshot_diff
       - cleanup_old_branch:
           prefix: compare_
           maximum_seconds_past: 2592000 # 30 days
       - cleanup_old_branch:
           prefix: screenshots_
           maximum_seconds_past: 15552000 # 180 days
+      - comment_screenshot_diff
       - slack/notify:
           event: fail
           template: basic_fail_1
