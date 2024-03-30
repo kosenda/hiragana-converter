@@ -183,7 +183,6 @@ commands:
 
   comment_screenshot_diff:
     steps:
-      - gh/install
       - run:
           name: Gh login
           command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
@@ -209,6 +208,7 @@ jobs:
     executor: android
     steps:
       - checkout
+      - gh/install
       - check_is_pr
       - get_screenshots
       - set_locale_properties
