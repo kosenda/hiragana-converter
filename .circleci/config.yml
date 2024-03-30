@@ -58,9 +58,9 @@ commands:
           name: Save SCREENSHOTS_TIMESTAMP to env
           command: |
             if [ $IS_EXIST_SCREENSHOTS = "false" ]; then
-              touch timestamp
+              echo "no-op" > timestamp
             fi
-            echo "timestamp: $timestamp"
+            echo "timestamp: $(cat timestamp)"
             echo "export SCREENSHOTS_TIMESTAMP=$(echo -n $(cat timestamp))" >> $BASH_ENV
       - run:
           name: Zip screenshots
@@ -207,14 +207,14 @@ commands:
             if [ $IS_PR = "true" ]; then
               prNumber=$(echo $CIRCLE_PULL_REQUEST | sed "s:.*/::")
               url="https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/${prNumber}/comments"
-              commentId=$(echo -n $(curl -s -H "Authorization: token $GITHUB_ACCESS_TOKEN $url -v | jq '.[] | select(.body | test("^Snapshot diff report.*")) | .id'))
+              commentId=$(echo -n $(curl -s -H "Authorization: token $GITHUB_ACCESS_TOKEN" $url -v | jq '.[] | select(.body | test("^Snapshot diff report.*")) | .id'))
               comment=$(cat ./comment)
               if [ -n "$commentId" ]; then
                 endpoint="/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/comments/$commentId"
                 gh api --method PATCH -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" $endpoint -f body='$comment'
             　else
                 gh pr comment $CIRCLE_PULL_REQUEST -F ./comment
-              if
+              fi
             fi
 
 jobs:
