@@ -184,9 +184,6 @@ commands:
   comment_screenshot_diff:
     steps:
       - run:
-          name: Gh login
-          command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
-      - run:
           name: Comment screenshot diff
           command: |
             if [ $IS_PR = "true" ]; then
@@ -209,6 +206,9 @@ jobs:
     steps:
       - checkout
       - gh/install
+      - run:
+          name: Gh login
+          command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
       - check_is_pr
       - get_screenshots
       - set_locale_properties
