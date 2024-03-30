@@ -41,10 +41,9 @@ commands:
       - run:
           name: Save IS_EXIST_SCREENSHOTS to env
           command: |
+            is_exist=false
             if [ $IS_PR = "true" ]; then
               is_exist=$(echo -n "$(git fetch origin screenshots_$BASE_BRANCH_NAME && echo true || echo false)")
-            else
-               is_exist=false
             fi
             echo "is_exist: $is_exist"
             echo "export IS_EXIST_SCREENSHOTS=${is_exist}" >> $BASH_ENV
@@ -61,8 +60,8 @@ commands:
             if [ $IS_EXIST_SCREENSHOTS = "false" ]; then
               touch timestamp
             fi
-            echo "timestamp: $(cat timestamp)"
-            echo "export SCREENSHOTS_TIMESTAMP=$(cat timestamp)" >> $BASH_ENV
+            echo "timestamp: $timestamp"
+            echo "export SCREENSHOTS_TIMESTAMP=$(echo -n $(cat timestamp))" >> $BASH_ENV
       - run:
           name: Zip screenshots
           command: |
@@ -86,7 +85,7 @@ commands:
           name: Unzip screenshots
           command: |
             unzip ./temp/zip/screenshots.zip || true
-            rm -rf ./temp/zip || true
+            rm -rf ./temp || true
 
   cleanup_old_branch:
     parameters:
@@ -184,10 +183,6 @@ commands:
 
   comment_screenshot_diff:
     steps:
-      - gh/install
-      - run:
-          name: Gh login
-          command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
       - run:
           name: Comment screenshot diff
           command: |
@@ -207,14 +202,12 @@ jobs:
     executor: android
     steps:
       - checkout
-      - cleanup_old_branch:
-          prefix: screenshots_
-          maximum_seconds_past: 15552000 # 180 days
+      - gh/install
+      - run:
+          name: Gh login
+          command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
       - check_is_pr
       - get_screenshots
-      - cleanup_old_branch:
-          prefix: screenshots_
-          maximum_seconds_past: 15552000 # 180 days
       - set_locale_properties
       - restore_and_save_gradle_cache
       - run:
@@ -228,9 +221,6 @@ jobs:
       - run:
           name: Ktlint check
           command: ./gradlew --continue ktlintCheck
-      - cleanup_old_branch:
-          prefix: screenshots_
-          maximum_seconds_past: 15552000 # 180 days
       - run:
           name: Test
           command: |
@@ -250,14 +240,8 @@ jobs:
       - run:
           name: Run danger file
           command: bundle exec danger --verbose
-      - cleanup_old_branch:
-          prefix: screenshots_
-          maximum_seconds_past: 15552000 # 180 days
       - setting_git_config
       - push_screenshots_branch
-      - cleanup_old_branch:
-          prefix: screenshots_
-          maximum_seconds_past: 15552000 # 180 days
       - push_compare_branch
       - cleanup_old_branch:
           prefix: compare_
