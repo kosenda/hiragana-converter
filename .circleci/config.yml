@@ -97,6 +97,10 @@ commands:
       - run:
           name: Cleanup old branch
           command: |
+            echo << parameters.prefix >>
+            echo << parameters.maximum_seconds_past >>
+            echo "$(git branch -r --format="%(refname:lstrip=3)")"
+            echo "$(git branch -r --format="%(refname:lstrip=3) | grep << parameters.prefix >> ")"
             git branch -r --format="%(refname:lstrip=3)" | grep << parameters.prefix >> | while read -r branch; do
               echo "branch: $branch"
               last_commit_date_timestamp=$(git log -1 --format=%ct "origin/$branch")
@@ -183,6 +187,10 @@ commands:
 
   comment_screenshot_diff:
     steps:
+      - gh/install
+      - run:
+          name: Gh login
+          command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
       - run:
           name: Comment screenshot diff
           command: |
@@ -202,10 +210,6 @@ jobs:
     executor: android
     steps:
       - checkout
-      - gh/install
-      - run:
-          name: Gh login
-          command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
       - check_is_pr
       - get_screenshots
       - set_locale_properties
