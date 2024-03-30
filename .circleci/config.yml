@@ -213,7 +213,7 @@ commands:
               
               if [ -n "$commentId" ]; then
                 endpoint="/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/comments/$commentId"
-                gh api --method PATCH -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" $endpoint -f body='$comment'
+                gh api --method PATCH -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" $endpoint -f body="$comment"
               else
                 gh pr comment "$CIRCLE_PULL_REQUEST" -F ./comment
               fi
