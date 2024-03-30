@@ -20,7 +20,6 @@ commands:
             if [ -n "$CIRCLE_PULL_REQUEST" ]; then
               is_pr=true
             fi
-            echo "is_pr: $is_pr"
             echo "export IS_PR=$is_pr" >> $BASH_ENV
 
   get_screenshots:
@@ -30,7 +29,6 @@ commands:
           command: |
             pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
             base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
-            echo "base: $base"
             echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
       - run:
           name: Save IS_EXIST_SCREENSHOTS to env
@@ -39,7 +37,6 @@ commands:
             if [ $IS_PR = "true" ]; then
               is_exist=$(echo -n "$(git fetch origin screenshots_$BASE_BRANCH_NAME && echo true || echo false)")
             fi
-            echo "is_exist: $is_exist"
             echo "export IS_EXIST_SCREENSHOTS=${is_exist}" >> $BASH_ENV
       - run:
           name: Checkout screenshots branch
@@ -54,7 +51,6 @@ commands:
             if [ $IS_EXIST_SCREENSHOTS = "false" ]; then
               touch timestamp
             fi
-            echo "timestamp: $timestamp"
             echo "export SCREENSHOTS_TIMESTAMP=$(echo -n $(cat timestamp))" >> $BASH_ENV
       - run:
           name: Zip screenshots
@@ -208,7 +204,7 @@ commands:
             done || true
 
 jobs:
-  test_prod:
+  unit_test:
     executor: android
     steps:
       - checkout
@@ -231,7 +227,7 @@ jobs:
 workflows:
   test:
     jobs:
-      - test_prod
+      - unit_test
 
 # ■ note ■
 # check command： circleci config validate
