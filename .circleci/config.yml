@@ -98,9 +98,6 @@ commands:
       - run:
           name: Cleanup old branch
           command: |
-            echo << parameters.prefix >>
-            echo << parameters.maximum_seconds_past >>
-            echo "$(git branch -r --format="%(refname:lstrip=3)" | grep << parameters.prefix >>)"
             git branch -r --format="%(refname:lstrip=3)" | grep << parameters.prefix >> | while read -r branch; do
               last_commit_date_timestamp=$(git log -1 --format=%ct "origin/$branch")
               now_timestamp=$(date +%s)
@@ -249,13 +246,13 @@ jobs:
       - setting_git_config
       - push_screenshots_branch
       - push_compare_branch
-      - comment_screenshot_diff
       - cleanup_old_branch:
           prefix: compare_
           maximum_seconds_past: 2592000 # 30 days
       - cleanup_old_branch:
           prefix: screenshots_
           maximum_seconds_past: 15552000 # 180 days
+      - comment_screenshot_diff
       - slack/notify:
           event: fail
           template: basic_fail_1
