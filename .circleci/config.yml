@@ -86,7 +86,7 @@ commands:
           name: Unzip screenshots
           command: |
             unzip ./temp/zip/screenshots.zip || true
-            rm -rf ./temp || true
+            rm -rf ./temp/zip || true
 
   cleanup_old_branch:
     parameters:
