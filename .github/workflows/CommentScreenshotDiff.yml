@@ -21,22 +21,22 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v4
 
-      - name: Check exist companion branch
-        id: check-exist-companion
-        run: echo "is_exist=$(echo -n "$(git fetch origin companion_${{ inputs.pr_branch_name }} && echo true || echo false)")" >> $GITHUB_OUTPUT
+      - name: Check exist compare branch
+        id: check-exist-compare
+        run: echo "is_exist=$(echo -n "$(git fetch origin compare_${{ inputs.pr_branch_name }} && echo true || echo false)")" >> $GITHUB_OUTPUT
 
-      - name: Save companion branch name
-        id: save-companion-branch-name
-        run: echo "name=companion_${{ inputs.pr_branch_name }}" >> $GITHUB_OUTPUT
+      - name: Save compare branch name
+        id: save-compare-branch-name
+        run: echo "name=compare_${{ inputs.pr_branch_name }}" >> $GITHUB_OUTPUT
 
-      - name: Checkout companion branch
-        if: steps.check-exist-companion.outputs.is_exist == 'true'
+      - name: Checkout compare branch
+        if: steps.check-exist-compare.outputs.is_exist == 'true'
         uses: actions/checkout@v4
         with:
-          ref: ${{ steps.save-companion-branch-name.outputs.name }}
+          ref: ${{ steps.save-compare-branch-name.outputs.name }}
 
       - name: Create comments
-        if: steps.check-exist-companion.outputs.is_exist == 'true'
+        if: steps.check-exist-compare.outputs.is_exist == 'true'
         id: create-comments
         run: |
           files=$(find . -type f -name "*_compare.png")
@@ -51,7 +51,7 @@ jobs:
 
           for file in $files; do
             fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
-            echo "| [$fileName](https://github.com/${{ github.repository }}/blob/${{ steps.save-companion-branch-name.outputs.name }}/$file) | ![](https://github.com/${{ github.repository }}/blob/${{ steps.save-companion-branch-name.outputs.name }}/$file?raw=true) |" >> "$GITHUB_OUTPUT"
+            echo "| [$fileName](https://github.com/${{ github.repository }}/blob/${{ steps.save-compare-branch-name.outputs.name }}/$file) | ![](https://github.com/${{ github.repository }}/blob/${{ steps.save-compare-branch-name.outputs.name }}/$file?raw=true) |" >> "$GITHUB_OUTPUT"
           done
           echo "${delimiter}" >> "$GITHUB_OUTPUT"
 
@@ -65,7 +65,7 @@ jobs:
           body-includes: Snapshot diff report
 
       - name: Add or update comment on PR(exist screenshot diff)
-        if: steps.check-exist-companion.outputs.is_exist == 'true'
+        if: steps.check-exist-compare.outputs.is_exist == 'true'
         uses: peter-evans/create-or-update-comment@v4
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
@@ -74,7 +74,7 @@ jobs:
           edit-mode: replace
 
       - name: Add or update comment on PR (not exist screenshot diff)
-        if: steps.check-exist-companion.outputs.is_exist == 'false'
+        if: steps.check-exist-compare.outputs.is_exist == 'false'
         uses: peter-evans/create-or-update-comment@v4
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
