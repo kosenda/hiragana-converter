@@ -53,6 +53,8 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ShareCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -248,14 +250,6 @@ fun ConverterScreenContent(
                 Spacer(modifier = Modifier.height(120.dp))
             }
         }
-//        Box(
-//            modifier = Modifier.fillMaxSize(),
-//            contentAlignment = Alignment.Center
-//        ) {
-//            CircularProgressIndicator(
-//                color = Color.Red
-//            )
-//        }
     }
 }
 
@@ -358,13 +352,13 @@ private fun BeforeOrAfterTextField(
 @OptIn(ExperimentalMaterial3Api::class)
 @UiModePreview
 @Composable
-fun PreviewConverterScreenContent() {
+fun PreviewConverterScreenContent(
+    @PreviewParameter(PreviewConverterUiStateProvider::class) uiState: ConvertUiState,
+) {
     HiraganaConverterTheme {
-        CompositionLocalProvider(LocalIsConnectNetwork provides false) {
+        CompositionLocalProvider(LocalIsConnectNetwork provides true) {
             ConverterScreenContent(
-                uiState = ConvertUiState(
-                    convertErrorType = ConvertErrorType.CONVERSION_FAILED,
-                ),
+                uiState = uiState,
                 snackbarHostState = remember { SnackbarHostState() },
                 topBar = { },
                 topBarHeight = 0,
@@ -378,4 +372,11 @@ fun PreviewConverterScreenContent() {
             )
         }
     }
+}
+
+class PreviewConverterUiStateProvider : PreviewParameterProvider<ConvertUiState> {
+    override val values: Sequence<ConvertUiState> = sequenceOf(
+        ConvertUiState(inputText = "漢字", outputText = "かんじ"),
+        ConvertUiState(showErrorCard = true, convertErrorType = ConvertErrorType.REACHED_CONVERT_MAX_LIMIT),
+    )
 }
