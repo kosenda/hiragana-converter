@@ -19,13 +19,14 @@ import org.robolectric.annotation.GraphicsMode
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(qualifiers = RobolectricDeviceQualifiers.Pixel6)
 class PreviewTest(
-    private val showkaseBrowserComponent: ShowkaseBrowserComponent,
+    private val param: Pair<ShowkaseBrowserComponent, Int>,
 ) {
 
     @Test
     fun previewScreenshot() {
+        val (showkaseBrowserComponent, count) = param
         val componentName = showkaseBrowserComponent.componentName.replace(" ", "")
-        val filePath = DEFAULT_ROBORAZZI_OUTPUT_DIR_PATH + "/" + showkaseBrowserComponent.group + "_" + componentName + ".png"
+        val filePath = DEFAULT_ROBORAZZI_OUTPUT_DIR_PATH + "/" + componentName + "_" + count + ".png"
         captureRoboImage(filePath) {
             val newConfiguration = Configuration().apply {
                 this.uiMode = if (componentName.contains(other = "dark", ignoreCase = true)) {
@@ -44,8 +45,12 @@ class PreviewTest(
         @ParameterizedRobolectricTestRunner.Parameters
         @JvmStatic
         fun components(): Iterable<Array<Any?>> {
+            val countMap = mutableMapOf<String, Int>()
             return Showkase.getMetadata().componentList.map { showkaseBrowserComponent ->
-                arrayOf(showkaseBrowserComponent)
+                val componentName = showkaseBrowserComponent.componentName
+                val count = countMap.getOrDefault(key = componentName, defaultValue = 0)
+                countMap[componentName] = count + 1
+                arrayOf(showkaseBrowserComponent to count)
             }
         }
     }
