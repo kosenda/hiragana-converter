@@ -30,7 +30,6 @@ commands:
                 is_skipping_vrt=true
               fi
             fi
-            echo "is_skipping_vrt: $is_skipping_vrt"
             echo "export IS_SKIPPING_VRT=$is_skipping_vrt" >> $BASH_ENV
 
   get_screenshots:
@@ -40,7 +39,6 @@ commands:
           command: |
             pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
             base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
-            echo "base: $base"
             echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
       - run:
           name: Save IS_EXIST_SCREENSHOTS to env
@@ -49,7 +47,6 @@ commands:
             if [ $IS_SKIPPING_VRT = "false" ]; then
               is_exist=$(echo -n "$(git fetch origin screenshots_$BASE_BRANCH_NAME && echo true || echo false)")
             fi
-            echo "is_exist: $is_exist"
             echo "export IS_EXIST_SCREENSHOTS=${is_exist}" >> $BASH_ENV
       - run:
           name: Checkout screenshots branch
@@ -64,7 +61,6 @@ commands:
             if [ $IS_EXIST_SCREENSHOTS = "false" ]; then
               echo "no-op" > timestamp
             fi
-            echo "timestamp: $(cat timestamp)"
             echo "export SCREENSHOTS_TIMESTAMP=$(echo -n $(cat timestamp))" >> $BASH_ENV
       - run:
           name: Zip screenshots
@@ -165,7 +161,6 @@ commands:
               git push origin --delete compare_$CIRCLE_BRANCH || true
             
               fileSize=$(echo $(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/ //g'))
-              echo "fileSize: $fileSize"
               if [ $fileSize -ne 0 ]; then
                 git checkout --orphan compare_$CIRCLE_BRANCH
                 git rm --cached -rf .
