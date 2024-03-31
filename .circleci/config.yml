@@ -211,7 +211,7 @@ commands:
             echo "| File name | Image |" >> comment
             echo "|-------|-------|" >> comment
             
-            files=$(find . -type f -name "*_compare.png")
+            files=$(find . -type f -path "./build/outputs/roborazzi/compareProdDebug/roborazzi/*" -name "*_compare.png")
             for file in $files; do
               fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
               echo "| [$fileName](https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/blob/compare_$CIRCLE_BRANCH/$file) | ![](https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/blob/compare_$CIRCLE_BRANCH/$file?raw=true) |" >> comment
@@ -239,6 +239,7 @@ commands:
         type: string
       maximum_seconds_past:
         type: integer
+        default:  2592000 # 30 days
     steps:
       - run:
           name: Cleanup old branch
@@ -282,7 +283,6 @@ jobs:
       - push_compare_branch
       - cleanup_old_branch:
           prefix: compare_
-          maximum_seconds_past: 2592000 # 30 days
       - cleanup_old_branch:
           prefix: screenshots_
           maximum_seconds_past: 15552000 # 180 days
