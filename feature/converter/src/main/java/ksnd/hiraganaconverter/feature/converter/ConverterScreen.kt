@@ -77,6 +77,7 @@ import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import my.nanihadesuka.compose.ColumnScrollbar
 import my.nanihadesuka.compose.ScrollbarSelectionMode
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
