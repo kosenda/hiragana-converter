@@ -2,8 +2,6 @@ import com.google.firebase.perf.plugin.FirebasePerfExtension
 import java.io.FileInputStream
 import java.util.Properties
 
-val ktlint: Configuration by configurations.creating
-
 plugins {
     id("hiraganaconverter.android.application")
     id("hiraganaconverter.android.application.jacoco")
@@ -113,13 +111,6 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.lifecycle.runtime.compose)
 
-    // ktlint
-    ktlint(libs.ktlint) {
-        attributes {
-            attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
-        }
-    }
-
     // Lottie
     implementation(libs.lottie)
 
@@ -148,25 +139,6 @@ dependencies {
     debugImplementation(libs.showkase)
     implementation(libs.showkase.annotation)
     kspDebug(libs.showkase.processor)
-}
-
-tasks.create<JavaExec>("ktlintCheck") {
-    description = "Check Kotlin code style."
-    classpath = ktlint
-    mainClass.set("com.pinterest.ktlint.Main")
-    args = listOf(
-        "src/**/*.kt",
-        "--reporter=checkstyle,output=${layout.buildDirectory.get()}/reports/ktlint/ktlint-result.xml",
-    )
-    isIgnoreExitValue = true
-}
-
-tasks.create<JavaExec>("ktlintFormatting") {
-    description = "Fix Kotlin code style deviations."
-    classpath = ktlint
-    mainClass.set("com.pinterest.ktlint.Main")
-    args("-F", "src/**/*.kt")
-    jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }
 
 tasks.withType<Test>().configureEach {

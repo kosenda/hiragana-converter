@@ -87,7 +87,7 @@ fun ConverterScreen(
     viewModel: ConvertViewModel,
     topBar: @Composable () -> Unit,
     topBarHeight: Int,
-    scrollBehavior: TopAppBarScrollBehavior,
+    scrollBehavior: TopAppBarScrollBehavior
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle(ConvertUiState())
     val analytics = LocalAnalytics.current

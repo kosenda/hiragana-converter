@@ -1,3 +1,5 @@
+val ktlint: Configuration by configurations.creating
+
 plugins {
     // apply false: only load
     jacoco
@@ -83,4 +85,32 @@ subprojects {
             }
         }
     }
+}
+
+dependencies {
+    // ktlint
+    ktlint(libs.ktlint) {
+        attributes {
+            attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
+        }
+    }
+}
+
+tasks.create<JavaExec>("ktlintCheck") {
+    description = "Check Kotlin code style."
+    classpath = ktlint
+    mainClass.set("com.pinterest.ktlint.Main")
+    args = listOf(
+        "**src/**/*.kt",
+        "--reporter=checkstyle,output=${layout.buildDirectory.get()}/reports/ktlint/ktlint-result.xml",
+    )
+    isIgnoreExitValue = true
+}
+
+tasks.create<JavaExec>("ktlintFormatting") {
+    description = "Fix Kotlin code style deviations."
+    classpath = ktlint
+    mainClass.set("com.pinterest.ktlint.Main")
+    args("-F", "**src/**/*.kt")
+    jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }
