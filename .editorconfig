@@ -1,5 +1,4 @@
 root = true
 
 [*.{kt,kts}]
-ktlint_code_style = intellij_idea
 ktlint_standard_function-naming = disabled
