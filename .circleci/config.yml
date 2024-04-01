@@ -118,7 +118,6 @@ commands:
       - run:
           name: Unit test
           command: |
-            roborazzi_option="-Proborazzi.test.record=true"
             if [ $IS_PR = "true" ]; then
               roborazzi_option="-Proborazzi.test.compare=true"
             fi
@@ -145,33 +144,33 @@ commands:
 
   push_screenshots_branch:
     steps:
+      - setting_git_config
       - run:
           name: Push screenshots branch
           command: |
-            if [ $IS_PR = "false" ]; then
-              git push origin --delete screenshots_$CIRCLE_BRANCH || true
-            
-              git checkout --orphan screenshots_$CIRCLE_BRANCH
-              git rm --cached -rf .
-            
-              add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*")
-              for file in $add_files; do
-                git add -f $file
-              done
-            
-              echo $(date +%s) > timestamp
-              git add -f timestamp
-            
-              echo -e "version: 2.1\njobs:\n no-op:\n  machine: true\n  steps:\n  - run: no-op\nworkflows:\n build:\n  jobs:\n   - no-op:\n      filters:\n       branches:\n        only: no-op" > .circleci/config.yml
-              git add -f .circleci/config.yml
-            
-              git commit -m "Add screenshot"
-              git clean -df
-              git push origin HEAD:screenshots_$CIRCLE_BRANCH -f
-            fi
+            git push origin --delete screenshots_$CIRCLE_BRANCH || true
+          
+            git checkout --orphan screenshots_$CIRCLE_BRANCH
+            git rm --cached -rf .
+          
+            add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*")
+            for file in $add_files; do
+              git add -f $file
+            done
+          
+            echo $(date +%s) > timestamp
+            git add -f timestamp
+          
+            echo -e "version: 2.1\njobs:\n no-op:\n  machine: true\n  steps:\n  - run: no-op\nworkflows:\n build:\n  jobs:\n   - no-op:\n      filters:\n       branches:\n        only: no-op" > .circleci/config.yml
+            git add -f .circleci/config.yml
+          
+            git commit -m "Add screenshot"
+            git clean -df
+            git push origin HEAD:screenshots_$CIRCLE_BRANCH -f
 
   push_compare_branch:
     steps:
+      - setting_git_config
       - run:
           name: Push compare branch
           command: |
@@ -223,13 +222,15 @@ commands:
               prNumber=$(echo $CIRCLE_PULL_REQUEST | sed "s:.*/::")
               url="https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/${prNumber}/comments"
               commentId=$(echo -n $(curl -s -H "Authorization: token $GITHUB_ACCESS_TOKEN" $url -v | jq '.[] | select(.body | test("^Snapshot diff report.*")) | .id'))
+              failedComment="$(echo -e "Snapshot diff report\n:warning: **Failed to show Snapshot diff**\n$CIRCLE_BUILD_URL")"
               
               if [ -n "$commentId" ]; then
                 comment="$(cat ./comment)"
                 endpoint="/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/comments/$commentId"
-                gh api --method PATCH -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" $endpoint -f body="$comment"
+                gh api --method PATCH -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" $endpoint -f body="$comment" ||
+                gh api --method PATCH -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" $endpoint -f body="$failedComment"
               else
-                gh pr comment "$CIRCLE_PULL_REQUEST" -F ./comment
+                gh pr comment "$CIRCLE_PULL_REQUEST" -F ./comment || gh pr comment "$CIRCLE_PULL_REQUEST" -b "$failedComment"
               fi
             fi
 
@@ -278,14 +279,7 @@ jobs:
       - run:
           name: Run danger file
           command: bundle exec danger --verbose
-      - setting_git_config
-      - push_screenshots_branch
       - push_compare_branch
-      - cleanup_old_branch:
-          prefix: compare_
-      - cleanup_old_branch:
-          prefix: screenshots_
-          maximum_seconds_past: 15552000 # 180 days
       - comment_screenshot_diff
       - slack/notify:
           event: fail
@@ -307,6 +301,25 @@ jobs:
           event: fail
           template: basic_fail_1
 
+  save_screenshots:
+    executor: android
+    steps:
+      - checkout
+      - set_locale_properties
+      - restore_and_save_gradle_cache
+      - run:
+          name: Create screenshots
+          command: ./gradlew recordRoborazziProdDebug --stacktrace
+      - push_screenshots_branch
+      - cleanup_old_branch:
+          prefix: compare_
+      - cleanup_old_branch:
+          prefix: screenshots_
+          maximum_seconds_past: 15552000 # 180 days
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+
 workflows:
   test:
     jobs:
@@ -319,6 +332,15 @@ workflows:
           context: slack-secrets
           requires:
             - dependencies
+      - save_screenshots:
+          context: slack-secrets
+          requires:
+            - dependencies
+          filters:
+            branches:
+              only:
+                - main
+                - develop
 
 # ■ note ■
 # check command： circleci config validate
