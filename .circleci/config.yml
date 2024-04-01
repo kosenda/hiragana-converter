@@ -336,9 +336,11 @@ workflows:
           context: slack-secrets
           requires:
             - dependencies
-          only:
-            - main
-            - develop
+          filters:
+            branches:
+              only:
+                - main
+                - develop
 
 # ■ note ■
 # check command： circleci config validate
