@@ -22,9 +22,9 @@ commands:
           name: Save IS_SKIPPING_VRT to env
           command: |
             endpoint="/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commits/$CIRCLE_BRANCH"
-            lastCommitSHA=$(echo -n $(gh api $endpoint --jq 'last(.sha)'))
+            lastCommitSHA="$(echo -n $(gh api $endpoint --jq 'last(.sha)'))"
             endpoint="/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/git/commits/$lastCommitSHA"
-            lastCommitMessage=$(echo $(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" $endpoint | jq -r  '.message')
+            lastCommitMessage="$(echo $(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" $endpoint | jq -r  '.message')"
             
             is_skipping_vrt=false
             if [[ "$lastCommitMessage" == *"[skip vrt]"* ]]; then
