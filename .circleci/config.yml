@@ -12,17 +12,30 @@ executors:
       - image: cimg/android:2024.01
 
 commands:
-  check_is_pr:
+  check_is_skipping_vrt:
     steps:
+      - gh/install
       - run:
-          name: Save IS_PR to env
+          name: Gh login
+          command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
+      - run:
+          name: Save IS_SKIPPING_VRT to env
           command: |
-            is_pr=false
-            if [ -n "$CIRCLE_PULL_REQUEST" ]; then
-              is_pr=true
+            endpoint="/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commits/$CIRCLE_BRANCH"
+            lastCommitSHA=$(echo -n $(gh api $endpoint --jq 'last(.sha)'))
+            endpoint="/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/git/commits/$lastCommitSHA"
+            lastCommitMessage=$(echo $(gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" $endpoint | jq -r  '.message')
+            
+            is_skipping_vrt=false
+            if [[ "$lastCommitMessage" == *"[skip vrt]"* ]]; then
+              is_skipping_vrt=true
+            else
+              if [ -n "$CIRCLE_PULL_REQUEST" ]; then
+                is_skipping_vrt=true
+              fi
             fi
-            echo "is_pr: $is_pr"
-            echo "export IS_PR=$is_pr" >> $BASH_ENV
+            echo "is_skipping_vrt: $is_skipping_vrt"
+            echo "export IS_SKIPPING_VRT=$is_skipping_vrt" >> $BASH_ENV
 
   get_screenshots:
     steps:
@@ -37,7 +50,7 @@ commands:
           name: Save IS_EXIST_SCREENSHOTS to env
           command: |
             is_exist=false
-            if [ $IS_PR = "true" ]; then
+            if [ $IS_SKIPPING_VRT = "true" ]; then
               is_exist=$(echo -n "$(git fetch origin screenshots_$BASE_BRANCH_NAME && echo true || echo false)")
             fi
             echo "is_exist: $is_exist"
@@ -118,7 +131,7 @@ commands:
       - run:
           name: Unit test
           command: |
-            if [ $IS_PR = "true" ]; then
+            if [ $IS_SKIPPING_VRT = "true" ]; then
               roborazzi_option="-Proborazzi.test.compare=true"
             fi
             ./gradlew test<< parameters.build_variant >> $roborazzi_option --stacktrace
@@ -174,7 +187,7 @@ commands:
       - run:
           name: Push compare branch
           command: |
-            if [ "$IS_PR" = "true" ]; then
+            if [ $IS_SKIPPING_VRT = "true" ]; then
               git push origin --delete compare_$CIRCLE_BRANCH || true
             
               fileSize=$(echo $(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/ //g'))
@@ -199,10 +212,6 @@ commands:
 
   comment_screenshot_diff:
     steps:
-      - gh/install
-      - run:
-          name: Gh login
-          command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
       - run:
           name: Create comment
           command: |
@@ -218,7 +227,7 @@ commands:
       - run:
           name: Comment screenshot diff
           command: |
-            if [ $IS_PR = "true" ]; then
+            if [ $IS_SKIPPING_VRT = "true" ]; then
               prNumber=$(echo $CIRCLE_PULL_REQUEST | sed "s:.*/::")
               url="https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/${prNumber}/comments"
               commentId=$(echo -n $(curl -s -H "Authorization: token $GITHUB_ACCESS_TOKEN" $url -v | jq '.[] | select(.body | test("^Snapshot diff report.*")) | .id'))
@@ -265,7 +274,7 @@ jobs:
     executor: android
     steps:
       - checkout
-      - check_is_pr
+      - check_is_skipping_vrt
       - get_screenshots
       - set_locale_properties
       - restore_and_save_gradle_cache
