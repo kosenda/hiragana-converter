@@ -17,6 +17,7 @@
 
 ## CircleCI
 - [circleci Discuss - How to Retrieve a Pull Request’s Base Branch Name [GitHub]](https://discuss.circleci.com/t/how-to-retrieve-a-pull-requests-base-branch-name-github/36911)
+- [stackoverflow - Display last git commit comment](https://stackoverflow.com/questions/7293008/display-last-git-commit-comment)
 
 ## Shell
 - [Bash move * to subfolder fail: cannot move to a subdirectory of itself](https://stackoverflow.com/questions/43260052/bash-move-to-subfolder-fail-cannot-move-to-a-subdirectory-of-itself)
