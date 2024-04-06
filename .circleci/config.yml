@@ -258,6 +258,17 @@ commands:
               fi
             done || true
 
+  setting_signing_key:
+    steps:
+      - run:
+          name: Setting signing key
+          command: |
+            echo "$BASE64_KEYSTORE" | base64 --decode > keystore.jks
+            echo  "storeFile=./keystore.jks" > keystore.properties
+            echo  "keyAlias=$KEY_ALIAS" >> keystore.properties
+            echo  "keyPassword=$KEY_PASSWORD" >> keystore.properties
+            echo  "storePassword=$STORE_PASSWORD" >> keystore.properties
+
 jobs:
   dependencies:
     executor: android
@@ -325,6 +336,22 @@ jobs:
           event: fail
           template: basic_fail_1
 
+  app_distribution:
+    executor: android
+    steps:
+      - checkout
+      - set_locale_properties
+      - setting_signing_key
+      - restore_and_save_gradle_cache
+      - run:
+          name: Build apk
+          command: ./gradlew assembleProdRelease
+      - store_artifacts:
+          path: app/prod/release/app-prod-release.apk
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+
 workflows:
   test:
     jobs:
@@ -346,6 +373,15 @@ workflows:
               only:
                 - main
                 - develop
+      - app_distribution:
+          context: slack-secrets
+          requires:
+            - dependencies # TODO unit_testに変更する
+          filters:
+            branches:
+              only:
+                - develop
+                - feature/app-distribution # TODO マージ時に消す
 
 # ■ note ■
 # check command： circleci config validate

@@ -14,6 +14,7 @@ plugins {
     alias(libs.plugins.gms)
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.firebase.perf)
+    alias(libs.plugins.firebase.appdistribution)
 }
 
 android {
@@ -28,6 +29,11 @@ android {
             isShrinkResources = true
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro", "shrinker-rules.pro")
+            firebaseAppDistribution {
+                artifactType = "apk"
+                releaseNotes = "test"
+                groups="tester"
+            }
         }
         debug {
             configure<FirebasePerfExtension> {
