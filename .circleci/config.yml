@@ -263,7 +263,7 @@ commands:
       - run:
           name: Setting signing key
           command: |
-            echo "$BASE64_KEYSTORE" | base64 --decode > keystore.jks
+            echo "$BASE64_KEYSTORE" | base64 --decode > app/keystore.jks
             echo  "storeFile=./keystore.jks" > keystore.properties
             echo  "keyAlias=$KEY_ALIAS" >> keystore.properties
             echo  "keyPassword=$KEY_PASSWORD" >> keystore.properties
@@ -309,6 +309,7 @@ jobs:
     steps:
       - checkout
       - set_locale_properties
+      - setting_signing_key
       - restore_and_save_gradle_cache
       - run:
           name: Build mock
@@ -322,6 +323,7 @@ jobs:
     steps:
       - checkout
       - set_locale_properties
+      - setting_signing_key
       - restore_and_save_gradle_cache
       - run:
           name: Create screenshots
