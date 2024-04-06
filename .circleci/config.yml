@@ -347,7 +347,7 @@ jobs:
           name: Build apk
           command: ./gradlew assembleProdRelease
       - store_artifacts:
-          path: app/prod/release/app-prod-release.apk
+          path: app/build/outputs/apk/prod/release/app-prod-release.apk
       - slack/notify:
           event: fail
           template: basic_fail_1
