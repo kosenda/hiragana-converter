@@ -24,26 +24,8 @@ android {
         generateLocaleConfig = true
     }
 
-    buildTypes {
-        release {
-            isShrinkResources = true
-            isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro", "shrinker-rules.pro")
-            firebaseAppDistribution {
-                artifactType = "apk"
-                releaseNotes = "test"
-                groups="tester"
-            }
-        }
-        debug {
-            configure<FirebasePerfExtension> {
-                setInstrumentationEnabled(false)
-            }
-        }
-    }
-
     // ref: https://github.com/DroidKaigi/conference-app-2023/blob/main/app-android/build.gradle.kts
-    val keystorePropertiesFile = file("keystore.properties")
+    val keystorePropertiesFile = file("../keystore.properties")
     signingConfigs {
         if (keystorePropertiesFile.exists()) {
             val keystoreProperties = Properties()
@@ -56,6 +38,26 @@ android {
             }
         }
     }
+
+    buildTypes {
+        release {
+            isShrinkResources = true
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro", "shrinker-rules.pro")
+            firebaseAppDistribution {
+                artifactType = "apk"
+                releaseNotes = "test"
+                groups="tester"
+            }
+            signingConfig = signingConfigs.getByName("release")
+        }
+        debug {
+            configure<FirebasePerfExtension> {
+                setInstrumentationEnabled(false)
+            }
+        }
+    }
+
     flavorDimensions += "env"
     productFlavors {
         create("prod") {
@@ -65,13 +67,6 @@ android {
         create("mock") {
             dimension = "env"
             applicationIdSuffix = ".mock"
-        }
-    }
-    buildTypes {
-        if (keystorePropertiesFile.exists()) {
-            getByName("release") {
-                signingConfig = signingConfigs.getByName("release")
-            }
         }
     }
     buildFeatures {
