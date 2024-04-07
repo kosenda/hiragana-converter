@@ -1,0 +1,88 @@
+## ref: https://github.com/kosenda/hiragana-converter/blob/develop/REFERENCE.md
+
+name: CommentScreenshotDiff
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_branch_name:
+        description: 'PR branch name'
+        type: string
+        required: true
+      pr_number:
+        description: 'PR number'
+        type: string
+        required: true
+
+jobs:
+  comment-screenshot-diff:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Check exist compare branch
+        id: check-exist-compare
+        run: echo "is_exist=$(echo -n "$(git fetch origin compare_${{ inputs.pr_branch_name }} && echo true || echo false)")" >> $GITHUB_OUTPUT
+
+      - name: Save compare branch name
+        id: save-compare-branch-name
+        run: echo "name=compare_${{ inputs.pr_branch_name }}" >> $GITHUB_OUTPUT
+
+      - name: Checkout compare branch
+        if: steps.check-exist-compare.outputs.is_exist == 'true'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.save-compare-branch-name.outputs.name }}
+
+      - name: Create comments
+        if: steps.check-exist-compare.outputs.is_exist == 'true'
+        id: create-comments
+        run: |
+          files=$(find . -type f -name "*_compare.png")
+          delimiter="$(openssl rand -hex 8)"
+          {
+            echo "reports<<${delimiter}"
+
+            echo "Snapshot diff report"
+            echo "| File name | Image |"
+            echo "|-------|-------|"
+          } >> "$GITHUB_OUTPUT"
+
+          for file in $files; do
+            fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
+            echo "| [$fileName](https://github.com/${{ github.repository }}/blob/${{ steps.save-compare-branch-name.outputs.name }}/$file) | ![](https://github.com/${{ github.repository }}/blob/${{ steps.save-compare-branch-name.outputs.name }}/$file?raw=true) |" >> "$GITHUB_OUTPUT"
+          done
+          echo "${delimiter}" >> "$GITHUB_OUTPUT"
+
+      - name: Find comment
+        continue-on-error: true
+        uses: peter-evans/find-comment@v3
+        id: fc
+        with:
+          issue-number: ${{ inputs.pr_number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Snapshot diff report
+
+      - name: Add or update comment on PR(exist screenshot diff)
+        if: steps.check-exist-compare.outputs.is_exist == 'true'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ inputs.pr_number }}
+          body: ${{ steps.create-comments.outputs.reports }}
+          edit-mode: replace
+
+      - name: Add or update comment on PR (not exist screenshot diff)
+        if: steps.check-exist-compare.outputs.is_exist == 'false'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ inputs.pr_number }}
+          body: Snapshot diff report
+          edit-mode: replace
+
+      - name: Checkout pr branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.pr_branch_name }}

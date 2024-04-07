@@ -1,6 +1,6 @@
-[![Test](https://github.com/kosenda/hiragana-converter/actions/workflows/Test.yml/badge.svg)](https://github.com/kosenda/hiragana-converter/actions/workflows/Test.yml)　[![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg?style=flat)](https://renovatebot.com)　
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/kosenda/hiragana-converter/tree/develop.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/kosenda/hiragana-converter/tree/develop)　[![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg?style=flat)](https://renovatebot.com)　
 
-# Hiragana Converter （Japanese: ひらがな変換）
+# Hiragana Converter （ひらがな変換）
 
 <img src="https://github.com/kosenda/hiragana-converter/assets/60963155/206e8a60-988b-4815-a0a7-4a5b459b10b4" width="200" alt="app icon">
 
@@ -24,7 +24,7 @@ https://labs.goo.ne.jp/apiusage/
 2. Add the following to the bottom of `local.properties`  
 `apiKey=<API key obtained in 1.>`  （Example： apiKey=011222333333abcd）
 
-> [!WARNING]
+> [!NOTE]
 > Mock flavor is provided, so if you want to simulate API communication using Mock, you can test it by setting a meaningless value (such as "AAA") in apiKey.
 
 ## Reference sites

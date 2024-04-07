@@ -2,8 +2,6 @@ import com.google.firebase.perf.plugin.FirebasePerfExtension
 import java.io.FileInputStream
 import java.util.Properties
 
-val ktlint: Configuration by configurations.creating
-
 plugins {
     id("hiraganaconverter.android.application")
     id("hiraganaconverter.android.application.jacoco")
@@ -16,6 +14,7 @@ plugins {
     alias(libs.plugins.gms)
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.firebase.perf)
+    alias(libs.plugins.firebase.appdistribution)
 }
 
 android {
@@ -25,21 +24,9 @@ android {
         generateLocaleConfig = true
     }
 
-    buildTypes {
-        release {
-            isShrinkResources = true
-            isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro", "shrinker-rules.pro")
-        }
-        debug {
-            configure<FirebasePerfExtension> {
-                setInstrumentationEnabled(false)
-            }
-        }
-    }
-
     // ref: https://github.com/DroidKaigi/conference-app-2023/blob/main/app-android/build.gradle.kts
     val keystorePropertiesFile = file("keystore.properties")
+
     signingConfigs {
         if (keystorePropertiesFile.exists()) {
             val keystoreProperties = Properties()
@@ -52,6 +39,28 @@ android {
             }
         }
     }
+
+    buildTypes {
+        release {
+            isShrinkResources = true
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro", "shrinker-rules.pro")
+            if (keystorePropertiesFile.exists()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
+            firebaseAppDistribution {
+                artifactType = "apk"
+                groups="tester"
+                serviceCredentialsFile = "firebase-app-distribution.json"
+            }
+        }
+        debug {
+            configure<FirebasePerfExtension> {
+                setInstrumentationEnabled(false)
+            }
+        }
+    }
+
     flavorDimensions += "env"
     productFlavors {
         create("prod") {
@@ -61,13 +70,6 @@ android {
         create("mock") {
             dimension = "env"
             applicationIdSuffix = ".mock"
-        }
-    }
-    buildTypes {
-        if (keystorePropertiesFile.exists()) {
-            getByName("release") {
-                signingConfig = signingConfigs.getByName("release")
-            }
         }
     }
     buildFeatures {
@@ -113,13 +115,6 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.lifecycle.runtime.compose)
 
-    // ktlint
-    ktlint(libs.ktlint) {
-        attributes {
-            attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
-        }
-    }
-
     // Lottie
     implementation(libs.lottie)
 
@@ -148,25 +143,6 @@ dependencies {
     debugImplementation(libs.showkase)
     implementation(libs.showkase.annotation)
     kspDebug(libs.showkase.processor)
-}
-
-tasks.create<JavaExec>("ktlintCheck") {
-    description = "Check Kotlin code style."
-    classpath = ktlint
-    mainClass.set("com.pinterest.ktlint.Main")
-    args = listOf(
-        "src/**/*.kt",
-        "--reporter=checkstyle,output=${layout.buildDirectory.get()}/reports/ktlint/ktlint-result.xml",
-    )
-    isIgnoreExitValue = true
-}
-
-tasks.create<JavaExec>("ktlintFormatting") {
-    description = "Fix Kotlin code style deviations."
-    classpath = ktlint
-    mainClass.set("com.pinterest.ktlint.Main")
-    args("-F", "src/**/*.kt")
-    jvmArgs("--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }
 
 tasks.withType<Test>().configureEach {

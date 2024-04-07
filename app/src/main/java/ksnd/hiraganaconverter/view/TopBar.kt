@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.core.resource.R
+import ksnd.hiraganaconverter.core.ui.isTest
 import ksnd.hiraganaconverter.core.ui.parts.GooCreditImage
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
@@ -69,7 +70,9 @@ fun TopBar(
                     onClick = transitionHistory,
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                GooCreditImage()
+                if (isTest().not()) {
+                    GooCreditImage()
+                }
             },
             scrollBehavior = scrollBehavior,
         )

@@ -44,10 +44,10 @@ fun RequestReviewDialog(onLater: () -> Unit, onOk: () -> Unit) {
     )
 }
 
-// FIXME: AlertDialog does not yet support Showkase yet
-//  ref: https://github.com/airbnb/Showkase/issues/235
+// FIXME: Skip in ShowkaseComposable does not work.
 // @UiModePreview
 // @Composable
+// @ShowkaseComposable(skip = true)
 // fun PreviewRequestReviewDialog() {
 //    HiraganaConverterTheme {
 //        RequestReviewDialog(

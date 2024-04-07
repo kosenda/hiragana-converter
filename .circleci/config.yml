@@ -1,10 +1,10 @@
+## ref: https://github.com/kosenda/hiragana-converter/blob/develop/REFERENCE.md
+
 version: 2.1
 
 orbs:
   slack: circleci/slack@4.12.6
   gh: circleci/github-cli@2.3.0
-  aws-cli: circleci/aws-cli@4.1.3
-  aws-s3: circleci/aws-s3@4.0.0
 
 executors:
   android:
@@ -12,128 +12,322 @@ executors:
       - image: cimg/android:2024.01
 
 commands:
-  set-locale-properties:
+  check_is_skipping_vrt:
+    steps:
+      - gh/install
+      - run:
+          name: Gh login
+          command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
+      - run:
+          name: Save IS_SKIPPING_VRT to env
+          command: |
+            lastCommitMessage="$(echo $(git log -1 --pretty=%B))"
+            is_skipping_vrt=false
+            if [[ "$lastCommitMessage" == *"[skip vrt]"* ]]; then
+              is_skipping_vrt=true
+            else
+              if [ -z "$CIRCLE_PULL_REQUEST" ]; then
+                is_skipping_vrt=true
+              fi
+            fi
+            echo "is_skipping_vrt: $is_skipping_vrt"
+            echo "export IS_SKIPPING_VRT=$is_skipping_vrt" >> $BASH_ENV
+
+  get_screenshots:
     steps:
       - run:
-          name: set local.properties
+          name: Save BASE_BRANCH_NAME to env
+          command: |
+            pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
+            base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
+            echo "base: $base"
+            echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
+      - run:
+          name: Save IS_EXIST_SCREENSHOTS to env
+          command: |
+            is_exist=false
+            if [ $IS_SKIPPING_VRT = "false" ]; then
+              is_exist=$(echo -n "$(git fetch origin screenshots_$BASE_BRANCH_NAME && echo true || echo false)")
+            fi
+            echo "is_exist: $is_exist"
+            echo "export IS_EXIST_SCREENSHOTS=${is_exist}" >> $BASH_ENV
+      - run:
+          name: Checkout screenshots branch
+          command: |
+            if [ $IS_EXIST_SCREENSHOTS = "true" ]; then
+              git fetch origin screenshots_$BASE_BRANCH_NAME
+              git checkout screenshots_$BASE_BRANCH_NAME
+            fi
+      - run:
+          name: Save SCREENSHOTS_TIMESTAMP to env
+          command: |
+            if [ $IS_EXIST_SCREENSHOTS = "false" ]; then
+              echo "no-op" > timestamp
+            fi
+            echo "timestamp: $(cat timestamp)"
+            echo "export SCREENSHOTS_TIMESTAMP=$(echo -n $(cat timestamp))" >> $BASH_ENV
+      - run:
+          name: Zip screenshots
+          command: |
+            mkdir -p ./temp/zip
+            if [ $IS_EXIST_SCREENSHOTS = "true" ]; then
+              zip -r ./temp/zip/screenshots.zip ./app/build/outputs/roborazzi
+            fi
+      - save_cache:
+          paths:
+            - ./temp/zip
+          key: screenshots-{{ checksum "timestamp" }}
+      - run:
+          name: Checkout pr branch
+          command: git checkout $CIRCLE_BRANCH
+      - run:
+          name: Restore timestamp file
+          command: echo $SCREENSHOTS_TIMESTAMP > timestamp
+      - restore_cache:
+          key: screenshots-{{ checksum "timestamp" }}
+      - run:
+          name: Unzip screenshots
+          command: |
+            unzip ./temp/zip/screenshots.zip || true
+            rm -rf ./temp || true
+
+  set_locale_properties:
+    steps:
+      - run:
+          name: Set local.properties
           command: |
             LOCAL_PROPERTIES_PATH=./local.properties
-            echo "apiKey=$.Environment.DEBUG_AD_APPLICATION_ID" >> $LOCAL_PROPERTIES_PATH
-  restore-and-save-gradle-cache:
+            echo "apiKey=$API_KEY" >> $LOCAL_PROPERTIES_PATH
+
+  restore_and_save_gradle_cache:
     steps:
       - restore_cache:
-          key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
-      - run:
-          name: Download dependencies
-          command: ./gradlew androidDependencies
+          key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}-{{ checksum "gradle/libs.versions.toml" }}
       - save_cache:
           paths:
             - ~/.gradle
-          key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
+          key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}-{{ checksum "gradle/libs.versions.toml" }}
 
-  set-github-access-token:
+  setup_bundle:
     steps:
       - run:
-          name: set github access token
-          # Create GitHub App Token using JWT and pass it with gh auth to login
-          # ref: https://zenn.dev/gorohash/articles/e2c5f6ce50f4e6
+          neme: Gem install bundler
+          command: sudo gem install bundler:2.4.12
+      - run:
+          name: Bundle install
           command: |
-            # create JWT
-            echo create JWT
-            # header
-            header=$(echo -n '{"alg":"RS256","typ":"JWT"}' | base64 -w 0)
-            # payload
-            # Current Unix time(Epoch)
-            now=$(date "+%s")
-            # Date and time token was issued (issued at) (Set 1 minute before the current time to account for the possibility of the clock being off)
-            iat=$((${now} - 60))
-            # Date and time when token expires (Expiration time) (10 minutes later)
-            exp=$((${now} + (10 * 60)))
-            # iss: GitHub App ID (issuer)
-            iss="$APP_ID"
-            payload=$(echo -n "{\"iat\":${iat},\"exp\":${exp},\"iss\":${iss}}" | base64 -w 0)
-            # signature
-            echo $COMMENT_GITHUB_API_TOKEN | base64 --decode > ./githubApps
-            signature=$(echo -n $(echo -n "${header}.${payload}" | openssl dgst -binary -sha256 -sign "./githubApps" | base64))
-            # jwt
-            jwt="${header}.${payload}.${signature}"
-            
-            # Generating an installation access token for a GitHub App
-            echo Generating an installation access token for a GitHub App
-            user_name="kosenda"
-            installation_id=$(
-              curl -s -G \
-                -H "Authorization: Bearer ${jwt}" \
-                -H "Accept: application/vnd.github+json" \
-                "https://api.github.com/app/installations" \
-                | jq -r ".[] | select(.account.login == \"${user_name}\" and .account.type == \"User\") | .id"
-            )
-            
-            # Get an installation access token
-            echo Get an installation access token
-            access_token=$(
-              echo $(
-                curl -s -X POST \
-                -H "Authorization: Bearer ${jwt}" \
-                -H "Accept: application/vnd.github+json" \
-                "https://api.github.com/app/installations/${installation_id}/access_tokens" \
-                | jq -r ".token"
-              )
-            )
-            
-            # set github access token
-            echo "export GITHUB_ACCESS_TOKEN='$access_token'" >> $BASH_ENV
-  aws-cli-setup:
+            bundle config set --local path 'vendor/bundle'
+            bundle install
+
+  unit_test:
+    parameters:
+      build_variant:
+        type: string
     steps:
-      - aws-cli/setup:
-          aws_access_key_id: AWS_ACCESS_KEY_ID
-          aws_secret_access_key: AWS_SECRET_ACCESS_KEY
-          region: AWS_REGION
+      - run:
+          name: Unit test
+          command: |
+            if [ $IS_SKIPPING_VRT = "false" ]; then
+              roborazzi_option="-Proborazzi.test.compare=true"
+            fi
+            ./gradlew test<< parameters.build_variant >> $roborazzi_option --stacktrace
+
+  save_test_result:
+    steps:
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/test-results/junit/
+            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
+          when: always
+      - store_test_results:
+          path: ~/test-results
+      - store_artifacts:
+          path: ~/test-results/junit
+
+  report_jacoco:
+    steps:
+      - run:
+          name: Report jacoco
+          command: ./gradlew jacocoTestReport
+      - run:
+          name: Zip jacoco report
+          command: zip -r jacocoTestReport.zip ./build/reports/jacoco/jacocoTestReport/html
+      - store_artifacts:
+          path: jacocoTestReport.zip
+
+  setting_git_config:
+    steps:
+      - run:
+          name: Setting git config
+          command: |
+            git config --global user.name "$GITHUB_NAME"
+            git config --global user.email "$GITHUB_EMAIL"
+
+  push_screenshots_branch:
+    steps:
+      - setting_git_config
+      - run:
+          name: Push screenshots branch
+          command: |
+            git push origin --delete screenshots_$CIRCLE_BRANCH || true
+          
+            git checkout --orphan screenshots_$CIRCLE_BRANCH
+            git rm --cached -rf .
+          
+            add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*")
+            for file in $add_files; do
+              git add -f $file
+            done
+          
+            echo $(date +%s) > timestamp
+            git add -f timestamp
+          
+            echo -e "version: 2.1\njobs:\n no-op:\n  machine: true\n  steps:\n  - run: no-op\nworkflows:\n build:\n  jobs:\n   - no-op:\n      filters:\n       branches:\n        only: no-op" > .circleci/config.yml
+            git add -f .circleci/config.yml
+          
+            git commit -m "Add screenshot"
+            git clean -df
+            git push origin HEAD:screenshots_$CIRCLE_BRANCH -f
+
+  push_compare_branch:
+    steps:
+      - setting_git_config
+      - run:
+          name: Push compare branch
+          command: |
+            if [ $IS_SKIPPING_VRT = "false" ]; then
+              git push origin --delete compare_$CIRCLE_BRANCH || true
+            
+              fileSize=$(echo $(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/ //g'))
+              echo "fileSize: $fileSize"
+              if [ $fileSize -ne 0 ]; then
+                git checkout --orphan compare_$CIRCLE_BRANCH
+                git rm --cached -rf .
+            
+                add_files=$(find . -type f -path "./app/build/outputs/roborazzi/*" -name "*_compare.png")
+                for file in $add_files; do
+                  git add -f $file
+                done
+            
+                echo -e "version: 2.1\njobs:\n no-op:\n  machine: true\n  steps:\n  - run: no-op\nworkflows:\n build:\n  jobs:\n   - no-op:\n      filters:\n       branches:\n        only: no-op" > .circleci/config.yml
+                git add .circleci/config.yml
+            
+                git commit -m "Add screenshot diff"
+                git clean -df
+                git push origin HEAD:compare_$CIRCLE_BRANCH -f
+              fi
+            fi
+
+  comment_screenshot_diff:
+    steps:
+      - run:
+          name: Create comment
+          command: |
+            echo "Snapshot diff report" > comment
+            echo "| File name | Image |" >> comment
+            echo "|-------|-------|" >> comment
+            
+            files=$(find . -type f -path "./app/build/outputs/roborazzi/*" -name "*_compare.png")
+            for file in $files; do
+              fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
+              echo "| [$fileName](https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/blob/compare_$CIRCLE_BRANCH/$file) | ![](https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/blob/compare_$CIRCLE_BRANCH/$file?raw=true) |" >> comment
+            done
+      - run:
+          name: Comment screenshot diff
+          command: |
+            if [ $IS_SKIPPING_VRT = "false" ]; then
+              prNumber=$(echo $CIRCLE_PULL_REQUEST | sed "s:.*/::")
+              url="https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/${prNumber}/comments"
+              commentId=$(echo -n $(curl -s -H "Authorization: token $GITHUB_ACCESS_TOKEN" $url -v | jq '.[] | select(.body | test("^Snapshot diff report.*")) | .id'))
+              failedComment="$(echo -e "Snapshot diff report\n:warning: **Failed to show Snapshot diff**\n$CIRCLE_BUILD_URL")"
+              
+              if [ -n "$commentId" ]; then
+                comment="$(cat ./comment)"
+                endpoint="/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/comments/$commentId"
+                gh api --method PATCH -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" $endpoint -f body="$comment" ||
+                gh api --method PATCH -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" $endpoint -f body="$failedComment"
+              else
+                gh pr comment "$CIRCLE_PULL_REQUEST" -F ./comment || gh pr comment "$CIRCLE_PULL_REQUEST" -b "$failedComment"
+              fi
+            fi
+
+  cleanup_old_branch:
+    parameters:
+      prefix:
+        type: string
+      maximum_seconds_past:
+        type: integer
+        default:  2592000 # 30 days
+    steps:
+      - run:
+          name: Cleanup old branch
+          command: |
+            git branch -r --format="%(refname:lstrip=3)" | grep << parameters.prefix >> | while read -r branch; do
+              last_commit_date_timestamp=$(git log -1 --format=%ct "origin/$branch")
+              now_timestamp=$(date +%s)
+              if [ $((now_timestamp - last_commit_date_timestamp)) -gt << parameters.maximum_seconds_past >> ]; then
+                git push origin --delete "$branch"
+              fi
+            done || true
+
+  app_distribution:
+    parameters:
+      build_variant:
+        type: string
+    steps:
+      - run:
+          name: Decode files
+          command: |
+            echo "$BASE64_KEYSTORE" | base64 -d > app/keystore.jks
+            echo "$BASE64_KEYSTORE_PROPERTIES" | base64 -d > app/keystore.properties
+            echo "$BASE64_DISTRIBUTION_JSON_FILE" | base64 -d > firebase-app-distribution.json
+      - run:
+          name: Build apk
+          command: ./gradlew assemble<< parameters.build_variant >>
+      - store_artifacts:
+          path: app/build/outputs/apk
+      - run:
+          name: Build aab
+          command: ./gradlew bundle<< parameters.build_variant >>
+      - store_artifacts:
+          path: app/build/outputs/bundle
+      - run:
+          name: Upload apk to Firebase App Distribution
+          command: ./gradlew appDistributionUpload<< parameters.build_variant >>
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
 
 jobs:
   dependencies:
     executor: android
     steps:
       - checkout
-      - set-locale-properties
-      - restore-and-save-gradle-cache
-      - persist_to_workspace:
-          root: .
-          paths:
-            - .
+      - set_locale_properties
+      - restore_and_save_gradle_cache
 
-  test-prod:
+  unit_test:
     executor: android
     steps:
       - checkout
-      - attach_workspace:
-          at: .
+      - check_is_skipping_vrt
+      - get_screenshots
+      - set_locale_properties
+      - restore_and_save_gradle_cache
+      - setup_bundle
       - run:
-          neme: gem install bundler
-          command: sudo gem install bundler:2.4.12
-      - run:
-          # Specify Gemfile path and then run bundle install
-          name: bundle install
-          command: |
-            bundle config set --local path 'vendor/bundle'
-            bundle install
-      - run:
-          name: ktlint-check
+          name: Ktlint check
           command: ./gradlew --continue ktlintCheck
+      - unit_test:
+          build_variant: ProdDebug
+      - save_test_result
+      - report_jacoco
       - run:
-          name: test
-          command: ./gradlew testProdDebug --stacktrace
-      - run:
-          name: jacoco-report
-          command: ./gradlew jacocoTestReport
-      - run:
-          name: jacoco-report to zip
-          command: zip -r jacocoTestReport.zip ./build/reports/jacoco/jacocoTestReport/html
-      - store_artifacts:
-          path: jacocoTestReport.zip
-      - run:
-          name: run-danger-file
+          name: Run danger file
           command: bundle exec danger --verbose
+      - push_compare_branch
+      - comment_screenshot_diff
       - slack/notify:
           event: fail
           template: basic_fail_1
@@ -141,116 +335,61 @@ jobs:
           event: pass
           template: basic_success_1
 
-  compile-mock:
+  compile_mock:
     executor: android
     steps:
       - checkout
-      - attach_workspace:
-          at: .
+      - set_locale_properties
+      - restore_and_save_gradle_cache
       - run:
-          name: build mock
+          name: Build mock
           command: ./gradlew compileMockDebugSource
       - slack/notify:
           event: fail
           template: basic_fail_1
 
-  save-screenshots:
+  save_screenshots:
     executor: android
     steps:
       - checkout
-      - attach_workspace:
-          at: .
+      - set_locale_properties
+      - restore_and_save_gradle_cache
       - run:
-          name: create screenshots
+          name: Create screenshots
           command: ./gradlew recordRoborazziProdDebug --stacktrace
-      - aws-cli-setup
-      - aws-s3/sync:
-          arguments: --delete
-          from: ./app/build/outputs/roborazzi
-          to: s3://hiraganaconverter-roborazzi/image/$CIRCLE_BRANCH
+      - push_screenshots_branch
+      - cleanup_old_branch:
+          prefix: compare_
+      - cleanup_old_branch:
+          prefix: screenshots_
+          maximum_seconds_past: 15552000 # 180 days
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
 
-  compare-screenshots:
+  app_distribution:
     executor: android
     steps:
       - checkout
-      - attach_workspace:
-          at: .
-      - gh/install
-      - set-github-access-token
-      - run:
-          name: gh login
-          command: echo "$GITHUB_ACCESS_TOKEN" | gh auth login --with-token
-      - run:
-          name: get base branch name
-          # ref: https://discuss.circleci.com/t/how-to-retrieve-a-pull-requests-base-branch-name-github/36911
-          command: |
-            # ◼ get base branch name
-            pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
-            base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
-            echo "base branch name: $base"
-            echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
-      - aws-cli-setup
-      - aws-s3/copy:
-          arguments: --recursive
-          from: "s3://hiraganaconverter-roborazzi/image/$BASE_BRANCH_NAME"
-          to: ./app/build/outputs/roborazzi
-      - run:
-          name: compare screenshots
-          command: ./gradlew compareRoborazziProdDebug --stacktrace
-      - run:
-          name: move screenshots files
-          command: |
-            mkdir -p ./build/outputs/roborazzi/compareProdDebug
-            mv ./app/build/outputs/roborazzi ./build/outputs/roborazzi/compareProdDebug
-            # delete except *_compare.png
-            find ./build/outputs/roborazzi/compareProdDebug/roborazzi  -type f |  grep -v -e '.*_compare.png' | xargs rm -rf
-            ls ./build/outputs/roborazzi/compareProdDebug/roborazzi
-      - run:
-          name: set pr number
-          command: |
-            pr_number=$(basename $CIRCLE_PULL_REQUEST)
-            echo "export PR_NUMBER=${pr_number}" >> $BASH_ENV
-      - aws-s3/sync:
-          arguments: --delete
-          from: ./build/outputs/roborazzi/compareProdDebug/roborazzi
-          to: s3://hiraganaconverter-roborazzi/image/pr/$PR_NUMBER
-      - run:
-          name: create comments
-          command: |
-            cat \<< EOF > comments
-            |File name|Image|
-            |---|---|
-            EOF
-
-            # Find all the files ending with _compare.png
-            files_to_add=$(find . -type f -path "./build/outputs/roborazzi/compareProdDebug/roborazzi/*" -name "*_compare.png")
-
-            # Add compare image
-            for file in $files_to_add; do
-              compare_file_path=$(basename $file)
-              echo "compare file path: $compare_file_path"
-              compare_file_name=$(echo $compare_file_path | rev | cut -d. -f-2 | rev )
-              image_url="https://hiraganaconverter-roborazzi.s3.ap-northeast-1.amazonaws.com/image/pr/$PR_NUMBER/$compare_file_path"
-              echo "| $compare_file_name | <img src=\"$image_url\" width=\"600\"> |" >> comments
-            done
-      - run:
-          # ref: https://github.com/cli/cli/issues/6790
-          name: test comment
-          command: gh pr comment "$CIRCLE_PULL_REQUEST" --edit-last -F ./comments || gh pr comment "$CIRCLE_PULL_REQUEST" -F ./comments
+      - set_locale_properties
+      - restore_and_save_gradle_cache
+      - app_distribution:
+          build_variant: ProdRelease
 
 workflows:
   test:
     jobs:
       - dependencies
-      - test-prod:
+      - unit_test:
           context: slack-secrets
           requires:
             - dependencies
-      - compile-mock:
+      - compile_mock:
           context: slack-secrets
           requires:
             - dependencies
-      - save-screenshots:
+      - save_screenshots:
+          context: slack-secrets
           requires:
             - dependencies
           filters:
@@ -258,14 +397,15 @@ workflows:
               only:
                 - main
                 - develop
-      - compare-screenshots:
+      - app_distribution:
+          context: slack-secrets
           requires:
-            - dependencies
+            - unit_test
           filters:
             branches:
-              ignore:
+              only:
                 - main
                 - develop
 
-# ■ memo ■
+# ■ note ■
 # check command： circleci config validate

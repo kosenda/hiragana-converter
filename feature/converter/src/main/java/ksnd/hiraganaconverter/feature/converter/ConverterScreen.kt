@@ -53,6 +53,8 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ShareCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -189,6 +191,7 @@ fun ConverterScreenContent(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     ConversionTypeCard(onSelectedChange = changeHiraKanaType)
+                    Spacer(modifier = Modifier.weight(1f))
                     CustomButtonWithBackground(
                         id = R.drawable.ic_reset,
                         convertDescription = "reset",
@@ -349,13 +352,13 @@ private fun BeforeOrAfterTextField(
 @OptIn(ExperimentalMaterial3Api::class)
 @UiModePreview
 @Composable
-fun PreviewConverterScreenContent() {
+fun PreviewConverterScreenContent(
+    @PreviewParameter(PreviewConverterUiStateProvider::class) uiState: ConvertUiState,
+) {
     HiraganaConverterTheme {
-        CompositionLocalProvider(LocalIsConnectNetwork provides false) {
+        CompositionLocalProvider(LocalIsConnectNetwork provides true) {
             ConverterScreenContent(
-                uiState = ConvertUiState(
-                    convertErrorType = ConvertErrorType.CONVERSION_FAILED,
-                ),
+                uiState = uiState,
                 snackbarHostState = remember { SnackbarHostState() },
                 topBar = { },
                 topBarHeight = 0,
@@ -369,4 +372,11 @@ fun PreviewConverterScreenContent() {
             )
         }
     }
+}
+
+class PreviewConverterUiStateProvider : PreviewParameterProvider<ConvertUiState> {
+    override val values: Sequence<ConvertUiState> = sequenceOf(
+        ConvertUiState(inputText = "漢字", outputText = "かんじ"),
+        ConvertUiState(showErrorCard = true, convertErrorType = ConvertErrorType.REACHED_CONVERT_MAX_LIMIT),
+    )
 }
