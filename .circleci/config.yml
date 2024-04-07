@@ -381,12 +381,12 @@ workflows:
       - app_distribution:
           context: slack-secrets
           requires:
-            - dependencies # TODO unit_testに変更する
+            unit_test1
           filters:
             branches:
               only:
+                - main
                 - develop
-                - feature/app-distribution # TODO マージ時に消す
 
 # ■ note ■
 # check command： circleci config validate
