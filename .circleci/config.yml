@@ -400,13 +400,12 @@ workflows:
       - app_distribution:
           context: slack-secrets
           requires:
-            - dependencies
+            - unit_test
           filters:
             branches:
               only:
                 - main
                 - develop
-                - feature/ci-app-distribution-use-apk
 
 # ■ note ■
 # check command： circleci config validate
