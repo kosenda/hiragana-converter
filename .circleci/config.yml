@@ -280,7 +280,7 @@ commands:
           name: Decode files
           command: |
             echo "$BASE64_KEYSTORE" | base64 -d > app/keystore.jks
-            echo "$BASE64_KEYSTORE_PROPERTIES | base64 -d > app/keystore.properties"
+            echo "$BASE64_KEYSTORE_PROPERTIES" | base64 -d > app/keystore.properties
             echo "$BASE64_DISTRIBUTION_JSON_FILE" | base64 -d > firebase-app-distribution.json
       - run:
           name: Build apk
