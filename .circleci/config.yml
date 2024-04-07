@@ -381,7 +381,7 @@ workflows:
       - app_distribution:
           context: slack-secrets
           requires:
-            unit_test1
+            - unit_test
           filters:
             branches:
               only:
