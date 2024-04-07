@@ -347,10 +347,16 @@ jobs:
       - setting_signing_key
       - restore_and_save_gradle_cache
       - run:
+          name: Decode Firebase App Distribution Json
+          command: echo "$FIREBASE_APP_DISTRIBUTION_JSON" | base64 -d > firebase-app-distribution.json
+      - run:
           name: Build apk
           command: ./gradlew assembleProdRelease
       - store_artifacts:
           path: app/build/outputs/apk/prod/release/app-prod-release.apk
+      - run:
+          name: Upload apk to Firebase App Distribution
+          command: ./gradlew appDistributionUploadProdRelease
       - slack/notify:
           event: fail
           template: basic_fail_1
