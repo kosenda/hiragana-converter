@@ -86,21 +86,19 @@ fun Navigation(
             arguments = arguments,
             enterTransition = {
                 slideInVertically(
-                    animationSpec = tween(durationMillis = 400, easing = EaseInOutQuart),
-                    initialOffsetY = { fullHeight -> fullHeight * 8 / 10 },
-                ) +
-                    fadeIn(
-                        animationSpec = tween(durationMillis = 400, easing = EaseOutQuad),
-                    )
+                    animationSpec = tween(durationMillis = 500, easing = EaseInOutQuart),
+                    initialOffsetY = { fullHeight -> fullHeight * 2 / 10 },
+                ) + fadeIn(
+                    animationSpec = tween(durationMillis = 500, easing = EaseOutQuad),
+                )
             },
             exitTransition = {
                 slideOutVertically(
-                    animationSpec = tween(durationMillis = 400, easing = EaseInOutQuart),
-                    targetOffsetY = { fullHeight -> fullHeight * 8 / 10 },
-                ) +
-                    fadeOut(
-                        animationSpec = tween(durationMillis = 400, easing = EaseOutQuad),
-                    )
+                    animationSpec = tween(durationMillis = 500, easing = EaseInOutQuart),
+                    targetOffsetY = { fullHeight -> fullHeight * 2 / 10 },
+                ) + fadeOut(
+                    animationSpec = tween(durationMillis = 500, easing = EaseOutQuad),
+                )
             },
             content = content,
         )
