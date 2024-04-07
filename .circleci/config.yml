@@ -284,6 +284,7 @@ jobs:
       - check_is_skipping_vrt
       - get_screenshots
       - set_locale_properties
+      - setting_signing_key
       - restore_and_save_gradle_cache
       - setup_bundle
       - run:
