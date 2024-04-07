@@ -97,7 +97,7 @@ commands:
           name: Set local.properties
           command: |
             LOCAL_PROPERTIES_PATH=./local.properties
-            echo "apiKey=$.Environment.DEBUG_AD_APPLICATION_ID" >> $LOCAL_PROPERTIES_PATH
+            echo "apiKey=$API_KEY" >> $LOCAL_PROPERTIES_PATH
 
   restore_and_save_gradle_cache:
     steps:
