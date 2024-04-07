@@ -258,16 +258,28 @@ commands:
               fi
             done || true
 
-  setting_signing_key:
+  app_distribution:
+    parameters:
+      build_variant:
+        type: string
     steps:
       - run:
-          name: Setting signing key
+          name: Decode files
           command: |
-            echo "$BASE64_KEYSTORE" | base64 --decode > app/keystore.jks
-            echo  "storeFile=./keystore.jks" > keystore.properties
-            echo  "keyAlias=$KEY_ALIAS" >> keystore.properties
-            echo  "keyPassword=$KEY_PASSWORD" >> keystore.properties
-            echo  "storePassword=$STORE_PASSWORD" >> keystore.properties
+            echo "$BASE64_KEYSTORE" | base64 -d > app/keystore.jks
+            echo "$BASE64_KEYSTORE_PROPERTIES | base64 -d > app/keystore.properties"
+            echo "$BASE64_DISTRIBUTION_JSON_FILE" | base64 -d > firebase-app-distribution.json
+      - run:
+          name: Build aab
+          command: ./gradlew bundle<< parameters.build_variant >>
+      - store_artifacts:
+          path: app/build/outputs/bundle
+      - run:
+          name: Upload aab to Firebase App Distribution
+          command: ./gradlew appDistributionUpload<< parameters.build_variant >>
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
 
 jobs:
   dependencies:
@@ -310,7 +322,6 @@ jobs:
     steps:
       - checkout
       - set_locale_properties
-      - setting_signing_key
       - restore_and_save_gradle_cache
       - run:
           name: Build mock
@@ -324,7 +335,6 @@ jobs:
     steps:
       - checkout
       - set_locale_properties
-      - setting_signing_key
       - restore_and_save_gradle_cache
       - run:
           name: Create screenshots
@@ -344,22 +354,9 @@ jobs:
     steps:
       - checkout
       - set_locale_properties
-      - setting_signing_key
       - restore_and_save_gradle_cache
-      - run:
-          name: Decode Firebase App Distribution Json
-          command: echo "$FIREBASE_APP_DISTRIBUTION_JSON" | base64 -d > firebase-app-distribution.json
-      - run:
-          name: Build apk
-          command: ./gradlew assembleProdRelease
-      - store_artifacts:
-          path: app/build/outputs/apk/prod/release/app-prod-release.apk
-      - run:
-          name: Upload apk to Firebase App Distribution
-          command: ./gradlew appDistributionUploadProdRelease
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
+      - app_distribution:
+          build_variant: ProdRelease
 
 workflows:
   test:

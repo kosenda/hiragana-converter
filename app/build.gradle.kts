@@ -25,7 +25,8 @@ android {
     }
 
     // ref: https://github.com/DroidKaigi/conference-app-2023/blob/main/app-android/build.gradle.kts
-    val keystorePropertiesFile = file("../keystore.properties")
+    val keystorePropertiesFile = file("keystore.properties")
+
     signingConfigs {
         if (keystorePropertiesFile.exists()) {
             val keystoreProperties = Properties()
@@ -44,13 +45,14 @@ android {
             isShrinkResources = true
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro", "shrinker-rules.pro")
+            if (keystorePropertiesFile.exists()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
             firebaseAppDistribution {
-                artifactType = "apk"
-                releaseNotes = "test"
+                artifactType = "aab"
                 groups="tester"
                 serviceCredentialsFile = "firebase-app-distribution.json"
             }
-            signingConfig = signingConfigs.getByName("release")
         }
         debug {
             configure<FirebasePerfExtension> {
