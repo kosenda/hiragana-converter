@@ -49,7 +49,7 @@ android {
                 signingConfig = signingConfigs.getByName("release")
             }
             firebaseAppDistribution {
-                artifactType = "AAB"
+                artifactType = "apk"
                 groups="tester"
                 serviceCredentialsFile = "firebase-app-distribution.json"
             }
