@@ -20,6 +20,7 @@ gmsPlugin = "4.4.0"
 firebaseBom = "32.7.2"
 firebaseCrashlyticsPlugin = "2.9.9"
 firebasePerfPlugin = "1.4.2"
+firebaseAppdistributionPlugin = "4.2.0"
 hilt = "2.50"
 junit4 = "4.13.2"
 kotlin = "1.9.21"
@@ -169,5 +170,6 @@ dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 gms = { id = "com.google.gms.google-services", version.ref = "gmsPlugin"}
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin"}
+firebase-appdistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppdistributionPlugin" }
 firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "firebasePerfPlugin" }
 androidLibrary = { id = "com.android.library", version.ref = "androidGradlePlugin" }

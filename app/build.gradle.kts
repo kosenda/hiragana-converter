@@ -14,6 +14,7 @@ plugins {
     alias(libs.plugins.gms)
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.firebase.perf)
+    alias(libs.plugins.firebase.appdistribution)
 }
 
 android {
@@ -23,21 +24,9 @@ android {
         generateLocaleConfig = true
     }
 
-    buildTypes {
-        release {
-            isShrinkResources = true
-            isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro", "shrinker-rules.pro")
-        }
-        debug {
-            configure<FirebasePerfExtension> {
-                setInstrumentationEnabled(false)
-            }
-        }
-    }
-
     // ref: https://github.com/DroidKaigi/conference-app-2023/blob/main/app-android/build.gradle.kts
     val keystorePropertiesFile = file("keystore.properties")
+
     signingConfigs {
         if (keystorePropertiesFile.exists()) {
             val keystoreProperties = Properties()
@@ -50,6 +39,28 @@ android {
             }
         }
     }
+
+    buildTypes {
+        release {
+            isShrinkResources = true
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro", "shrinker-rules.pro")
+            if (keystorePropertiesFile.exists()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
+            firebaseAppDistribution {
+                artifactType = "AAB"
+                groups="tester"
+                serviceCredentialsFile = "firebase-app-distribution.json"
+            }
+        }
+        debug {
+            configure<FirebasePerfExtension> {
+                setInstrumentationEnabled(false)
+            }
+        }
+    }
+
     flavorDimensions += "env"
     productFlavors {
         create("prod") {
@@ -59,13 +70,6 @@ android {
         create("mock") {
             dimension = "env"
             applicationIdSuffix = ".mock"
-        }
-    }
-    buildTypes {
-        if (keystorePropertiesFile.exists()) {
-            getByName("release") {
-                signingConfig = signingConfigs.getByName("release")
-            }
         }
     }
     buildFeatures {

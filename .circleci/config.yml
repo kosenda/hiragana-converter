@@ -97,7 +97,7 @@ commands:
           name: Set local.properties
           command: |
             LOCAL_PROPERTIES_PATH=./local.properties
-            echo "apiKey=$.Environment.DEBUG_AD_APPLICATION_ID" >> $LOCAL_PROPERTIES_PATH
+            echo "apiKey=$API_KEY" >> $LOCAL_PROPERTIES_PATH
 
   restore_and_save_gradle_cache:
     steps:
@@ -258,6 +258,29 @@ commands:
               fi
             done || true
 
+  app_distribution:
+    parameters:
+      build_variant:
+        type: string
+    steps:
+      - run:
+          name: Decode files
+          command: |
+            echo "$BASE64_KEYSTORE" | base64 -d > app/keystore.jks
+            echo "$BASE64_KEYSTORE_PROPERTIES | base64 -d > app/keystore.properties"
+            echo "$BASE64_DISTRIBUTION_JSON_FILE" | base64 -d > firebase-app-distribution.json
+      - run:
+          name: Build aab
+          command: ./gradlew bundle<< parameters.build_variant >>
+      - store_artifacts:
+          path: app/build/outputs/bundle
+      - run:
+          name: Upload aab to Firebase App Distribution
+          command: ./gradlew appDistributionUpload<< parameters.build_variant >>
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+
 jobs:
   dependencies:
     executor: android
@@ -325,6 +348,15 @@ jobs:
           event: fail
           template: basic_fail_1
 
+  app_distribution:
+    executor: android
+    steps:
+      - checkout
+      - set_locale_properties
+      - restore_and_save_gradle_cache
+      - app_distribution:
+          build_variant: ProdRelease
+
 workflows:
   test:
     jobs:
@@ -341,6 +373,15 @@ workflows:
           context: slack-secrets
           requires:
             - dependencies
+          filters:
+            branches:
+              only:
+                - main
+                - develop
+      - app_distribution:
+          context: slack-secrets
+          requires:
+            - unit_test
           filters:
             branches:
               only:
