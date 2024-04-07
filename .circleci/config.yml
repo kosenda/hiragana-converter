@@ -132,6 +132,19 @@ commands:
             fi
             ./gradlew test<< parameters.build_variant >> $roborazzi_option --stacktrace
 
+  save_test_result:
+    steps:
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/test-results/junit/
+            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
+          when: always
+      - store_test_results:
+          path: ~/test-results
+      - store_artifacts:
+          path: ~/test-results/junit
+
   report_jacoco:
     steps:
       - run:
@@ -303,6 +316,7 @@ jobs:
           command: ./gradlew --continue ktlintCheck
       - unit_test:
           build_variant: ProdDebug
+      - save_test_result
       - report_jacoco
       - run:
           name: Run danger file
