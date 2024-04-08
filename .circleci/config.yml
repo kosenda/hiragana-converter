@@ -21,12 +21,13 @@ commands:
       - run:
           name: Save IS_SKIPPING_VRT to env
           command: |
-            lastCommitMessage="$(echo $(git log -1 --pretty=%B))"
             is_skipping_vrt=false
-            if [[ "$lastCommitMessage" == *"[skip vrt]"* ]]; then
+            if [[ "$(echo $(git log -1 --pretty=%B))" == *"[skip vrt]"* ]]; then
+              # Skip if the latest commit message contains [skip vrt]
               is_skipping_vrt=true
             else
-              if [ -z "$CIRCLE_PULL_REQUEST" ]; then
+              # Skip if there is no PR or if the PR has a `skip vrt` label
+              if [ -z "$CIRCLE_PULL_REQUEST" ] || [ "$(gh pr view test/sample-vrt2 --json labels | jq '.labels | any(.name == "skip vrt")')" = "true" ]; then
                 is_skipping_vrt=true
               fi
             fi
