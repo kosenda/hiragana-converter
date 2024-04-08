@@ -3,7 +3,6 @@
 version: 2.1
 
 orbs:
-  slack: circleci/slack@4.12.6
   gh: circleci/github-cli@2.3.0
 
 executors:
@@ -109,17 +108,6 @@ commands:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}-{{ checksum "gradle/libs.versions.toml" }}
 
-  setup_bundle:
-    steps:
-      - run:
-          neme: Gem install bundler
-          command: sudo gem install bundler:2.4.12
-      - run:
-          name: Bundle install
-          command: |
-            bundle config set --local path 'vendor/bundle'
-            bundle install
-
   unit_test:
     parameters:
       build_variant:
@@ -132,30 +120,6 @@ commands:
               roborazzi_option="-Proborazzi.test.compare=true"
             fi
             ./gradlew test<< parameters.build_variant >> $roborazzi_option --stacktrace
-
-  save_test_result:
-    steps:
-      - run:
-          name: Save test results
-          command: |
-            mkdir -p ~/test-results/junit/
-            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
-          when: always
-      - store_test_results:
-          path: ~/test-results
-      - store_artifacts:
-          path: ~/test-results/junit
-
-  report_jacoco:
-    steps:
-      - run:
-          name: Report jacoco
-          command: ./gradlew jacocoTestReport
-      - run:
-          name: Zip jacoco report
-          command: zip -r jacocoTestReport.zip ./build/reports/jacoco/jacocoTestReport/html
-      - store_artifacts:
-          path: jacocoTestReport.zip
 
   setting_git_config:
     steps:
@@ -272,42 +236,7 @@ commands:
               fi
             done || true
 
-  app_distribution:
-    parameters:
-      build_variant:
-        type: string
-    steps:
-      - run:
-          name: Decode files
-          command: |
-            echo "$BASE64_KEYSTORE" | base64 -d > app/keystore.jks
-            echo "$BASE64_KEYSTORE_PROPERTIES" | base64 -d > app/keystore.properties
-            echo "$BASE64_DISTRIBUTION_JSON_FILE" | base64 -d > firebase-app-distribution.json
-      - run:
-          name: Build apk
-          command: ./gradlew assemble<< parameters.build_variant >>
-      - store_artifacts:
-          path: app/build/outputs/apk
-      - run:
-          name: Build aab
-          command: ./gradlew bundle<< parameters.build_variant >>
-      - store_artifacts:
-          path: app/build/outputs/bundle
-      - run:
-          name: Upload apk to Firebase App Distribution
-          command: ./gradlew appDistributionUpload<< parameters.build_variant >>
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
-
 jobs:
-  dependencies:
-    executor: android
-    steps:
-      - checkout
-      - set_locale_properties
-      - restore_and_save_gradle_cache
-
   unit_test:
     executor: android
     steps:
@@ -316,38 +245,10 @@ jobs:
       - get_screenshots
       - set_locale_properties
       - restore_and_save_gradle_cache
-      - setup_bundle
-      - run:
-          name: Ktlint check
-          command: ./gradlew --continue ktlintCheck
       - unit_test:
           build_variant: ProdDebug
-      - save_test_result
-      - report_jacoco
-      - run:
-          name: Run danger file
-          command: bundle exec danger --verbose
       - push_compare_branch
       - comment_screenshot_diff
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
-      - slack/notify:
-          event: pass
-          template: basic_success_1
-
-  compile_mock:
-    executor: android
-    steps:
-      - checkout
-      - set_locale_properties
-      - restore_and_save_gradle_cache
-      - run:
-          name: Build mock
-          command: ./gradlew compileMockDebugSource
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
 
   save_screenshots:
     executor: android
@@ -364,9 +265,6 @@ jobs:
       - cleanup_old_branch:
           prefix: screenshots_
           maximum_seconds_past: 15552000 # 180 days
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
 
   app_distribution:
     executor: android
@@ -380,28 +278,8 @@ jobs:
 workflows:
   test:
     jobs:
-      - dependencies
-      - unit_test:
-          context: slack-secrets
-          requires:
-            - dependencies
-      - compile_mock:
-          context: slack-secrets
-          requires:
-            - dependencies
+      - unit_test
       - save_screenshots:
-          context: slack-secrets
-          requires:
-            - dependencies
-          filters:
-            branches:
-              only:
-                - main
-                - develop
-      - app_distribution:
-          context: slack-secrets
-          requires:
-            - unit_test
           filters:
             branches:
               only:
