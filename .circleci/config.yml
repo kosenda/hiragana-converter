@@ -27,7 +27,7 @@ commands:
               is_skipping_vrt=true
             else
               # Skip if there is no PR or if the PR has a `skip vrt` label
-              if [ -z "$CIRCLE_PULL_REQUEST" ] || [ "$(gh pr view test/sample-vrt2 --json labels | jq '.labels | any(.name == "skip vrt")')" = "true" ]; then
+              if [ -z "$CIRCLE_PULL_REQUEST" ] || [ "$(gh pr view $CIRCLE_BRANCH --json labels | jq '.labels | any(.name == "skip vrt")')" = "true" ]; then
                 is_skipping_vrt=true
               fi
             fi
