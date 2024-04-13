@@ -43,7 +43,7 @@ timber = "5.0.1"
 truth = "1.4.2"
 turbine = "1.0.0"
 mockk = "1.13.10"
-roborazzi = "1.9.0"
+roborazzi = "1.12.0"
 showkase = "1.0.2"
 
 # ** I'm using it, so no deletions allowed. **
