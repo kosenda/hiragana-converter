@@ -3,7 +3,7 @@
 version: 2.1
 
 orbs:
-  slack: circleci/slack@4.12.6
+  slack: circleci/slack@4.13.2
   gh: circleci/github-cli@2.3.0
 
 executors:
