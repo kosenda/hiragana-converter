@@ -47,7 +47,7 @@ roborazzi = "1.9.0"
 showkase = "1.0.2"
 
 # ** I'm using it, so no deletions allowed. **
-androidxComposeCompiler = "1.5.6"
+androidxComposeCompiler = "1.5.11"
 jacoco = "0.8.10"
 
 [libraries]
