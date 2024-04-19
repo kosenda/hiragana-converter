@@ -72,16 +72,17 @@ tasks.create<JacocoReport>("jacocoTestReport") {
 subprojects {
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
         kotlinOptions {
+            val composeCompilerDir = "${project.layout.buildDirectory.get()}/compose_compiler"
             if (project.findProperty("composeCompilerReports") == "true") {
                 freeCompilerArgs += listOf(
                     "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${project.buildDir.absolutePath}/compose_compiler"
+                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=$composeCompilerDir"
                 )
             }
             if (project.findProperty("composeCompilerMetrics") == "true") {
                 freeCompilerArgs += listOf(
                     "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.buildDir.absolutePath}/compose_compiler"
+                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=$composeCompilerDir"
                 )
             }
         }
