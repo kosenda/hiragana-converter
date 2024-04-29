@@ -91,7 +91,7 @@ private fun ConvertHistoryScreenContent(
             .displayCutoutPadding(),
         topBar = {
             BackTopBar(scrollBehavior = scrollBehavior, onBackPressed = onBackPressed)
-        }
+        },
     ) { padding ->
         if (state.isShowDetailDialog) {
             state.usedHistoryDataByDetail?.let {
@@ -108,7 +108,7 @@ private fun ConvertHistoryScreenContent(
                     paddingValues = PaddingValues(
                         start = padding.calculateStartPadding(layoutDirection),
                         top = padding.calculateTopPadding(),
-                        end = padding.calculateEndPadding(layoutDirection)
+                        end = padding.calculateEndPadding(layoutDirection),
                     ),
                 )
                 .fillMaxSize(),
@@ -124,7 +124,7 @@ private fun ConvertHistoryScreenContent(
                             Spacer(modifier = Modifier.weight(1f))
                             DeleteButton(
                                 modifier = Modifier.padding(end = 16.dp),
-                                onClick = deleteAllConvertHistory
+                                onClick = deleteAllConvertHistory,
                             )
                         }
                     }
@@ -137,7 +137,7 @@ private fun ConvertHistoryScreenContent(
                                 .padding(horizontal = 16.dp)
                                 .then(
                                     // adding the condition because it behaves strangely when set while scrolling
-                                    if (lazyListState.isScrollInProgress) Modifier else Modifier.animateItemPlacement()
+                                    if (lazyListState.isScrollInProgress) Modifier else Modifier.animateItemPlacement(),
                                 ),
                             beforeText = history.before,
                             time = history.time,

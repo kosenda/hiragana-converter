@@ -134,7 +134,7 @@ private fun InfoScreenContent(
                     paddingValues = PaddingValues(
                         start = padding.calculateStartPadding(layoutDirection),
                         top = padding.calculateTopPadding(),
-                        end = padding.calculateEndPadding(layoutDirection)
+                        end = padding.calculateEndPadding(layoutDirection),
                     ),
                 )
                 .verticalScroll(rememberScrollState())

@@ -51,7 +51,7 @@ class ObserveNeedRequestReviewUseCaseTest {
                 isAlreadyReviewed = false,
                 totalConvertCount = INTERVAL_REQUEST_REVIEW_COUNT,
                 lastRequestReviewLocalDate = YesterdayLocalDate,
-            )
+            ),
         )
 
         val result = useCase().first()
@@ -66,7 +66,7 @@ class ObserveNeedRequestReviewUseCaseTest {
                 isAlreadyReviewed = false,
                 totalConvertCount = INTERVAL_REQUEST_REVIEW_COUNT,
                 lastRequestReviewLocalDate = IntervalDateDaysAgoLocalDate,
-            )
+            ),
         )
 
         val result = useCase().first()

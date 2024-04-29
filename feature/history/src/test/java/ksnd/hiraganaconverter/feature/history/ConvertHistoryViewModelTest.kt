@@ -13,7 +13,7 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class ConvertHistoryViewModelTest {
-    @get: Rule
+    @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
     private val convertHistoryRepository = mockk<ConvertHistoryRepository>(relaxed = true)

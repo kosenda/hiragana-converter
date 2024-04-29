@@ -17,10 +17,10 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class ConvertHistoryRepositoryImplTest {
-    @get: Rule
+    @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    @get: Rule
+    @get:Rule
     val roomRule = RoomRule(context = ApplicationProvider.getApplicationContext())
 
     private val convertHistoryDao = spyk<ConvertHistoryDao>(roomRule.dao)

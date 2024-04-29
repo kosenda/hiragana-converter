@@ -17,7 +17,7 @@ import javax.inject.Inject
 const val DAYS_FOR_FLEXIBLE_UPDATE = 2L
 
 class InAppUpdateManagerImpl @Inject constructor(
-    private val appUpdateManager: AppUpdateManager
+    private val appUpdateManager: AppUpdateManager,
 ) : InAppUpdateManager {
 
     override suspend fun requestUpdate(

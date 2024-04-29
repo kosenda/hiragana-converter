@@ -100,7 +100,7 @@ private fun SettingScreenContent(
                     paddingValues = PaddingValues(
                         start = padding.calculateStartPadding(layoutDirection),
                         top = padding.calculateTopPadding(),
-                        end = padding.calculateEndPadding(layoutDirection)
+                        end = padding.calculateEndPadding(layoutDirection),
                     ),
                 )
                 .fillMaxSize()
