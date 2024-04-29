@@ -12,7 +12,7 @@ import javax.inject.Inject
 class InAppReviewManagerImpl @Inject constructor(
     private val reviewManger: ReviewManager,
     @ActivityContext private val context: Context,
-): InAppReviewManager {
+) : InAppReviewManager {
     override suspend fun requestReview() {
         val reviewInfo = reviewManger.requestReview()
         reviewManger.launchReview(activity = context as Activity, reviewInfo = reviewInfo)

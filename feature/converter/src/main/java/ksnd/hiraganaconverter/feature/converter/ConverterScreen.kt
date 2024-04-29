@@ -70,8 +70,8 @@ import ksnd.hiraganaconverter.core.ui.parts.button.ConvertButton
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomButtonWithBackground
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.parts.card.ConversionTypeCard
+import ksnd.hiraganaconverter.core.ui.parts.card.ERROR_CARD_ANIMATUIB_DURATION
 import ksnd.hiraganaconverter.core.ui.parts.card.ErrorCard
-import ksnd.hiraganaconverter.core.ui.parts.card.ErrorCardAnimationDuration
 import ksnd.hiraganaconverter.core.ui.parts.card.OfflineCard
 import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
@@ -97,7 +97,7 @@ fun ConverterScreen(
 
     LaunchedEffect(uiState.showErrorCard) {
         if (uiState.convertErrorType != null && uiState.showErrorCard.not()) {
-            delay(ErrorCardAnimationDuration.toLong())
+            delay(ERROR_CARD_ANIMATUIB_DURATION.toLong())
             viewModel.clearConvertErrorType()
         }
     }
