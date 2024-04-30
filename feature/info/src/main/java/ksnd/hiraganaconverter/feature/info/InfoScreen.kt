@@ -115,14 +115,14 @@ private fun InfoScreenContent(
                 onBackPressed = onBackPressed,
             )
         },
-    ) { padding ->
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(
                     paddingValues = PaddingValues(
-                        start = padding.calculateStartPadding(layoutDirection),
-                        top = padding.calculateTopPadding(),
-                        end = padding.calculateEndPadding(layoutDirection),
+                        start = innerPadding.calculateStartPadding(layoutDirection),
+                        top = innerPadding.calculateTopPadding(),
+                        end = innerPadding.calculateEndPadding(layoutDirection),
                     ),
                 )
                 .verticalScroll(scrollState)
