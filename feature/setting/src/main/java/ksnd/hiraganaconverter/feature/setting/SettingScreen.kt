@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
@@ -33,11 +34,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
 import ksnd.hiraganaconverter.core.analytics.Screen
 import ksnd.hiraganaconverter.core.model.ui.FontType
 import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.resource.R
+import ksnd.hiraganaconverter.core.ui.extension.noRippleClickable
 import ksnd.hiraganaconverter.core.ui.parts.BackTopBar
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomRadioButton
 import ksnd.hiraganaconverter.core.ui.parts.button.TransitionButton
@@ -78,6 +81,8 @@ private fun SettingScreenContent(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val layoutDirection = LocalLayoutDirection.current
     val isShowSelectLanguageDialog = rememberSaveable { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+    val scrollState = rememberScrollState()
 
     if (isShowSelectLanguageDialog.value) {
         SelectLanguageDialog(
@@ -90,21 +95,29 @@ private fun SettingScreenContent(
             .background(MaterialTheme.colorScheme.surface)
             .displayCutoutPadding(),
         topBar = {
-            BackTopBar(scrollBehavior = scrollBehavior, onBackPressed = onBackPressed)
+            BackTopBar(
+                scrollBehavior = scrollBehavior,
+                modifier = Modifier.noRippleClickable {
+                    coroutineScope.launch {
+                        scrollState.animateScrollTo(0)
+                    }
+                },
+                onBackPressed = onBackPressed,
+            )
         },
-    ) { padding ->
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .displayCutoutPadding()
                 .padding(
                     paddingValues = PaddingValues(
-                        start = padding.calculateStartPadding(layoutDirection),
-                        top = padding.calculateTopPadding(),
-                        end = padding.calculateEndPadding(layoutDirection),
+                        start = innerPadding.calculateStartPadding(layoutDirection),
+                        top = innerPadding.calculateTopPadding(),
+                        end = innerPadding.calculateEndPadding(layoutDirection),
                     ),
                 )
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
                 .padding(horizontal = 16.dp),
         ) {
             SettingThemeContent(

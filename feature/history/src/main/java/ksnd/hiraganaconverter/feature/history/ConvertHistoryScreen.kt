@@ -29,6 +29,7 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -38,10 +39,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
 import ksnd.hiraganaconverter.core.analytics.Screen
 import ksnd.hiraganaconverter.core.model.ConvertHistoryData
 import ksnd.hiraganaconverter.core.resource.R
+import ksnd.hiraganaconverter.core.ui.extension.noRippleClickable
 import ksnd.hiraganaconverter.core.ui.parts.BackTopBar
 import ksnd.hiraganaconverter.core.ui.parts.button.DeleteButton
 import ksnd.hiraganaconverter.core.ui.parts.card.ConvertHistoryCard
@@ -63,11 +66,19 @@ fun ConvertHistoryScreen(
     ConvertHistoryScreenContent(
         state = uiState,
         onBackPressed = onBackPressed,
-        closeConvertHistoryDetailDialog = viewModel::closeConvertHistoryDetailDialog,
         deleteAllConvertHistory = viewModel::deleteAllConvertHistory,
         showConvertHistoryDetailDialog = viewModel::showConvertHistoryDetailDialog,
         deleteConvertHistory = viewModel::deleteConvertHistory,
     )
+
+    if (uiState.isShowDetailDialog) {
+        uiState.usedHistoryDataByDetail?.let {
+            ConvertHistoryDetailDialog(
+                onCloseClick = viewModel::closeConvertHistoryDetailDialog,
+                historyData = it,
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -75,7 +86,6 @@ fun ConvertHistoryScreen(
 private fun ConvertHistoryScreenContent(
     state: ConvertHistoryUiState,
     onBackPressed: () -> Unit,
-    closeConvertHistoryDetailDialog: () -> Unit,
     deleteAllConvertHistory: () -> Unit,
     showConvertHistoryDetailDialog: (ConvertHistoryData) -> Unit,
     deleteConvertHistory: (ConvertHistoryData) -> Unit,
@@ -83,6 +93,7 @@ private fun ConvertHistoryScreenContent(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val layoutDirection = LocalLayoutDirection.current
     val lazyListState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         modifier = Modifier
@@ -90,18 +101,27 @@ private fun ConvertHistoryScreenContent(
             .background(MaterialTheme.colorScheme.surface)
             .displayCutoutPadding(),
         topBar = {
-            BackTopBar(scrollBehavior = scrollBehavior, onBackPressed = onBackPressed)
+            BackTopBar(
+                scrollBehavior = scrollBehavior,
+                modifier = Modifier.noRippleClickable {
+                    coroutineScope.launch {
+                        lazyListState.animateScrollToItem(0)
+                    }
+                },
+                onBackPressed = onBackPressed,
+            ) {
+                if (state.convertHistories.isNotEmpty()) {
+                    Row {
+                        Spacer(modifier = Modifier.weight(1f))
+                        DeleteButton(
+                            modifier = Modifier.padding(end = 16.dp),
+                            onClick = deleteAllConvertHistory,
+                        )
+                    }
+                }
+            }
         },
     ) { padding ->
-        if (state.isShowDetailDialog) {
-            state.usedHistoryDataByDetail?.let {
-                ConvertHistoryDetailDialog(
-                    onCloseClick = closeConvertHistoryDetailDialog,
-                    historyData = it,
-                )
-            }
-        }
-
         Column(
             modifier = Modifier
                 .padding(
@@ -119,15 +139,6 @@ private fun ConvertHistoryScreenContent(
                 LazyColumn(
                     state = lazyListState,
                 ) {
-                    item {
-                        Row {
-                            Spacer(modifier = Modifier.weight(1f))
-                            DeleteButton(
-                                modifier = Modifier.padding(end = 16.dp),
-                                onClick = deleteAllConvertHistory,
-                            )
-                        }
-                    }
                     items(
                         items = state.convertHistories,
                         key = { history -> history.id },
@@ -145,7 +156,7 @@ private fun ConvertHistoryScreenContent(
                             onDeleteClick = { deleteConvertHistory(history) },
                         )
                     }
-                    item { Spacer(modifier = Modifier.height(16.dp)) }
+                    item { Spacer(modifier = Modifier.height(48.dp)) }
                 }
             }
         }
@@ -190,7 +201,6 @@ fun PreviewConvertHistoryScreeContent() {
             ConvertHistoryScreenContent(
                 state = ConvertHistoryUiState(convertHistories = MockConvertHistories().data),
                 onBackPressed = {},
-                closeConvertHistoryDetailDialog = {},
                 deleteAllConvertHistory = {},
                 showConvertHistoryDetailDialog = {},
                 deleteConvertHistory = {},
@@ -210,7 +220,6 @@ fun PreviewConvertHistoryScreenContent_NoData() {
             ConvertHistoryScreenContent(
                 state = ConvertHistoryUiState(),
                 onBackPressed = {},
-                closeConvertHistoryDetailDialog = {},
                 deleteAllConvertHistory = {},
                 showConvertHistoryDetailDialog = {},
                 deleteConvertHistory = {},
