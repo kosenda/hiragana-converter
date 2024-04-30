@@ -422,6 +422,7 @@ workflows:
       - app_distribution:
           context: slack-secrets
           requires:
+            - lint
             - unit_test
           filters:
             branches:
