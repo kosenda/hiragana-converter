@@ -120,49 +120,47 @@ private fun ConvertHistoryScreenContent(
                     }
                 }
             }
-        }
-},
-) {
-    padding ->
-    Column(
-        modifier = Modifier
-            .padding(
-                paddingValues = PaddingValues(
-                    start = padding.calculateStartPadding(layoutDirection),
-                    top = padding.calculateTopPadding(),
-                    end = padding.calculateEndPadding(layoutDirection),
-                ),
-            )
-            .fillMaxSize(),
-    ) {
-        if (state.convertHistories.isEmpty()) {
-            EmptyHistoryImage()
-        } else {
-            LazyColumn(
-                state = lazyListState,
-            ) {
-                items(
-                    items = state.convertHistories,
-                    key = { history -> history.id },
-                ) { history ->
-                    ConvertHistoryCard(
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .then(
-                                // adding the condition because it behaves strangely when set while scrolling
-                                if (lazyListState.isScrollInProgress) Modifier else Modifier.animateItemPlacement(),
-                            ),
-                        beforeText = history.before,
-                        time = history.time,
-                        onClick = { showConvertHistoryDetailDialog(history) },
-                        onDeleteClick = { deleteConvertHistory(history) },
-                    )
+        },
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .padding(
+                    paddingValues = PaddingValues(
+                        start = padding.calculateStartPadding(layoutDirection),
+                        top = padding.calculateTopPadding(),
+                        end = padding.calculateEndPadding(layoutDirection),
+                    ),
+                )
+                .fillMaxSize(),
+        ) {
+            if (state.convertHistories.isEmpty()) {
+                EmptyHistoryImage()
+            } else {
+                LazyColumn(
+                    state = lazyListState,
+                ) {
+                    items(
+                        items = state.convertHistories,
+                        key = { history -> history.id },
+                    ) { history ->
+                        ConvertHistoryCard(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .then(
+                                    // adding the condition because it behaves strangely when set while scrolling
+                                    if (lazyListState.isScrollInProgress) Modifier else Modifier.animateItemPlacement(),
+                                ),
+                            beforeText = history.before,
+                            time = history.time,
+                            onClick = { showConvertHistoryDetailDialog(history) },
+                            onDeleteClick = { deleteConvertHistory(history) },
+                        )
+                    }
+                    item { Spacer(modifier = Modifier.height(48.dp)) }
                 }
-                item { Spacer(modifier = Modifier.height(48.dp)) }
             }
         }
     }
-}
 }
 
 @Composable
