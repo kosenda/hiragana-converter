@@ -47,7 +47,7 @@ class MainActivityViewModel @Inject constructor(
                 theme = theme,
                 fontType = fontType,
                 inAppUpdateState = inAppUpdateState,
-                needRequestReview = needRequestReview,
+                isRequestedReview = needRequestReview,
                 isConnectNetwork = isConnectNetwork,
             )
         }.stateIn(
