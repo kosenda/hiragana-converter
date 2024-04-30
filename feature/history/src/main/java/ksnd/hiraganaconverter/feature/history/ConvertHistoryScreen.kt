@@ -101,21 +101,23 @@ private fun ConvertHistoryScreenContent(
             .background(MaterialTheme.colorScheme.surface)
             .displayCutoutPadding(),
         topBar = {
-            BackTopBar(
-                scrollBehavior = scrollBehavior,
-                modifier = Modifier.noRippleClickable {
-                    coroutineScope.launch {
-                        lazyListState.animateScrollToItem(0)
+            if (state.convertHistories.isNotEmpty()) {
+                BackTopBar(
+                    scrollBehavior = scrollBehavior,
+                    modifier = Modifier.noRippleClickable {
+                        coroutineScope.launch {
+                            lazyListState.animateScrollToItem(0)
+                        }
+                    },
+                    onBackPressed = onBackPressed,
+                ) {
+                    Row {
+                        Spacer(modifier = Modifier.weight(1f))
+                        DeleteButton(
+                            modifier = Modifier.padding(end = 16.dp),
+                            onClick = deleteAllConvertHistory,
+                        )
                     }
-                },
-                onBackPressed = onBackPressed,
-            ) {
-                Row {
-                    Spacer(modifier = Modifier.weight(1f))
-                    DeleteButton(
-                        modifier = Modifier.padding(end = 16.dp),
-                        onClick = deleteAllConvertHistory,
-                    )
                 }
             }
         },
