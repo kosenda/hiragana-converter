@@ -89,7 +89,7 @@ private fun ConvertHistoryScreenContent(
     deleteAllConvertHistory: () -> Unit,
     showConvertHistoryDetailDialog: (ConvertHistoryData) -> Unit,
     deleteConvertHistory: (ConvertHistoryData) -> Unit,
-    test: () -> Unit = {},
+    test: () -> Unit = {}
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val layoutDirection = LocalLayoutDirection.current
