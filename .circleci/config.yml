@@ -319,7 +319,7 @@ jobs:
       - setup_bundle
       - run:
           name: Ktlint check
-          command: ./gradlew ktlintCheck --continue  --parallel --max-workers=4
+          command: ./gradlew ktlintCheck --continue --parallel --max-workers=4
       - unit_test:
           build_variant: ProdDebug
       - save_test_result
@@ -344,7 +344,7 @@ jobs:
       - restore_and_save_gradle_cache
       - run:
           name: Build mock
-          command: ./gradlew compileMockDebugSource
+          command: ./gradlew compileMockDebugSource --parallel --max-workers=4
       - slack/notify:
           event: fail
           template: basic_fail_1
