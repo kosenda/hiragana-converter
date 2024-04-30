@@ -131,7 +131,7 @@ commands:
             if [ $IS_SKIPPING_VRT = "false" ]; then
               roborazzi_option="-Proborazzi.test.compare=true"
             fi
-            ./gradlew test<< parameters.build_variant >> $roborazzi_option --stacktrace
+            ./gradlew test<< parameters.build_variant >> $roborazzi_option --stacktrace --parallel --max-workers=4
 
   save_test_result:
     steps:
