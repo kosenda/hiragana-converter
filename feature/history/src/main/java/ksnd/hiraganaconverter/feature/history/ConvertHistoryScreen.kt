@@ -101,16 +101,16 @@ private fun ConvertHistoryScreenContent(
             .background(MaterialTheme.colorScheme.surface)
             .displayCutoutPadding(),
         topBar = {
-            if (state.convertHistories.isNotEmpty()) {
-                BackTopBar(
-                    scrollBehavior = scrollBehavior,
-                    modifier = Modifier.noRippleClickable {
-                        coroutineScope.launch {
-                            lazyListState.animateScrollToItem(0)
-                        }
-                    },
-                    onBackPressed = onBackPressed,
-                ) {
+            BackTopBar(
+                scrollBehavior = scrollBehavior,
+                modifier = Modifier.noRippleClickable {
+                    coroutineScope.launch {
+                        lazyListState.animateScrollToItem(0)
+                    }
+                },
+                onBackPressed = onBackPressed,
+            ) {
+                if (state.convertHistories.isNotEmpty()) {
                     Row {
                         Spacer(modifier = Modifier.weight(1f))
                         DeleteButton(
@@ -120,47 +120,49 @@ private fun ConvertHistoryScreenContent(
                     }
                 }
             }
-        },
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .padding(
-                    paddingValues = PaddingValues(
-                        start = padding.calculateStartPadding(layoutDirection),
-                        top = padding.calculateTopPadding(),
-                        end = padding.calculateEndPadding(layoutDirection),
-                    ),
-                )
-                .fillMaxSize(),
-        ) {
-            if (state.convertHistories.isEmpty()) {
-                EmptyHistoryImage()
-            } else {
-                LazyColumn(
-                    state = lazyListState,
-                ) {
-                    items(
-                        items = state.convertHistories,
-                        key = { history -> history.id },
-                    ) { history ->
-                        ConvertHistoryCard(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .then(
-                                    // adding the condition because it behaves strangely when set while scrolling
-                                    if (lazyListState.isScrollInProgress) Modifier else Modifier.animateItemPlacement(),
-                                ),
-                            beforeText = history.before,
-                            time = history.time,
-                            onClick = { showConvertHistoryDetailDialog(history) },
-                            onDeleteClick = { deleteConvertHistory(history) },
-                        )
-                    }
-                    item { Spacer(modifier = Modifier.height(48.dp)) }
+        }
+},
+) {
+    padding ->
+    Column(
+        modifier = Modifier
+            .padding(
+                paddingValues = PaddingValues(
+                    start = padding.calculateStartPadding(layoutDirection),
+                    top = padding.calculateTopPadding(),
+                    end = padding.calculateEndPadding(layoutDirection),
+                ),
+            )
+            .fillMaxSize(),
+    ) {
+        if (state.convertHistories.isEmpty()) {
+            EmptyHistoryImage()
+        } else {
+            LazyColumn(
+                state = lazyListState,
+            ) {
+                items(
+                    items = state.convertHistories,
+                    key = { history -> history.id },
+                ) { history ->
+                    ConvertHistoryCard(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .then(
+                                // adding the condition because it behaves strangely when set while scrolling
+                                if (lazyListState.isScrollInProgress) Modifier else Modifier.animateItemPlacement(),
+                            ),
+                        beforeText = history.before,
+                        time = history.time,
+                        onClick = { showConvertHistoryDetailDialog(history) },
+                        onDeleteClick = { deleteConvertHistory(history) },
+                    )
                 }
+                item { Spacer(modifier = Modifier.height(48.dp)) }
             }
         }
     }
+}
 }
 
 @Composable
