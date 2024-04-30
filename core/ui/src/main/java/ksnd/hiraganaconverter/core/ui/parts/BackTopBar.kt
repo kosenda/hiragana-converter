@@ -30,9 +30,10 @@ fun BackTopBar(
     scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit,
+    title: @Composable () -> Unit = {},
 ) {
     TopAppBar(
-        title = {},
+        title = title,
         modifier = modifier,
         scrollBehavior = scrollBehavior,
         navigationIcon = {
@@ -65,6 +66,9 @@ fun BackTopBar(
 @Composable
 fun PreviewBackTopBar() {
     HiraganaConverterTheme {
-        BackTopBar(TopAppBarDefaults.pinnedScrollBehavior()) {}
+        BackTopBar(
+            scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+            onBackPressed = {},
+        )
     }
 }

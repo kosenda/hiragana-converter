@@ -35,6 +35,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,9 +54,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
 import ksnd.hiraganaconverter.core.analytics.Screen
 import ksnd.hiraganaconverter.core.resource.R
+import ksnd.hiraganaconverter.core.ui.extension.noRippleClickable
 import ksnd.hiraganaconverter.core.ui.isTest
 import ksnd.hiraganaconverter.core.ui.parts.BackTopBar
 import ksnd.hiraganaconverter.core.ui.parts.GooCreditImage
@@ -91,6 +94,8 @@ private fun InfoScreenContent(
     val context = LocalContext.current
     val layoutDirection = LocalLayoutDirection.current
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+    val coroutineScope = rememberCoroutineScope()
+    val scrollState = rememberScrollState()
     var isShowMovesToAppSiteDialog by remember { mutableStateOf(false) }
     var isShowMovesToApiSiteDialog by remember { mutableStateOf(false) }
 
@@ -100,34 +105,17 @@ private fun InfoScreenContent(
             .background(MaterialTheme.colorScheme.surface)
             .displayCutoutPadding(),
         topBar = {
-            BackTopBar(scrollBehavior = scrollBehavior, onBackPressed = onBackPressed)
+            BackTopBar(
+                scrollBehavior = scrollBehavior,
+                modifier = Modifier.noRippleClickable {
+                    coroutineScope.launch {
+                        scrollState.animateScrollTo(0)
+                    }
+                },
+                onBackPressed = onBackPressed,
+            )
         },
     ) { padding ->
-        if (isShowMovesToAppSiteDialog) {
-            MovesToSiteDialog(
-                onDismissRequest = {
-                    isShowMovesToAppSiteDialog = false
-                },
-                onClick = {
-                    isShowMovesToAppSiteDialog = false
-                    urlHandler.openUri(uri = context.getString(R.string.review_url))
-                },
-                url = stringResource(id = R.string.review_url),
-            )
-        }
-        if (isShowMovesToApiSiteDialog) {
-            MovesToSiteDialog(
-                onDismissRequest = {
-                    isShowMovesToApiSiteDialog = false
-                },
-                onClick = {
-                    isShowMovesToApiSiteDialog = false
-                    urlHandler.openUri(uri = context.getString(R.string.goo_url))
-                },
-                url = stringResource(id = R.string.goo_url),
-            )
-        }
-
         Column(
             modifier = Modifier
                 .padding(
@@ -137,7 +125,7 @@ private fun InfoScreenContent(
                         end = padding.calculateEndPadding(layoutDirection),
                     ),
                 )
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
                 .padding(horizontal = 16.dp)
                 .fillMaxSize(),
         ) {
@@ -146,8 +134,34 @@ private fun InfoScreenContent(
             APIInfoContent(onURLClick = { isShowMovesToApiSiteDialog = true })
             LicensesContent()
             PrivacyPolicyContent()
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(48.dp))
         }
+    }
+
+    if (isShowMovesToAppSiteDialog) {
+        MovesToSiteDialog(
+            onDismissRequest = {
+                isShowMovesToAppSiteDialog = false
+            },
+            onClick = {
+                isShowMovesToAppSiteDialog = false
+                urlHandler.openUri(uri = context.getString(R.string.review_url))
+            },
+            url = stringResource(id = R.string.review_url),
+        )
+    }
+
+    if (isShowMovesToApiSiteDialog) {
+        MovesToSiteDialog(
+            onDismissRequest = {
+                isShowMovesToApiSiteDialog = false
+            },
+            onClick = {
+                isShowMovesToApiSiteDialog = false
+                urlHandler.openUri(uri = context.getString(R.string.goo_url))
+            },
+            url = stringResource(id = R.string.goo_url),
+        )
     }
 }
 

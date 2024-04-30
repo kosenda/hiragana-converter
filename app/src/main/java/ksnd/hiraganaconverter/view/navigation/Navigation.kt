@@ -6,9 +6,11 @@ import androidx.compose.animation.core.EaseOutQuad
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.background
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -76,7 +78,7 @@ fun Navigation(
         )
     }
 
-    fun NavGraphBuilder.pushComposable(
+    fun NavGraphBuilder.slideHorizontallyComposable(
         route: String,
         arguments: List<NamedNavArgument> = emptyList(),
         content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit,
@@ -85,17 +87,17 @@ fun Navigation(
             route = route,
             arguments = arguments,
             enterTransition = {
-                slideInVertically(
+                slideInHorizontally(
                     animationSpec = tween(durationMillis = 500, easing = EaseInOutQuart),
-                    initialOffsetY = { fullHeight -> fullHeight * 2 / 10 },
+                    initialOffsetX = { fullWidth -> fullWidth * 2 / 10 },
                 ) + fadeIn(
                     animationSpec = tween(durationMillis = 500, easing = EaseOutQuad),
                 )
             },
             exitTransition = {
-                slideOutVertically(
+                slideOutHorizontally(
                     animationSpec = tween(durationMillis = 500, easing = EaseInOutQuart),
-                    targetOffsetY = { fullHeight -> fullHeight * 2 / 10 },
+                    targetOffsetX = { fullWidth -> fullWidth * 2 / 10 },
                 ) + fadeOut(
                     animationSpec = tween(durationMillis = 500, easing = EaseOutQuad),
                 )
@@ -107,7 +109,7 @@ fun Navigation(
     NavHost(
         navController = navController,
         startDestination = "%s/{%s}".format(NavRoute.Converter.route, NavKey.RECEIVED_TEXT),
-        modifier = modifier,
+        modifier = modifier.background(MaterialTheme.colorScheme.surface),
     ) {
         fadeComposable(
             route = "%s/{%s}".format(NavRoute.Converter.route, NavKey.RECEIVED_TEXT),
@@ -120,8 +122,10 @@ fun Navigation(
             ),
         ) {
             ConverterScreen(
-                snackbarHostState = snackbarHostState,
                 viewModel = hiltViewModel(),
+                snackbarHostState = snackbarHostState,
+                scrollBehavior = scrollBehavior,
+                topBarHeight = topBarHeight,
                 topBar = {
                     TopBar(
                         modifier = Modifier.onSizeChanged { topBarHeight = it.height },
@@ -131,23 +135,21 @@ fun Navigation(
                         transitionInfo = { transitionScreen(NavRoute.Info) },
                     )
                 },
-                topBarHeight = topBarHeight,
-                scrollBehavior = scrollBehavior,
             )
         }
-        pushComposable(route = NavRoute.History.route) {
+        slideHorizontallyComposable(route = NavRoute.History.route) {
             ConvertHistoryScreen(
                 viewModel = hiltViewModel(),
                 onBackPressed = ::navigateUp,
             )
         }
-        pushComposable(route = NavRoute.Setting.route) {
+        slideHorizontallyComposable(route = NavRoute.Setting.route) {
             SettingScreen(
                 viewModel = hiltViewModel(),
                 onBackPressed = ::navigateUp,
             )
         }
-        pushComposable(route = NavRoute.Info.route) {
+        slideHorizontallyComposable(route = NavRoute.Info.route) {
             InfoScreen(
                 viewModel = hiltViewModel(),
                 onBackPressed = ::navigateUp,

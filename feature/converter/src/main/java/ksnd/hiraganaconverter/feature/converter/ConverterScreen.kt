@@ -69,6 +69,7 @@ import ksnd.hiraganaconverter.core.ui.LocalIsConnectNetwork
 import ksnd.hiraganaconverter.core.ui.parts.button.ConvertButton
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomButtonWithBackground
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
+import ksnd.hiraganaconverter.core.ui.parts.button.MoveTopButton
 import ksnd.hiraganaconverter.core.ui.parts.card.ConversionTypeCard
 import ksnd.hiraganaconverter.core.ui.parts.card.ERROR_CARD_ANIMATUIB_DURATION
 import ksnd.hiraganaconverter.core.ui.parts.card.ErrorCard
@@ -81,12 +82,12 @@ import my.nanihadesuka.compose.ScrollbarSelectionMode
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConverterScreen(
-    modifier: Modifier = Modifier,
-    snackbarHostState: SnackbarHostState,
     viewModel: ConvertViewModel,
-    topBar: @Composable () -> Unit,
-    topBarHeight: Int,
+    snackbarHostState: SnackbarHostState,
     scrollBehavior: TopAppBarScrollBehavior,
+    topBarHeight: Int,
+    modifier: Modifier = Modifier,
+    topBar: @Composable () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle(ConvertUiState())
     val analytics = LocalAnalytics.current
@@ -163,7 +164,7 @@ fun ConverterScreenContent(
         topBar = topBar,
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         containerColor = MaterialTheme.colorScheme.surface,
-        floatingActionButton = { ksnd.hiraganaconverter.core.ui.parts.button.MoveTopButton(scrollState = scrollState) },
+        floatingActionButton = { MoveTopButton(scrollState = scrollState) },
     ) { innerPadding ->
         ColumnScrollbar(
             state = scrollState,
