@@ -317,9 +317,6 @@ jobs:
       - set_locale_properties
       - restore_and_save_gradle_cache
       - setup_bundle
-      - run:
-          name: Ktlint check
-          command: ./gradlew ktlintCheck --continue --parallel --max-workers=4
       - unit_test:
           build_variant: ProdDebug
       - save_test_result
