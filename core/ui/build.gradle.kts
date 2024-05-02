@@ -1,6 +1,7 @@
 plugins {
     id("hiraganaconverter.android.library")
     id("hiraganaconverter.android.library.compose")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -26,4 +27,7 @@ dependencies {
 
     // Lottie
     implementation(libs.lottie)
+
+    // kotlinx serialization
+    implementation(libs.kotlinx.serialization.json)
 }

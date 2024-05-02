@@ -29,6 +29,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import ksnd.hiraganaconverter.core.ui.navigation.Nav
 import ksnd.hiraganaconverter.feature.converter.ConverterScreen
 import ksnd.hiraganaconverter.feature.history.ConvertHistoryScreen
 import ksnd.hiraganaconverter.feature.info.InfoScreen

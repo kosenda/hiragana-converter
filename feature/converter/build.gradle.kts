@@ -30,4 +30,5 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewModelCompose)
     implementation(libs.lazyColumnScrollbar)
     implementation(libs.firebase.perf)
+    implementation(libs.androidx.navigation.compose)
 }
