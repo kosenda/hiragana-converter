@@ -24,7 +24,7 @@ import ksnd.hiraganaconverter.core.domain.inappupdate.InAppUpdateManager
 import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
 import ksnd.hiraganaconverter.core.domain.usecase.CancelReviewUseCase
 import ksnd.hiraganaconverter.core.domain.usecase.CompletedRequestReviewUseCase
-import ksnd.hiraganaconverter.core.domain.usecase.ObserveNeedRequestReviewUseCase
+import ksnd.hiraganaconverter.core.domain.usecase.ObserveIsRequestingReviewUseCase
 import ksnd.hiraganaconverter.core.model.ui.FontType
 import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.testing.MainDispatcherRule
@@ -38,7 +38,7 @@ class MainActivityViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private val dataStoreRepository = spyk(FakeDataStoreRepository())
-    private val observeNeedRequestReviewUseCase = mockk<ObserveNeedRequestReviewUseCase>(relaxUnitFun = true)
+    private val observeNeedRequestReviewUseCase = mockk<ObserveIsRequestingReviewUseCase>(relaxUnitFun = true)
     private val completedRequestReviewUseCase = mockk<CompletedRequestReviewUseCase>(relaxUnitFun = true)
     private val cancelReviewUseCase = mockk<CancelReviewUseCase>(relaxUnitFun = true)
     private val inAppUpdateManager = spyk(FakeInAppUpdateManager(scope = mainDispatcherRule.testScope))
@@ -51,7 +51,7 @@ class MainActivityViewModelTest {
         viewModel = MainActivityViewModel(
             dataStoreRepository = dataStoreRepository,
             inAppUpdateManager = inAppUpdateManager,
-            observeNeedRequestReviewUseCase = observeNeedRequestReviewUseCase,
+            observeIsRequestingReviewUseCase = observeNeedRequestReviewUseCase,
             completedRequestReviewUseCase = completedRequestReviewUseCase,
             cancelReviewUseCase = cancelReviewUseCase,
         )
