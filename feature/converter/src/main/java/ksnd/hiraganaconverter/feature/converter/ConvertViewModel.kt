@@ -16,7 +16,6 @@ import ksnd.hiraganaconverter.core.domain.usecase.ConvertTextUseCase
 import ksnd.hiraganaconverter.core.domain.usecase.toConvertErrorType
 import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
 import ksnd.hiraganaconverter.core.ui.navigation.Nav
-import ksnd.hiraganaconverter.core.ui.navigation.NavKey
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -33,7 +32,7 @@ class ConvertViewModel @Inject constructor(
 
     init {
         if (receivedText.isNotEmpty()) _uiState.update { it.copy(inputText = receivedText) }
-        savedStateHandle.remove<String>(NavKey.RECEIVED_TEXT)
+        savedStateHandle.remove<String>(Nav.Converter::receivedText.name)
     }
 
     fun convert() {

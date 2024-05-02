@@ -11,7 +11,7 @@ import ksnd.hiraganaconverter.core.domain.usecase.ConversionFailedException
 import ksnd.hiraganaconverter.core.domain.usecase.ConvertTextUseCase
 import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
 import ksnd.hiraganaconverter.core.testing.MainDispatcherRule
-import ksnd.hiraganaconverter.core.ui.navigation.NavKey
+import ksnd.hiraganaconverter.core.ui.navigation.Nav
 import org.junit.Rule
 import org.junit.Test
 
@@ -29,7 +29,7 @@ class ConvertViewModelTest {
     @Test
     fun init_receivedText_isUpdatedInputText() {
         val savedStateHandle = SavedStateHandle().apply {
-            set(NavKey.RECEIVED_TEXT, RECEIVED_TEXT)
+            set(Nav.Converter::receivedText.name, RECEIVED_TEXT)
         }
         val viewModel = ConvertViewModel(
             convertTextUseCase = convertTextUseCase,
