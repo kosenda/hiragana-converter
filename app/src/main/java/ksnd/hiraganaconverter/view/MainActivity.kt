@@ -30,7 +30,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.firebase.perf.metrics.AddTrace
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import ksnd.hiraganaconverter.core.analytics.Analytics
 import ksnd.hiraganaconverter.core.analytics.AnalyticsHelper
 import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
 import ksnd.hiraganaconverter.core.data.inappupdate.InAppUpdateState
@@ -113,14 +112,12 @@ class MainActivity : AppCompatActivity() {
 
             LaunchedEffect(isDarkTheme) {
                 enableEdgeToEdge(
-                    statusBarStyle =
-                    SystemBarStyle.auto(
+                    statusBarStyle = SystemBarStyle.auto(
                         lightScrim = Color.Transparent.toArgb(),
                         darkScrim = Color.Transparent.toArgb(),
                         detectDarkMode = { isDarkTheme },
                     ),
-                    navigationBarStyle =
-                    SystemBarStyle.auto(
+                    navigationBarStyle = SystemBarStyle.auto(
                         lightScrim = Color.Transparent.toArgb(),
                         darkScrim = Color.Transparent.toArgb(),
                         detectDarkMode = { isDarkTheme },
@@ -141,13 +138,8 @@ class MainActivity : AppCompatActivity() {
                             mainViewModel.startInAppUpdateInstall()
                         }
                     }
-                    else -> Unit
-                }
-            }
 
-            LaunchedEffect(uiState.isRequestedReview) {
-                if (uiState.isRequestedReview) {
-                    analytics.logEvent(Analytics.RequestReview())
+                    else -> Unit
                 }
             }
 
@@ -173,7 +165,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            if (uiState.isRequestedReview) {
+            if (uiState.isRequestingReview) {
                 RequestReviewDialog(
                     onLater = mainViewModel::cancelledReview,
                     onOk = {

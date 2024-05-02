@@ -8,6 +8,6 @@ data class MainActivityUiState(
     val theme: Theme = Theme.AUTO,
     val fontType: FontType = FontType.YUSEI_MAGIC,
     val inAppUpdateState: InAppUpdateState = InAppUpdateState.Requesting,
-    val isRequestedReview: Boolean = false,
+    val isRequestingReview: Boolean = false,
     val isConnectNetwork: Boolean? = null,
 )
