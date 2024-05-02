@@ -3,6 +3,7 @@ package ksnd.hiraganaconverter.feature.converter
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -11,10 +12,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.analytics.Analytics
 import ksnd.hiraganaconverter.core.analytics.AnalyticsHelper
-import ksnd.hiraganaconverter.core.domain.NavKey
 import ksnd.hiraganaconverter.core.domain.usecase.ConvertTextUseCase
 import ksnd.hiraganaconverter.core.domain.usecase.toConvertErrorType
 import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
+import ksnd.hiraganaconverter.core.ui.navigation.Nav
+import ksnd.hiraganaconverter.core.ui.navigation.NavKey
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -24,7 +26,7 @@ class ConvertViewModel @Inject constructor(
     private val analytics: AnalyticsHelper,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-    private val receivedText = savedStateHandle.get<String>(NavKey.RECEIVED_TEXT) ?: ""
+    private val receivedText = savedStateHandle.toRoute<Nav.Converter>().receivedText
 
     private val _uiState = MutableStateFlow(ConvertUiState())
     val uiState: StateFlow<ConvertUiState> = _uiState.asStateFlow()
