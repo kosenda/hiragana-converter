@@ -3,6 +3,9 @@ package ksnd.hiraganaconverter.core.domain.usecase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import ksnd.hiraganaconverter.core.analytics.Analytics
+import ksnd.hiraganaconverter.core.analytics.AnalyticsHelper
 import ksnd.hiraganaconverter.core.domain.repository.ReviewInfoRepository
 import ksnd.hiraganaconverter.core.model.extension.daysHavePassed
 import timber.log.Timber
@@ -11,8 +14,9 @@ import javax.inject.Inject
 const val INTERVAL_REQUEST_REVIEW_COUNT = 10
 const val INTERVAL_REQUEST_REVIEW_DATE = 4
 
-class ObserveNeedRequestReviewUseCase @Inject constructor(
+class ObserveIsRequestingReviewUseCase @Inject constructor(
     private val reviewInfoRepository: ReviewInfoRepository,
+    private val analytics: AnalyticsHelper,
 ) {
     operator fun invoke(): Flow<Boolean> = reviewInfoRepository.reviewInfo
         .map {
@@ -27,4 +31,7 @@ class ObserveNeedRequestReviewUseCase @Inject constructor(
             isReachedConvertCount && isPassedIntervalDate
         }
         .distinctUntilChanged()
+        .onEach { isRequestingReview ->
+            if (isRequestingReview) analytics.logEvent(Analytics.RequestReview())
+        }
 }

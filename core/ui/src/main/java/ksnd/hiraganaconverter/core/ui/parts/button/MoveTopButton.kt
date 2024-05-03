@@ -32,7 +32,7 @@ import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
 @Composable
 fun MoveTopButton(scrollState: ScrollState) {
-    val scrollScope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
     val offset = IntOffset(x = 100, y = 100)
     val showVisibleTopBar by remember {
         derivedStateOf { scrollState.value > 0 }
@@ -45,7 +45,7 @@ fun MoveTopButton(scrollState: ScrollState) {
     ) {
         FloatingActionButton(
             onClick = {
-                scrollScope.launch {
+                coroutineScope.launch {
                     scrollState.animateScrollTo(0)
                 }
             },

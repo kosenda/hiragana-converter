@@ -4,8 +4,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import ksnd.hiraganaconverter.core.domain.repository.ConvertHistoryRepository
 import ksnd.hiraganaconverter.core.data.repository.ConvertHistoryRepositoryImpl
+import ksnd.hiraganaconverter.core.domain.repository.ConvertHistoryRepository
 import javax.inject.Singleton
 
 @Module

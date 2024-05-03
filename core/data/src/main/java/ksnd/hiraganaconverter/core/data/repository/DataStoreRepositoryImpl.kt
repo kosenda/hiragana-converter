@@ -101,7 +101,6 @@ class DataStoreRepositoryImpl @Inject constructor(
         dataStore.edit { it[PreferenceKeys.ENABLE_IN_APP_UPDATE] = isUsed }
     }
 
-
     private suspend fun updateLastConvertTime(convertDate: LocalDate) {
         dataStore.edit { it[PreferenceKeys.LAST_CONVERT_DATE] = convertDate.toString() }
     }

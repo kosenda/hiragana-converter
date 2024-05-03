@@ -17,7 +17,7 @@ import org.robolectric.annotation.GraphicsMode
 // ref: https://github.com/DroidKaigi/conference-app-2023/pull/217
 @RunWith(ParameterizedRobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-@Config(qualifiers = RobolectricDeviceQualifiers.Pixel6)
+@Config(qualifiers = RobolectricDeviceQualifiers.NexusOne)
 class PreviewTest(
     private val param: Pair<ShowkaseBrowserComponent, Int>,
 ) {

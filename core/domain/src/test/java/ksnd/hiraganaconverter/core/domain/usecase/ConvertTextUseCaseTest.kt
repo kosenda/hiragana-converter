@@ -23,7 +23,7 @@ import kotlin.test.assertFailsWith
 
 @RunWith(RobolectricTestRunner::class)
 class ConvertTextUseCaseTest {
-    @get: Rule
+    @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
     private val convertRepository = mockk<ConvertRepository>(relaxed = true)

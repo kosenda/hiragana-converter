@@ -1,6 +1,5 @@
 package ksnd.hiraganaconverter.core.analytics
 
-
 sealed class AnalyticsEvent {
     abstract val event: Event
     open val params: List<AnalyticsParam> = emptyList()

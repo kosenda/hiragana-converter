@@ -18,7 +18,7 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class DataStoreRepositoryImplTest {
-    @get: Rule
+    @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
     private val context = ApplicationProvider.getApplicationContext<Context>()

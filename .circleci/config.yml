@@ -3,7 +3,7 @@
 version: 2.1
 
 orbs:
-  slack: circleci/slack@4.12.6
+  slack: circleci/slack@4.13.2
   gh: circleci/github-cli@2.3.0
 
 executors:
@@ -21,12 +21,13 @@ commands:
       - run:
           name: Save IS_SKIPPING_VRT to env
           command: |
-            lastCommitMessage="$(echo $(git log -1 --pretty=%B))"
             is_skipping_vrt=false
-            if [[ "$lastCommitMessage" == *"[skip vrt]"* ]]; then
+            if [[ "$(echo $(git log -1 --pretty=%B))" == *"[skip vrt]"* ]]; then
+              # Skip if the latest commit message contains [skip vrt]
               is_skipping_vrt=true
             else
-              if [ -z "$CIRCLE_PULL_REQUEST" ]; then
+              # Skip if there is no PR or if the PR has a `skip vrt` label
+              if [ -z "$CIRCLE_PULL_REQUEST" ] || [ "$(gh pr view $CIRCLE_BRANCH --json labels | jq '.labels | any(.name == "skip vrt")')" = "true" ]; then
                 is_skipping_vrt=true
               fi
             fi
@@ -130,7 +131,7 @@ commands:
             if [ $IS_SKIPPING_VRT = "false" ]; then
               roborazzi_option="-Proborazzi.test.compare=true"
             fi
-            ./gradlew test<< parameters.build_variant >> $roborazzi_option --stacktrace
+            ./gradlew test<< parameters.build_variant >> $roborazzi_option --stacktrace --parallel --max-workers=4
 
   save_test_result:
     steps:
@@ -318,7 +319,7 @@ jobs:
       - setup_bundle
       - run:
           name: Ktlint check
-          command: ./gradlew --continue ktlintCheck
+          command: ./gradlew ktlintCheck --continue --parallel --max-workers=4
       - unit_test:
           build_variant: ProdDebug
       - save_test_result
@@ -343,7 +344,7 @@ jobs:
       - restore_and_save_gradle_cache
       - run:
           name: Build mock
-          command: ./gradlew compileMockDebugSource
+          command: ./gradlew compileMockDebugSource --parallel --max-workers=4
       - slack/notify:
           event: fail
           template: basic_fail_1
