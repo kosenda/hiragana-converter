@@ -26,14 +26,14 @@ fun rememberButtonScaleState(): ButtonScaleState {
             when (interaction) {
                 is PressInteraction.Press -> {
                     buttonScaleState.animationScale.animateTo(
-                        targetValue = 0.95f,
+                        targetValue = 0.97f,
                         animationSpec = tween(durationMillis = 100),
                     )
                 }
                 is PressInteraction.Release, is PressInteraction.Cancel -> {
                     buttonScaleState.animationScale.animateTo(
                         targetValue = 1.0f,
-                        animationSpec = tween(durationMillis = 500),
+                        animationSpec = tween(durationMillis = 300),
                     )
                 }
             }
