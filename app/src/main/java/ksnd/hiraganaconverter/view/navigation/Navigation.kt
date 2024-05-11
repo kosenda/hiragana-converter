@@ -33,6 +33,7 @@ import ksnd.hiraganaconverter.core.ui.navigation.Nav
 import ksnd.hiraganaconverter.feature.converter.ConverterScreen
 import ksnd.hiraganaconverter.feature.history.ConvertHistoryScreen
 import ksnd.hiraganaconverter.feature.info.InfoScreen
+import ksnd.hiraganaconverter.feature.info.licence.LicenseScreen
 import ksnd.hiraganaconverter.feature.setting.SettingScreen
 import ksnd.hiraganaconverter.view.TopBar
 
@@ -97,6 +98,13 @@ fun Navigation(
         }
         slideHorizontallyComposable<Nav.Info> {
             InfoScreen(
+                viewModel = hiltViewModel(),
+                onBackPressed = ::navigateUp,
+                onClickLicense = { transitionScreen(Nav.License) },
+            )
+        }
+        slideHorizontallyComposable<Nav.License> {
+            LicenseScreen(
                 viewModel = hiltViewModel(),
                 onBackPressed = ::navigateUp,
             )

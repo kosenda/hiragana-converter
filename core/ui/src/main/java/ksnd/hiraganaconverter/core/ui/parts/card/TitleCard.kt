@@ -27,9 +27,13 @@ import ksnd.hiraganaconverter.core.ui.theme.contentBrush
 import ksnd.hiraganaconverter.core.ui.theme.primaryBrush
 
 @Composable
-fun TitleCard(text: String, painter: Painter) {
+fun TitleCard(
+    text: String,
+    painter: Painter,
+    modifier: Modifier = Modifier,
+) {
     Card(
-        modifier = Modifier.padding(top = 28.dp, bottom = 4.dp),
+        modifier = modifier.padding(top = 28.dp, bottom = 4.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.Transparent,
         ),

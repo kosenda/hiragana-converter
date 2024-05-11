@@ -7,7 +7,6 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.hilt) apply false
-    alias(libs.plugins.oss.licenses) apply false
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.secrets) apply false
     alias(libs.plugins.dokka) apply false
@@ -17,6 +16,7 @@ plugins {
     alias(libs.plugins.androidLibrary) apply false
     alias(libs.plugins.firebase.perf) apply false
     alias(libs.plugins.firebase.appdistribution) apply false
+    alias(libs.plugins.aboutLibraries) apply false
 }
 
 tasks.create<JacocoReport>("jacocoTestReport") {
