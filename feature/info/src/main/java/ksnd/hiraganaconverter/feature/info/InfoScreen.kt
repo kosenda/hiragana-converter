@@ -1,6 +1,5 @@
 package ksnd.hiraganaconverter.feature.info
 
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -52,8 +51,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
 import ksnd.hiraganaconverter.core.analytics.Screen
@@ -74,6 +71,7 @@ import ksnd.hiraganaconverter.core.ui.theme.urlColor
 fun InfoScreen(
     viewModel: InfoViewModel,
     onBackPressed: () -> Unit,
+    onClickLicense: () -> Unit,
 ) {
     val analytics = LocalAnalytics.current
 
@@ -81,7 +79,11 @@ fun InfoScreen(
         analytics.logScreen(Screen.INFO)
     }
 
-    InfoScreenContent(versionName = viewModel.versionName, onBackPressed = onBackPressed)
+    InfoScreenContent(
+        versionName = viewModel.versionName,
+        onBackPressed = onBackPressed,
+        onClickLicense = onClickLicense,
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -89,6 +91,7 @@ fun InfoScreen(
 private fun InfoScreenContent(
     versionName: String,
     onBackPressed: () -> Unit,
+    onClickLicense: () -> Unit,
 ) {
     val urlHandler = LocalUriHandler.current
     val context = LocalContext.current
@@ -132,7 +135,7 @@ private fun InfoScreenContent(
             AppInfoContent(versionName = versionName, onURLClick = { isShowMovesToAppSiteDialog = true })
             DeveloperInfoContent()
             APIInfoContent(onURLClick = { isShowMovesToApiSiteDialog = true })
-            LicensesContent()
+            LicensesContent(onClickLicense = onClickLicense)
             PrivacyPolicyContent()
             Spacer(modifier = Modifier.height(48.dp))
         }
@@ -316,20 +319,16 @@ private fun APIInfoContent(onURLClick: () -> Unit) {
 }
 
 @Composable
-private fun LicensesContent() {
-    val context = LocalContext.current
+private fun LicensesContent(onClickLicense: () -> Unit) {
     val buttonText = stringResource(id = R.string.oss_licenses)
+
     TitleCard(
         text = stringResource(id = R.string.licenses_title),
         painter = painterResource(id = R.drawable.ic_outline_info_24),
     )
     TransitionButton(
         text = buttonText,
-        onClick = {
-            val intent = Intent(context, OssLicensesMenuActivity::class.java)
-            intent.putExtra("title", buttonText)
-            ContextCompat.startActivity(context, intent, null)
-        },
+        onClick = onClickLicense,
     )
 }
 
@@ -379,6 +378,7 @@ fun PreviewInfoScreenContent() {
             InfoScreenContent(
                 versionName = "1.0.0",
                 onBackPressed = {},
+                onClickLicense = {},
             )
         }
     }
