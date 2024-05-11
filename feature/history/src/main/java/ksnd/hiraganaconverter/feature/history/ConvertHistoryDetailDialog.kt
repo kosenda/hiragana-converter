@@ -6,10 +6,12 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,9 +19,12 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ClipboardManager
@@ -34,7 +39,7 @@ import androidx.compose.ui.window.DialogProperties
 import ksnd.hiraganaconverter.core.model.ConvertHistoryData
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
-import ksnd.hiraganaconverter.core.ui.parts.dialog.DialogCloseButton
+import ksnd.hiraganaconverter.core.ui.parts.dialog.DialogTopBar
 import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
@@ -61,19 +66,23 @@ private fun ConvertHistoryDetailDialogContent(
     onCloseClick: () -> Unit,
 ) {
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
+    val scrollState = rememberScrollState()
 
-    Surface(
+    val isScrolled by remember {
+        derivedStateOf {
+            scrollState.value > 10
+        }
+    }
+
+    Scaffold(
         modifier = Modifier
             .fillMaxHeight(0.95f)
             .fillMaxWidth(0.95f)
             .border(width = 4.dp, color = MaterialTheme.colorScheme.surfaceVariant, shape = RoundedCornerShape(16.dp))
             .clip(RoundedCornerShape(16.dp)),
-    ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            DialogCloseButton(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 16.dp),
+        topBar = {
+            DialogTopBar(
+                isScrolled = isScrolled,
                 leftContent = {
                     Text(
                         text = historyData.time,
@@ -84,23 +93,29 @@ private fun ConvertHistoryDetailDialogContent(
                 },
                 onCloseClick = onCloseClick,
             )
-            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                BeforeOrAfterText(
-                    historyData = historyData,
-                    isBefore = true,
-                    clipboardManager = clipboardManager,
-                )
-                HorizontalDivider(
-                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 48.dp),
-                    thickness = 1.dp,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-                BeforeOrAfterText(
-                    historyData = historyData,
-                    isBefore = false,
-                    clipboardManager = clipboardManager,
-                )
-            }
+        },
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .verticalScroll(scrollState)
+                .padding(innerPadding),
+        ) {
+            BeforeOrAfterText(
+                historyData = historyData,
+                isBefore = true,
+                clipboardManager = clipboardManager,
+            )
+            HorizontalDivider(
+                modifier = Modifier.padding(vertical = 8.dp, horizontal = 48.dp),
+                thickness = 1.dp,
+                color = MaterialTheme.colorScheme.primary,
+            )
+            BeforeOrAfterText(
+                historyData = historyData,
+                isBefore = false,
+                clipboardManager = clipboardManager,
+            )
+            Spacer(modifier = Modifier.height(48.dp))
         }
     }
 }

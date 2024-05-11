@@ -19,42 +19,41 @@ import ksnd.hiraganaconverter.core.domain.inappupdate.InAppUpdateManager
 import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
 import ksnd.hiraganaconverter.core.domain.usecase.CancelReviewUseCase
 import ksnd.hiraganaconverter.core.domain.usecase.CompletedRequestReviewUseCase
-import ksnd.hiraganaconverter.core.domain.usecase.ObserveNeedRequestReviewUseCase
+import ksnd.hiraganaconverter.core.domain.usecase.ObserveIsRequestingReviewUseCase
 import ksnd.hiraganaconverter.view.MainActivityUiState
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    observeNeedRequestReviewUseCase: ObserveNeedRequestReviewUseCase,
     private val dataStoreRepository: DataStoreRepository,
     private val inAppUpdateManager: InAppUpdateManager,
     private val completedRequestReviewUseCase: CompletedRequestReviewUseCase,
     private val cancelReviewUseCase: CancelReviewUseCase,
+    observeIsRequestingReviewUseCase: ObserveIsRequestingReviewUseCase,
 ) : ViewModel(), InstallStateUpdatedListener {
     private val inAppUpdateState: MutableStateFlow<InAppUpdateState> = MutableStateFlow(InAppUpdateState.Requesting)
     private val isConnectNetwork: MutableStateFlow<Boolean?> = MutableStateFlow(null)
 
-    val uiState =
-        combine(
-            dataStoreRepository.theme(),
-            dataStoreRepository.fontType(),
-            inAppUpdateState,
-            observeNeedRequestReviewUseCase(),
-            isConnectNetwork,
-        ) { theme, fontType, inAppUpdateState, needRequestReview, isConnectNetwork ->
-            MainActivityUiState(
-                theme = theme,
-                fontType = fontType,
-                inAppUpdateState = inAppUpdateState,
-                needRequestReview = needRequestReview,
-                isConnectNetwork = isConnectNetwork,
-            )
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Eagerly,
-            initialValue = MainActivityUiState(),
+    val uiState = combine(
+        dataStoreRepository.theme(),
+        dataStoreRepository.fontType(),
+        inAppUpdateState,
+        observeIsRequestingReviewUseCase(),
+        isConnectNetwork,
+    ) { theme, fontType, inAppUpdateState, isRequestingReview, isConnectNetwork ->
+        MainActivityUiState(
+            theme = theme,
+            fontType = fontType,
+            inAppUpdateState = inAppUpdateState,
+            isRequestingReview = isRequestingReview,
+            isConnectNetwork = isConnectNetwork,
         )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = MainActivityUiState(),
+    )
 
     init {
         inAppUpdateManager.registerListener(this)

@@ -143,6 +143,9 @@ dependencies {
     debugImplementation(libs.showkase)
     implementation(libs.showkase.annotation)
     kspDebug(libs.showkase.processor)
+
+    // kotlinx serialization
+    implementation(libs.kotlinx.serialization.json)
 }
 
 tasks.withType<Test>().configureEach {

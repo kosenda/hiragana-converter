@@ -6,9 +6,11 @@ import androidx.compose.animation.core.EaseOutQuad
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.background
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -19,18 +21,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
-import androidx.navigation.NamedNavArgument
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import ksnd.hiraganaconverter.core.domain.NavKey
+import ksnd.hiraganaconverter.core.ui.navigation.Nav
 import ksnd.hiraganaconverter.feature.converter.ConverterScreen
 import ksnd.hiraganaconverter.feature.history.ConvertHistoryScreen
 import ksnd.hiraganaconverter.feature.info.InfoScreen
@@ -58,100 +57,83 @@ fun Navigation(
         }
     }
 
-    fun transitionScreen(navRoute: NavRoute) {
-        navController.navigate(navRoute.route) { launchSingleTop = true }
-    }
-
-    fun NavGraphBuilder.fadeComposable(
-        route: String,
-        arguments: List<NamedNavArgument> = emptyList(),
-        content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit,
-    ) {
-        composable(
-            route = route,
-            arguments = arguments,
-            enterTransition = { fadeIn(tween(durationMillis = 400)) },
-            exitTransition = { fadeOut(tween(durationMillis = 400)) },
-            content = content,
-        )
-    }
-
-    fun NavGraphBuilder.pushComposable(
-        route: String,
-        arguments: List<NamedNavArgument> = emptyList(),
-        content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit,
-    ) {
-        composable(
-            route = route,
-            arguments = arguments,
-            enterTransition = {
-                slideInVertically(
-                    animationSpec = tween(durationMillis = 500, easing = EaseInOutQuart),
-                    initialOffsetY = { fullHeight -> fullHeight * 2 / 10 },
-                ) + fadeIn(
-                    animationSpec = tween(durationMillis = 500, easing = EaseOutQuad),
-                )
-            },
-            exitTransition = {
-                slideOutVertically(
-                    animationSpec = tween(durationMillis = 500, easing = EaseInOutQuart),
-                    targetOffsetY = { fullHeight -> fullHeight * 2 / 10 },
-                ) + fadeOut(
-                    animationSpec = tween(durationMillis = 500, easing = EaseOutQuad),
-                )
-            },
-            content = content,
-        )
+    fun transitionScreen(nav: Nav) {
+        navController.navigate(nav) { launchSingleTop = true }
     }
 
     NavHost(
         navController = navController,
-        startDestination = "%s/{%s}".format(NavRoute.Converter.route, NavKey.RECEIVED_TEXT),
-        modifier = modifier,
+        startDestination = Nav.Converter(receivedText = receivedText?.toString() ?: ""),
+        modifier = modifier.background(MaterialTheme.colorScheme.surface),
     ) {
-        fadeComposable(
-            route = "%s/{%s}".format(NavRoute.Converter.route, NavKey.RECEIVED_TEXT),
-            arguments =
-            listOf(
-                navArgument(NavKey.RECEIVED_TEXT) {
-                    type = NavType.StringType
-                    defaultValue = receivedText?.toString() ?: ""
-                },
-            ),
-        ) {
+        fadeComposable<Nav.Converter> {
             ConverterScreen(
-                snackbarHostState = snackbarHostState,
                 viewModel = hiltViewModel(),
+                snackbarHostState = snackbarHostState,
+                scrollBehavior = scrollBehavior,
+                topBarHeight = topBarHeight,
                 topBar = {
                     TopBar(
                         modifier = Modifier.onSizeChanged { topBarHeight = it.height },
                         scrollBehavior = scrollBehavior,
-                        transitionHistory = { transitionScreen(NavRoute.History) },
-                        transitionSetting = { transitionScreen(NavRoute.Setting) },
-                        transitionInfo = { transitionScreen(NavRoute.Info) },
+                        transitionHistory = { transitionScreen(Nav.History) },
+                        transitionSetting = { transitionScreen(Nav.Setting) },
+                        transitionInfo = { transitionScreen(Nav.Info) },
                     )
                 },
-                topBarHeight = topBarHeight,
-                scrollBehavior = scrollBehavior,
             )
         }
-        pushComposable(route = NavRoute.History.route) {
+        slideHorizontallyComposable<Nav.History> {
             ConvertHistoryScreen(
                 viewModel = hiltViewModel(),
                 onBackPressed = ::navigateUp,
             )
         }
-        pushComposable(route = NavRoute.Setting.route) {
+        slideHorizontallyComposable<Nav.Setting> {
             SettingScreen(
                 viewModel = hiltViewModel(),
                 onBackPressed = ::navigateUp,
             )
         }
-        pushComposable(route = NavRoute.Info.route) {
+        slideHorizontallyComposable<Nav.Info> {
             InfoScreen(
                 viewModel = hiltViewModel(),
                 onBackPressed = ::navigateUp,
             )
         }
     }
+}
+
+inline fun <reified T : Nav> NavGraphBuilder.slideHorizontallyComposable(
+    noinline content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit,
+) {
+    composable<T>(
+        enterTransition = {
+            slideInHorizontally(
+                animationSpec = tween(durationMillis = 500, easing = EaseInOutQuart),
+                initialOffsetX = { fullWidth -> fullWidth * 2 / 10 },
+            ) + fadeIn(
+                animationSpec = tween(durationMillis = 500, easing = EaseOutQuad),
+            )
+        },
+        exitTransition = {
+            slideOutHorizontally(
+                animationSpec = tween(durationMillis = 500, easing = EaseInOutQuart),
+                targetOffsetX = { fullWidth -> fullWidth * 2 / 10 },
+            ) + fadeOut(
+                animationSpec = tween(durationMillis = 500, easing = EaseOutQuad),
+            )
+        },
+        content = content,
+    )
+}
+
+inline fun <reified T : Nav> NavGraphBuilder.fadeComposable(
+    noinline content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit,
+) {
+    composable<T>(
+        enterTransition = { fadeIn(tween(durationMillis = 400)) },
+        exitTransition = { fadeOut(tween(durationMillis = 400)) },
+        content = content,
+    )
 }

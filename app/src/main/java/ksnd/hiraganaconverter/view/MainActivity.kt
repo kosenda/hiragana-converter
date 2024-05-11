@@ -17,13 +17,10 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -32,11 +29,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.firebase.perf.metrics.AddTrace
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import ksnd.hiraganaconverter.core.analytics.Analytics
 import ksnd.hiraganaconverter.core.analytics.AnalyticsHelper
 import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
 import ksnd.hiraganaconverter.core.data.inappupdate.InAppUpdateState
@@ -52,9 +45,11 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    @Inject lateinit var analytics: AnalyticsHelper
+    @Inject
+    lateinit var analytics: AnalyticsHelper
 
-    @Inject lateinit var inAppReviewManager: InAppReviewManager
+    @Inject
+    lateinit var inAppReviewManager: InAppReviewManager
 
     private val mainViewModel: MainActivityViewModel by viewModels()
     private val updateFlowResultLauncher: ActivityResultLauncher<IntentSenderRequest> =
@@ -75,16 +70,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val intentReader = ShareCompat.IntentReader(this, intent)
-        val receivedText = if (intentReader.isShareIntent) intentReader.text else null
-
-        var isAnimateSplash by mutableStateOf(true)
-        CoroutineScope(Dispatchers.Default).launch {
-            delay(800L)
-            isAnimateSplash = false
-        }
-        val splashScreen = installSplashScreen()
-        splashScreen.setKeepOnScreenCondition { isAnimateSplash }
+        installSplashScreen()
 
         val connectivityManager = getSystemService(ConnectivityManager::class.java)
         connectivityManager.registerDefaultNetworkCallback(
@@ -92,10 +78,12 @@ class MainActivity : AppCompatActivity() {
                 init {
                     mainViewModel.onNetworkConnectivityChanged(isConnectNetwork = connectivityManager.activeNetwork != null)
                 }
+
                 override fun onAvailable(network: Network) {
                     super.onAvailable(network)
                     mainViewModel.onNetworkConnectivityChanged(isConnectNetwork = true)
                 }
+
                 override fun onLost(network: Network) {
                     super.onLost(network)
                     mainViewModel.onNetworkConnectivityChanged(isConnectNetwork = false)
@@ -103,70 +91,56 @@ class MainActivity : AppCompatActivity() {
             },
         )
 
-        enableEdgeToEdge()
+        val intentReader = ShareCompat.IntentReader(this, intent)
+        val receivedText = if (intentReader.isShareIntent) intentReader.text else null
 
         setContent {
-            val uiState by mainViewModel.uiState.collectAsStateWithLifecycle(MainActivityUiState())
+            val uiState by mainViewModel.uiState.collectAsStateWithLifecycle()
             val snackbarHostState = remember { SnackbarHostState() }
             val coroutineScope = rememberCoroutineScope()
 
-            val isDarkTheme =
-                when (uiState.theme) {
-                    Theme.NIGHT -> true
-                    Theme.DAY -> false
-                    else -> isSystemInDarkTheme()
-                }
+            val isDarkTheme = when (uiState.theme) {
+                Theme.NIGHT -> true
+                Theme.DAY -> false
+                else -> isSystemInDarkTheme()
+            }
 
-            DisposableEffect(isDarkTheme) {
+            val downloadPercentage = when (val inAppUpdateState = uiState.inAppUpdateState) {
+                is InAppUpdateState.Downloading -> inAppUpdateState.percentage
+                else -> 100
+            }
+
+            LaunchedEffect(isDarkTheme) {
                 enableEdgeToEdge(
-                    statusBarStyle =
-                    SystemBarStyle.auto(
+                    statusBarStyle = SystemBarStyle.auto(
                         lightScrim = Color.Transparent.toArgb(),
                         darkScrim = Color.Transparent.toArgb(),
                         detectDarkMode = { isDarkTheme },
                     ),
-                    navigationBarStyle =
-                    SystemBarStyle.auto(
+                    navigationBarStyle = SystemBarStyle.auto(
                         lightScrim = Color.Transparent.toArgb(),
                         darkScrim = Color.Transparent.toArgb(),
                         detectDarkMode = { isDarkTheme },
                     ),
                 )
-                onDispose { }
             }
 
             LaunchedEffect(uiState.inAppUpdateState) {
                 when (uiState.inAppUpdateState) {
                     is InAppUpdateState.Requesting -> mainViewModel.requestInAppUpdate(activityResultLauncher = updateFlowResultLauncher)
                     is InAppUpdateState.Downloaded -> {
-                        val snackbarResult =
-                            snackbarHostState.showSnackbar(
-                                message = this@MainActivity.getString(R.string.in_app_update_downloaded_snackbar_title),
-                                actionLabel = this@MainActivity.getString(R.string.in_app_update_downloaded_action_label),
-                                duration = SnackbarDuration.Indefinite,
-                            )
+                        val snackbarResult = snackbarHostState.showSnackbar(
+                            message = this@MainActivity.getString(R.string.in_app_update_downloaded_snackbar_title),
+                            actionLabel = this@MainActivity.getString(R.string.in_app_update_downloaded_action_label),
+                            duration = SnackbarDuration.Indefinite,
+                        )
                         if (snackbarResult == SnackbarResult.ActionPerformed) {
                             mainViewModel.startInAppUpdateInstall()
                         }
                     }
+
                     else -> Unit
                 }
-            }
-
-            LaunchedEffect(uiState.needRequestReview) {
-                if (uiState.needRequestReview) {
-                    analytics.logEvent(Analytics.RequestReview())
-                }
-            }
-
-            if (uiState.needRequestReview) {
-                RequestReviewDialog(
-                    onLater = mainViewModel::cancelledReview,
-                    onOk = {
-                        coroutineScope.launch { inAppReviewManager.requestReview() }
-                        mainViewModel.completedRequestReview()
-                    },
-                )
             }
 
             CompositionLocalProvider(
@@ -177,14 +151,6 @@ class MainActivity : AppCompatActivity() {
                     isDarkTheme = isDarkTheme,
                     fontType = uiState.fontType,
                 ) {
-                    // Because the state changes before the animation ends
-                    val downloadPercentage =
-                        if (uiState.inAppUpdateState is InAppUpdateState.Downloading) {
-                            (uiState.inAppUpdateState as InAppUpdateState.Downloading).percentage
-                        } else {
-                            100
-                        }
-
                     Column {
                         InAppUpdateDownloadingCard(
                             text = this@MainActivity.getString(R.string.in_app_update_downloading_snackbar_title, downloadPercentage),
@@ -197,6 +163,16 @@ class MainActivity : AppCompatActivity() {
                         )
                     }
                 }
+            }
+
+            if (uiState.isRequestingReview) {
+                RequestReviewDialog(
+                    onLater = mainViewModel::cancelledReview,
+                    onOk = {
+                        coroutineScope.launch { inAppReviewManager.requestReview() }
+                        mainViewModel.completedRequestReview()
+                    },
+                )
             }
         }
     }

@@ -1,6 +1,7 @@
 package ksnd.hiraganaconverter.core.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
@@ -11,19 +12,22 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.todayIn
+import ksnd.hiraganaconverter.core.analytics.AnalyticsHelper
 import ksnd.hiraganaconverter.core.domain.repository.ReviewInfoRepository
 import ksnd.hiraganaconverter.core.model.ReviewInfo
 import ksnd.hiraganaconverter.core.testing.MainDispatcherRule
 import org.junit.Rule
 import org.junit.Test
 
-class ObserveNeedRequestReviewUseCaseTest {
+class ObserveIsRequestingReviewUseCaseTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
     private val reviewInfoRepository = mockk<ReviewInfoRepository>(relaxUnitFun = true)
-    private val useCase = ObserveNeedRequestReviewUseCase(
+    private val analytics = mockk<AnalyticsHelper>(relaxUnitFun = true)
+    private val useCase = ObserveIsRequestingReviewUseCase(
         reviewInfoRepository = reviewInfoRepository,
+        analytics = analytics,
     )
 
     @Test
@@ -33,6 +37,7 @@ class ObserveNeedRequestReviewUseCaseTest {
         val result = useCase().first()
 
         assertThat(result).isFalse()
+        coVerify(exactly = 0) { analytics.logEvent(any()) }
     }
 
     @Test
@@ -42,6 +47,7 @@ class ObserveNeedRequestReviewUseCaseTest {
         val result = useCase().first()
 
         assertThat(result).isFalse()
+        coVerify(exactly = 0) { analytics.logEvent(any()) }
     }
 
     @Test
@@ -51,12 +57,13 @@ class ObserveNeedRequestReviewUseCaseTest {
                 isAlreadyReviewed = false,
                 totalConvertCount = INTERVAL_REQUEST_REVIEW_COUNT,
                 lastRequestReviewLocalDate = YesterdayLocalDate,
-            )
+            ),
         )
 
         val result = useCase().first()
 
         assertThat(result).isFalse()
+        coVerify(exactly = 0) { analytics.logEvent(any()) }
     }
 
     @Test
@@ -66,12 +73,13 @@ class ObserveNeedRequestReviewUseCaseTest {
                 isAlreadyReviewed = false,
                 totalConvertCount = INTERVAL_REQUEST_REVIEW_COUNT,
                 lastRequestReviewLocalDate = IntervalDateDaysAgoLocalDate,
-            )
+            ),
         )
 
         val result = useCase().first()
 
         assertThat(result).isTrue()
+        coVerify(exactly = 1) { analytics.logEvent(any()) }
     }
 
     private companion object {

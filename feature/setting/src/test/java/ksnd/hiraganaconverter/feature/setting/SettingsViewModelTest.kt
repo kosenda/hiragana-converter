@@ -19,7 +19,7 @@ class SettingsViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private val dataStoreRepository = mockk<DataStoreRepository>(relaxed = true)
-    private lateinit var viewModel : SettingsViewModel
+    private lateinit var viewModel: SettingsViewModel
 
     @Before
     fun setUp() {

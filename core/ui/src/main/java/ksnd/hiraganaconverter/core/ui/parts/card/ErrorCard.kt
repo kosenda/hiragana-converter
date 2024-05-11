@@ -29,7 +29,7 @@ import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.rememberButtonScaleState
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
-const val ErrorCardAnimationDuration = 500
+const val ERROR_CARD_ANIMATUIB_DURATION = 500
 
 @Composable
 fun ErrorCard(
@@ -41,8 +41,8 @@ fun ErrorCard(
     AnimatedVisibility(
         visible = visible,
         modifier = Modifier.background(color = MaterialTheme.colorScheme.surface),
-        enter = expandVertically(expandFrom = Alignment.Top, animationSpec = tween(ErrorCardAnimationDuration)),
-        exit = shrinkVertically(shrinkTowards = Alignment.Top, animationSpec = tween(ErrorCardAnimationDuration)),
+        enter = expandVertically(expandFrom = Alignment.Top, animationSpec = tween(ERROR_CARD_ANIMATUIB_DURATION)),
+        exit = shrinkVertically(shrinkTowards = Alignment.Top, animationSpec = tween(ERROR_CARD_ANIMATUIB_DURATION)),
     ) {
         Card(
             modifier = Modifier

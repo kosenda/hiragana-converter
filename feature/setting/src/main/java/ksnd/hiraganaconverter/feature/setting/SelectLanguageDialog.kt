@@ -5,12 +5,15 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,7 +33,7 @@ import ksnd.hiraganaconverter.core.analytics.Analytics
 import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.card.LanguageCard
-import ksnd.hiraganaconverter.core.ui.parts.dialog.DialogCloseButton
+import ksnd.hiraganaconverter.core.ui.parts.dialog.DialogTopBar
 import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
@@ -65,21 +68,27 @@ private fun SelectLanguageDialogContent(
         locale?.let { settingLocale = locale.toLanguageTag() }
     }
 
-    Surface(
+    Scaffold(
         modifier = Modifier
             .fillMaxHeight(0.95f)
             .fillMaxWidth(0.95f)
             .border(width = 4.dp, color = MaterialTheme.colorScheme.surfaceVariant, shape = RoundedCornerShape(16.dp))
             .clip(RoundedCornerShape(16.dp)),
-    ) {
+        topBar = {
+            DialogTopBar(
+                isScrolled = false,
+                onCloseClick = onCloseClick,
+            )
+        },
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(innerPadding)
                 .padding(all = 8.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            DialogCloseButton(onCloseClick = onCloseClick)
             languagePair.forEach { (locale, displayLanguage) ->
                 LanguageCard(
                     modifier = Modifier.weight(1f),
@@ -91,6 +100,7 @@ private fun SelectLanguageDialogContent(
                     },
                 )
             }
+            Spacer(modifier = Modifier.height(48.dp))
         }
     }
 }

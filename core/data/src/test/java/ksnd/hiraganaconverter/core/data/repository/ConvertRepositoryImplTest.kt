@@ -26,7 +26,7 @@ class ConvertRepositoryImplTest {
             convertApiClient.requestConvert(
                 appId = APP_ID,
                 sentence = SENTENCE,
-                type = TYPE
+                type = TYPE,
             )
         } returns retrofit2.Response.success(RESPONSE_DATA)
 
@@ -43,7 +43,7 @@ class ConvertRepositoryImplTest {
             convertApiClient.requestConvert(
                 appId = APP_ID,
                 sentence = SENTENCE,
-                type = TYPE
+                type = TYPE,
             )
         } throws Exception()
 

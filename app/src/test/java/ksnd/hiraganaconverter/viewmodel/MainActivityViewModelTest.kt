@@ -24,7 +24,7 @@ import ksnd.hiraganaconverter.core.domain.inappupdate.InAppUpdateManager
 import ksnd.hiraganaconverter.core.domain.repository.DataStoreRepository
 import ksnd.hiraganaconverter.core.domain.usecase.CancelReviewUseCase
 import ksnd.hiraganaconverter.core.domain.usecase.CompletedRequestReviewUseCase
-import ksnd.hiraganaconverter.core.domain.usecase.ObserveNeedRequestReviewUseCase
+import ksnd.hiraganaconverter.core.domain.usecase.ObserveIsRequestingReviewUseCase
 import ksnd.hiraganaconverter.core.model.ui.FontType
 import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.testing.MainDispatcherRule
@@ -38,7 +38,7 @@ class MainActivityViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private val dataStoreRepository = spyk(FakeDataStoreRepository())
-    private val observeNeedRequestReviewUseCase = mockk<ObserveNeedRequestReviewUseCase>(relaxUnitFun = true)
+    private val observeNeedRequestReviewUseCase = mockk<ObserveIsRequestingReviewUseCase>(relaxUnitFun = true)
     private val completedRequestReviewUseCase = mockk<CompletedRequestReviewUseCase>(relaxUnitFun = true)
     private val cancelReviewUseCase = mockk<CancelReviewUseCase>(relaxUnitFun = true)
     private val inAppUpdateManager = spyk(FakeInAppUpdateManager(scope = mainDispatcherRule.testScope))
@@ -51,7 +51,7 @@ class MainActivityViewModelTest {
         viewModel = MainActivityViewModel(
             dataStoreRepository = dataStoreRepository,
             inAppUpdateManager = inAppUpdateManager,
-            observeNeedRequestReviewUseCase = observeNeedRequestReviewUseCase,
+            observeIsRequestingReviewUseCase = observeNeedRequestReviewUseCase,
             completedRequestReviewUseCase = completedRequestReviewUseCase,
             cancelReviewUseCase = cancelReviewUseCase,
         )
@@ -147,18 +147,17 @@ class MainActivityViewModelTest {
     }
 
     @Test
-    fun updateInAppUpdateState_state_changeUiState() =
-        runTest {
-            viewModel.uiState.test {
-                assertThat(awaitItem().inAppUpdateState).isEqualTo(InAppUpdateState.Requesting)
+    fun updateInAppUpdateState_state_changeUiState() = runTest {
+        viewModel.uiState.test {
+            assertThat(awaitItem().inAppUpdateState).isEqualTo(InAppUpdateState.Requesting)
 
-                viewModel.updateInAppUpdateState(InAppUpdateState.Downloaded)
-                assertThat(awaitItem().inAppUpdateState).isEqualTo(InAppUpdateState.Downloaded)
+            viewModel.updateInAppUpdateState(InAppUpdateState.Downloaded)
+            assertThat(awaitItem().inAppUpdateState).isEqualTo(InAppUpdateState.Downloaded)
 
-                viewModel.updateInAppUpdateState(InAppUpdateState.Canceled)
-                assertThat(awaitItem().inAppUpdateState).isEqualTo(InAppUpdateState.Canceled)
-            }
+            viewModel.updateInAppUpdateState(InAppUpdateState.Canceled)
+            assertThat(awaitItem().inAppUpdateState).isEqualTo(InAppUpdateState.Canceled)
         }
+    }
 
     @Test
     fun completedRequestReview_callUseCase() = runTest {
@@ -231,17 +230,11 @@ class MainActivityViewModelTest {
             private val fontType = MutableStateFlow(MainActivityUiState().fontType)
 
             override fun theme(): Flow<Theme> = theme
-
             override fun fontType(): Flow<FontType> = fontType
-
             override fun enableInAppUpdate(): Flow<Boolean> = flowOf(false)
-
             override suspend fun updateTheme(newTheme: Theme) {}
-
             override suspend fun updateFontType(fontType: FontType) {}
-
             override suspend fun checkIsExceedingMaxLimit(): Boolean = false
-
             override suspend fun updateUseInAppUpdate(isUsed: Boolean) {}
 
             suspend fun emit(theme: Theme) {
@@ -252,65 +245,65 @@ class MainActivityViewModelTest {
                 this.fontType.emit(fontType)
             }
         }
-    }
 
-    class FakeInAppUpdateManager(
-        private val scope: TestScope,
-    ) : InAppUpdateManager {
-        private val appUpdateInfoState = MutableStateFlow(AppUpdateInfoState.AVAILABLE)
+        class FakeInAppUpdateManager(
+            private val scope: TestScope,
+        ) : InAppUpdateManager {
+            private val appUpdateInfoState = MutableStateFlow(AppUpdateInfoState.AVAILABLE)
 
-        fun setAppUpdateInfoState(state: AppUpdateInfoState) {
-            scope.launch {
-                appUpdateInfoState.emit(state)
-            }
-        }
-
-        override suspend fun requestUpdate(
-            activityResultLauncher: ActivityResultLauncher<IntentSenderRequest>,
-            alreadyDownloaded: () -> Unit,
-            notAvailable: () -> Unit,
-            onFailed: () -> Unit,
-        ) {
-            when (appUpdateInfoState.value) {
-                AppUpdateInfoState.AVAILABLE -> {
-                    /* no-op */
+            fun setAppUpdateInfoState(state: AppUpdateInfoState) {
+                scope.launch {
+                    appUpdateInfoState.emit(state)
                 }
+            }
 
-                AppUpdateInfoState.ALREADY_DOWNLOADED -> alreadyDownloaded()
-                AppUpdateInfoState.NOT_AVAILABLE -> notAvailable()
-                AppUpdateInfoState.FAILURE -> onFailed()
+            override suspend fun requestUpdate(
+                activityResultLauncher: ActivityResultLauncher<IntentSenderRequest>,
+                alreadyDownloaded: () -> Unit,
+                notAvailable: () -> Unit,
+                onFailed: () -> Unit,
+            ) {
+                when (appUpdateInfoState.value) {
+                    AppUpdateInfoState.AVAILABLE -> {
+                        /* no-op */
+                    }
+
+                    AppUpdateInfoState.ALREADY_DOWNLOADED -> alreadyDownloaded()
+                    AppUpdateInfoState.NOT_AVAILABLE -> notAvailable()
+                    AppUpdateInfoState.FAILURE -> onFailed()
+                }
+            }
+
+            override fun startInstall() {
+                /* no-op */
+            }
+
+            override fun registerListener(listener: InstallStateUpdatedListener) {
+                /* no-op */
+            }
+
+            override fun unregisterListener(listener: InstallStateUpdatedListener) {
+                /* no-op */
             }
         }
 
-        override fun startInstall() {
-            /* no-op */
+        class MockInstallState(
+            private val installStatus: Int,
+            private val bytesDownloaded: Long = 0,
+            private val totalBytesToDownload: Long = 0,
+        ) : InstallState() {
+            override fun bytesDownloaded(): Long = bytesDownloaded
+            override fun totalBytesToDownload(): Long = totalBytesToDownload
+            override fun installStatus(): Int = installStatus
+            override fun installErrorCode(): Int = 0
+            override fun packageName(): String = ""
         }
 
-        override fun registerListener(listener: InstallStateUpdatedListener) {
-            /* no-op */
+        enum class AppUpdateInfoState {
+            ALREADY_DOWNLOADED,
+            AVAILABLE,
+            NOT_AVAILABLE,
+            FAILURE,
         }
-
-        override fun unregisterListener(listener: InstallStateUpdatedListener) {
-            /* no-op */
-        }
-    }
-
-    class MockInstallState(
-        private val installStatus: Int,
-        private val bytesDownloaded: Long = 0,
-        private val totalBytesToDownload: Long = 0,
-    ) : InstallState() {
-        override fun bytesDownloaded(): Long = bytesDownloaded
-        override fun totalBytesToDownload(): Long = totalBytesToDownload
-        override fun installStatus(): Int = installStatus
-        override fun installErrorCode(): Int = 0
-        override fun packageName(): String = ""
-    }
-
-    enum class AppUpdateInfoState {
-        ALREADY_DOWNLOADED,
-        AVAILABLE,
-        NOT_AVAILABLE,
-        FAILURE,
     }
 }

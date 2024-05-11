@@ -20,14 +20,14 @@ import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
-private const val OfflineAnimationDuration = 500
+private const val OFFLINE_ANIMATION_DURATION = 500
 
 @Composable
 fun OfflineCard(visible: Boolean) {
     AnimatedVisibility(
         visible = visible,
-        enter = expandVertically(expandFrom = Alignment.Top, animationSpec = tween(OfflineAnimationDuration)),
-        exit = shrinkVertically(shrinkTowards = Alignment.Top, animationSpec = tween(OfflineAnimationDuration)),
+        enter = expandVertically(expandFrom = Alignment.Top, animationSpec = tween(OFFLINE_ANIMATION_DURATION)),
+        exit = shrinkVertically(shrinkTowards = Alignment.Top, animationSpec = tween(OFFLINE_ANIMATION_DURATION)),
     ) {
         Card(
             modifier = Modifier

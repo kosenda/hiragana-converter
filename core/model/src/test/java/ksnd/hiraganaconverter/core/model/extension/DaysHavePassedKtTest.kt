@@ -9,7 +9,7 @@ import org.junit.runners.Parameterized.Parameters
 
 @RunWith(Parameterized::class)
 class DaysHavePassedKtTest(
-    private val testDate: TestDate
+    private val testDate: TestDate,
 ) {
     @Test
     fun testDaysHavePassed() {

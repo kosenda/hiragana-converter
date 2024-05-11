@@ -57,4 +57,3 @@ class ConvertHistoryViewModel @Inject constructor(
         }
     }
 }
-
