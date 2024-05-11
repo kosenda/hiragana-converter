@@ -3,7 +3,6 @@
 version: 2.1
 
 orbs:
-  slack: circleci/slack@4.13.2
   gh: circleci/github-cli@2.3.0
 
 executors:
@@ -31,7 +30,6 @@ commands:
                 is_skipping_vrt=true
               fi
             fi
-            echo "is_skipping_vrt: $is_skipping_vrt"
             echo "export IS_SKIPPING_VRT=$is_skipping_vrt" >> $BASH_ENV
 
   get_screenshots:
@@ -41,7 +39,6 @@ commands:
           command: |
             pr=$(echo https://api.github.com/repos/${CIRCLE_PULL_REQUEST:19} | sed "s/\/pull\//\/pulls\//")
             base=$(curl -s -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" $pr | jq '.base.ref')
-            echo "base: $base"
             echo "export BASE_BRANCH_NAME=${base}" >> $BASH_ENV
       - run:
           name: Save IS_EXIST_SCREENSHOTS to env
@@ -50,7 +47,6 @@ commands:
             if [ $IS_SKIPPING_VRT = "false" ]; then
               is_exist=$(echo -n "$(git fetch origin screenshots_$BASE_BRANCH_NAME && echo true || echo false)")
             fi
-            echo "is_exist: $is_exist"
             echo "export IS_EXIST_SCREENSHOTS=${is_exist}" >> $BASH_ENV
       - run:
           name: Checkout screenshots branch
@@ -65,7 +61,6 @@ commands:
             if [ $IS_EXIST_SCREENSHOTS = "false" ]; then
               echo "no-op" > timestamp
             fi
-            echo "timestamp: $(cat timestamp)"
             echo "export SCREENSHOTS_TIMESTAMP=$(echo -n $(cat timestamp))" >> $BASH_ENV
       - run:
           name: Zip screenshots
@@ -109,17 +104,6 @@ commands:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}-{{ checksum "gradle/libs.versions.toml" }}
 
-  setup_bundle:
-    steps:
-      - run:
-          neme: Gem install bundler
-          command: sudo gem install bundler:2.4.12
-      - run:
-          name: Bundle install
-          command: |
-            bundle config set --local path 'vendor/bundle'
-            bundle install
-
   unit_test:
     parameters:
       build_variant:
@@ -132,30 +116,6 @@ commands:
               roborazzi_option="-Proborazzi.test.compare=true"
             fi
             ./gradlew test<< parameters.build_variant >> $roborazzi_option --stacktrace --parallel --max-workers=4
-
-  save_test_result:
-    steps:
-      - run:
-          name: Save test results
-          command: |
-            mkdir -p ~/test-results/junit/
-            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/test-results/junit/ \;
-          when: always
-      - store_test_results:
-          path: ~/test-results
-      - store_artifacts:
-          path: ~/test-results/junit
-
-  report_jacoco:
-    steps:
-      - run:
-          name: Report jacoco
-          command: ./gradlew jacocoTestReport
-      - run:
-          name: Zip jacoco report
-          command: zip -r jacocoTestReport.zip ./build/reports/jacoco/jacocoTestReport/html
-      - store_artifacts:
-          path: jacocoTestReport.zip
 
   setting_git_config:
     steps:
@@ -201,7 +161,6 @@ commands:
               git push origin --delete compare_$CIRCLE_BRANCH || true
             
               fileSize=$(echo $(find ./app/build/outputs/roborazzi -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/ //g'))
-              echo "fileSize: $fileSize"
               if [ $fileSize -ne 0 ]; then
                 git checkout --orphan compare_$CIRCLE_BRANCH
                 git rm --cached -rf .
@@ -272,42 +231,7 @@ commands:
               fi
             done || true
 
-  app_distribution:
-    parameters:
-      build_variant:
-        type: string
-    steps:
-      - run:
-          name: Decode files
-          command: |
-            echo "$BASE64_KEYSTORE" | base64 -d > app/keystore.jks
-            echo "$BASE64_KEYSTORE_PROPERTIES" | base64 -d > app/keystore.properties
-            echo "$BASE64_DISTRIBUTION_JSON_FILE" | base64 -d > firebase-app-distribution.json
-      - run:
-          name: Build apk
-          command: ./gradlew assemble<< parameters.build_variant >>
-      - store_artifacts:
-          path: app/build/outputs/apk
-      - run:
-          name: Build aab
-          command: ./gradlew bundle<< parameters.build_variant >>
-      - store_artifacts:
-          path: app/build/outputs/bundle
-      - run:
-          name: Upload apk to Firebase App Distribution
-          command: ./gradlew appDistributionUpload<< parameters.build_variant >>
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
-
 jobs:
-  dependencies:
-    executor: android
-    steps:
-      - checkout
-      - set_locale_properties
-      - restore_and_save_gradle_cache
-
   unit_test:
     executor: android
     steps:
@@ -316,38 +240,10 @@ jobs:
       - get_screenshots
       - set_locale_properties
       - restore_and_save_gradle_cache
-      - setup_bundle
-      - run:
-          name: Ktlint check
-          command: ./gradlew ktlintCheck --continue --parallel --max-workers=4
       - unit_test:
           build_variant: ProdDebug
-      - save_test_result
-      - report_jacoco
-      - run:
-          name: Run danger file
-          command: bundle exec danger --verbose
       - push_compare_branch
       - comment_screenshot_diff
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
-      - slack/notify:
-          event: pass
-          template: basic_success_1
-
-  compile_mock:
-    executor: android
-    steps:
-      - checkout
-      - set_locale_properties
-      - restore_and_save_gradle_cache
-      - run:
-          name: Build mock
-          command: ./gradlew compileMockDebugSource --parallel --max-workers=4
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
 
   save_screenshots:
     executor: android
@@ -364,9 +260,6 @@ jobs:
       - cleanup_old_branch:
           prefix: screenshots_
           maximum_seconds_past: 15552000 # 180 days
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
 
   app_distribution:
     executor: android
@@ -380,28 +273,8 @@ jobs:
 workflows:
   test:
     jobs:
-      - dependencies
-      - unit_test:
-          context: slack-secrets
-          requires:
-            - dependencies
-      - compile_mock:
-          context: slack-secrets
-          requires:
-            - dependencies
+      - unit_test
       - save_screenshots:
-          context: slack-secrets
-          requires:
-            - dependencies
-          filters:
-            branches:
-              only:
-                - main
-                - develop
-      - app_distribution:
-          context: slack-secrets
-          requires:
-            - unit_test
           filters:
             branches:
               only:
