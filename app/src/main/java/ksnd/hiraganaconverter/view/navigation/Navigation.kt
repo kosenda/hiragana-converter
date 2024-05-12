@@ -29,11 +29,13 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import ksnd.hiraganaconverter.core.ui.navigation.Nav
 import ksnd.hiraganaconverter.feature.converter.ConverterScreen
 import ksnd.hiraganaconverter.feature.history.ConvertHistoryScreen
 import ksnd.hiraganaconverter.feature.info.InfoScreen
 import ksnd.hiraganaconverter.feature.info.licence.LicenseScreen
+import ksnd.hiraganaconverter.feature.info.licensedetail.LicenseDetailScreen
 import ksnd.hiraganaconverter.feature.setting.SettingScreen
 import ksnd.hiraganaconverter.view.TopBar
 
@@ -58,8 +60,12 @@ fun Navigation(
         }
     }
 
-    fun transitionScreen(nav: Nav) {
+    fun navigateScreen(nav: Nav) {
         navController.navigate(nav) { launchSingleTop = true }
+    }
+
+    fun navigateLicenseDetail(libraryName: String, licenseContent: String) {
+        navController.navigate(Nav.LicenseDetail(libraryName, licenseContent))
     }
 
     NavHost(
@@ -77,9 +83,9 @@ fun Navigation(
                     TopBar(
                         modifier = Modifier.onSizeChanged { topBarHeight = it.height },
                         scrollBehavior = scrollBehavior,
-                        transitionHistory = { transitionScreen(Nav.History) },
-                        transitionSetting = { transitionScreen(Nav.Setting) },
-                        transitionInfo = { transitionScreen(Nav.Info) },
+                        transitionHistory = { navigateScreen(Nav.History) },
+                        transitionSetting = { navigateScreen(Nav.Setting) },
+                        transitionInfo = { navigateScreen(Nav.Info) },
                     )
                 },
             )
@@ -100,12 +106,20 @@ fun Navigation(
             InfoScreen(
                 viewModel = hiltViewModel(),
                 onBackPressed = ::navigateUp,
-                onClickLicense = { transitionScreen(Nav.License) },
+                onClickLicense = { navigateScreen(Nav.License) },
             )
         }
         slideHorizontallyComposable<Nav.License> {
             LicenseScreen(
                 viewModel = hiltViewModel(),
+                navigateLicenseDetail = ::navigateLicenseDetail,
+                onBackPressed = ::navigateUp,
+            )
+        }
+        slideHorizontallyComposable<Nav.LicenseDetail> {
+            LicenseDetailScreen(
+                libraryName = it.toRoute<Nav.LicenseDetail>().libraryName,
+                licenseContent = it.toRoute<Nav.LicenseDetail>().licenseContent,
                 onBackPressed = ::navigateUp,
             )
         }

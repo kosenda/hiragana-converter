@@ -17,4 +17,10 @@ sealed class Nav {
 
     @Serializable
     data object License : Nav()
+
+    @Serializable
+    data class LicenseDetail(
+        val libraryName: String,
+        val licenseContent: String,
+    ) : Nav()
 }

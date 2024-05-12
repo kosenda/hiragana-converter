@@ -30,4 +30,7 @@ dependencies {
 
     // kotlinx serialization
     implementation(libs.kotlinx.serialization.json)
+
+    // AboutLibraries
+    implementation(libs.aboutLibraries)
 }
