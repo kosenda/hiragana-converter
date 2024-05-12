@@ -48,7 +48,10 @@ import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.extension.noRippleClickable
 import ksnd.hiraganaconverter.core.ui.parts.BackTopBar
+import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.rememberButtonScaleState
+import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
+import ksnd.hiraganaconverter.feature.info.licence.mock.MockLibs
 
 @Composable
 fun LicenseScreen(
@@ -61,7 +64,7 @@ fun LicenseScreen(
     LicenseContent(
         libs = libs,
         navigateLicenseDetail = navigateLicenseDetail,
-        onBackPressed = onBackPressed
+        onBackPressed = onBackPressed,
     )
 }
 
@@ -114,7 +117,7 @@ fun LicenseContent(
         ) {
             items(
                 items = libs?.libraries ?: emptyList(),
-                key = { it.uniqueId }
+                key = { it.uniqueId },
             ) { library ->
                 LibraryItem(
                     library = library,
@@ -211,5 +214,17 @@ fun LibraryItem(
                 )
             }
         }
+    }
+}
+
+@UiModePreview
+@Composable
+fun PreviewLicenseContent() {
+    HiraganaConverterTheme {
+        LicenseContent(
+            libs = MockLibs.item,
+            navigateLicenseDetail = { _, _ -> },
+            onBackPressed = {},
+        )
     }
 }

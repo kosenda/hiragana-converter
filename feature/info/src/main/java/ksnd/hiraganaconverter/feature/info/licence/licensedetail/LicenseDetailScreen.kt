@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.feature.info.licensedetail
+package ksnd.hiraganaconverter.feature.info.licence.licensedetail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -25,18 +25,21 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import com.mikepenz.aboutlibraries.ui.compose.m3.HtmlText
 import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.ui.extension.noRippleClickable
 import ksnd.hiraganaconverter.core.ui.parts.BackTopBar
+import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
+import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LicenseDetailScreen(
     libraryName: String,
     licenseContent: String,
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val coroutineScope = rememberCoroutineScope()
@@ -99,5 +102,17 @@ fun LicenseDetailScreen(
                     .height(48.dp),
             )
         }
+    }
+}
+
+@UiModePreview
+@Composable
+fun PreviewLicenseDetailScreen() {
+    HiraganaConverterTheme {
+        LicenseDetailScreen(
+            libraryName = "SampleLibrary",
+            licenseContent = LoremIpsum().values.first(),
+            onBackPressed = {},
+        )
     }
 }
