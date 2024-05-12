@@ -143,6 +143,9 @@ dependencies {
 
     // kotlinx serialization
     implementation(libs.kotlinx.serialization.json)
+
+    // AboutLibraries
+    implementation(libs.aboutLibraries)
 }
 
 tasks.withType<Test>().configureEach {
