@@ -70,7 +70,7 @@ fun LicenseScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LicenseContent(
+private fun LicenseContent(
     libs: Libs?,
     navigateLicenseDetail: (libraryName: String, licenseContent: String) -> Unit,
     onBackPressed: () -> Unit,
@@ -136,7 +136,7 @@ fun LicenseContent(
 }
 
 @Composable
-fun LibraryItem(
+private fun LibraryItem(
     library: Library,
     navigateLicenseDetail: (libraryName: String, licenseContent: String) -> Unit,
 ) {
