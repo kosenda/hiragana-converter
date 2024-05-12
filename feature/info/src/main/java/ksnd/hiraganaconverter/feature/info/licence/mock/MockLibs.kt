@@ -12,7 +12,7 @@ object MockLibs {
         name = "SampleLicense",
         url = "https://example.com",
         licenseContent = "SampleLicenseContent",
-        hash = "1"
+        hash = "1",
     )
 
     private val mockLibrary = Library(
