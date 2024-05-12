@@ -111,7 +111,7 @@ private fun LicenseContent(
                     end = innerPadding.calculateEndPadding(LocalLayoutDirection.current),
                 ),
             ),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
             state = lazyListState,
             contentPadding = PaddingValues(horizontal = 16.dp),
         ) {
