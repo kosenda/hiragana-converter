@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
@@ -156,10 +157,7 @@ fun ConverterScreenContent(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(
-                        start = innerPadding.calculateStartPadding(layoutDirection),
-                        end = innerPadding.calculateEndPadding(layoutDirection),
-                    )
+                    .consumeWindowInsets(innerPadding)
                     .padding(
                         start = WindowInsets.displayCutout
                             .asPaddingValues()
