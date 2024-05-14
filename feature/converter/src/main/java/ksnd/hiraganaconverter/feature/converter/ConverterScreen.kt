@@ -10,13 +10,11 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -71,7 +69,7 @@ import ksnd.hiraganaconverter.core.ui.parts.button.CustomButtonWithBackground
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.parts.button.MoveTopButton
 import ksnd.hiraganaconverter.core.ui.parts.card.ConversionTypeCard
-import ksnd.hiraganaconverter.core.ui.parts.card.ERROR_CARD_ANIMATUIB_DURATION
+import ksnd.hiraganaconverter.core.ui.parts.card.ERROR_CARD_ANIMATE_DURATION
 import ksnd.hiraganaconverter.core.ui.parts.card.ErrorCard
 import ksnd.hiraganaconverter.core.ui.parts.card.OfflineCard
 import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
@@ -98,7 +96,8 @@ fun ConverterScreen(
 
     LaunchedEffect(uiState.showErrorCard) {
         if (uiState.convertErrorType != null && uiState.showErrorCard.not()) {
-            delay(ERROR_CARD_ANIMATUIB_DURATION.toLong())
+            // Prevents text from disappearing during Animation
+            delay(ERROR_CARD_ANIMATE_DURATION.toLong())
             viewModel.clearConvertErrorType()
         }
     }
@@ -143,24 +142,7 @@ fun ConverterScreenContent(
     val isConnectNetwork = LocalIsConnectNetwork.current
 
     Scaffold(
-        modifier = modifier
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(
-                start = WindowInsets.displayCutout
-                    .asPaddingValues()
-                    .calculateStartPadding(layoutDirection),
-                end = WindowInsets.displayCutout
-                    .asPaddingValues()
-                    .calculateEndPadding(layoutDirection),
-            )
-            .padding(
-                start = WindowInsets.navigationBars
-                    .asPaddingValues()
-                    .calculateStartPadding(layoutDirection),
-                end = WindowInsets.navigationBars
-                    .asPaddingValues()
-                    .calculateEndPadding(layoutDirection),
-            ),
+        modifier = modifier.background(MaterialTheme.colorScheme.surface),
         topBar = topBar,
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         containerColor = MaterialTheme.colorScheme.surface,
@@ -174,8 +156,19 @@ fun ConverterScreenContent(
         ) {
             Column(
                 modifier = Modifier
+                    .padding(
+                        start = innerPadding.calculateStartPadding(layoutDirection),
+                        end = innerPadding.calculateEndPadding(layoutDirection),
+                    )
+                    .padding(
+                        start = WindowInsets.displayCutout
+                            .asPaddingValues()
+                            .calculateStartPadding(layoutDirection),
+                        end = WindowInsets.displayCutout
+                            .asPaddingValues()
+                            .calculateEndPadding(layoutDirection),
+                    )
                     .padding(horizontal = 8.dp)
-                    .consumeWindowInsets(innerPadding)
                     .fillMaxSize()
                     .nestedScroll(scrollBehavior.nestedScrollConnection)
                     .verticalScroll(scrollState)
@@ -221,6 +214,7 @@ fun ConverterScreenContent(
                             id = R.string.limit_local_count,
                             LIMIT_CONVERT_COUNT,
                         )
+
                         else -> ""
                     },
                     onClick = hideErrorCard,
