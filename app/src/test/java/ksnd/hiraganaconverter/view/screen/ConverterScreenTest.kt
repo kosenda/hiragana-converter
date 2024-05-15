@@ -16,7 +16,7 @@ import com.github.takahirom.roborazzi.captureRoboImage
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.feature.converter.ConvertUiState
 import ksnd.hiraganaconverter.feature.converter.ConverterScreenContent
-import ksnd.hiraganaconverter.view.TopBar
+import ksnd.hiraganaconverter.core.ui.parts.TopBar
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -40,7 +40,7 @@ class ConverterScreenTest {
                         TopBar(
                             modifier = Modifier.onSizeChanged { topBarHeight = it.height },
                             scrollBehavior = scrollBehavior,
-                            transitionHistory = {},
+                            navigateHistory = {},
                             transitionSetting = {},
                             transitionInfo = {},
                         )
@@ -71,7 +71,7 @@ class ConverterScreenTest {
                         TopBar(
                             modifier = Modifier.onSizeChanged { topBarHeight = it.height },
                             scrollBehavior = scrollBehavior,
-                            transitionHistory = {},
+                            navigateHistory = {},
                             transitionSetting = {},
                             transitionInfo = {},
                         )

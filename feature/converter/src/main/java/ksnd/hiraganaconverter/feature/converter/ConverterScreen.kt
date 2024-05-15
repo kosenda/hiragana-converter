@@ -36,13 +36,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
@@ -65,6 +68,8 @@ import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
 import ksnd.hiraganaconverter.core.resource.LIMIT_CONVERT_COUNT
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.LocalIsConnectNetwork
+import ksnd.hiraganaconverter.core.ui.navigation.Nav
+import ksnd.hiraganaconverter.core.ui.parts.TopBar
 import ksnd.hiraganaconverter.core.ui.parts.button.ConvertButton
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomButtonWithBackground
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
@@ -84,9 +89,8 @@ fun ConverterScreen(
     viewModel: ConvertViewModel,
     snackbarHostState: SnackbarHostState,
     scrollBehavior: TopAppBarScrollBehavior,
-    topBarHeight: Int,
     modifier: Modifier = Modifier,
-    topBar: @Composable () -> Unit,
+    navigateScreen: (Nav) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle(ConvertUiState())
     val analytics = LocalAnalytics.current
@@ -107,8 +111,6 @@ fun ConverterScreen(
         modifier = modifier,
         uiState = uiState,
         snackbarHostState = snackbarHostState,
-        topBar = topBar,
-        topBarHeight = topBarHeight,
         scrollBehavior = scrollBehavior,
         changeHiraKanaType = viewModel::changeHiraKanaType,
         clearAllText = viewModel::clearAllText,
@@ -116,6 +118,7 @@ fun ConverterScreen(
         updateInputText = viewModel::updateInputText,
         updateOutputText = viewModel::updateOutputText,
         hideErrorCard = viewModel::hideErrorCard,
+        navigateScreen = navigateScreen,
     )
 }
 
@@ -125,8 +128,6 @@ fun ConverterScreenContent(
     modifier: Modifier = Modifier,
     uiState: ConvertUiState,
     snackbarHostState: SnackbarHostState,
-    topBar: @Composable () -> Unit,
-    topBarHeight: Int,
     scrollBehavior: TopAppBarScrollBehavior,
     changeHiraKanaType: (HiraKanaType) -> Unit,
     clearAllText: () -> Unit,
@@ -134,6 +135,7 @@ fun ConverterScreenContent(
     updateInputText: (String) -> Unit,
     updateOutputText: (String) -> Unit,
     hideErrorCard: () -> Unit,
+    navigateScreen: (Nav) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
@@ -141,10 +143,17 @@ fun ConverterScreenContent(
     val layoutDirection = LocalLayoutDirection.current
     val scrollState = rememberScrollState()
     val isConnectNetwork = LocalIsConnectNetwork.current
+    var topBarHeight by remember { mutableIntStateOf(0) }
 
     Scaffold(
         modifier = modifier.background(MaterialTheme.colorScheme.surface),
-        topBar = topBar,
+        topBar = {
+            TopBar(
+                modifier = Modifier.onSizeChanged { topBarHeight = it.height },
+                scrollBehavior = scrollBehavior,
+                navigateScreen = navigateScreen,
+            )
+        },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         containerColor = MaterialTheme.colorScheme.surface,
         floatingActionButton = { MoveTopButton(scrollState = scrollState) },
@@ -353,8 +362,6 @@ fun PreviewConverterScreenContent(
             ConverterScreenContent(
                 uiState = uiState,
                 snackbarHostState = remember { SnackbarHostState() },
-                topBar = { },
-                topBarHeight = 0,
                 scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState()),
                 changeHiraKanaType = {},
                 clearAllText = {},
@@ -362,6 +369,7 @@ fun PreviewConverterScreenContent(
                 updateInputText = {},
                 updateOutputText = {},
                 hideErrorCard = {},
+                navigateScreen = {},
             )
         }
     }

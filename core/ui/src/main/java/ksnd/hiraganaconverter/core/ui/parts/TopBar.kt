@@ -1,10 +1,15 @@
-package ksnd.hiraganaconverter.view
+package ksnd.hiraganaconverter.core.ui.parts
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -18,30 +23,37 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.isTest
-import ksnd.hiraganaconverter.core.ui.parts.GooCreditImage
+import ksnd.hiraganaconverter.core.ui.navigation.Nav
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
-    modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior,
-    transitionHistory: () -> Unit,
-    transitionSetting: () -> Unit,
-    transitionInfo: () -> Unit,
+    modifier: Modifier = Modifier,
+    navigateScreen: (Nav) -> Unit,
 ) {
+    val layoutDirection = LocalLayoutDirection.current
     val isShowTopBar by remember(scrollBehavior.state.collapsedFraction) {
         derivedStateOf { scrollBehavior.state.collapsedFraction != 1.toFloat() }
     }
 
     AnimatedVisibility(
         visible = isShowTopBar,
-        modifier = modifier,
+        modifier = modifier.padding(
+            start = WindowInsets.displayCutout
+                .asPaddingValues()
+                .calculateStartPadding(layoutDirection),
+            end = WindowInsets.displayCutout
+                .asPaddingValues()
+                .calculateEndPadding(layoutDirection),
+        ),
         enter = fadeIn(),
         exit = fadeOut(),
     ) {
@@ -58,18 +70,18 @@ fun TopBar(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     contentDescription = "info",
                     painter = painterResource(id = R.drawable.ic_outline_info_24),
-                    onClick = transitionInfo,
+                    onClick = { navigateScreen(Nav.Info) },
                 )
                 CustomIconButton(
                     modifier = Modifier.padding(end = 8.dp),
                     contentDescription = "settings",
                     painter = painterResource(id = R.drawable.ic_outline_settings_24),
-                    onClick = transitionSetting,
+                    onClick = { navigateScreen(Nav.Setting) },
                 )
                 CustomIconButton(
                     contentDescription = "history",
                     painter = painterResource(id = R.drawable.ic_baseline_history_24),
-                    onClick = transitionHistory,
+                    onClick = { navigateScreen(Nav.History) },
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 if (isTest().not()) {
@@ -87,8 +99,6 @@ fun TopBar(
 fun PreviewTopBar() {
     TopBar(
         scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState()),
-        transitionHistory = {},
-        transitionSetting = {},
-        transitionInfo = {},
+        navigateScreen = {},
     )
 }

@@ -15,12 +15,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -37,7 +32,6 @@ import ksnd.hiraganaconverter.feature.info.InfoScreen
 import ksnd.hiraganaconverter.feature.info.licence.LicenseScreen
 import ksnd.hiraganaconverter.feature.info.licence.licensedetail.LicenseDetailScreen
 import ksnd.hiraganaconverter.feature.setting.SettingScreen
-import ksnd.hiraganaconverter.view.TopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,7 +42,6 @@ fun Navigation(
 ) {
     val navController = rememberNavController()
     val lifecycleOwner = LocalLifecycleOwner.current
-    var topBarHeight by remember { mutableIntStateOf(0) }
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
     // Ignore click events when you've started navigating to another screen
@@ -78,16 +71,7 @@ fun Navigation(
                 viewModel = hiltViewModel(),
                 snackbarHostState = snackbarHostState,
                 scrollBehavior = scrollBehavior,
-                topBarHeight = topBarHeight,
-                topBar = {
-                    TopBar(
-                        modifier = Modifier.onSizeChanged { topBarHeight = it.height },
-                        scrollBehavior = scrollBehavior,
-                        transitionHistory = { navigateScreen(Nav.History) },
-                        transitionSetting = { navigateScreen(Nav.Setting) },
-                        transitionInfo = { navigateScreen(Nav.Info) },
-                    )
-                },
+                navigateScreen = ::navigateScreen,
             )
         }
         slideHorizontallyComposable<Nav.History> {
