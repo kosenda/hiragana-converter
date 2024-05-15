@@ -89,7 +89,6 @@ fun ConverterScreen(
     viewModel: ConvertViewModel,
     snackbarHostState: SnackbarHostState,
     scrollBehavior: TopAppBarScrollBehavior,
-    modifier: Modifier = Modifier,
     navigateScreen: (Nav) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle(ConvertUiState())
@@ -108,7 +107,6 @@ fun ConverterScreen(
     }
 
     ConverterScreenContent(
-        modifier = modifier,
         uiState = uiState,
         snackbarHostState = snackbarHostState,
         scrollBehavior = scrollBehavior,
@@ -125,7 +123,6 @@ fun ConverterScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConverterScreenContent(
-    modifier: Modifier = Modifier,
     uiState: ConvertUiState,
     snackbarHostState: SnackbarHostState,
     scrollBehavior: TopAppBarScrollBehavior,
@@ -146,7 +143,7 @@ fun ConverterScreenContent(
     var topBarHeight by remember { mutableIntStateOf(0) }
 
     Scaffold(
-        modifier = modifier.background(MaterialTheme.colorScheme.surface),
+        modifier = Modifier.background(MaterialTheme.colorScheme.surface),
         topBar = {
             TopBar(
                 modifier = Modifier.onSizeChanged { topBarHeight = it.height },
