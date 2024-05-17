@@ -1,6 +1,7 @@
 package ksnd.hiraganaconverter.feature.setting
 
 import io.mockk.coVerify
+import io.mockk.coVerifyCount
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
@@ -34,9 +35,11 @@ class SettingsViewModelTest {
 
     @Test
     fun uiState_initial_callRepositoryMethods() = runTest {
-        coVerify(exactly = 1) { dataStoreRepository.theme() }
-        coVerify(exactly = 1) { dataStoreRepository.fontType() }
-        coVerify(exactly = 1) { dataStoreRepository.enableInAppUpdate() }
+        coVerifyCount {
+            1 * { dataStoreRepository.theme() }
+            1 * { dataStoreRepository.fontType() }
+            1 * { dataStoreRepository.enableInAppUpdate() }
+        }
     }
 
     @Test
@@ -50,7 +53,7 @@ class SettingsViewModelTest {
     fun updateFontType_newFontType_isCalledUpdateFontType() = runTest {
         viewModel.updateFontType(NEW_FONT_TYPE)
 
-        coVerify(exactly = 1) { dataStoreRepository.updateFontType(fontType = NEW_FONT_TYPE) }
+        coVerify { dataStoreRepository.updateFontType(fontType = NEW_FONT_TYPE) }
     }
 
     @Test
