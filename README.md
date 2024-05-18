@@ -33,6 +33,7 @@ https://github.com/kosenda/hiragana-converter/blob/develop/REFERENCE.md
 ## Typical libraries used  
 |Name|Brief description|
 |:--|:--|
+|AboutLibraries|OSS Licenses|
 |Analytics|Firebase analytics|
 |App Update|In App Update|
 |App Review|In App Review|
@@ -47,7 +48,6 @@ https://github.com/kosenda/hiragana-converter/blob/develop/REFERENCE.md
 |Ktlint|Formatter|
 |Material3|Design|
 |Mockk|Unit test mock|
-|OSS licenses plugin|OSS Licenses|
 |Preferences DataStore|Permanent data|
 |Renovate|Automated project dependency updates|
 |Retrofit2|Library for API communications|

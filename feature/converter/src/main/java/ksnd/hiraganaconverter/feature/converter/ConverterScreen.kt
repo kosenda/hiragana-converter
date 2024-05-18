@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -37,13 +36,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
@@ -66,12 +68,14 @@ import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
 import ksnd.hiraganaconverter.core.resource.LIMIT_CONVERT_COUNT
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.LocalIsConnectNetwork
+import ksnd.hiraganaconverter.core.ui.navigation.Nav
+import ksnd.hiraganaconverter.core.ui.parts.TopBar
 import ksnd.hiraganaconverter.core.ui.parts.button.ConvertButton
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomButtonWithBackground
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.parts.button.MoveTopButton
 import ksnd.hiraganaconverter.core.ui.parts.card.ConversionTypeCard
-import ksnd.hiraganaconverter.core.ui.parts.card.ERROR_CARD_ANIMATUIB_DURATION
+import ksnd.hiraganaconverter.core.ui.parts.card.ERROR_CARD_ANIMATE_DURATION
 import ksnd.hiraganaconverter.core.ui.parts.card.ErrorCard
 import ksnd.hiraganaconverter.core.ui.parts.card.OfflineCard
 import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
@@ -85,9 +89,7 @@ fun ConverterScreen(
     viewModel: ConvertViewModel,
     snackbarHostState: SnackbarHostState,
     scrollBehavior: TopAppBarScrollBehavior,
-    topBarHeight: Int,
-    modifier: Modifier = Modifier,
-    topBar: @Composable () -> Unit,
+    navigateScreen: (Nav) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle(ConvertUiState())
     val analytics = LocalAnalytics.current
@@ -98,17 +100,15 @@ fun ConverterScreen(
 
     LaunchedEffect(uiState.showErrorCard) {
         if (uiState.convertErrorType != null && uiState.showErrorCard.not()) {
-            delay(ERROR_CARD_ANIMATUIB_DURATION.toLong())
+            // Prevents text from disappearing during Animation
+            delay(ERROR_CARD_ANIMATE_DURATION.toLong())
             viewModel.clearConvertErrorType()
         }
     }
 
     ConverterScreenContent(
-        modifier = modifier,
         uiState = uiState,
         snackbarHostState = snackbarHostState,
-        topBar = topBar,
-        topBarHeight = topBarHeight,
         scrollBehavior = scrollBehavior,
         changeHiraKanaType = viewModel::changeHiraKanaType,
         clearAllText = viewModel::clearAllText,
@@ -116,17 +116,15 @@ fun ConverterScreen(
         updateInputText = viewModel::updateInputText,
         updateOutputText = viewModel::updateOutputText,
         hideErrorCard = viewModel::hideErrorCard,
+        navigateScreen = navigateScreen,
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConverterScreenContent(
-    modifier: Modifier = Modifier,
     uiState: ConvertUiState,
     snackbarHostState: SnackbarHostState,
-    topBar: @Composable () -> Unit,
-    topBarHeight: Int,
     scrollBehavior: TopAppBarScrollBehavior,
     changeHiraKanaType: (HiraKanaType) -> Unit,
     clearAllText: () -> Unit,
@@ -134,6 +132,7 @@ fun ConverterScreenContent(
     updateInputText: (String) -> Unit,
     updateOutputText: (String) -> Unit,
     hideErrorCard: () -> Unit,
+    navigateScreen: (Nav) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
@@ -141,27 +140,17 @@ fun ConverterScreenContent(
     val layoutDirection = LocalLayoutDirection.current
     val scrollState = rememberScrollState()
     val isConnectNetwork = LocalIsConnectNetwork.current
+    var topBarHeight by remember { mutableIntStateOf(0) }
 
     Scaffold(
-        modifier = modifier
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(
-                start = WindowInsets.displayCutout
-                    .asPaddingValues()
-                    .calculateStartPadding(layoutDirection),
-                end = WindowInsets.displayCutout
-                    .asPaddingValues()
-                    .calculateEndPadding(layoutDirection),
+        modifier = Modifier.background(MaterialTheme.colorScheme.surface),
+        topBar = {
+            TopBar(
+                modifier = Modifier.onSizeChanged { topBarHeight = it.height },
+                scrollBehavior = scrollBehavior,
+                navigateScreen = navigateScreen,
             )
-            .padding(
-                start = WindowInsets.navigationBars
-                    .asPaddingValues()
-                    .calculateStartPadding(layoutDirection),
-                end = WindowInsets.navigationBars
-                    .asPaddingValues()
-                    .calculateEndPadding(layoutDirection),
-            ),
-        topBar = topBar,
+        },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         containerColor = MaterialTheme.colorScheme.surface,
         floatingActionButton = { MoveTopButton(scrollState = scrollState) },
@@ -174,8 +163,16 @@ fun ConverterScreenContent(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(horizontal = 8.dp)
                     .consumeWindowInsets(innerPadding)
+                    .padding(
+                        start = WindowInsets.displayCutout
+                            .asPaddingValues()
+                            .calculateStartPadding(layoutDirection),
+                        end = WindowInsets.displayCutout
+                            .asPaddingValues()
+                            .calculateEndPadding(layoutDirection),
+                    )
+                    .padding(horizontal = 8.dp)
                     .fillMaxSize()
                     .nestedScroll(scrollBehavior.nestedScrollConnection)
                     .verticalScroll(scrollState)
@@ -221,6 +218,7 @@ fun ConverterScreenContent(
                             id = R.string.limit_local_count,
                             LIMIT_CONVERT_COUNT,
                         )
+
                         else -> ""
                     },
                     onClick = hideErrorCard,
@@ -361,8 +359,6 @@ fun PreviewConverterScreenContent(
             ConverterScreenContent(
                 uiState = uiState,
                 snackbarHostState = remember { SnackbarHostState() },
-                topBar = { },
-                topBarHeight = 0,
                 scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState()),
                 changeHiraKanaType = {},
                 clearAllText = {},
@@ -370,6 +366,7 @@ fun PreviewConverterScreenContent(
                 updateInputText = {},
                 updateOutputText = {},
                 hideErrorCard = {},
+                navigateScreen = {},
             )
         }
     }

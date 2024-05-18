@@ -2,37 +2,35 @@
 accompanist = "0.34.0"
 activity = "1.9.0"
 androidGradlePlugin = "8.4.0"
-androidxAppCompat = "1.7.0-beta01"
+androidxAppCompat = "1.7.0-rc01"
 androidxCompose = "1.6.7"
 androidxComposeMaterial3 = "1.2.1"
 androidxCoreSplashscreen = "1.0.1"
 androidxDataStore = "1.1.1"
 androidxHilt = "1.2.0"
-androidxLifecycle = "2.7.0"
+androidxLifecycle = "2.8.0"
 androidxNavigation = "2.8.0-alpha08"
 androidxTestCore = "1.5.0"
 appUpdate = "2.1.0"
 coil = "2.6.0"
-coroutines = "1.8.0"
-coroutineTest = "1.8.0"
+coroutines = "1.8.1"
+coroutineTest = "1.8.1"
 dokka = "1.9.20"
 gmsPlugin = "4.4.1"
 firebaseBom = "33.0.0"
-firebaseCrashlyticsPlugin = "2.9.9"
+firebaseCrashlyticsPlugin = "3.0.1"
 firebasePerfPlugin = "1.4.2"
 firebaseAppdistributionPlugin = "5.0.0"
 hilt = "2.51.1"
 junit4 = "4.13.2"
 kotlin = "1.9.24"
 kotlinxSerializationJson = "1.6.3"
-kotlinxDatetime = "0.5.0"
+kotlinxDatetime = "0.6.0"
 ksp = "1.9.24-1.0.20"
 ktlint = "1.2.1"
 lazyColumnScrollbar = "1.9.0"
 lottie = "6.4.0"
 okhttp3 = "4.12.0"
-ossLicenses = "17.0.1"
-ossLicensesPlugin = "0.10.6"
 playReview = "2.0.1"
 retrofit = "2.11.0"
 retrofitSerialization = "1.0.0"
@@ -42,9 +40,10 @@ secrets = "2.0.1"
 timber = "5.0.1"
 truth = "1.4.2"
 turbine = "1.1.0"
-mockk = "1.13.10"
-roborazzi = "1.14.0"
+mockk = "1.13.11"
+roborazzi = "1.16.1"
 showkase = "1.0.2"
+aboutLibraries = "11.1.4"
 
 # ** I'm using it, so no deletions allowed. **
 androidxComposeCompiler = "1.5.14"
@@ -87,9 +86,6 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 
 # Lottie
 lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
-
-# Play Services
-play-oss-licenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "ossLicenses" }
 
 # Ktlint
 ktlint = { group = "com.pinterest.ktlint", name = "ktlint-cli", version.ref = "ktlint" }
@@ -158,13 +154,15 @@ showkase = { group = "com.airbnb.android", name = "showkase", version.ref = "sho
 showkase-annotation = { group = "com.airbnb.android", name = "showkase-annotation", version.ref = "showkase" }
 showkase-processor = { group = "com.airbnb.android", name = "showkase-processor", version.ref = "showkase" }
 
+# AboutLibraries
+aboutLibraries = { group = "com.mikepenz", name = "aboutlibraries-compose-m3", version.ref = "aboutLibraries" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-oss-licenses = { id = "com.google.android.gms.oss-licenses-plugin", version.ref = "ossLicensesPlugin" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
@@ -173,3 +171,4 @@ firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "
 firebase-appdistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppdistributionPlugin" }
 firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "firebasePerfPlugin" }
 androidLibrary = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+aboutLibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutLibraries" }
