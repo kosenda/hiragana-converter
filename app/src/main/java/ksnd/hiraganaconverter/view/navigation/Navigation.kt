@@ -17,8 +17,7 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
@@ -41,17 +40,7 @@ fun Navigation(
     receivedText: CharSequence?,
 ) {
     val navController = rememberNavController()
-    val lifecycleOwner = LocalLifecycleOwner.current
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
-
-    // Ignore click events when you've started navigating to another screen
-    // https://stackoverflow.com/a/76386604/4339442
-    fun navigateUp() {
-        val currentState = lifecycleOwner.lifecycle.currentState
-        if (currentState.isAtLeast(Lifecycle.State.RESUMED)) {
-            navController.navigateUp()
-        }
-    }
 
     fun navigateScreen(nav: Nav) {
         navController.navigate(nav) { launchSingleTop = true }
@@ -77,34 +66,34 @@ fun Navigation(
         slideHorizontallyComposable<Nav.History> {
             ConvertHistoryScreen(
                 viewModel = hiltViewModel(),
-                onBackPressed = ::navigateUp,
+                onBackPressed = dropUnlessResumed(block = navController::navigateUp),
             )
         }
         slideHorizontallyComposable<Nav.Setting> {
             SettingScreen(
                 viewModel = hiltViewModel(),
-                onBackPressed = ::navigateUp,
+                onBackPressed = dropUnlessResumed(block = navController::navigateUp),
             )
         }
         slideHorizontallyComposable<Nav.Info> {
             InfoScreen(
                 viewModel = hiltViewModel(),
-                onBackPressed = ::navigateUp,
-                onClickLicense = { navigateScreen(Nav.License) },
+                onBackPressed = dropUnlessResumed(block = navController::navigateUp),
+                onClickLicense = dropUnlessResumed { navigateScreen(Nav.License) },
             )
         }
         slideHorizontallyComposable<Nav.License> {
             LicenseScreen(
                 viewModel = hiltViewModel(),
                 navigateLicenseDetail = ::navigateLicenseDetail,
-                onBackPressed = ::navigateUp,
+                onBackPressed = dropUnlessResumed(block = navController::navigateUp),
             )
         }
         slideHorizontallyComposable<Nav.LicenseDetail> {
             LicenseDetailScreen(
                 libraryName = it.toRoute<Nav.LicenseDetail>().libraryName,
                 licenseContent = it.toRoute<Nav.LicenseDetail>().licenseContent,
-                onBackPressed = ::navigateUp,
+                onBackPressed = dropUnlessResumed(block = navController::navigateUp),
             )
         }
     }
