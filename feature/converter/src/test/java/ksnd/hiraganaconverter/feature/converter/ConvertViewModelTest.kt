@@ -14,7 +14,10 @@ import ksnd.hiraganaconverter.core.testing.MainDispatcherRule
 import ksnd.hiraganaconverter.core.ui.navigation.Nav
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 
+@RunWith(RobolectricTestRunner::class)
 class ConvertViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
