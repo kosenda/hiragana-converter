@@ -40,6 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.compose.dropUnlessResumed
 import com.mikepenz.aboutlibraries.Libs
 import com.mikepenz.aboutlibraries.entity.Library
 import com.mikepenz.aboutlibraries.ui.compose.m3.util.author
@@ -149,7 +150,7 @@ private fun LibraryItem(
             .scale(scale = buttonScaleState.animationScale.value)
             .noRippleClickable(
                 interactionSource = buttonScaleState.interactionSource,
-                onClick = {
+                onClick = dropUnlessResumed {
                     if (isNotExistLicenseContent) {
                         library.licenses.first().url?.let {
                             urlHandler.openUri(it)
