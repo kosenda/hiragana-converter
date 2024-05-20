@@ -39,7 +39,6 @@ fun ConvertHistoryCard(
     val buttonScaleState = rememberButtonScaleState()
     Card(
         modifier = modifier
-            .padding(top = 8.dp)
             .wrapContentHeight()
             .fillMaxWidth()
             .scale(scale = buttonScaleState.animationScale.value)

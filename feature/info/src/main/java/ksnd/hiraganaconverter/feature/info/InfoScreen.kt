@@ -6,12 +6,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.displayCutoutPadding
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,6 +34,7 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -42,7 +45,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
@@ -101,37 +106,43 @@ private fun InfoScreenContent(
     val scrollState = rememberScrollState()
     var isShowMovesToAppSiteDialog by remember { mutableStateOf(false) }
     var isShowMovesToApiSiteDialog by remember { mutableStateOf(false) }
+    var topBarHeight by remember { mutableIntStateOf(0) }
+    val density = LocalDensity.current.density
 
     Scaffold(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection)
-            .background(MaterialTheme.colorScheme.surface)
-            .displayCutoutPadding(),
+            .background(MaterialTheme.colorScheme.surface),
         topBar = {
             BackTopBar(
                 scrollBehavior = scrollBehavior,
-                modifier = Modifier.noRippleClickable {
-                    coroutineScope.launch {
-                        scrollState.animateScrollTo(0)
+                modifier = Modifier
+                    .noRippleClickable {
+                        coroutineScope.launch {
+                            scrollState.animateScrollTo(0)
+                        }
                     }
-                },
+                    .onSizeChanged { topBarHeight = it.height },
                 onBackPressed = onBackPressed,
             )
         },
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .padding(
-                    paddingValues = PaddingValues(
-                        start = innerPadding.calculateStartPadding(layoutDirection),
-                        top = innerPadding.calculateTopPadding(),
-                        end = innerPadding.calculateEndPadding(layoutDirection),
-                    ),
-                )
+                .fillMaxSize()
                 .verticalScroll(scrollState)
-                .padding(horizontal = 16.dp)
-                .fillMaxSize(),
+                .consumeWindowInsets(innerPadding)
+                .padding(
+                    start = WindowInsets.displayCutout
+                        .asPaddingValues()
+                        .calculateStartPadding(layoutDirection),
+                    end = WindowInsets.displayCutout
+                        .asPaddingValues()
+                        .calculateEndPadding(layoutDirection),
+                )
+                .padding(horizontal = 16.dp),
         ) {
+            Spacer(modifier = Modifier.height((topBarHeight / density).toInt().dp))
             AppInfoContent(versionName = versionName, onURLClick = { isShowMovesToAppSiteDialog = true })
             DeveloperInfoContent()
             APIInfoContent(onURLClick = { isShowMovesToApiSiteDialog = true })

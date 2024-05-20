@@ -1,16 +1,18 @@
 package ksnd.hiraganaconverter.feature.history
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.displayCutoutPadding
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -29,11 +31,16 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -81,7 +88,7 @@ fun ConvertHistoryScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ConvertHistoryScreenContent(
     state: ConvertHistoryUiState,
@@ -94,20 +101,23 @@ private fun ConvertHistoryScreenContent(
     val layoutDirection = LocalLayoutDirection.current
     val lazyListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
+    var topBarHeight by remember { mutableIntStateOf(0) }
+    val density = LocalDensity.current.density
 
     Scaffold(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection)
-            .background(MaterialTheme.colorScheme.surface)
-            .displayCutoutPadding(),
+            .background(MaterialTheme.colorScheme.surface),
         topBar = {
             BackTopBar(
                 scrollBehavior = scrollBehavior,
-                modifier = Modifier.noRippleClickable {
-                    coroutineScope.launch {
-                        lazyListState.animateScrollToItem(0)
+                modifier = Modifier
+                    .noRippleClickable {
+                        coroutineScope.launch {
+                            lazyListState.animateScrollToItem(0)
+                        }
                     }
-                },
+                    .onSizeChanged { topBarHeight = it.height },
                 onBackPressed = onBackPressed,
             ) {
                 if (state.convertHistories.isNotEmpty()) {
@@ -121,35 +131,36 @@ private fun ConvertHistoryScreenContent(
                 }
             }
         },
-    ) { padding ->
+    ) { innerPadding ->
         Column(
             modifier = Modifier
+                .fillMaxSize()
+                .consumeWindowInsets(innerPadding)
                 .padding(
-                    paddingValues = PaddingValues(
-                        start = padding.calculateStartPadding(layoutDirection),
-                        top = padding.calculateTopPadding(),
-                        end = padding.calculateEndPadding(layoutDirection),
-                    ),
-                )
-                .fillMaxSize(),
+                    start = WindowInsets.displayCutout
+                        .asPaddingValues()
+                        .calculateStartPadding(layoutDirection),
+                    end = WindowInsets.displayCutout
+                        .asPaddingValues()
+                        .calculateEndPadding(layoutDirection),
+                ),
         ) {
             if (state.convertHistories.isEmpty()) {
                 EmptyHistoryImage()
             } else {
                 LazyColumn(
                     state = lazyListState,
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
+                    item {
+                        Spacer(modifier = Modifier.height((topBarHeight / density).toInt().dp))
+                    }
                     items(
                         items = state.convertHistories,
                         key = { history -> history.id },
                     ) { history ->
                         ConvertHistoryCard(
-                            modifier = Modifier
-                                .padding(horizontal = 16.dp)
-                                .then(
-                                    // adding the condition because it behaves strangely when set while scrolling
-                                    if (lazyListState.isScrollInProgress) Modifier else Modifier.animateItemPlacement(),
-                                ),
+                            modifier = Modifier.padding(horizontal = 16.dp),
                             beforeText = history.before,
                             time = history.time,
                             onClick = { showConvertHistoryDetailDialog(history) },
