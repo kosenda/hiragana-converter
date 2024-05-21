@@ -39,6 +39,11 @@
     <string name="request_review_desc">Could you please review the application?</string>
     <string name="request_review_cancel">Later</string>
 
+    <!-- Title -->
+    <string name="title_info">Info</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_history">History</string>
+
     <string-array name="conversion_type">
         <item>ひらがな</item>
         <item>カタカナ</item>

@@ -117,6 +117,7 @@ private fun InfoScreenContent(
             .background(MaterialTheme.colorScheme.surface),
         topBar = {
             BackTopBar(
+                title = stringResource(id = R.string.title_info),
                 scrollBehavior = scrollBehavior,
                 modifier = Modifier
                     .noRippleClickable {

@@ -39,6 +39,11 @@
     <string name="request_review_desc">アプリのレビューをしていただけないでしょうか？</string>
     <string name="request_review_cancel">後で</string>
 
+    <!-- Title -->
+    <string name="title_info">情報</string>
+    <string name="title_settings">設定</string>
+    <string name="title_history">履歴</string>
+
     <string-array name="conversion_type">
         <item>ひらがな</item>
         <item>カタカナ</item>

@@ -90,6 +90,7 @@ private fun LicenseContent(
             .displayCutoutPadding(),
         topBar = {
             BackTopBar(
+                title = stringResource(id = R.string.licenses_title),
                 scrollBehavior = scrollBehavior,
                 modifier = Modifier.noRippleClickable {
                     coroutineScope.launch {
@@ -97,13 +98,6 @@ private fun LicenseContent(
                     }
                 },
                 onBackPressed = onBackPressed,
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.licenses_title),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                },
             )
         },
     ) { innerPadding ->
