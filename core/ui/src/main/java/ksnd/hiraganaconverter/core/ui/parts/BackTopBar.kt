@@ -7,17 +7,18 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.displayCutout
-import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -40,10 +41,11 @@ import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BackTopBar(
+    title: String,
     scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit,
-    title: @Composable () -> Unit = {},
+    actions: @Composable RowScope.() -> Unit = {},
 ) {
     val layoutDirection = LocalLayoutDirection.current
     val isShowTopBar by remember(scrollBehavior.state.collapsedFraction) {
@@ -64,7 +66,13 @@ fun BackTopBar(
         exit = fadeOut(),
     ) {
         TopAppBar(
-            title = title,
+            title = {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            },
             modifier = modifier.background(MaterialTheme.colorScheme.surface),
             scrollBehavior = scrollBehavior,
             navigationIcon = {
@@ -84,6 +92,7 @@ fun BackTopBar(
                     )
                 }
             },
+            actions = actions,
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = Color.Transparent,
                 scrolledContainerColor = Color.Transparent,
@@ -98,6 +107,7 @@ fun BackTopBar(
 fun PreviewBackTopBar() {
     HiraganaConverterTheme {
         BackTopBar(
+            title = "Title",
             scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
             onBackPressed = {},
         )

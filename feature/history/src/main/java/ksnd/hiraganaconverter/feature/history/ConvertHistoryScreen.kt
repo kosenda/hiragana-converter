@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -44,6 +43,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -112,6 +112,7 @@ private fun ConvertHistoryScreenContent(
             .background(MaterialTheme.colorScheme.surface),
         topBar = {
             BackTopBar(
+                title = stringResource(id = R.string.title_history),
                 scrollBehavior = scrollBehavior,
                 modifier = Modifier
                     .noRippleClickable {
@@ -123,13 +124,10 @@ private fun ConvertHistoryScreenContent(
                 onBackPressed = onBackPressed,
             ) {
                 if (state.convertHistories.isNotEmpty()) {
-                    Row {
-                        Spacer(modifier = Modifier.weight(1f))
-                        DeleteButton(
-                            modifier = Modifier.padding(end = 16.dp),
-                            onClick = deleteAllConvertHistory,
-                        )
-                    }
+                    DeleteButton(
+                        modifier = Modifier.padding(end = 16.dp),
+                        onClick = deleteAllConvertHistory,
+                    )
                 }
             }
         },

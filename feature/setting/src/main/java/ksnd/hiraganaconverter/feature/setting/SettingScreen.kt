@@ -107,6 +107,7 @@ private fun SettingScreenContent(
             .background(MaterialTheme.colorScheme.surface),
         topBar = {
             BackTopBar(
+                title = stringResource(id = R.string.title_settings),
                 scrollBehavior = scrollBehavior,
                 modifier = Modifier
                     .noRippleClickable {

@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import com.mikepenz.aboutlibraries.ui.compose.m3.HtmlText
@@ -55,6 +54,7 @@ fun LicenseDetailScreen(
             .displayCutoutPadding(),
         topBar = {
             BackTopBar(
+                title = libraryName,
                 scrollBehavior = scrollBehavior,
                 modifier = Modifier.noRippleClickable {
                     coroutineScope.launch {
@@ -62,15 +62,6 @@ fun LicenseDetailScreen(
                     }
                 },
                 onBackPressed = onBackPressed,
-                title = {
-                    Text(
-                        text = libraryName,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.primary,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                },
             )
         },
     ) { innerPadding ->
