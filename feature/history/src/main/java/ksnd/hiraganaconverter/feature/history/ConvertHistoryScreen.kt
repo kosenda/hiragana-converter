@@ -54,7 +54,7 @@ import ksnd.hiraganaconverter.core.model.ConvertHistoryData
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.extension.noRippleClickable
 import ksnd.hiraganaconverter.core.ui.parts.BackTopBar
-import ksnd.hiraganaconverter.core.ui.parts.button.DeleteButton
+import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.parts.card.ConvertHistoryCard
 import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
@@ -124,8 +124,11 @@ private fun ConvertHistoryScreenContent(
                 onBackPressed = onBackPressed,
             ) {
                 if (state.convertHistories.isNotEmpty()) {
-                    DeleteButton(
+                    CustomIconButton(
+                        painter = painterResource(id = R.drawable.ic_baseline_delete_outline_24),
+                        contentDescription = "",
                         modifier = Modifier.padding(end = 16.dp),
+                        contentColor = MaterialTheme.colorScheme.error,
                         onClick = deleteAllConvertHistory,
                     )
                 }
@@ -183,7 +186,7 @@ private fun EmptyHistoryImage() {
         Column {
             Image(
                 painter = painterResource(id = R.drawable.desert),
-                contentDescription = "no data",
+                contentDescription = "",
                 modifier = Modifier
                     .fillMaxWidth()
                     .size(144.dp),

@@ -16,7 +16,6 @@
     <string name="theme_setting">テーマ</string>
     <string name="language_setting">言語</string>
     <string name="font_setting">フォント</string>
-    <string name="delete_all">すべて削除</string>
     <string name="top">Top</string>
     <string name="not_connected_network">ネットワークに接続していません…</string>
 

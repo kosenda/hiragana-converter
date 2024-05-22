@@ -281,18 +281,18 @@ private fun BeforeOrAfterTextField(
 
         if (isBefore) {
             CustomIconButton(
-                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
-                contentDescription = "pasteText",
                 painter = painterResource(id = R.drawable.ic_baseline_content_paste_24),
+                contentDescription = "",
+                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
                 onClick = {
                     onValueChange(clipboardManager.getText()?.text ?: "")
                 },
             )
         } else {
             CustomIconButton(
-                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
-                contentDescription = "share",
                 painter = painterResource(id = R.drawable.baseline_share_24),
+                contentDescription = "",
+                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
                 onClick = {
                     context.startActivity(
                         ShareCompat.IntentBuilder(context)
@@ -305,7 +305,7 @@ private fun BeforeOrAfterTextField(
 
             CustomIconButton(
                 modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
-                contentDescription = "copyText",
+                contentDescription = "",
                 painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
                 onClick = {
                     clipboardManager.setText(AnnotatedString(text))

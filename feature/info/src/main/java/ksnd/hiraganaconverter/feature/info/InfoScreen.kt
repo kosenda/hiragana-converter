@@ -267,17 +267,17 @@ private fun DeveloperInfoContent() {
                 FlowRow {
                     BodyMedium(text = stringResource(id = R.string.developer_name))
                     CustomIconButton(
-                        contentDescription = "",
                         painter = painterResource(id = R.drawable.ic_github_logo),
-                        contentColor = null,
+                        contentDescription = "",
+                        contentColor = Color.Black,
                         containerColor = Color.White,
                         onClick = { uriHandler.openUri(uri = "https://github.com/kosenda") },
                     )
                     CustomIconButton(
-                        modifier = Modifier.padding(start = 8.dp),
-                        contentDescription = "",
                         painter = painterResource(id = R.drawable.ic_x_logo),
-                        contentColor = null,
+                        contentDescription = "",
+                        modifier = Modifier.padding(start = 8.dp),
+                        contentColor = Color.White,
                         containerColor = Color.Black,
                         onClick = { uriHandler.openUri(uri = "https://twitter.com/ksnd_dev") },
                     )
