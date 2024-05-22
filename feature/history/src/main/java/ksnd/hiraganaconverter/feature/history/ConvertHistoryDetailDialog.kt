@@ -141,9 +141,9 @@ private fun BeforeOrAfterText(
             color = MaterialTheme.colorScheme.onSurface,
         )
         CustomIconButton(
-            modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
-            contentDescription = "copyText",
             painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
+            contentDescription = "",
+            modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
             onClick = {
                 clipboardManager.setText(
                     AnnotatedString(

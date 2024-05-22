@@ -42,9 +42,9 @@ fun DialogTopBar(
         ) {
             Row(modifier = Modifier.weight(1f), content = leftContent)
             CustomIconButton(
-                modifier = Modifier.padding(end = 8.dp),
-                contentDescription = "",
                 painter = painterResource(id = R.drawable.baseline_close_24),
+                contentDescription = "",
+                modifier = Modifier.padding(end = 8.dp),
                 onClick = onCloseClick,
             )
         }

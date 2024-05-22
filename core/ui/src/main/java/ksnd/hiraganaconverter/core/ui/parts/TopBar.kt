@@ -68,20 +68,20 @@ fun TopBar(
             ),
             actions = {
                 CustomIconButton(
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    contentDescription = "info",
                     painter = painterResource(id = R.drawable.ic_outline_info_24),
+                    contentDescription = "",
+                    modifier = Modifier.padding(horizontal = 8.dp),
                     onClick = dropUnlessResumed { navigateScreen(Nav.Info) },
                 )
                 CustomIconButton(
-                    modifier = Modifier.padding(end = 8.dp),
-                    contentDescription = "settings",
                     painter = painterResource(id = R.drawable.ic_outline_settings_24),
+                    contentDescription = "",
+                    modifier = Modifier.padding(end = 8.dp),
                     onClick = dropUnlessResumed { navigateScreen(Nav.Setting) },
                 )
                 CustomIconButton(
-                    contentDescription = "history",
                     painter = painterResource(id = R.drawable.ic_baseline_history_24),
+                    contentDescription = "",
                     onClick = dropUnlessResumed { navigateScreen(Nav.History) },
                 )
                 Spacer(modifier = Modifier.weight(1f))

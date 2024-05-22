@@ -24,10 +24,10 @@ import ksnd.hiraganaconverter.core.ui.theme.secondaryBrush
 
 @Composable
 fun CustomIconButton(
-    modifier: Modifier = Modifier,
-    contentDescription: String,
     painter: Painter,
-    contentColor: Color? = MaterialTheme.colorScheme.primary,
+    contentDescription: String,
+    modifier: Modifier = Modifier,
+    contentColor: Color? = null,
     containerColor: Color = MaterialTheme.colorScheme.surface,
     onClick: () -> Unit,
 ) {
@@ -45,15 +45,15 @@ fun CustomIconButton(
         Image(
             painter = painter,
             contentDescription = contentDescription,
-            colorFilter = if (contentColor == null) null else ColorFilter.tint(contentColor),
+            colorFilter = contentColor?.let { ColorFilter.tint(it) },
             contentScale = ContentScale.Fit,
             modifier = Modifier
                 .size(32.dp)
                 .then(
                     if (contentColor == null) {
-                        Modifier
-                    } else {
                         Modifier.contentBrush(brush = secondaryBrush())
+                    } else {
+                        Modifier
                     },
                 ),
         )
