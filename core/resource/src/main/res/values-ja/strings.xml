@@ -43,6 +43,10 @@
     <string name="title_settings">設定</string>
     <string name="title_history">履歴</string>
 
+    <!-- Delete History Dialog -->
+    <string name="delete_history_dialog_title">削除確認</string>
+    <string name="delete_history_dialog_message">変換履歴を全て削除します。</string>
+
     <string-array name="conversion_type">
         <item>ひらがな</item>
         <item>カタカナ</item>

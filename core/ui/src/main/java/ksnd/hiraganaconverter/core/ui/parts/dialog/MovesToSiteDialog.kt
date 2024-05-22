@@ -18,16 +18,12 @@ fun MovesToSiteDialog(onDismissRequest: () -> Unit, onClick: () -> Unit, url: St
         text = { Text(text = url) },
         confirmButton = {
             TextButton(onClick = onClick) {
-                Text(
-                    text = "OK",
-                )
+                Text(text = stringResource(id = R.string.ok))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {
-                Text(
-                    text = "Cancel",
-                )
+                Text(text = stringResource(id = R.string.cancel))
             }
         },
     )

@@ -43,6 +43,10 @@
     <string name="title_settings">Settings</string>
     <string name="title_history">History</string>
 
+    <!-- Delete History Dialog -->
+    <string name="delete_history_dialog_title">Confirmation</string>
+    <string name="delete_history_dialog_message">Delete all conversion history.</string>
+
     <string-array name="conversion_type">
         <item>ひらがな</item>
         <item>カタカナ</item>
@@ -57,6 +61,7 @@
     <string name="app_info_title" translatable="false">App Info</string>
     <string name="app_name_title" translatable="false">App Name</string>
     <string name="ok" translatable="false">OK</string>
+    <string name="cancel" translatable="false">Cancel</string>
 
     <string name="developer_name_title" translatable="false">Developer</string>
     <string name="developer_name" translatable="false">KSND</string>

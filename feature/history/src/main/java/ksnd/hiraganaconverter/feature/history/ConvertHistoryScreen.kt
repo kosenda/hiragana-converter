@@ -21,17 +21,20 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -105,6 +108,7 @@ private fun ConvertHistoryScreenContent(
     var topBarHeight by remember { mutableIntStateOf(0) }
     val density = LocalDensity.current.density
     val navigationHeight = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+    var isShowConfirmDeleteDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier
@@ -129,7 +133,7 @@ private fun ConvertHistoryScreenContent(
                         contentDescription = "",
                         modifier = Modifier.padding(end = 16.dp),
                         contentColor = MaterialTheme.colorScheme.error,
-                        onClick = deleteAllConvertHistory,
+                        onClick = { isShowConfirmDeleteDialog = true },
                     )
                 }
             }
@@ -174,6 +178,29 @@ private fun ConvertHistoryScreenContent(
                 }
             }
         }
+    }
+
+    if (isShowConfirmDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { isShowConfirmDeleteDialog = false },
+            title = { Text(text = stringResource(id = R.string.delete_history_dialog_title)) },
+            text = { Text(text = stringResource(id = R.string.delete_history_dialog_message)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        deleteAllConvertHistory()
+                        isShowConfirmDeleteDialog = false
+                    },
+                ) {
+                    Text(text = stringResource(id = R.string.ok))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { isShowConfirmDeleteDialog = false }) {
+                    Text(text = stringResource(id = R.string.cancel))
+                }
+            },
+        )
     }
 }
 
