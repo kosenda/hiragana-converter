@@ -43,7 +43,7 @@ turbine = "1.1.0"
 mockk = "1.13.11"
 roborazzi = "1.16.1"
 showkase = "1.0.2"
-aboutLibraries = "11.1.4"
+aboutLibraries = "11.2.0"
 
 # ** I'm using it, so no deletions allowed. **
 androidxComposeCompiler = "1.5.14"
