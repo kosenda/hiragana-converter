@@ -18,6 +18,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -33,7 +34,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
@@ -163,24 +163,6 @@ private fun SettingThemeContent(
     selectedTheme: Theme,
     onRadioButtonClick: (Theme) -> Unit,
 ) {
-    val modeRadioResourceTriple: List<Triple<Theme, String, Painter>> = listOf(
-        Triple(
-            Theme.NIGHT,
-            stringResource(id = R.string.dark_mode),
-            painterResource(id = R.drawable.ic_baseline_brightness_2_24),
-        ),
-        Triple(
-            Theme.DAY,
-            stringResource(id = R.string.light_mode),
-            painterResource(id = R.drawable.ic_baseline_brightness_low_24),
-        ),
-        Triple(
-            Theme.AUTO,
-            stringResource(id = R.string.auto_mode),
-            painterResource(id = R.drawable.ic_baseline_brightness_auto_24),
-        ),
-    )
-
     TitleCard(
         text = stringResource(id = R.string.theme_setting),
         painter = painterResource(id = R.drawable.ic_baseline_brightness_4_24),
@@ -191,14 +173,35 @@ private fun SettingThemeContent(
         ),
         modifier = Modifier.padding(vertical = 8.dp),
     ) {
-        modeRadioResourceTriple.map { resource ->
-            val (theme, displayThemeName, painter) = resource
+        listOf(
+            Triple(
+                Theme.NIGHT,
+                stringResource(id = R.string.dark_mode),
+                painterResource(id = R.drawable.ic_baseline_brightness_2_24),
+            ),
+            Triple(
+                Theme.DAY,
+                stringResource(id = R.string.light_mode),
+                painterResource(id = R.drawable.ic_baseline_brightness_low_24),
+            ),
+            Triple(
+                Theme.AUTO,
+                stringResource(id = R.string.auto_mode),
+                painterResource(id = R.drawable.ic_baseline_brightness_auto_24),
+            ),
+        ).forEachIndexed { index, (theme, displayThemeName, painter) ->
             CustomRadioButton(
                 isSelected = theme == selectedTheme,
                 buttonText = displayThemeName,
                 painter = painter,
                 onClick = { onRadioButtonClick(theme) },
             )
+            if (index != FontType.entries.size - 1) {
+                HorizontalDivider(
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    color = MaterialTheme.colorScheme.surface,
+                )
+            }
         }
     }
 }
@@ -230,12 +233,16 @@ private fun SettingFontContent(
         ),
         modifier = Modifier.padding(vertical = 8.dp),
     ) {
-        Column(modifier = Modifier.padding(vertical = 8.dp)) {
-            FontType.entries.forEach { fontType ->
-                CustomRadioButton(
-                    isSelected = fontType == selectFontType,
-                    buttonText = fontType.fontName,
-                    onClick = { onClickFontType(fontType) },
+        FontType.entries.forEachIndexed { index, fontType ->
+            CustomRadioButton(
+                isSelected = fontType == selectFontType,
+                buttonText = fontType.fontName,
+                onClick = { onClickFontType(fontType) },
+            )
+            if (index != FontType.entries.size - 1) {
+                HorizontalDivider(
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    color = MaterialTheme.colorScheme.surface,
                 )
             }
         }
