@@ -5,10 +5,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.button.TransitionButton
 import ksnd.hiraganaconverter.core.ui.parts.card.TitleCard
+import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
 @Composable
@@ -23,7 +23,7 @@ fun SettingLanguageSection(onClick: () -> Unit) {
     )
 }
 
-@Preview
+@UiModePreview
 @Composable
 fun PreviewSettingLanguageSection() {
     HiraganaConverterTheme {
