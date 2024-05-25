@@ -1,11 +1,12 @@
-package ksnd.hiraganaconverter.feature.setting
+package ksnd.hiraganaconverter.feature.setting.section
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,9 +17,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.card.TitleCard
+import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
+import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
 @Composable
-fun SettingInAppUpdateContent(
+fun SettingInAppUpdateSection(
     enableInAppUpdate: Boolean,
     onCheckedChange: (Boolean) -> Unit,
 ) {
@@ -33,16 +36,33 @@ fun SettingInAppUpdateContent(
         modifier = Modifier.padding(vertical = 8.dp),
     ) {
         Row(
-            modifier = Modifier.padding(all = 8.dp).fillMaxSize(),
+            modifier = Modifier.padding(all = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = stringResource(id = R.string.in_app_update_show_update),
-                modifier = Modifier.padding(start = 16.dp).weight(1f),
+                modifier = Modifier
+                    .padding(start = 16.dp)
+                    .weight(1f),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.primary,
             )
             Switch(checked = enableInAppUpdate, onCheckedChange = onCheckedChange)
+        }
+    }
+}
+
+@UiModePreview
+@Composable
+fun PreviewSettingInAppUpdateSection() {
+    HiraganaConverterTheme {
+        Surface {
+            Column {
+                SettingInAppUpdateSection(
+                    enableInAppUpdate = true,
+                    onCheckedChange = {},
+                )
+            }
         }
     }
 }
