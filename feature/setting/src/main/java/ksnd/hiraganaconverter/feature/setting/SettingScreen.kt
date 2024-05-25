@@ -15,10 +15,7 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -38,7 +35,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -50,11 +46,12 @@ import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.extension.noRippleClickable
 import ksnd.hiraganaconverter.core.ui.parts.BackTopBar
-import ksnd.hiraganaconverter.core.ui.parts.button.CustomRadioButton
-import ksnd.hiraganaconverter.core.ui.parts.button.TransitionButton
-import ksnd.hiraganaconverter.core.ui.parts.card.TitleCard
 import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
+import ksnd.hiraganaconverter.feature.setting.section.SettingFontSection
+import ksnd.hiraganaconverter.feature.setting.section.SettingInAppUpdateSection
+import ksnd.hiraganaconverter.feature.setting.section.SettingLanguageSection
+import ksnd.hiraganaconverter.feature.setting.section.SettingThemeSection
 
 @Composable
 fun SettingScreen(
@@ -136,20 +133,20 @@ private fun SettingScreenContent(
                 .padding(horizontal = 16.dp),
         ) {
             Spacer(modifier = Modifier.height((topBarHeight / density).toInt().dp))
-            SettingThemeContent(
+            SettingThemeSection(
                 onRadioButtonClick = updateTheme,
                 selectedTheme = uiState.theme,
             )
-            SettingLanguageContent(
+            SettingLanguageSection(
                 onClick = {
                     isShowSelectLanguageDialog.value = true
                 },
             )
-            SettingFontContent(
+            SettingFontSection(
                 selectFontType = uiState.fontType,
                 onClickFontType = { fontType -> updateFontType(fontType) },
             )
-            SettingInAppUpdateContent(
+            SettingInAppUpdateSection(
                 enableInAppUpdate = uiState.enableInAppUpdate,
                 onCheckedChange = updateUseInAppUpdate,
             )
@@ -158,104 +155,11 @@ private fun SettingScreenContent(
     }
 }
 
-@Composable
-private fun SettingThemeContent(
-    selectedTheme: Theme,
-    onRadioButtonClick: (Theme) -> Unit,
-) {
-    TitleCard(
-        text = stringResource(id = R.string.theme_setting),
-        painter = painterResource(id = R.drawable.ic_baseline_brightness_4_24),
-    )
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        ),
-        modifier = Modifier.padding(vertical = 8.dp),
-    ) {
-        listOf(
-            Triple(
-                Theme.NIGHT,
-                stringResource(id = R.string.dark_mode),
-                painterResource(id = R.drawable.ic_baseline_brightness_2_24),
-            ),
-            Triple(
-                Theme.DAY,
-                stringResource(id = R.string.light_mode),
-                painterResource(id = R.drawable.ic_baseline_brightness_low_24),
-            ),
-            Triple(
-                Theme.AUTO,
-                stringResource(id = R.string.auto_mode),
-                painterResource(id = R.drawable.ic_baseline_brightness_auto_24),
-            ),
-        ).forEachIndexed { index, (theme, displayThemeName, painter) ->
-            CustomRadioButton(
-                isSelected = theme == selectedTheme,
-                buttonText = displayThemeName,
-                painter = painter,
-                onClick = { onRadioButtonClick(theme) },
-            )
-            if (index != FontType.entries.size - 1) {
-                HorizontalDivider(
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    color = MaterialTheme.colorScheme.surface,
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun SettingLanguageContent(onClick: () -> Unit) {
-    TitleCard(
-        text = stringResource(id = R.string.language_setting),
-        painter = painterResource(id = R.drawable.ic_baseline_language_24),
-    )
-    TransitionButton(
-        text = stringResource(id = R.string.select_language),
-        onClick = onClick,
-    )
-}
-
-@Composable
-private fun SettingFontContent(
-    selectFontType: FontType,
-    onClickFontType: (FontType) -> Unit,
-) {
-    TitleCard(
-        text = stringResource(id = R.string.font_setting),
-        painterResource(id = R.drawable.ic_baseline_text_fields_24),
-    )
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant,
-        ),
-        modifier = Modifier.padding(vertical = 8.dp),
-    ) {
-        FontType.entries.forEachIndexed { index, fontType ->
-            CustomRadioButton(
-                isSelected = fontType == selectFontType,
-                buttonText = fontType.fontName,
-                onClick = { onClickFontType(fontType) },
-            )
-            if (index != FontType.entries.size - 1) {
-                HorizontalDivider(
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    color = MaterialTheme.colorScheme.surface,
-                )
-            }
-        }
-    }
-}
-
 @UiModePreview
 @Composable
 fun PreviewSettingScreenContent() {
     HiraganaConverterTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-        ) {
+        Surface {
             SettingScreenContent(
                 uiState = SettingsUiState(),
                 updateTheme = {},
