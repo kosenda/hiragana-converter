@@ -13,16 +13,9 @@ class AndroidLibraryComposePlugin : Plugin<Project> {
         with(target) {
             with(pluginManager) {
                 apply("com.google.devtools.ksp")
+                apply("org.jetbrains.kotlin.plugin.compose")
             }
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
-            extensions.configure<LibraryExtension> {
-                buildFeatures {
-                    compose = true
-                }
-                composeOptions {
-                    kotlinCompilerExtensionVersion = libs.findVersion("androidxComposeCompiler").get().toString()
-                }
-            }
             dependencies {
                 add("implementation", libs.findLibrary("androidx.compose.material3").get())
                 add("implementation", libs.findLibrary("androidx.compose.ui").get())
