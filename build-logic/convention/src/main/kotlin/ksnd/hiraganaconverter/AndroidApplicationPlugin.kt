@@ -11,10 +11,10 @@ import org.gradle.kotlin.dsl.getByType
 class AndroidApplicationPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
             with(pluginManager) {
                 apply("com.android.application")
                 apply("org.jetbrains.kotlin.android")
+                apply("org.jetbrains.kotlin.plugin.compose")
             }
             extensions.configure<ApplicationExtension> {
                 compileSdk = 34
@@ -32,12 +32,6 @@ class AndroidApplicationPlugin : Plugin<Project> {
                 }
                 kotlinOptions {
                     jvmTarget = JavaVersion.VERSION_17.toString()
-                }
-                buildFeatures {
-                    compose = true
-                }
-                composeOptions {
-                    kotlinCompilerExtensionVersion = libs.findVersion("androidxComposeCompiler").get().toString()
                 }
             }
         }

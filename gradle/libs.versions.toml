@@ -23,10 +23,10 @@ firebasePerfPlugin = "1.4.2"
 firebaseAppdistributionPlugin = "5.0.0"
 hilt = "2.51.1"
 junit4 = "4.13.2"
-kotlin = "1.9.24"
+kotlin = "2.0.0"
 kotlinxSerializationJson = "1.6.3"
 kotlinxDatetime = "0.6.0"
-ksp = "1.9.24-1.0.20"
+ksp = "2.0.0-1.0.21"
 ktlint = "1.2.1"
 lazyColumnScrollbar = "1.9.0"
 lottie = "6.4.0"
@@ -46,7 +46,6 @@ showkase = "1.0.2"
 aboutLibraries = "11.2.0"
 
 # ** I'm using it, so no deletions allowed. **
-androidxComposeCompiler = "1.5.14"
 jacoco = "0.8.10"
 
 [libraries]
@@ -159,6 +158,7 @@ aboutLibraries = { group = "com.mikepenz", name = "aboutlibraries-compose-m3", v
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
