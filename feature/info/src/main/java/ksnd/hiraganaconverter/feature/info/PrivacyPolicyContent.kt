@@ -21,7 +21,6 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -63,7 +62,6 @@ fun PrivacyPolicyContent() {
     val webViewState = rememberWebViewState(url = stringResource(id = R.string.privacy_policy_url))
     val navigator = rememberWebViewNavigator()
     val scrollState = rememberScrollState()
-    val isScrollTop by remember(scrollState.value) { derivedStateOf { scrollState.value == 0 } }
     val analytics = LocalAnalytics.current
 
     LaunchedEffect(isShowWebView) {
@@ -102,7 +100,7 @@ fun PrivacyPolicyContent() {
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.BottomEnd,
                 ) {
-                    this@ModalBottomSheet.AnimatedVisibility(visible = isScrollTop.not()) {
+                    this@ModalBottomSheet.AnimatedVisibility(visible = scrollState.canScrollBackward) {
                         ToTopFloatingButton(
                             scrollState = scrollState,
                             sizeChangedHeight = { floatingPlayerHeight = it },
