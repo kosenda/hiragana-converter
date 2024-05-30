@@ -19,9 +19,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,12 +38,9 @@ fun MoveTopButton(scrollState: ScrollState) {
     val coroutineScope = rememberCoroutineScope()
     val layoutDirection = LocalLayoutDirection.current
     val offset = IntOffset(x = 100, y = 100)
-    val showVisibleTopBar by remember {
-        derivedStateOf { scrollState.value > 0 }
-    }
 
     AnimatedVisibility(
-        visible = showVisibleTopBar,
+        visible = scrollState.canScrollBackward,
         modifier = Modifier.padding(
             start = WindowInsets.displayCutout
                 .asPaddingValues()
