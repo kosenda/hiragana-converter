@@ -43,7 +43,7 @@ turbine = "1.1.0"
 mockk = "1.13.11"
 roborazzi = "1.19.0"
 showkase = "1.0.2"
-aboutLibraries = "11.2.0"
+aboutLibraries = "11.2.1"
 
 # ** I'm using it, so no deletions allowed. **
 jacoco = "0.8.10"
