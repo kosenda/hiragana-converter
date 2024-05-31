@@ -15,6 +15,11 @@ class AndroidLibraryComposePlugin : Plugin<Project> {
                 apply("com.google.devtools.ksp")
                 apply("org.jetbrains.kotlin.plugin.compose")
             }
+            extensions.configure<LibraryExtension> {
+                buildFeatures {
+                    compose = true
+                }
+            }
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
             dependencies {
                 add("implementation", libs.findLibrary("androidx.compose.material3").get())
