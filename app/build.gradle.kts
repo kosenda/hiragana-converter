@@ -74,6 +74,7 @@ android {
     }
     buildFeatures {
         buildConfig = true
+        compose = true
     }
     composeCompiler {
         enableStrongSkippingMode = true
