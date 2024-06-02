@@ -71,12 +71,12 @@ fun ConversionTypeCard(
     ) {
         if (rotation <= 90f) {
             ConversionTypeSpinnerCardContent(
-                selectedTextType = selectedTextType
+                selectedTextType = selectedTextType,
             )
         } else {
             ConversionTypeSpinnerCardContent(
                 modifier = Modifier.graphicsLayer { rotationY = 180f },
-                selectedTextType = selectedTextType
+                selectedTextType = selectedTextType,
             )
         }
     }
