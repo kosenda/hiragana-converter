@@ -323,7 +323,7 @@ jobs:
           command: ./gradlew ktlintCheck --continue --parallel --max-workers=4
       - run:
           name: Run danger file
-          command: bundle exec danger --verbose -dangerfile Dangerfile-lint
+          command: bundle exec danger --verbose --dangerfile Dangerfile-lint
       - report_jacoco
       - slack/notify:
           event: fail
@@ -344,7 +344,7 @@ jobs:
       - report_jacoco
       - run:
           name: Run danger file
-          command: bundle exec danger --verbose -dangerfile Dangerfile-test
+          command: bundle exec danger --verbose --dangerfile Dangerfile-test
       - push_compare_branch
       - comment_screenshot_diff
       - slack/notify:
