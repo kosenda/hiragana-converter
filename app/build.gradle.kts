@@ -88,6 +88,9 @@ android {
         unitTests.isIncludeAndroidResources = true
         unitTests.isReturnDefaultValues = true
     }
+    lint {
+        xmlReport = true
+    }
 }
 
 dependencies {
