@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.core.model.ui.HiraKanaType
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.extension.noRippleClickable
+import ksnd.hiraganaconverter.core.ui.isTest
 import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.rememberButtonScaleState
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
@@ -58,7 +59,7 @@ fun ConversionTypeCard(
                 },
             )
             .graphicsLayer {
-                rotationY = rotation
+                if (isTest().not()) rotationY = rotation
                 cameraDistance = 10f * density
             },
         colors = CardDefaults.cardColors(
@@ -69,7 +70,7 @@ fun ConversionTypeCard(
             },
         ),
     ) {
-        if (rotation <= 90f) {
+        if (rotation <= 90f || isTest()) {
             ConversionTypeSpinnerCardContent(
                 selectedTextType = selectedTextType,
             )
