@@ -1,6 +1,8 @@
 package ksnd.hiraganaconverter.core.ui.parts.card
 
 import android.view.HapticFeedbackConstants
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -14,6 +16,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -33,6 +36,12 @@ fun ConversionTypeCard(
     val buttonScaleState = rememberButtonScaleState()
     val localView = LocalView.current
 
+    val rotation by animateFloatAsState(
+        targetValue = if (selectedTextType == HiraKanaType.HIRAGANA) 180f else 0f,
+        animationSpec = tween(500),
+        label = "",
+    )
+
     Card(
         modifier = Modifier
             .padding(all = 8.dp)
@@ -47,19 +56,39 @@ fun ConversionTypeCard(
                     }
                     onSelectedChange(selectedTextType)
                 },
-            ),
+            )
+            .graphicsLayer {
+                rotationY = rotation
+                cameraDistance = 10f * density
+            },
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+            containerColor = if (rotation <= 90f) {
+                MaterialTheme.colorScheme.secondaryContainer
+            } else {
+                MaterialTheme.colorScheme.tertiaryContainer
+            },
         ),
     ) {
-        ConversionTypeSpinnerCardContent(selectedTextType = selectedTextType)
+        if (rotation <= 90f) {
+            ConversionTypeSpinnerCardContent(
+                selectedTextType = selectedTextType
+            )
+        } else {
+            ConversionTypeSpinnerCardContent(
+                modifier = Modifier.graphicsLayer { rotationY = 180f },
+                selectedTextType = selectedTextType
+            )
+        }
     }
 }
 
 @Composable
-private fun ConversionTypeSpinnerCardContent(selectedTextType: HiraKanaType) {
+private fun ConversionTypeSpinnerCardContent(
+    selectedTextType: HiraKanaType,
+    modifier: Modifier = Modifier,
+) {
     Column(
-        modifier = Modifier.padding(all = 8.dp),
+        modifier = modifier.padding(all = 8.dp),
     ) {
         Text(
             text = stringResource(id = R.string.conversion_type),
