@@ -324,7 +324,6 @@ jobs:
       - run:
           name: Run danger file
           command: bundle exec danger --verbose --dangerfile="Dangerfile-lint"
-      - report_jacoco
       - slack/notify:
           event: fail
           template: basic_fail_1
