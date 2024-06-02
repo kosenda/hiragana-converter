@@ -42,11 +42,11 @@ fun CustomButtonWithBackground(
     CompositionLocalProvider(
         LocalRippleTheme provides object : RippleTheme {
             @Composable
-            override fun defaultColor(): Color = Color.Transparent
+            override fun defaultColor() = Color.Transparent
 
             @Composable
-            override fun rippleAlpha(): RippleAlpha = RippleAlpha(0f, 0f, 0f, 0f)
-        }
+            override fun rippleAlpha() = RippleAlpha(0f, 0f, 0f, 0f)
+        },
     ) {
         IconButton(
             modifier = modifier
