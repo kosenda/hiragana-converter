@@ -22,9 +22,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ClipboardManager
@@ -68,12 +65,6 @@ private fun ConvertHistoryDetailDialogContent(
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     val scrollState = rememberScrollState()
 
-    val isScrolled by remember {
-        derivedStateOf {
-            scrollState.value > 10
-        }
-    }
-
     Scaffold(
         modifier = Modifier
             .fillMaxHeight(0.95f)
@@ -82,7 +73,7 @@ private fun ConvertHistoryDetailDialogContent(
             .clip(RoundedCornerShape(16.dp)),
         topBar = {
             DialogTopBar(
-                isScrolled = isScrolled,
+                isScrolled = scrollState.canScrollBackward,
                 leftContent = {
                     Text(
                         text = historyData.time,
@@ -141,9 +132,9 @@ private fun BeforeOrAfterText(
             color = MaterialTheme.colorScheme.onSurface,
         )
         CustomIconButton(
-            modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
-            contentDescription = "copyText",
             painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
+            contentDescription = "",
+            modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
             onClick = {
                 clipboardManager.setText(
                     AnnotatedString(

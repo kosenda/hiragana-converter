@@ -5,10 +5,14 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.ripple.LocalRippleTheme
+import androidx.compose.material.ripple.RippleAlpha
+import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
@@ -34,25 +38,36 @@ fun CustomButtonWithBackground(
 ) {
     val buttonScaleState = rememberButtonScaleState()
     val localView = LocalView.current
-    IconButton(
-        modifier = modifier
-            .padding(all = 8.dp)
-            .size(size = 56.dp)
-            .scale(scale = buttonScaleState.animationScale.value),
-        onClick = {
-            localView.performHapticFeedback(CONTEXT_CLICK)
-            onClick()
+
+    CompositionLocalProvider(
+        LocalRippleTheme provides object : RippleTheme {
+            @Composable
+            override fun defaultColor() = Color.Transparent
+
+            @Composable
+            override fun rippleAlpha() = RippleAlpha(0f, 0f, 0f, 0f)
         },
-        colors = IconButtonDefaults.iconButtonColors(containerColor = containerColor),
-        interactionSource = buttonScaleState.interactionSource,
     ) {
-        Image(
-            painter = painterResource(id = id),
-            contentDescription = convertDescription,
-            modifier = Modifier.size(36.dp),
-            contentScale = ContentScale.Fit,
-            colorFilter = ColorFilter.tint(color = contentColor),
-        )
+        IconButton(
+            modifier = modifier
+                .padding(all = 8.dp)
+                .size(size = 56.dp)
+                .scale(scale = buttonScaleState.animationScale.value),
+            onClick = {
+                localView.performHapticFeedback(CONTEXT_CLICK)
+                onClick()
+            },
+            colors = IconButtonDefaults.iconButtonColors(containerColor = containerColor),
+            interactionSource = buttonScaleState.interactionSource,
+        ) {
+            Image(
+                painter = painterResource(id = id),
+                contentDescription = convertDescription,
+                modifier = Modifier.size(36.dp),
+                contentScale = ContentScale.Fit,
+                colorFilter = ColorFilter.tint(color = contentColor),
+            )
+        }
     }
 }
 

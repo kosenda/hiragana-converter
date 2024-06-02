@@ -6,7 +6,6 @@ plugins {
     id("hiraganaconverter.android.application")
     id("hiraganaconverter.android.application.jacoco")
     id("hiraganaconverter.android.hilt")
-    alias(libs.plugins.oss.licenses)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.secrets)
     alias(libs.plugins.dokka)
@@ -15,6 +14,7 @@ plugins {
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.firebase.perf)
     alias(libs.plugins.firebase.appdistribution)
+    alias(libs.plugins.aboutLibraries)
 }
 
 android {
@@ -73,11 +73,11 @@ android {
         }
     }
     buildFeatures {
-        compose = true
         buildConfig = true
+        compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
+    composeCompiler {
+        enableStrongSkippingMode = true
     }
     packaging {
         resources {
@@ -121,9 +121,6 @@ dependencies {
     // Timber
     implementation(libs.timber)
 
-    // OSS Licenses
-    implementation(libs.play.oss.licenses)
-
     // Splash Screen
     implementation(libs.androidx.core.splashscreen)
 
@@ -146,6 +143,9 @@ dependencies {
 
     // kotlinx serialization
     implementation(libs.kotlinx.serialization.json)
+
+    // AboutLibraries
+    implementation(libs.aboutLibraries)
 }
 
 tasks.withType<Test>().configureEach {

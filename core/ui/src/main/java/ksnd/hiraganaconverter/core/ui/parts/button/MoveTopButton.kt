@@ -8,19 +8,22 @@ import androidx.compose.animation.slideOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
@@ -33,13 +36,19 @@ import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 @Composable
 fun MoveTopButton(scrollState: ScrollState) {
     val coroutineScope = rememberCoroutineScope()
+    val layoutDirection = LocalLayoutDirection.current
     val offset = IntOffset(x = 100, y = 100)
-    val showVisibleTopBar by remember {
-        derivedStateOf { scrollState.value > 0 }
-    }
 
     AnimatedVisibility(
-        visible = showVisibleTopBar,
+        visible = scrollState.canScrollBackward,
+        modifier = Modifier.padding(
+            start = WindowInsets.displayCutout
+                .asPaddingValues()
+                .calculateStartPadding(layoutDirection),
+            end = WindowInsets.displayCutout
+                .asPaddingValues()
+                .calculateEndPadding(layoutDirection),
+        ),
         enter = scaleIn() + slideIn(initialOffset = { offset }),
         exit = scaleOut() + slideOut(targetOffset = { offset }),
     ) {

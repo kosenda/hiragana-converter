@@ -5,9 +5,9 @@ plugins {
     jacoco
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.hilt) apply false
-    alias(libs.plugins.oss.licenses) apply false
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.secrets) apply false
     alias(libs.plugins.dokka) apply false
@@ -17,6 +17,7 @@ plugins {
     alias(libs.plugins.androidLibrary) apply false
     alias(libs.plugins.firebase.perf) apply false
     alias(libs.plugins.firebase.appdistribution) apply false
+    alias(libs.plugins.aboutLibraries) apply false
 }
 
 tasks.create<JacocoReport>("jacocoTestReport") {
@@ -71,19 +72,13 @@ tasks.create<JacocoReport>("jacocoTestReport") {
 
 subprojects {
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-        kotlinOptions {
+        compilerOptions {
             val composeCompilerDir = "${project.layout.buildDirectory.get()}/compose_compiler"
             if (project.findProperty("composeCompilerReports") == "true") {
-                freeCompilerArgs += listOf(
-                    "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=$composeCompilerDir"
-                )
+                freeCompilerArgs.add("-P=plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=$composeCompilerDir")
             }
             if (project.findProperty("composeCompilerMetrics") == "true") {
-                freeCompilerArgs += listOf(
-                    "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=$composeCompilerDir"
-                )
+                freeCompilerArgs.add("-P=plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=$composeCompilerDir")
             }
         }
     }
