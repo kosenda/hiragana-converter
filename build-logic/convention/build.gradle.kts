@@ -17,10 +17,6 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        register("androidApplication") {
-            id = "hiraganaconverter.android.application"
-            implementationClass = "ksnd.hiraganaconverter.AndroidApplicationPlugin"
-        }
         register("androidApplicationJacoco") {
             id = "hiraganaconverter.android.application.jacoco"
             implementationClass = "ksnd.hiraganaconverter.AndroidApplicationJacocoPlugin"
