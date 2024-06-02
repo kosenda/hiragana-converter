@@ -13,5 +13,5 @@ checkstyle_format.report 'build/reports/ktlint/ktlint-result.xml'
 Dir["**/build/reports/lint-results*.xml"].each do |file_name|
     android_lint.skip_gradle_task = true
     android_lint.report_file = file_name
-    android_lint.lint(inline_mode: true)
+    android_lint.lint
 end
