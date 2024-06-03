@@ -83,6 +83,7 @@ import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import my.nanihadesuka.compose.ColumnScrollbar
 import my.nanihadesuka.compose.ScrollbarSelectionMode
+import my.nanihadesuka.compose.ScrollbarSettings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -159,9 +160,11 @@ fun ConverterScreenContent(
     ) { innerPadding ->
         ColumnScrollbar(
             state = scrollState,
-            thumbColor = MaterialTheme.colorScheme.tertiaryContainer,
-            thumbSelectedColor = MaterialTheme.colorScheme.tertiary,
-            selectionMode = ScrollbarSelectionMode.Full,
+            settings = ScrollbarSettings.Default.copy(
+                thumbUnselectedColor = MaterialTheme.colorScheme.tertiaryContainer,
+                thumbSelectedColor = MaterialTheme.colorScheme.tertiary,
+                selectionMode = ScrollbarSelectionMode.Full,
+            ),
         ) {
             Column(
                 modifier = Modifier
