@@ -3,6 +3,7 @@ val ktlint: Configuration by configurations.creating
 plugins {
     // apply false: only load
     jacoco
+    alias(libs.plugins.squareup.invert)
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.compose.compiler) apply false

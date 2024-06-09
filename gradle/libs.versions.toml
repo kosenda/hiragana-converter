@@ -44,6 +44,7 @@ mockk = "1.13.11"
 roborazzi = "1.20.0"
 showkase = "1.0.3"
 aboutLibraries = "11.2.1"
+squareupInvert = "0.0.1-dev-SNAPSHOT"
 
 # ** I'm using it, so no deletions allowed. **
 jacoco = "0.8.10"
@@ -172,3 +173,4 @@ firebase-appdistribution = { id = "com.google.firebase.appdistribution", version
 firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "firebasePerfPlugin" }
 androidLibrary = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 aboutLibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutLibraries" }
+squareup-invert = { id = "com.squareup.invert", version.ref = "squareupInvert" }
