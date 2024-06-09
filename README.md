@@ -67,16 +67,16 @@ https://github.com/kosenda/hiragana-converter/blob/develop/REFERENCE.md
 ## Image
 |Conversion screen(Light)|Conversion screen(Dark)|
 |:-:|:-:|
-|<img width="280" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/af920334-fd73-40b4-803c-525d0cc64f21">|<img width="280" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/9a67591f-cd1e-4184-9d79-79a3f69f69af">|
+|<img width="280" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/5ac9e2e0-461f-4401-bd13-934459f7941a">|<img width="280" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/f82f2f13-f117-48fd-83dc-eee19aa1318c">|
 
 |Setting screen(Light)|Setting screen(Dark)|
 |:-:|:-:|
-|<img width="280" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/2ad5a49f-eaed-425d-8b66-83ec84223582">|<img width="280" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/d8d47e0e-06ea-4131-be83-cb11c2e5dcc3">|
+|<img width="280" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/e46a5c3d-a84d-493c-88c1-21a26dfc8d2d">|<img width="280" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/c467a50e-f4b9-4311-bc6a-de196587de0f">|
 
 |History screen(Light)|History screen(Dark)|
 |:-:|:-:|
-|<img width="280" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/24908a61-184b-4768-adfa-c3361d365549">|<img width="280" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/a7a3ef8f-cbdd-4b27-b17e-c8f7f2a3af79">|
+|<img width="280" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/c61537ae-3733-4392-9fa8-240f6b4a659e">|<img width="280" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/dea7436c-3617-433c-b5fb-4310e660c69b">|
 
 |Info screen(Light)|Info screen(Dark)|
 |:-:|:-:|
-|<img width="280" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/708f10fb-d93c-4d28-91d1-7b5a25c543ec">|<img width="280" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/718a2722-3ab9-48f7-95be-65efe6a9112c">|
+|<img width="280" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/2abd8765-8db6-4df3-b558-637b90f99ed1">|<img width="280" alt="convert_screen" src="https://github.com/kosenda/hiragana-converter/assets/60963155/34326658-e6e8-479c-9e8f-584cce36cbc2">|
