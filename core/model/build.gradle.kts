@@ -9,7 +9,7 @@ android {
 }
 
 dependencies {
-    testImplementation(project(":core:testing"))
+    testImplementation(projects.core.testing)
 
     // kotlinx serialization
     implementation(libs.kotlinx.serialization.json)

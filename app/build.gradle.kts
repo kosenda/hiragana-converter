@@ -106,17 +106,17 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature:converter"))
-    implementation(project(":feature:history"))
-    implementation(project(":feature:info"))
-    implementation(project(":feature:setting"))
-    implementation(project(":core:analytics"))
-    implementation(project(":core:model"))
-    implementation(project(":core:resource"))
-    implementation(project(":core:domain"))
-    implementation(project(":core:data"))
-    implementation(project(":core:ui"))
-    testImplementation(project(":core:testing"))
+    implementation(projects.feature.converter)
+    implementation(projects.feature.history)
+    implementation(projects.feature.info)
+    implementation(projects.feature.setting)
+    implementation(projects.core.analytics)
+    implementation(projects.core.model)
+    implementation(projects.core.resource)
+    implementation(projects.core.domain)
+    implementation(projects.core.data)
+    implementation(projects.core.ui)
+    testImplementation(projects.core.testing)
 
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)

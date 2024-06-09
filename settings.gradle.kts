@@ -1,18 +1,10 @@
-import java.net.URL
-
 pluginManagement {
     includeBuild("build-logic")
     repositories {
-        gradlePluginPortal()
         google()
         mavenCentral()
-    }
-    resolutionStrategy {
-        eachPlugin {
-            when (requested.id.id) {
-                "com.google.android.gms.oss-licenses-plugin" -> useModule("com.google.android.gms:oss-licenses-plugin:${requested.version}")
-            }
-        }
+        maven { setUrl("https://s01.oss.sonatype.org/content/repositories/snapshots") }
+        gradlePluginPortal()
     }
 }
 dependencyResolutionManagement {
@@ -20,10 +12,12 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven(url = URL("https://jitpack.io"))
+        maven { setUrl("https://jitpack.io") }
     }
 }
 rootProject.name = "hiraganaconverter"
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
 include(":feature:converter")
 include(":feature:history")
