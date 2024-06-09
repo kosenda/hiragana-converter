@@ -19,10 +19,11 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:analytics"))
-    implementation(project(":core:model"))
-    implementation(project(":core:resource"))
-    testImplementation(project(":core:testing"))
+    implementation(projects.core.analytics)
+    implementation(projects.core.model)
+    implementation(projects.core.resource)
+    testImplementation(projects.core.testing)
+
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.retrofit)
     implementation(libs.okhttp3)
