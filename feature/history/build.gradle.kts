@@ -30,4 +30,5 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.androidx.lifecycle.viewModelCompose)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.lazyColumnScrollbar)
 }
