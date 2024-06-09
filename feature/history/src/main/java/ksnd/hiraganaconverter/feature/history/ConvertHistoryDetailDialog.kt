@@ -39,6 +39,9 @@ import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.parts.dialog.DialogTopBar
 import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
+import my.nanihadesuka.compose.ColumnScrollbar
+import my.nanihadesuka.compose.ScrollbarSelectionMode
+import my.nanihadesuka.compose.ScrollbarSettings
 
 @Composable
 fun ConvertHistoryDetailDialog(
@@ -86,27 +89,36 @@ private fun ConvertHistoryDetailDialogContent(
             )
         },
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .verticalScroll(scrollState)
-                .padding(innerPadding),
+        ColumnScrollbar(
+            state = scrollState,
+            settings = ScrollbarSettings.Default.copy(
+                thumbUnselectedColor = MaterialTheme.colorScheme.tertiaryContainer,
+                thumbSelectedColor = MaterialTheme.colorScheme.tertiary,
+                selectionMode = ScrollbarSelectionMode.Full,
+            ),
         ) {
-            BeforeOrAfterText(
-                historyData = historyData,
-                isBefore = true,
-                clipboardManager = clipboardManager,
-            )
-            HorizontalDivider(
-                modifier = Modifier.padding(vertical = 8.dp, horizontal = 48.dp),
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.primary,
-            )
-            BeforeOrAfterText(
-                historyData = historyData,
-                isBefore = false,
-                clipboardManager = clipboardManager,
-            )
-            Spacer(modifier = Modifier.height(48.dp))
+            Column(
+                modifier = Modifier
+                    .verticalScroll(scrollState)
+                    .padding(innerPadding),
+            ) {
+                BeforeOrAfterText(
+                    historyData = historyData,
+                    isBefore = true,
+                    clipboardManager = clipboardManager,
+                )
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 48.dp),
+                    thickness = 1.dp,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+                BeforeOrAfterText(
+                    historyData = historyData,
+                    isBefore = false,
+                    clipboardManager = clipboardManager,
+                )
+                Spacer(modifier = Modifier.height(48.dp))
+            }
         }
     }
 }
