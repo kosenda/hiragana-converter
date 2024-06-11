@@ -22,11 +22,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -36,6 +42,7 @@ import androidx.compose.ui.window.DialogProperties
 import ksnd.hiraganaconverter.core.model.ConvertHistoryData
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
+import ksnd.hiraganaconverter.core.ui.parts.button.MoveTopButton
 import ksnd.hiraganaconverter.core.ui.parts.dialog.DialogTopBar
 import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
@@ -67,6 +74,7 @@ private fun ConvertHistoryDetailDialogContent(
 ) {
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     val scrollState = rememberScrollState()
+    var moveTopButtonHeight by remember { mutableIntStateOf(0) }
 
     Scaffold(
         modifier = Modifier
@@ -86,6 +94,12 @@ private fun ConvertHistoryDetailDialogContent(
                     )
                 },
                 onCloseClick = onCloseClick,
+            )
+        },
+        floatingActionButton = {
+            MoveTopButton(
+                scrollState = scrollState,
+                modifier = Modifier.onSizeChanged { moveTopButtonHeight = it.height },
             )
         },
     ) { innerPadding ->
@@ -117,7 +131,7 @@ private fun ConvertHistoryDetailDialogContent(
                     isBefore = false,
                     clipboardManager = clipboardManager,
                 )
-                Spacer(modifier = Modifier.height(48.dp))
+                Spacer(modifier = Modifier.height(48.dp + (moveTopButtonHeight / LocalDensity.current.density).toInt().dp))
             }
         }
     }
