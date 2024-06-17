@@ -1,7 +1,11 @@
 package ksnd.hiraganaconverter.core.ui.parts.button
 
 import android.view.HapticFeedbackConstants
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -60,12 +64,22 @@ fun ConvertButton(
             },
         contentAlignment = Alignment.Center,
     ) {
-        if (isConverting) {
+        AnimatedVisibility(
+            visible = isConverting,
+            enter = fadeIn(animationSpec = tween(0)),
+            exit = fadeOut(animationSpec = tween(500)),
+        ) {
             LottieAnimation(
                 composition = composition,
                 iterations = LottieConstants.IterateForever,
             )
-        } else {
+        }
+
+        AnimatedVisibility(
+            visible = isConverting.not(),
+            enter = fadeIn(animationSpec = tween(500)),
+            exit = fadeOut(animationSpec = tween(0)),
+        ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_baseline_compare_arrows_24),
                 contentDescription = stringResource(id = R.string.conversion),
