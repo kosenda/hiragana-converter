@@ -30,4 +30,7 @@ dependencies {
     api(libs.roborazzi)
     api(libs.roborazzi.compose)
     api(libs.roborazzi.junit4.rule)
+
+    // Konsist
+    api(libs.konsist)
 }
