@@ -23,7 +23,6 @@ class KonsistTest {
             .scopeFromProject()
             .functions()
             .withNameMatching(Regex(".*Preview.*"))
-            .print()
             .assertTrue { it.hasNameStartingWith("Preview", ) }
     }
 }
