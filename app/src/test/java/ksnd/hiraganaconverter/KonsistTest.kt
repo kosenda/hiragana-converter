@@ -1,7 +1,6 @@
 package ksnd.hiraganaconverter
 
 import com.lemonappdev.konsist.api.Konsist
-import com.lemonappdev.konsist.api.ext.list.print
 import com.lemonappdev.konsist.api.ext.list.withNameMatching
 import com.lemonappdev.konsist.api.verify.assertFalse
 import com.lemonappdev.konsist.api.verify.assertTrue
@@ -23,6 +22,6 @@ class KonsistTest {
             .scopeFromProject()
             .functions()
             .withNameMatching(Regex(".*Preview.*"))
-            .assertTrue { it.hasNameStartingWith("Preview", ) }
+            .assertTrue { it.hasNameStartingWith("Preview") }
     }
 }
