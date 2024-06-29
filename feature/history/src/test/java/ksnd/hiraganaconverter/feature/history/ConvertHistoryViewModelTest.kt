@@ -5,6 +5,7 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import ksnd.hiraganaconverter.core.domain.repository.ConvertHistoryRepository
+import ksnd.hiraganaconverter.core.model.mock.MockConvertHistoryData
 import ksnd.hiraganaconverter.core.testing.MainDispatcherRule
 import org.junit.Rule
 import org.junit.Test
@@ -54,6 +55,6 @@ class ConvertHistoryViewModelTest {
     }
 
     private companion object {
-        private val HISTORY_DATA = MockConvertHistories().data.first()
+        private val HISTORY_DATA = MockConvertHistoryData().data.first()
     }
 }

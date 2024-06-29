@@ -308,6 +308,26 @@ jobs:
       - set_locale_properties
       - restore_and_save_gradle_cache
 
+  lint:
+    executor: android
+    steps:
+      - checkout
+      - set_locale_properties
+      - restore_and_save_gradle_cache
+      - setup_bundle
+      - run:
+          name: Android lint
+          command: ./gradlew lint --parallel --max-workers=4
+      - run:
+          name: Ktlint check
+          command: ./gradlew ktlintCheck --continue --parallel --max-workers=4
+      - run:
+          name: Run danger file
+          command: bundle exec danger --verbose --dangerfile="Dangerfile-lint"
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+
   unit_test:
     executor: android
     steps:
@@ -317,16 +337,13 @@ jobs:
       - set_locale_properties
       - restore_and_save_gradle_cache
       - setup_bundle
-      - run:
-          name: Ktlint check
-          command: ./gradlew ktlintCheck --continue --parallel --max-workers=4
       - unit_test:
           build_variant: ProdDebug
       - save_test_result
       - report_jacoco
       - run:
           name: Run danger file
-          command: bundle exec danger --verbose
+          command: bundle exec danger --verbose --dangerfile="Dangerfile-test"
       - push_compare_branch
       - comment_screenshot_diff
       - slack/notify:
@@ -381,6 +398,10 @@ workflows:
   test:
     jobs:
       - dependencies
+      - lint:
+          context: slack-secrets
+          requires:
+            - dependencies
       - unit_test:
           context: slack-secrets
           requires:
@@ -401,6 +422,7 @@ workflows:
       - app_distribution:
           context: slack-secrets
           requires:
+            - lint
             - unit_test
           filters:
             branches:

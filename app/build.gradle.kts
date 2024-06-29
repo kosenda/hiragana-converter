@@ -1,9 +1,12 @@
 import com.google.firebase.perf.plugin.FirebasePerfExtension
+import ksnd.hiraganaconverter.kotlinOptions
 import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    id("hiraganaconverter.android.application")
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
     id("hiraganaconverter.android.application.jacoco")
     id("hiraganaconverter.android.hilt")
     alias(libs.plugins.kotlin.serialization)
@@ -19,14 +22,28 @@ plugins {
 
 android {
     namespace = "ksnd.hiraganaconverter"
-
+    compileSdk = 34
+    defaultConfig {
+        applicationId = "ksnd.hiraganaconverter"
+        minSdk = 26
+        targetSdk = 34
+        versionCode = 43
+        versionName = "1.32"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
     androidResources {
         generateLocaleConfig = true
     }
 
     // ref: https://github.com/DroidKaigi/conference-app-2023/blob/main/app-android/build.gradle.kts
     val keystorePropertiesFile = file("keystore.properties")
-
     signingConfigs {
         if (keystorePropertiesFile.exists()) {
             val keystoreProperties = Properties()
@@ -39,7 +56,6 @@ android {
             }
         }
     }
-
     buildTypes {
         release {
             isShrinkResources = true
@@ -60,7 +76,6 @@ android {
             }
         }
     }
-
     flavorDimensions += "env"
     productFlavors {
         create("prod") {
@@ -91,17 +106,17 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature:converter"))
-    implementation(project(":feature:history"))
-    implementation(project(":feature:info"))
-    implementation(project(":feature:setting"))
-    implementation(project(":core:analytics"))
-    implementation(project(":core:model"))
-    implementation(project(":core:resource"))
-    implementation(project(":core:domain"))
-    implementation(project(":core:data"))
-    implementation(project(":core:ui"))
-    testImplementation(project(":core:testing"))
+    implementation(projects.feature.converter)
+    implementation(projects.feature.history)
+    implementation(projects.feature.info)
+    implementation(projects.feature.setting)
+    implementation(projects.core.analytics)
+    implementation(projects.core.model)
+    implementation(projects.core.resource)
+    implementation(projects.core.domain)
+    implementation(projects.core.data)
+    implementation(projects.core.ui)
+    testImplementation(projects.core.testing)
 
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)

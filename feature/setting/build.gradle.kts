@@ -20,12 +20,13 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:analytics"))
-    implementation(project(":core:ui"))
-    implementation(project(":core:resource"))
-    implementation(project(":core:model"))
-    implementation(project(":core:domain"))
-    testImplementation(project(":core:testing"))
+    implementation(projects.core.analytics)
+    implementation(projects.core.ui)
+    implementation(projects.core.resource)
+    implementation(projects.core.model)
+    implementation(projects.core.domain)
+    testImplementation(projects.core.testing)
+
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.appcompat)
 }

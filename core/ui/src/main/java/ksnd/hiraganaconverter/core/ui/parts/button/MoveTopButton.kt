@@ -34,14 +34,17 @@ import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
 @Composable
-fun MoveTopButton(scrollState: ScrollState) {
+fun MoveTopButton(
+    scrollState: ScrollState,
+    modifier: Modifier = Modifier,
+) {
     val coroutineScope = rememberCoroutineScope()
     val layoutDirection = LocalLayoutDirection.current
     val offset = IntOffset(x = 100, y = 100)
 
     AnimatedVisibility(
         visible = scrollState.canScrollBackward,
-        modifier = Modifier.padding(
+        modifier = modifier.padding(
             start = WindowInsets.displayCutout
                 .asPaddingValues()
                 .calculateStartPadding(layoutDirection),
