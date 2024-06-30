@@ -43,7 +43,7 @@ turbine = "1.1.0"
 mockk = "1.13.11"
 roborazzi = "1.20.0"
 showkase = "1.0.3"
-aboutLibraries = "11.2.1"
+aboutLibraries = "11.2.2"
 konsist = "0.15.1"
 
 # ** I'm using it, so no deletions allowed. **
