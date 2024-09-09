@@ -9,7 +9,7 @@ orbs:
 executors:
   android:
     docker:
-      - image: cimg/android:2024.01
+      - image: cimg/android:2024.09
 
 commands:
   check_is_skipping_vrt:
