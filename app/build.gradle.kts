@@ -1,3 +1,4 @@
+import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.google.firebase.perf.plugin.FirebasePerfExtension
 import ksnd.hiraganaconverter.kotlinOptions
 import java.io.FileInputStream
@@ -102,6 +103,16 @@ android {
     testOptions {
         unitTests.isIncludeAndroidResources = true
         unitTests.isReturnDefaultValues = true
+        unitTests.all {
+            it.systemProperties["robolectric.pixelCopyRenderMode"] = "hardware"
+        }
+    }
+    roborazzi {
+        @OptIn(ExperimentalRoborazziApi::class)
+        generateComposePreviewRobolectricTests {
+            enable = true
+            packages = listOf("ksnd.hiraganaconverter")
+        }
     }
 }
 
@@ -151,16 +162,17 @@ dependencies {
     // Navigation
     implementation(libs.androidx.navigation.compose)
 
-    // Showkase
-    debugImplementation(libs.showkase)
-    implementation(libs.showkase.annotation)
-    kspDebug(libs.showkase.processor)
-
     // kotlinx serialization
     implementation(libs.kotlinx.serialization.json)
 
     // AboutLibraries
     implementation(libs.aboutLibraries)
+
+    // Roborazzi (for ComposablePreviewScanner)
+    testImplementation(libs.roborazzi.compose.preview.scanner.support)
+    testImplementation(libs.junit)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.composable.preview.scanner)
 }
 
 tasks.withType<Test>().configureEach {
