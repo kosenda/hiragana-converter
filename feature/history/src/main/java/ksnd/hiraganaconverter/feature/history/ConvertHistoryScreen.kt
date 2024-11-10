@@ -48,12 +48,15 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
 import ksnd.hiraganaconverter.core.analytics.Screen
 import ksnd.hiraganaconverter.core.model.ConvertHistoryData
+import ksnd.hiraganaconverter.core.model.mock.MockConvertHistoryData
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.extension.noRippleClickable
 import ksnd.hiraganaconverter.core.ui.parts.BackTopBar
@@ -231,35 +234,25 @@ private fun EmptyHistoryImage() {
     }
 }
 
-@UiModePreview
-@Composable
-fun PreviewConvertHistoryScreeContent() {
-    HiraganaConverterTheme {
-        Surface(
-            color = MaterialTheme.colorScheme.surface,
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            ConvertHistoryScreenContent(
-                state = ConvertHistoryUiState(convertHistories = MockConvertHistories().data),
-                onBackPressed = {},
-                deleteAllConvertHistory = {},
-                showConvertHistoryDetailDialog = {},
-                deleteConvertHistory = {},
-            )
-        }
-    }
+class PreviewConverterHistoryUiStateProvider : PreviewParameterProvider<ConvertHistoryUiState> {
+    override val values: Sequence<ConvertHistoryUiState> = sequenceOf(
+        ConvertHistoryUiState(convertHistories = MockConvertHistoryData().data),
+        ConvertHistoryUiState(),
+    )
 }
 
 @UiModePreview
 @Composable
-fun PreviewConvertHistoryScreenContent_NoData() {
+fun PreviewConvertHistoryScreeContent(
+    @PreviewParameter(PreviewConverterHistoryUiStateProvider::class) state: ConvertHistoryUiState,
+) {
     HiraganaConverterTheme {
         Surface(
             color = MaterialTheme.colorScheme.surface,
             modifier = Modifier.fillMaxSize(),
         ) {
             ConvertHistoryScreenContent(
-                state = ConvertHistoryUiState(),
+                state = state,
                 onBackPressed = {},
                 deleteAllConvertHistory = {},
                 showConvertHistoryDetailDialog = {},

@@ -19,10 +19,11 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:analytics"))
-    implementation(project(":core:ui"))
-    implementation(project(":core:resource"))
-    implementation(project(":core:model"))
+    implementation(projects.core.analytics)
+    implementation(projects.core.ui)
+    implementation(projects.core.resource)
+    implementation(projects.core.model)
+
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.accompanist.webView)
     implementation(libs.aboutLibraries)

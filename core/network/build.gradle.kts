@@ -28,8 +28,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:model"))
-    testImplementation(project(":core:testing"))
+    implementation(projects.core.model)
+    testImplementation(projects.core.testing)
+
     implementation(libs.retrofit)
     implementation(libs.retrofit.kotlinx.serialization.converter)
     implementation(libs.kotlinx.serialization.json)

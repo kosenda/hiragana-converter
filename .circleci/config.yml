@@ -3,13 +3,13 @@
 version: 2.1
 
 orbs:
-  slack: circleci/slack@4.13.3
-  gh: circleci/github-cli@2.3.0
+  slack: circleci/slack@4.15.0
+  gh: circleci/github-cli@2.4.0
 
 executors:
   android:
     docker:
-      - image: cimg/android:2024.04
+      - image: cimg/android:2024.11
 
 commands:
   check_is_skipping_vrt:

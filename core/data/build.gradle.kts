@@ -25,11 +25,13 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:resource"))
-    implementation(project(":core:model"))
-    implementation(project(":core:domain"))
-    implementation(project(":core:network"))
-    testImplementation(project(":core:testing"))
+    implementation(projects.core.resource)
+    implementation(projects.core.model)
+    implementation(projects.core.domain)
+    implementation(projects.core.network)
+    implementation(projects.core.analytics)
+    testImplementation(projects.core.testing)
+
     implementation(libs.androidx.dataStore.preferences)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.timber)
@@ -44,7 +46,4 @@ dependencies {
     // App Review
     implementation(libs.app.review)
     implementation(libs.app.review.ktx)
-
-    // Analytics
-    implementation(project(":core:analytics"))
 }
