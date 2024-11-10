@@ -44,7 +44,7 @@ mockk = "1.13.13"
 roborazzi = "1.32.2"
 showkase = "1.0.3"
 aboutLibraries = "11.2.3"
-konsist = "0.15.1"
+konsist = "0.16.1"
 
 # ** I'm using it, so no deletions allowed. **
 jacoco = "0.8.10"
