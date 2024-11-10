@@ -22,11 +22,11 @@ plugins {
 
 android {
     namespace = "ksnd.hiraganaconverter"
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         applicationId = "ksnd.hiraganaconverter"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 44
         versionName = "1.33"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
