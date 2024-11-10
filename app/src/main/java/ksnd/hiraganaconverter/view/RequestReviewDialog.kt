@@ -46,13 +46,13 @@ fun RequestReviewDialog(onLater: () -> Unit, onOk: () -> Unit) {
     )
 }
 
- @UiModePreview
- @Composable
- private fun PreviewRequestReviewDialog() {
+@UiModePreview
+@Composable
+private fun PreviewRequestReviewDialog() {
     HiraganaConverterTheme {
         RequestReviewDialog(
             onLater = {},
             onOk = {},
         )
     }
- }
+}
