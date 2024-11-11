@@ -7,6 +7,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import ksnd.hiraganaconverter.core.resource.R
+import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
+import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
 @Composable
 fun RequestReviewDialog(onLater: () -> Unit, onOk: () -> Unit) {
@@ -44,15 +46,13 @@ fun RequestReviewDialog(onLater: () -> Unit, onOk: () -> Unit) {
     )
 }
 
-// FIXME: Skip in ShowkaseComposable does not work.
-// @UiModePreview
-// @Composable
-// @ShowkaseComposable(skip = true)
-// fun PreviewRequestReviewDialog() {
-//    HiraganaConverterTheme {
-//        RequestReviewDialog(
-//            onLater = {},
-//            onOk = {},
-//        )
-//    }
-// }
+@UiModePreview
+@Composable
+private fun PreviewRequestReviewDialog() {
+    HiraganaConverterTheme {
+        RequestReviewDialog(
+            onLater = {},
+            onOk = {},
+        )
+    }
+}

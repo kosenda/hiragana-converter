@@ -55,7 +55,6 @@ https://github.com/kosenda/hiragana-converter/blob/develop/REFERENCE.md
 |Roborazzi|Make JVM Android Integration Test Visible|
 |Room|Database|
 |Secrets gradle plugin|Reading API keys from `local.properties`|
-|Showkase|auto-generates a browser for Jetpack Compose UI|
 |Timber|Log output library|
 |Truth|Assertions used in testing|
 |Turbine|testing library for kotlinx.coroutines Flow|

@@ -29,9 +29,6 @@ class AndroidLibraryComposePlugin : Plugin<Project> {
                 add("implementation", libs.findLibrary("androidx.compose.ui.tooling.preview").get())
                 add("testImplementation", libs.findLibrary("androidx.compose.ui.test.junit4").get())
                 add("implementation", libs.findLibrary("androidx.lifecycle.runtime.compose").get())
-                add("debugImplementation", libs.findLibrary("showkase").get())
-                add("implementation", libs.findLibrary("showkase.annotation").get())
-                add("kspDebug", libs.findLibrary("showkase.processor").get())
             }
         }
     }

@@ -42,9 +42,9 @@ truth = "1.4.4"
 turbine = "1.2.0"
 mockk = "1.13.13"
 roborazzi = "1.32.2"
-showkase = "1.0.3"
 aboutLibraries = "11.2.3"
 konsist = "0.16.1"
+composablePreviewScanner = "0.4.0"
 
 # ** I'm using it, so no deletions allowed. **
 jacoco = "0.8.10"
@@ -120,6 +120,10 @@ mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", version.ref = "roborazzi" }
 roborazzi-compose = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose", version.ref = "roborazzi" }
 roborazzi-junit4-rule = { group = "io.github.takahirom.roborazzi", name = "roborazzi-junit-rule", version.ref = "roborazzi" }
+roborazzi-compose-preview-scanner-support = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose-preview-scanner-support", version.ref = "roborazzi" }
+
+# ComposablePreviewScanner
+composable-preview-scanner = { group = "io.github.sergio-sastre.ComposablePreviewScanner", name = "android", version.ref = "composablePreviewScanner" }
 
 # Firebase
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref="firebaseBom"}
@@ -148,11 +152,6 @@ kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-pl
 
 # LazyColumnScrollbar
 lazyColumnScrollbar = { group = "com.github.nanihadesuka", name = "LazyColumnScrollbar", version.ref = "lazyColumnScrollbar" }
-
-# Showkase
-showkase = { group = "com.airbnb.android", name = "showkase", version.ref = "showkase" }
-showkase-annotation = { group = "com.airbnb.android", name = "showkase-annotation", version.ref = "showkase" }
-showkase-processor = { group = "com.airbnb.android", name = "showkase-processor", version.ref = "showkase" }
 
 # AboutLibraries
 aboutLibraries = { group = "com.mikepenz", name = "aboutlibraries-compose-m3", version.ref = "aboutLibraries" }
