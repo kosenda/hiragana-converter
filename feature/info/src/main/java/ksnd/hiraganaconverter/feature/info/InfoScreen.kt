@@ -47,7 +47,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalUriHandler
@@ -68,7 +67,7 @@ import ksnd.hiraganaconverter.core.ui.parts.GooCreditImage
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.parts.button.TransitionButton
 import ksnd.hiraganaconverter.core.ui.parts.card.TitleCard
-import ksnd.hiraganaconverter.core.ui.parts.dialog.MovesToSiteDialog
+import ksnd.hiraganaconverter.core.ui.parts.dialog.MoveToBrowserDialog
 import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.core.ui.theme.urlColor
@@ -99,8 +98,6 @@ private fun InfoScreenContent(
     onBackPressed: () -> Unit,
     onClickLicense: () -> Unit,
 ) {
-    val urlHandler = LocalUriHandler.current
-    val context = LocalContext.current
     val layoutDirection = LocalLayoutDirection.current
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val coroutineScope = rememberCoroutineScope()
@@ -156,26 +153,24 @@ private fun InfoScreenContent(
     }
 
     if (isShowMovesToAppSiteDialog) {
-        MovesToSiteDialog(
+        MoveToBrowserDialog(
             onDismissRequest = {
                 isShowMovesToAppSiteDialog = false
             },
-            onClick = {
+            onMoveToBrowser = {
                 isShowMovesToAppSiteDialog = false
-                urlHandler.openUri(uri = context.getString(R.string.review_url))
             },
             url = stringResource(id = R.string.review_url),
         )
     }
 
     if (isShowMovesToApiSiteDialog) {
-        MovesToSiteDialog(
+        MoveToBrowserDialog(
             onDismissRequest = {
                 isShowMovesToApiSiteDialog = false
             },
-            onClick = {
+            onMoveToBrowser = {
                 isShowMovesToApiSiteDialog = false
-                urlHandler.openUri(uri = context.getString(R.string.goo_url))
             },
             url = stringResource(id = R.string.goo_url),
         )
