@@ -1,50 +1,51 @@
 [versions]
-accompanist = "0.34.0"
-activity = "1.9.0"
-androidGradlePlugin = "8.5.1"
+accompanist = "0.36.0"
+activity = "1.9.3"
+androidGradlePlugin = "8.7.2"
 androidxAppCompat = "1.7.0"
-androidxCompose = "1.6.8"
-androidxComposeMaterial3 = "1.2.1"
+androidxCompose = "1.7.5"
+androidxComposeMaterial3 = "1.3.1"
 androidxCoreSplashscreen = "1.0.1"
 androidxDataStore = "1.1.1"
 androidxHilt = "1.2.0"
-androidxLifecycle = "2.8.2"
-androidxNavigation = "2.8.0-beta05"
+androidxLifecycle = "2.8.7"
+androidxNavigation = "2.8.4"
 androidxTestCore = "1.6.1"
 appUpdate = "2.1.0"
 coil = "2.7.0"
-coroutines = "1.8.1"
-coroutineTest = "1.8.1"
+coroutines = "1.9.0"
+coroutineTest = "1.9.0"
 dokka = "1.9.20"
 gmsPlugin = "4.4.2"
-firebaseBom = "33.1.2"
+firebaseBom = "33.6.0"
 firebaseCrashlyticsPlugin = "3.0.2"
 firebasePerfPlugin = "1.4.2"
 firebaseAppdistributionPlugin = "5.0.0"
-hilt = "2.51.1"
+hilt = "2.52"
 junit4 = "4.13.2"
-kotlin = "2.0.0"
-kotlinxSerializationJson = "1.7.1"
-kotlinxDatetime = "0.6.0"
-ksp = "2.0.0-1.0.22"
-ktlint = "1.3.1"
-lazyColumnScrollbar = "2.1.0"
-lottie = "6.4.1"
+kotlin = "2.0.21"
+kotlinxSerializationJson = "1.7.3"
+kotlinxDatetime = "0.6.1"
+ksp = "2.0.21-1.0.28"
+ktlint = "1.4.1"
+lazyColumnScrollbar = "2.2.0"
+lottie = "6.6.0"
 okhttp3 = "4.12.0"
 playReview = "2.0.1"
 retrofit = "2.11.0"
 retrofitSerialization = "1.0.0"
-robolectric = "4.13"
+robolectric = "4.14"
 room = "2.6.1"
 secrets = "2.0.1"
 timber = "5.0.1"
 truth = "1.4.4"
-turbine = "1.1.0"
-mockk = "1.13.12"
-roborazzi = "1.23.0"
-showkase = "1.0.3"
-aboutLibraries = "11.2.2"
-konsist = "0.15.1"
+turbine = "1.2.0"
+mockk = "1.13.13"
+roborazzi = "1.32.2"
+aboutLibraries = "11.2.3"
+konsist = "0.16.1"
+composablePreviewScanner = "0.4.0"
+webpImageIO = "0.3.3"
 
 # ** I'm using it, so no deletions allowed. **
 jacoco = "0.8.10"
@@ -61,6 +62,7 @@ androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "androidxCompose" }
 androidx-compose-ui-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "androidxCompose" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "androidxCompose" }
+androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "androidxCompose" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "androidxCompose" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "androidxCompose" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidxCoreSplashscreen" }
@@ -120,6 +122,10 @@ mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", version.ref = "roborazzi" }
 roborazzi-compose = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose", version.ref = "roborazzi" }
 roborazzi-junit4-rule = { group = "io.github.takahirom.roborazzi", name = "roborazzi-junit-rule", version.ref = "roborazzi" }
+roborazzi-compose-preview-scanner-support = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose-preview-scanner-support", version.ref = "roborazzi" }
+
+# ComposablePreviewScanner
+composable-preview-scanner = { group = "io.github.sergio-sastre.ComposablePreviewScanner", name = "android", version.ref = "composablePreviewScanner" }
 
 # Firebase
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref="firebaseBom"}
@@ -149,16 +155,14 @@ kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-pl
 # LazyColumnScrollbar
 lazyColumnScrollbar = { group = "com.github.nanihadesuka", name = "LazyColumnScrollbar", version.ref = "lazyColumnScrollbar" }
 
-# Showkase
-showkase = { group = "com.airbnb.android", name = "showkase", version.ref = "showkase" }
-showkase-annotation = { group = "com.airbnb.android", name = "showkase-annotation", version.ref = "showkase" }
-showkase-processor = { group = "com.airbnb.android", name = "showkase-processor", version.ref = "showkase" }
-
 # AboutLibraries
 aboutLibraries = { group = "com.mikepenz", name = "aboutlibraries-compose-m3", version.ref = "aboutLibraries" }
 
 # Konsist
 konsist = { group = "com.lemonappdev", name = "konsist", version.ref = "konsist" }
+
+# WebP ImageIO
+webp-image-io = { group = "io.github.darkxanter", name = "webp-imageio", version.ref = "webpImageIO" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

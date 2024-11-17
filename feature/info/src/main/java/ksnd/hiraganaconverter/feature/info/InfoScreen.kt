@@ -1,5 +1,6 @@
 package ksnd.hiraganaconverter.feature.info
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -47,7 +48,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalUriHandler
@@ -56,6 +56,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
@@ -68,7 +69,7 @@ import ksnd.hiraganaconverter.core.ui.parts.GooCreditImage
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.parts.button.TransitionButton
 import ksnd.hiraganaconverter.core.ui.parts.card.TitleCard
-import ksnd.hiraganaconverter.core.ui.parts.dialog.MovesToSiteDialog
+import ksnd.hiraganaconverter.core.ui.parts.dialog.MoveToBrowserDialog
 import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.core.ui.theme.urlColor
@@ -99,8 +100,6 @@ private fun InfoScreenContent(
     onBackPressed: () -> Unit,
     onClickLicense: () -> Unit,
 ) {
-    val urlHandler = LocalUriHandler.current
-    val context = LocalContext.current
     val layoutDirection = LocalLayoutDirection.current
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val coroutineScope = rememberCoroutineScope()
@@ -156,26 +155,24 @@ private fun InfoScreenContent(
     }
 
     if (isShowMovesToAppSiteDialog) {
-        MovesToSiteDialog(
+        MoveToBrowserDialog(
             onDismissRequest = {
                 isShowMovesToAppSiteDialog = false
             },
-            onClick = {
+            onMoveToBrowser = {
                 isShowMovesToAppSiteDialog = false
-                urlHandler.openUri(uri = context.getString(R.string.review_url))
             },
             url = stringResource(id = R.string.review_url),
         )
     }
 
     if (isShowMovesToApiSiteDialog) {
-        MovesToSiteDialog(
+        MoveToBrowserDialog(
             onDismissRequest = {
                 isShowMovesToApiSiteDialog = false
             },
-            onClick = {
+            onMoveToBrowser = {
                 isShowMovesToApiSiteDialog = false
-                urlHandler.openUri(uri = context.getString(R.string.goo_url))
             },
             url = stringResource(id = R.string.goo_url),
         )
@@ -384,7 +381,8 @@ private fun UrlText(url: String, onURLClick: () -> Unit) {
     )
 }
 
-@UiModePreview
+@Preview(name = "Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, heightDp = 1100)
+@Preview(name = "Light", uiMode = Configuration.UI_MODE_NIGHT_NO, heightDp = 1100)
 @Composable
 fun PreviewInfoScreenContent() {
     HiraganaConverterTheme {

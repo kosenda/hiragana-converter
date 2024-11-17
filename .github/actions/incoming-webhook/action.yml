@@ -15,7 +15,7 @@ runs:
     # https://github.com/slackapi/slack-github-action
     - name: Send GitHub Action trigger data to Slack workflow
       id: slack
-      uses: slackapi/slack-github-action@v1.26.0
+      uses: slackapi/slack-github-action@v2.0.0
       with:
         payload: |
           {

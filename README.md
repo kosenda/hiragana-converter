@@ -38,6 +38,7 @@ https://github.com/kosenda/hiragana-converter/blob/develop/REFERENCE.md
 |App Update|In App Update|
 |App Review|In App Review|
 |Coil|Image loading library|
+|ComposablePreviewScanner|Help auto-generate screenshot tests|
 |Crashlytics|Firebase crashlytics|
 |Danger|Automatic review|
 |Hilt|Dependency Injection|
@@ -55,7 +56,6 @@ https://github.com/kosenda/hiragana-converter/blob/develop/REFERENCE.md
 |Roborazzi|Make JVM Android Integration Test Visible|
 |Room|Database|
 |Secrets gradle plugin|Reading API keys from `local.properties`|
-|Showkase|auto-generates a browser for Jetpack Compose UI|
 |Timber|Log output library|
 |Truth|Assertions used in testing|
 |Turbine|testing library for kotlinx.coroutines Flow|

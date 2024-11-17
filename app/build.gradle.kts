@@ -1,5 +1,6 @@
+import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.google.firebase.perf.plugin.FirebasePerfExtension
-import ksnd.hiraganaconverter.kotlinOptions
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -22,21 +23,23 @@ plugins {
 
 android {
     namespace = "ksnd.hiraganaconverter"
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         applicationId = "ksnd.hiraganaconverter"
         minSdk = 26
-        targetSdk = 34
-        versionCode = 44
-        versionName = "1.33"
+        targetSdk = 35
+        versionCode = 45
+        versionName = "1.34"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+        }
     }
     androidResources {
         generateLocaleConfig = true
@@ -91,9 +94,6 @@ android {
         buildConfig = true
         compose = true
     }
-    composeCompiler {
-        enableStrongSkippingMode = true
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -102,6 +102,18 @@ android {
     testOptions {
         unitTests.isIncludeAndroidResources = true
         unitTests.isReturnDefaultValues = true
+        unitTests.all {
+            it.systemProperties["robolectric.pixelCopyRenderMode"] = "hardware"
+        }
+    }
+}
+
+roborazzi {
+    @OptIn(ExperimentalRoborazziApi::class)
+    generateComposePreviewRobolectricTests {
+        enable = true
+        testerQualifiedClassName = "ksnd.hiraganaconverter.RoborazziComposePreviewTest"
+        packages = listOf("ksnd.hiraganaconverter")
     }
 }
 
@@ -130,6 +142,10 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.lifecycle.runtime.compose)
 
+    // Supported: Workaround for AGP not merging test manifest
+    //   ref: https://github.com/robolectric/robolectric/pull/4736
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+
     // Lottie
     implementation(libs.lottie)
 
@@ -151,16 +167,18 @@ dependencies {
     // Navigation
     implementation(libs.androidx.navigation.compose)
 
-    // Showkase
-    debugImplementation(libs.showkase)
-    implementation(libs.showkase.annotation)
-    kspDebug(libs.showkase.processor)
-
     // kotlinx serialization
     implementation(libs.kotlinx.serialization.json)
 
     // AboutLibraries
     implementation(libs.aboutLibraries)
+
+    // Roborazzi (for ComposablePreviewScanner)
+    testImplementation(libs.roborazzi.compose.preview.scanner.support)
+    testImplementation(libs.junit)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.composable.preview.scanner)
+    testImplementation(libs.webp.image.io)
 }
 
 tasks.withType<Test>().configureEach {
