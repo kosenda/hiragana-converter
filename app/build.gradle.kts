@@ -1,6 +1,6 @@
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.google.firebase.perf.plugin.FirebasePerfExtension
-import ksnd.hiraganaconverter.kotlinOptions
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
 import java.util.Properties
 
@@ -36,8 +36,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+        }
     }
     androidResources {
         generateLocaleConfig = true
@@ -91,9 +93,6 @@ android {
     buildFeatures {
         buildConfig = true
         compose = true
-    }
-    composeCompiler {
-        enableStrongSkippingMode = true
     }
     packaging {
         resources {
