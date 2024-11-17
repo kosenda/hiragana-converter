@@ -38,6 +38,7 @@ https://github.com/kosenda/hiragana-converter/blob/develop/REFERENCE.md
 |App Update|In App Update|
 |App Review|In App Review|
 |Coil|Image loading library|
+|ComposablePreviewScanner|Help auto-generate screenshot tests|
 |Crashlytics|Firebase crashlytics|
 |Danger|Automatic review|
 |Hilt|Dependency Injection|
