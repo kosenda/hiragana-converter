@@ -45,6 +45,7 @@ roborazzi = "1.32.2"
 aboutLibraries = "11.2.3"
 konsist = "0.16.1"
 composablePreviewScanner = "0.4.0"
+webpImageIO = "0.3.3"
 
 # ** I'm using it, so no deletions allowed. **
 jacoco = "0.8.10"
@@ -159,6 +160,9 @@ aboutLibraries = { group = "com.mikepenz", name = "aboutlibraries-compose-m3", v
 
 # Konsist
 konsist = { group = "com.lemonappdev", name = "konsist", version.ref = "konsist" }
+
+# WebP ImageIO
+webp-image-io = { group = "io.github.darkxanter", name = "webp-imageio", version.ref = "webpImageIO" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

@@ -200,13 +200,13 @@ commands:
             if [ $IS_SKIPPING_VRT = "false" ]; then
               git push origin --delete compare_$CIRCLE_BRANCH || true
             
-              fileSize=$(echo $(find ./screenshots/compare -type f | grep -e '.*_compare.png' | wc -l | sed -e 's/ //g'))
+              fileSize=$(echo $(find ./screenshots/compare -type f | grep -e '.*_compare.webp' | wc -l | sed -e 's/ //g'))
               echo "fileSize: $fileSize"
               if [ $fileSize -ne 0 ]; then
                 git checkout --orphan compare_$CIRCLE_BRANCH
                 git rm --cached -rf .
             
-                add_files=$(find . -type f -path "./screenshots/compare/*" -name "*_compare.png")
+                add_files=$(find . -type f -path "./screenshots/compare/*" -name "*_compare.webp")
                 for file in $add_files; do
                   git add -f $file
                 done
@@ -229,7 +229,7 @@ commands:
             echo "| File name | Image |" >> comment
             echo "|-------|-------|" >> comment
             
-            files=$(find . -type f -path "./screenshots/compare/*" -name "*_compare.png")
+            files=$(find . -type f -path "./screenshots/compare/*" -name "*_compare.webp")
             for file in $files; do
               fileName=$(basename "$file" | sed -r 's/(.{20})/\1<br>/g')
               echo "| [$fileName](https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/blob/compare_$CIRCLE_BRANCH/$file) | ![](https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/blob/compare_$CIRCLE_BRANCH/$file?raw=true) |" >> comment
