@@ -41,12 +41,11 @@ class RoborazziComposePreviewTest : ComposePreviewTester<AndroidPreviewInfo> {
         return super.options().copy(testLifecycleOptions = testLifecycleOptions)
     }
 
-    override fun previews(): List<ComposablePreview<AndroidPreviewInfo>> {
-        return AndroidComposablePreviewScanner()
+    override fun previews(): List<ComposablePreview<AndroidPreviewInfo>> =
+        AndroidComposablePreviewScanner()
             // Configure roborazzi's packages in :app/build.gradle.kts
             .scanPackageTrees(*options().scanOptions.packages.toTypedArray())
             .getPreviews()
-    }
 
     override fun test(preview: ComposablePreview<AndroidPreviewInfo>) {
         val screenshotId = AndroidPreviewScreenshotIdBuilder(preview).build()
