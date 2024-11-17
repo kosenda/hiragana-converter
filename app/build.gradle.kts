@@ -178,6 +178,7 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.robolectric)
     testImplementation(libs.composable.preview.scanner)
+    testImplementation(libs.webp.image.io)
 }
 
 tasks.withType<Test>().configureEach {

@@ -8,6 +8,7 @@ import androidx.compose.ui.test.onRoot
 import androidx.test.core.app.ApplicationProvider
 import com.github.takahirom.roborazzi.ComposePreviewTester
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
+import com.github.takahirom.roborazzi.LosslessWebPImageIoFormat
 import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.captureRoboImage
 import org.robolectric.RuntimeEnvironment
@@ -49,7 +50,7 @@ class RoborazziComposePreviewTest : ComposePreviewTester<AndroidPreviewInfo> {
 
     override fun test(preview: ComposablePreview<AndroidPreviewInfo>) {
         val screenshotId = AndroidPreviewScreenshotIdBuilder(preview).build()
-        val filePath = "$SCREEN_SHOT_PATH$screenshotId.png"
+        val filePath = "$SCREEN_SHOT_PATH$screenshotId.webp"
 
         preview.apply {
             if (this.previewInfo.uiMode == Configuration.UI_MODE_NIGHT_YES) {
@@ -72,6 +73,9 @@ class RoborazziComposePreviewTest : ComposePreviewTester<AndroidPreviewInfo> {
                 roborazziOptions = RoborazziOptions(
                     compareOptions = RoborazziOptions.CompareOptions(
                         outputDirectoryPath = COMPARE_PATH,
+                    ),
+                    recordOptions = RoborazziOptions.RecordOptions(
+                        imageIoFormat = LosslessWebPImageIoFormat(),
                     ),
                 ),
             )
