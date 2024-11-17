@@ -36,21 +36,20 @@ class RoborazziComposePreviewTest : ComposePreviewTester<AndroidPreviewInfo> {
     override fun options(): ComposePreviewTester.Options {
         // Use composeTestRule as a JUnit 4 Rule
         val testLifecycleOptions = ComposePreviewTester.Options.JUnit4TestLifecycleOptions(
-            testRuleFactory = { composeTestRule }
+            testRuleFactory = { composeTestRule },
         )
         return super.options().copy(testLifecycleOptions = testLifecycleOptions)
     }
 
-    override fun previews(): List<ComposablePreview<AndroidPreviewInfo>> {
-        return AndroidComposablePreviewScanner()
+    override fun previews(): List<ComposablePreview<AndroidPreviewInfo>> =
+        AndroidComposablePreviewScanner()
             // Configure roborazzi's packages in :app/build.gradle.kts
             .scanPackageTrees(*options().scanOptions.packages.toTypedArray())
             .getPreviews()
-    }
 
     override fun test(preview: ComposablePreview<AndroidPreviewInfo>) {
         val screenshotId = AndroidPreviewScreenshotIdBuilder(preview).build()
-        val filePath = "$ScreenShotPath${screenshotId}.png"
+        val filePath = "$ScreenShotPath$screenshotId.png"
 
         preview.apply {
             if (this.previewInfo.uiMode == Configuration.UI_MODE_NIGHT_YES) {
@@ -73,8 +72,8 @@ class RoborazziComposePreviewTest : ComposePreviewTester<AndroidPreviewInfo> {
                 roborazziOptions = RoborazziOptions(
                     compareOptions = RoborazziOptions.CompareOptions(
                         outputDirectoryPath = ComparePath,
-                    )
-                )
+                    ),
+                ),
             )
         }
     }
