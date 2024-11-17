@@ -379,7 +379,7 @@ fun PreviewConverterScreenContent(
 
 class PreviewConverterUiStateProvider : PreviewParameterProvider<ConvertUiState> {
     override val values: Sequence<ConvertUiState> = sequenceOf(
-        ConvertUiState(inputText = "漢字漢字", outputText = "かんじかんじ"),
+        ConvertUiState(inputText = "漢字", outputText = "かんじ"),
         ConvertUiState(showErrorCard = true, convertErrorType = ConvertErrorType.REACHED_CONVERT_MAX_LIMIT),
     )
 }
