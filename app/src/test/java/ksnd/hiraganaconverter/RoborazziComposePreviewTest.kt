@@ -19,8 +19,8 @@ import sergio.sastre.composable.preview.scanner.android.screenshotid.AndroidPrev
 import sergio.sastre.composable.preview.scanner.core.preview.ComposablePreview
 import kotlin.math.roundToInt
 
-private const val ScreenShotPath = "../screenshots/"
-private const val ComparePath = "../screenshots/compare/"
+private const val SCREEN_SHOT_PATH = "../screenshots/"
+private const val COMPARE_PATH = "../screenshots/compare/"
 
 /**
  * ref:
@@ -41,15 +41,16 @@ class RoborazziComposePreviewTest : ComposePreviewTester<AndroidPreviewInfo> {
         return super.options().copy(testLifecycleOptions = testLifecycleOptions)
     }
 
-    override fun previews(): List<ComposablePreview<AndroidPreviewInfo>> =
-        AndroidComposablePreviewScanner()
+    override fun previews(): List<ComposablePreview<AndroidPreviewInfo>> {
+        return AndroidComposablePreviewScanner()
             // Configure roborazzi's packages in :app/build.gradle.kts
             .scanPackageTrees(*options().scanOptions.packages.toTypedArray())
             .getPreviews()
+    }
 
     override fun test(preview: ComposablePreview<AndroidPreviewInfo>) {
         val screenshotId = AndroidPreviewScreenshotIdBuilder(preview).build()
-        val filePath = "$ScreenShotPath$screenshotId.png"
+        val filePath = "$SCREEN_SHOT_PATH$screenshotId.png"
 
         preview.apply {
             if (this.previewInfo.uiMode == Configuration.UI_MODE_NIGHT_YES) {
@@ -71,7 +72,7 @@ class RoborazziComposePreviewTest : ComposePreviewTester<AndroidPreviewInfo> {
                 filePath = filePath,
                 roborazziOptions = RoborazziOptions(
                     compareOptions = RoborazziOptions.CompareOptions(
-                        outputDirectoryPath = ComparePath,
+                        outputDirectoryPath = COMPARE_PATH,
                     ),
                 ),
             )

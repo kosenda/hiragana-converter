@@ -1,5 +1,6 @@
 package ksnd.hiraganaconverter.feature.info
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -55,6 +56,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
@@ -379,7 +381,8 @@ private fun UrlText(url: String, onURLClick: () -> Unit) {
     )
 }
 
-@UiModePreview
+@Preview(name = "Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, heightDp = 1100)
+@Preview(name = "Light", uiMode = Configuration.UI_MODE_NIGHT_NO, heightDp = 1100)
 @Composable
 fun PreviewInfoScreenContent() {
     HiraganaConverterTheme {
