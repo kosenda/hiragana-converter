@@ -106,12 +106,14 @@ android {
             it.systemProperties["robolectric.pixelCopyRenderMode"] = "hardware"
         }
     }
-    roborazzi {
-        @OptIn(ExperimentalRoborazziApi::class)
-        generateComposePreviewRobolectricTests {
-            enable = true
-            packages = listOf("ksnd.hiraganaconverter")
-        }
+}
+
+roborazzi {
+    @OptIn(ExperimentalRoborazziApi::class)
+    generateComposePreviewRobolectricTests {
+        enable = true
+        testerQualifiedClassName = "ksnd.hiraganaconverter.RoborazziComposePreviewTest"
+        packages = listOf("ksnd.hiraganaconverter")
     }
 }
 
@@ -139,6 +141,10 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.lifecycle.runtime.compose)
+
+    // Supported: Workaround for AGP not merging test manifest
+    //   ref: https://github.com/robolectric/robolectric/pull/4736
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     // Lottie
     implementation(libs.lottie)

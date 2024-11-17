@@ -32,6 +32,7 @@ import ksnd.hiraganaconverter.core.ui.isTest
 import ksnd.hiraganaconverter.core.ui.navigation.Nav
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
+import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -98,8 +99,10 @@ fun TopBar(
 @UiModePreview
 @Composable
 fun PreviewTopBar() {
-    TopBar(
-        scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState()),
-        navigateScreen = {},
-    )
+    HiraganaConverterTheme {
+        TopBar(
+            scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState()),
+            navigateScreen = {},
+        )
+    }
 }
