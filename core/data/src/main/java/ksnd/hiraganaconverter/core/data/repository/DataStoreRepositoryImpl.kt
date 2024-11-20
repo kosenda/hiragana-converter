@@ -24,7 +24,7 @@ class DataStoreRepositoryImpl @Inject constructor(
     override fun theme(): Flow<Theme> {
         return dataStore.data
             .catch { exception ->
-                Timber.e("DataStore: %s", exception)
+                Timber.e(exception, "DataStore: %s", exception.message)
                 if (exception is IOException) emit(emptyPreferences()) else Theme.AUTO
             }
             .map { preferences ->
@@ -35,7 +35,7 @@ class DataStoreRepositoryImpl @Inject constructor(
     override fun fontType(): Flow<FontType> {
         return dataStore.data
             .catch { exception ->
-                Timber.e("DataStore: %s", exception)
+                Timber.e(exception, "DataStore: %s", exception.message)
                 if (exception is IOException) emit(emptyPreferences()) else FontType.YUSEI_MAGIC
             }
             .map { preferences ->
@@ -46,7 +46,7 @@ class DataStoreRepositoryImpl @Inject constructor(
     private fun lastConvertTime(): Flow<LocalDate?> {
         return dataStore.data
             .catch { exception ->
-                Timber.e("DataStore: %s".format(exception))
+                Timber.e(exception, "DataStore: %s", exception.message)
                 if (exception is IOException) emit(emptyPreferences())
             }
             .map { preferences ->
@@ -57,7 +57,7 @@ class DataStoreRepositoryImpl @Inject constructor(
     private fun todayConvertCount(): Flow<Int> {
         return dataStore.data
             .catch { exception ->
-                Timber.e("DataStore: %s".format(exception))
+                Timber.e(exception, "DataStore: %s", exception.message)
                 if (exception is IOException) emit(emptyPreferences())
             }
             .map { preferences ->
@@ -68,7 +68,7 @@ class DataStoreRepositoryImpl @Inject constructor(
     override fun enableInAppUpdate(): Flow<Boolean> {
         return dataStore.data
             .catch { exception ->
-                Timber.e("DataStore: %s", exception)
+                Timber.e(exception, "DataStore: %s", exception.message)
                 if (exception is IOException) emit(emptyPreferences())
             }
             .map { preferences ->

@@ -27,13 +27,13 @@ fun Throwable.toConvertErrorType(): ConvertErrorType = when (this) {
         ConvertErrorType.INTERNAL_SERVER.name -> ConvertErrorType.INTERNAL_SERVER
         ConvertErrorType.NETWORK.name -> ConvertErrorType.NETWORK
         else -> {
-            Timber.w("InterceptorError: %s".format(this.message))
+            Timber.w(this, "InterceptorError: %s".format(this.message))
             ConvertErrorType.CONVERSION_FAILED
         }
     }
 
     else -> {
-        Timber.e("Not defined ConvertTextUseCaseException! throwable: $this")
+        Timber.e(this, "Not defined ConvertTextUseCaseException! throwable: $this")
         ConvertErrorType.CONVERSION_FAILED
     }
 }
