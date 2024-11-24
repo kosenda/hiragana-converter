@@ -169,7 +169,10 @@ private fun AppInfoContent(versionName: String) {
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(end = 16.dp)
+        ) {
             Image(
                 painter = painterResource(id = R.drawable.icon),
                 contentDescription = "convert",
