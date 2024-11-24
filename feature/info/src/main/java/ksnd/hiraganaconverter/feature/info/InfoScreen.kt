@@ -245,6 +245,7 @@ private fun DeveloperInfoContent() {
                     CustomIconButton(
                         painter = painterResource(id = R.drawable.ic_github_logo),
                         contentDescription = "",
+                        modifier = Modifier.padding(end = 8.dp),
                         contentColor = Color.Black,
                         containerColor = Color.White,
                         onClick = { uriHandler.openUri(uri = "https://github.com/kosenda") },

@@ -33,7 +33,9 @@ fun CustomIconButton(
 ) {
     val buttonScaleState = rememberButtonScaleState()
     IconButton(
-        modifier = modifier.scale(scale = buttonScaleState.animationScale.value),
+        modifier = modifier
+            .size(48.dp)
+            .scale(scale = buttonScaleState.animationScale.value),
         onClick = onClick,
         interactionSource = buttonScaleState.interactionSource,
         colors = IconButtonDefaults.iconButtonColors(
@@ -46,7 +48,7 @@ fun CustomIconButton(
             colorFilter = contentColor?.let { ColorFilter.tint(it) },
             contentScale = ContentScale.Fit,
             modifier = Modifier
-                .size(24.dp)
+                .size(32.dp)
                 .then(
                     if (contentColor == null) {
                         Modifier.contentBrush(brush = secondaryBrush())
