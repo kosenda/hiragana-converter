@@ -1,12 +1,14 @@
 package ksnd.hiraganaconverter.feature.info
 
 import android.content.res.Configuration
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -34,10 +36,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -45,6 +47,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
@@ -53,9 +56,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
@@ -69,10 +70,9 @@ import ksnd.hiraganaconverter.core.ui.parts.GooCreditImage
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.parts.button.TransitionButton
 import ksnd.hiraganaconverter.core.ui.parts.card.TitleCard
-import ksnd.hiraganaconverter.core.ui.parts.dialog.MoveToBrowserDialog
-import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
+import ksnd.hiraganaconverter.core.ui.theme.CustomColor
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
-import ksnd.hiraganaconverter.core.ui.theme.urlColor
+import ksnd.hiraganaconverter.core.ui.theme.LocalIsDarkTheme
 
 @Composable
 fun InfoScreen(
@@ -104,8 +104,6 @@ private fun InfoScreenContent(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
-    var isShowMovesToAppSiteDialog by remember { mutableStateOf(false) }
-    var isShowMovesToApiSiteDialog by remember { mutableStateOf(false) }
     var topBarHeight by remember { mutableIntStateOf(0) }
     val density = LocalDensity.current.density
     val navigationHeight = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
@@ -145,42 +143,20 @@ private fun InfoScreenContent(
                 .padding(horizontal = 16.dp),
         ) {
             Spacer(modifier = Modifier.height((topBarHeight / density).toInt().dp))
-            AppInfoContent(versionName = versionName, onURLClick = { isShowMovesToAppSiteDialog = true })
+
+            AppInfoContent(versionName = versionName)
             DeveloperInfoContent()
-            APIInfoContent(onURLClick = { isShowMovesToApiSiteDialog = true })
+            APIInfoContent()
             LicensesContent(onClickLicense = onClickLicense)
             PrivacyPolicyContent()
+
             Spacer(modifier = Modifier.height(48.dp + navigationHeight))
         }
-    }
-
-    if (isShowMovesToAppSiteDialog) {
-        MoveToBrowserDialog(
-            onDismissRequest = {
-                isShowMovesToAppSiteDialog = false
-            },
-            onMoveToBrowser = {
-                isShowMovesToAppSiteDialog = false
-            },
-            url = stringResource(id = R.string.review_url),
-        )
-    }
-
-    if (isShowMovesToApiSiteDialog) {
-        MoveToBrowserDialog(
-            onDismissRequest = {
-                isShowMovesToApiSiteDialog = false
-            },
-            onMoveToBrowser = {
-                isShowMovesToApiSiteDialog = false
-            },
-            url = stringResource(id = R.string.goo_url),
-        )
     }
 }
 
 @Composable
-private fun AppInfoContent(versionName: String, onURLClick: () -> Unit) {
+private fun AppInfoContent(versionName: String) {
     TitleCard(
         text = stringResource(id = R.string.app_info_title),
         painter = painterResource(id = R.drawable.ic_outline_info_24),
@@ -203,28 +179,25 @@ private fun AppInfoContent(versionName: String, onURLClick: () -> Unit) {
                     .size(72.dp)
                     .clip(CircleShape),
             )
+
             Column(
                 modifier = Modifier.padding(vertical = 16.dp),
             ) {
-                ItemTitle(
-                    text = stringResource(id = R.string.app_name_title),
-                    modifier = Modifier.padding(bottom = 4.dp),
+                DescItem(
+                    title = R.string.app_name_title,
+                    text = stringResource(id = R.string.app_name),
+                    modifier = Modifier.padding(bottom = 8.dp)
                 )
-                BodyMedium(text = stringResource(id = R.string.app_name))
 
-                ItemTitle(
-                    text = stringResource(id = R.string.version_title),
-                    modifier = Modifier.padding(bottom = 4.dp, top = 16.dp),
+                DescItem(
+                    title = R.string.version_title,
+                    text = versionName,
                 )
-                BodyMedium(text = versionName)
 
-                ItemTitle(
+                LinkText(
                     text = stringResource(id = R.string.google_play),
-                    modifier = Modifier.padding(bottom = 4.dp, top = 16.dp),
-                )
-                UrlText(
                     url = stringResource(id = R.string.review_url),
-                    onURLClick = onURLClick,
+                    modifier = Modifier.padding(top = 16.dp),
                 )
             }
         }
@@ -243,26 +216,32 @@ private fun DeveloperInfoContent() {
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             Image(
                 painter = painterResource(id = R.drawable.google_play_icon),
                 contentDescription = "convert",
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .padding(all = 16.dp)
+                    .padding(vertical = 16.dp)
+                    .padding(end = 16.dp)
                     .size(72.dp)
                     .clip(CircleShape),
             )
             Column(
                 modifier = Modifier.padding(vertical = 16.dp),
             ) {
-                ItemTitle(
-                    text = stringResource(id = R.string.developer_name_title),
-                    modifier = Modifier.padding(bottom = 4.dp),
+                DescItem(
+                    title = R.string.developer_name_title,
+                    text = stringResource(R.string.developer_name),
                 )
 
-                FlowRow {
-                    BodyMedium(text = stringResource(id = R.string.developer_name))
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
                     CustomIconButton(
                         painter = painterResource(id = R.drawable.ic_github_logo),
                         contentDescription = "",
@@ -273,10 +252,9 @@ private fun DeveloperInfoContent() {
                     CustomIconButton(
                         painter = painterResource(id = R.drawable.ic_x_logo),
                         contentDescription = "",
-                        modifier = Modifier.padding(start = 8.dp),
                         contentColor = Color.White,
                         containerColor = Color.Black,
-                        onClick = { uriHandler.openUri(uri = "https://twitter.com/ksnd_dev") },
+                        onClick = { uriHandler.openUri(uri = "https://x.com/ksnd_dev") },
                     )
                 }
             }
@@ -285,7 +263,7 @@ private fun DeveloperInfoContent() {
 }
 
 @Composable
-private fun APIInfoContent(onURLClick: () -> Unit) {
+private fun APIInfoContent() {
     TitleCard(
         text = stringResource(id = R.string.api_info_title),
         painter = painterResource(id = R.drawable.ic_outline_info_24),
@@ -298,33 +276,29 @@ private fun APIInfoContent(onURLClick: () -> Unit) {
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
     ) {
+        Column(
+            modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp),
+        ) {
+            DescItem(
+                title = R.string.api_name_title,
+                text = stringResource(id = R.string.api_name),
+                modifier = Modifier.padding(bottom = 4.dp),
+            )
+
+            LinkText(
+                text = stringResource(id = R.string.url_title),
+                url = stringResource(id = R.string.goo_url),
+                modifier = Modifier.padding(top = 8.dp),
+            )
+        }
+
         if (isTest().not()) {
             Column(
-                modifier = Modifier
-                    .padding(start = 16.dp)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.Start,
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.End,
             ) {
                 GooCreditImage()
             }
-        }
-        Column(
-            modifier = Modifier.padding(vertical = 16.dp),
-        ) {
-            ItemTitle(
-                text = stringResource(id = R.string.api_name_title),
-                modifier = Modifier.padding(bottom = 4.dp),
-            )
-            BodyMedium(text = stringResource(id = R.string.api_name))
-
-            ItemTitle(
-                text = stringResource(id = R.string.url_title),
-                modifier = Modifier.padding(bottom = 4.dp, top = 16.dp),
-            )
-            UrlText(
-                url = stringResource(id = R.string.goo_url),
-                onURLClick = onURLClick,
-            )
         }
     }
 }
@@ -343,55 +317,76 @@ private fun LicensesContent(onClickLicense: () -> Unit) {
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ItemTitle(text: String, modifier: Modifier = Modifier) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.bodySmall,
-        color = MaterialTheme.colorScheme.primary,
-        modifier = modifier.padding(horizontal = 16.dp),
-        textAlign = TextAlign.Center,
-    )
+private fun LinkText(
+    text: String,
+    url: String,
+    modifier: Modifier = Modifier,
+) {
+    val urlHandler = LocalUriHandler.current
+
+    Row(
+        modifier = modifier.clickable(
+            onClick = {
+                urlHandler.openUri(url)
+            },
+        ),
+        verticalAlignment = Alignment.Bottom,
+    ) {
+        Image(
+            modifier = Modifier
+                .padding(end = 4.dp)
+                .size(20.dp),
+            painter = painterResource(id = R.drawable.baseline_open_in_new_24),
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(color = CustomColor.URL()),
+        )
+
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodySmall,
+            color = CustomColor.URL(),
+            textDecoration = TextDecoration.Underline,
+        )
+    }
 }
 
 @Composable
-private fun BodyMedium(text: String, modifier: Modifier = Modifier) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.bodyLarge,
-        color = MaterialTheme.colorScheme.tertiary,
-        modifier = modifier.padding(horizontal = 16.dp),
-        textAlign = TextAlign.Left,
-    )
-}
+private fun DescItem(
+    @StringRes title: Int,
+    text: String,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        Text(
+            text = stringResource(id = title),
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(bottom = 4.dp),
+        )
 
-@Composable
-private fun UrlText(url: String, onURLClick: () -> Unit) {
-    Text(
-        text = url,
-        style = MaterialTheme.typography.bodyLarge,
-        color = urlColor,
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .clickable(onClick = onURLClick),
-        textAlign = TextAlign.Center,
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis,
-        textDecoration = TextDecoration.Underline,
-    )
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.tertiary,
+        )
+    }
 }
 
 @Preview(name = "Dark", uiMode = Configuration.UI_MODE_NIGHT_YES, heightDp = 1100)
 @Preview(name = "Light", uiMode = Configuration.UI_MODE_NIGHT_NO, heightDp = 1100)
 @Composable
 fun PreviewInfoScreenContent() {
-    HiraganaConverterTheme {
-        Surface(modifier = Modifier.fillMaxSize()) {
-            InfoScreenContent(
-                versionName = "1.0.0",
-                onBackPressed = {},
-                onClickLicense = {},
-            )
+    CompositionLocalProvider(LocalIsDarkTheme provides isSystemInDarkTheme()) {
+        HiraganaConverterTheme {
+            Surface(modifier = Modifier.fillMaxSize()) {
+                InfoScreenContent(
+                    versionName = "1.0.0",
+                    onBackPressed = {},
+                    onClickLicense = {},
+                )
+            }
         }
     }
 }

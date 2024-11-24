@@ -42,12 +42,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -136,12 +134,11 @@ fun ConverterScreenContent(
     hideErrorCard: () -> Unit,
     navigateScreen: (Nav) -> Unit,
 ) {
-    val focusManager = LocalFocusManager.current
-    val clipboardManager: ClipboardManager = LocalClipboardManager.current
     val density = LocalDensity.current.density
     val layoutDirection = LocalLayoutDirection.current
+    val focusManager = LocalFocusManager.current
+
     val scrollState = rememberScrollState()
-    val isConnectNetwork = LocalIsConnectNetwork.current
     var topBarHeight by remember { mutableIntStateOf(0) }
     val navigationHeight = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
 
@@ -209,7 +206,7 @@ fun ConverterScreenContent(
                     )
                 }
 
-                OfflineCard(visible = isConnectNetwork == false)
+                OfflineCard()
 
                 ErrorCard(
                     visible = uiState.showErrorCard,
@@ -229,11 +226,9 @@ fun ConverterScreenContent(
                     onClick = hideErrorCard,
                 )
 
-                BeforeOrAfterTextField(
+                BeforeAfterTextField(
                     isBefore = true,
                     text = uiState.inputText,
-                    clipboardManager = clipboardManager,
-                    focusManager = focusManager,
                     onValueChange = updateInputText,
                 )
 
@@ -243,11 +238,9 @@ fun ConverterScreenContent(
                     color = MaterialTheme.colorScheme.primary,
                 )
 
-                BeforeOrAfterTextField(
+                BeforeAfterTextField(
                     isBefore = false,
                     text = uiState.outputText,
-                    clipboardManager = clipboardManager,
-                    focusManager = focusManager,
                     onValueChange = updateOutputText,
                 )
 
@@ -258,14 +251,15 @@ fun ConverterScreenContent(
 }
 
 @Composable
-private fun BeforeOrAfterTextField(
+private fun BeforeAfterTextField(
     isBefore: Boolean,
     text: String,
-    clipboardManager: ClipboardManager,
-    focusManager: FocusManager,
     onValueChange: (String) -> Unit,
 ) {
     val context = LocalContext.current
+    val clipboardManager = LocalClipboardManager.current
+    val focusManager = LocalFocusManager.current
+
     val textColor = if (isBefore) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.tertiary
 
     Row {
@@ -334,11 +328,7 @@ private fun BeforeOrAfterTextField(
         ),
         placeholder = {
             Text(
-                text = if (isBefore) {
-                    stringResource(id = R.string.input_hint)
-                } else {
-                    stringResource(id = R.string.output_hint)
-                },
+                text = stringResource(id = if (isBefore) R.string.input_hint else R.string.output_hint),
                 style = MaterialTheme.typography.titleMedium,
                 color = if (isBefore) {
                     MaterialTheme.colorScheme.secondary
