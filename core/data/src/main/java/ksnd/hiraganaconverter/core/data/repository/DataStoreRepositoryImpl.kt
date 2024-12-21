@@ -21,60 +21,50 @@ import javax.inject.Inject
 class DataStoreRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>,
 ) : DataStoreRepository {
-    override fun theme(): Flow<Theme> {
-        return dataStore.data
-            .catch { exception ->
-                Timber.e(exception, "DataStore: %s", exception.message)
-                if (exception is IOException) emit(emptyPreferences()) else Theme.AUTO
-            }
-            .map { preferences ->
-                Theme.entries.firstOrNull { it.num == preferences[PreferenceKeys.THEME_NUM] } ?: Theme.AUTO
-            }
-    }
+    override fun theme(): Flow<Theme> = dataStore.data
+        .catch { exception ->
+            Timber.e(exception, "DataStore: %s", exception.message)
+            if (exception is IOException) emit(emptyPreferences()) else Theme.AUTO
+        }
+        .map { preferences ->
+            Theme.entries.firstOrNull { it.num == preferences[PreferenceKeys.THEME_NUM] } ?: Theme.AUTO
+        }
 
-    override fun fontType(): Flow<FontType> {
-        return dataStore.data
-            .catch { exception ->
-                Timber.e(exception, "DataStore: %s", exception.message)
-                if (exception is IOException) emit(emptyPreferences()) else FontType.YUSEI_MAGIC
-            }
-            .map { preferences ->
-                FontType.entries.firstOrNull { it.fontName == preferences[PreferenceKeys.FONT_TYPE] } ?: FontType.YUSEI_MAGIC
-            }
-    }
+    override fun fontType(): Flow<FontType> = dataStore.data
+        .catch { exception ->
+            Timber.e(exception, "DataStore: %s", exception.message)
+            if (exception is IOException) emit(emptyPreferences()) else FontType.YUSEI_MAGIC
+        }
+        .map { preferences ->
+            FontType.entries.firstOrNull { it.fontName == preferences[PreferenceKeys.FONT_TYPE] } ?: FontType.YUSEI_MAGIC
+        }
 
-    private fun lastConvertTime(): Flow<LocalDate?> {
-        return dataStore.data
-            .catch { exception ->
-                Timber.e(exception, "DataStore: %s", exception.message)
-                if (exception is IOException) emit(emptyPreferences())
-            }
-            .map { preferences ->
-                preferences[PreferenceKeys.LAST_CONVERT_DATE]?.let { LocalDate.parse(it) }
-            }
-    }
+    private fun lastConvertTime(): Flow<LocalDate?> = dataStore.data
+        .catch { exception ->
+            Timber.e(exception, "DataStore: %s", exception.message)
+            if (exception is IOException) emit(emptyPreferences())
+        }
+        .map { preferences ->
+            preferences[PreferenceKeys.LAST_CONVERT_DATE]?.let { LocalDate.parse(it) }
+        }
 
-    private fun todayConvertCount(): Flow<Int> {
-        return dataStore.data
-            .catch { exception ->
-                Timber.e(exception, "DataStore: %s", exception.message)
-                if (exception is IOException) emit(emptyPreferences())
-            }
-            .map { preferences ->
-                preferences[PreferenceKeys.TODAY_CONVERT_COUNT] ?: 1
-            }
-    }
+    private fun todayConvertCount(): Flow<Int> = dataStore.data
+        .catch { exception ->
+            Timber.e(exception, "DataStore: %s", exception.message)
+            if (exception is IOException) emit(emptyPreferences())
+        }
+        .map { preferences ->
+            preferences[PreferenceKeys.TODAY_CONVERT_COUNT] ?: 1
+        }
 
-    override fun enableInAppUpdate(): Flow<Boolean> {
-        return dataStore.data
-            .catch { exception ->
-                Timber.e(exception, "DataStore: %s", exception.message)
-                if (exception is IOException) emit(emptyPreferences())
-            }
-            .map { preferences ->
-                preferences[PreferenceKeys.ENABLE_IN_APP_UPDATE] ?: true
-            }
-    }
+    override fun enableInAppUpdate(): Flow<Boolean> = dataStore.data
+        .catch { exception ->
+            Timber.e(exception, "DataStore: %s", exception.message)
+            if (exception is IOException) emit(emptyPreferences())
+        }
+        .map { preferences ->
+            preferences[PreferenceKeys.ENABLE_IN_APP_UPDATE] ?: true
+        }
 
     override suspend fun updateTheme(newTheme: Theme) {
         dataStore.edit { it[PreferenceKeys.THEME_NUM] = newTheme.num }

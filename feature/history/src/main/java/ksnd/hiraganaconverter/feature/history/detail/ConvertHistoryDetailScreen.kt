@@ -1,33 +1,34 @@
-package ksnd.hiraganaconverter.feature.history
+package ksnd.hiraganaconverter.feature.history.detail
 
 import android.widget.Toast
-import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -37,13 +38,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
+import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.model.ConvertHistoryData
+import ksnd.hiraganaconverter.core.model.mock.MockConvertHistoryData
 import ksnd.hiraganaconverter.core.resource.R
+import ksnd.hiraganaconverter.core.ui.extension.noRippleClickable
+import ksnd.hiraganaconverter.core.ui.parts.BackTopBar
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.parts.button.MoveTopButton
-import ksnd.hiraganaconverter.core.ui.parts.dialog.DialogTopBar
 import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import my.nanihadesuka.compose.ColumnScrollbar
@@ -51,49 +53,45 @@ import my.nanihadesuka.compose.ScrollbarSelectionMode
 import my.nanihadesuka.compose.ScrollbarSettings
 
 @Composable
-fun ConvertHistoryDetailDialog(
-    onCloseClick: () -> Unit,
+fun ConvertHistoryDetailScreen(
     historyData: ConvertHistoryData,
+    onBackPressed: () -> Unit,
 ) {
-    Dialog(
-        onDismissRequest = { },
-        properties = DialogProperties(usePlatformDefaultWidth = false),
-    ) {
-        BackHandler(onBack = onCloseClick)
-        ConvertHistoryDetailDialogContent(
-            historyData = historyData,
-            onCloseClick = onCloseClick,
-        )
-    }
+    ConvertHistoryDetailScreenContent(
+        historyData = historyData,
+        onBackPressed = onBackPressed,
+    )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ConvertHistoryDetailDialogContent(
+private fun ConvertHistoryDetailScreenContent(
     historyData: ConvertHistoryData,
-    onCloseClick: () -> Unit,
+    onBackPressed: () -> Unit,
 ) {
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val scrollState = rememberScrollState()
     var moveTopButtonHeight by remember { mutableIntStateOf(0) }
+    var topBarHeight by remember { mutableIntStateOf(0) }
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         modifier = Modifier
-            .fillMaxHeight(0.95f)
-            .fillMaxWidth(0.95f)
-            .border(width = 4.dp, color = MaterialTheme.colorScheme.surfaceVariant, shape = RoundedCornerShape(16.dp))
-            .clip(RoundedCornerShape(16.dp)),
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .background(MaterialTheme.colorScheme.surface),
         topBar = {
-            DialogTopBar(
-                isScrolled = scrollState.canScrollBackward,
-                leftContent = {
-                    Text(
-                        text = historyData.time,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.padding(start = 16.dp, top = 8.dp),
-                    )
-                },
-                onCloseClick = onCloseClick,
+            BackTopBar(
+                title = stringResource(id = R.string.title_detail),
+                scrollBehavior = scrollBehavior,
+                modifier = Modifier
+                    .noRippleClickable {
+                        coroutineScope.launch {
+                            scrollState.animateScrollTo(0)
+                        }
+                    }
+                    .onSizeChanged { topBarHeight = it.height },
+                onBackPressed = onBackPressed,
             )
         },
         floatingActionButton = {
@@ -200,17 +198,12 @@ private fun BeforeOrAfterText(
 
 @UiModePreview
 @Composable
-fun PreviewConvertHistoryDetailDialogContent() {
+fun PreviewConvertHistoryDetailScreenContent() {
     HiraganaConverterTheme {
         Box(modifier = Modifier.fillMaxSize()) {
-            ConvertHistoryDetailDialogContent(
-                historyData = ConvertHistoryData(
-                    id = 0,
-                    time = "2022/11/26 22:25",
-                    before = "変換前はこんな感じ",
-                    after = "へんかんごはこんなかんじ",
-                ),
-                onCloseClick = {},
+            ConvertHistoryDetailScreenContent(
+                historyData = MockConvertHistoryData().data[0],
+                onBackPressed = {},
             )
         }
     }

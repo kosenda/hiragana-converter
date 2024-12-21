@@ -15,16 +15,14 @@ class ConvertRepositoryImpl @Inject constructor(
         sentence: String,
         type: String,
         appId: String,
-    ): Response<ResponseData>? {
-        return try {
-            convertApiClient.requestConvert(appId = appId, sentence = sentence, type = type)
-        } catch (e: Exception) {
+    ): Response<ResponseData>? = try {
+        convertApiClient.requestConvert(appId = appId, sentence = sentence, type = type)
+    } catch (e: Exception) {
             /*
              * Basically, it is assumed that API communication is caught by ErrorInterceptor and a response is returned even if it fails,
              * and error processing is also performed here just in case, although it is not necessary to catch here.
              */
-            Timber.e(e)
-            null
-        }
+        Timber.e(e)
+        null
     }
 }

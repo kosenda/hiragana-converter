@@ -27,24 +27,20 @@ import javax.inject.Singleton
 object DataStoreModule {
     @Provides
     @Singleton
-    fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
-        return PreferenceDataStoreFactory.create(
-            produceFile = {
-                context.preferencesDataStoreFile("DataStore")
-            },
-        )
-    }
+    fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> = PreferenceDataStoreFactory.create(
+        produceFile = {
+            context.preferencesDataStoreFile("DataStore")
+        },
+    )
 
     @Provides
     @Singleton
     fun provideCalcInputRequiredInterestDataStore(
         @ApplicationContext context: Context,
-    ): DataStore<ReviewInfo> {
-        return DataStoreFactory.create(
-            serializer = ReviewInfoSerializer,
-            produceFile = { context.preferencesDataStoreFile("ReviewInfoDataStore") },
-        )
-    }
+    ): DataStore<ReviewInfo> = DataStoreFactory.create(
+        serializer = ReviewInfoSerializer,
+        produceFile = { context.preferencesDataStoreFile("ReviewInfoDataStore") },
+    )
 }
 
 object ReviewInfoSerializer : Serializer<ReviewInfo> {

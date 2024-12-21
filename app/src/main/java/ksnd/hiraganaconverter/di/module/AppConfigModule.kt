@@ -11,13 +11,12 @@ import ksnd.hiraganaconverter.core.resource.AppConfig
 @InstallIn(SingletonComponent::class)
 object AppConfigModule {
     @Provides
-    fun provideAppConfig(): AppConfig =
-        AppConfig(
-            apiKey = BuildConfig.apiKey,
-            applicationId = BuildConfig.APPLICATION_ID,
-            buildType = BuildConfig.BUILD_TYPE,
-            isDebug = BuildConfig.DEBUG,
-            versionCode = BuildConfig.VERSION_CODE,
-            versionName = BuildConfig.VERSION_NAME,
-        )
+    fun provideAppConfig(): AppConfig = AppConfig(
+        apiKey = BuildConfig.apiKey,
+        applicationId = BuildConfig.APPLICATION_ID,
+        buildType = BuildConfig.BUILD_TYPE,
+        isDebug = BuildConfig.DEBUG,
+        versionCode = BuildConfig.VERSION_CODE,
+        versionName = BuildConfig.VERSION_NAME,
+    )
 }

@@ -1,6 +1,7 @@
 package ksnd.hiraganaconverter.core.ui.navigation
 
 import kotlinx.serialization.Serializable
+import ksnd.hiraganaconverter.core.model.ConvertHistoryData
 
 sealed class Nav {
     @Serializable
@@ -8,6 +9,9 @@ sealed class Nav {
 
     @Serializable
     data object History : Nav()
+
+    @Serializable
+    data class HistoryDetail(val historyData: ConvertHistoryData) : Nav()
 
     @Serializable
     data object Setting : Nav()

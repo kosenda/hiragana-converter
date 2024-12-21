@@ -171,7 +171,7 @@ private fun AppInfoContent(versionName: String) {
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(end = 16.dp)
+            modifier = Modifier.padding(end = 16.dp),
         ) {
             Image(
                 painter = painterResource(id = R.drawable.icon),
@@ -189,7 +189,7 @@ private fun AppInfoContent(versionName: String) {
                 DescItem(
                     title = R.string.app_name_title,
                     text = stringResource(id = R.string.app_name),
-                    modifier = Modifier.padding(bottom = 8.dp)
+                    modifier = Modifier.padding(bottom = 8.dp),
                 )
 
                 DescItem(

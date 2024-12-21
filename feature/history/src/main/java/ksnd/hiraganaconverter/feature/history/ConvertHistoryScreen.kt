@@ -68,6 +68,7 @@ import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 @Composable
 fun ConvertHistoryScreen(
     viewModel: ConvertHistoryViewModel,
+    navigateHistoryDetail: (ConvertHistoryData) -> Unit,
     onBackPressed: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle(ConvertHistoryUiState())
@@ -81,18 +82,9 @@ fun ConvertHistoryScreen(
         state = uiState,
         onBackPressed = onBackPressed,
         deleteAllConvertHistory = viewModel::deleteAllConvertHistory,
-        showConvertHistoryDetailDialog = viewModel::showConvertHistoryDetailDialog,
         deleteConvertHistory = viewModel::deleteConvertHistory,
+        navigateHistoryDetail = navigateHistoryDetail,
     )
-
-    if (uiState.isShowDetailDialog) {
-        uiState.usedHistoryDataByDetail?.let {
-            ConvertHistoryDetailDialog(
-                onCloseClick = viewModel::closeConvertHistoryDetailDialog,
-                historyData = it,
-            )
-        }
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -101,8 +93,8 @@ private fun ConvertHistoryScreenContent(
     state: ConvertHistoryUiState,
     onBackPressed: () -> Unit,
     deleteAllConvertHistory: () -> Unit,
-    showConvertHistoryDetailDialog: (ConvertHistoryData) -> Unit,
     deleteConvertHistory: (ConvertHistoryData) -> Unit,
+    navigateHistoryDetail: (ConvertHistoryData) -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val layoutDirection = LocalLayoutDirection.current
@@ -173,7 +165,7 @@ private fun ConvertHistoryScreenContent(
                             modifier = Modifier.padding(horizontal = 16.dp),
                             beforeText = history.before,
                             time = history.time,
-                            onClick = { showConvertHistoryDetailDialog(history) },
+                            onClick = { navigateHistoryDetail(history) },
                             onDeleteClick = { deleteConvertHistory(history) },
                         )
                     }
@@ -255,8 +247,8 @@ fun PreviewConvertHistoryScreeContent(
                 state = state,
                 onBackPressed = {},
                 deleteAllConvertHistory = {},
-                showConvertHistoryDetailDialog = {},
                 deleteConvertHistory = {},
+                navigateHistoryDetail = {},
             )
         }
     }

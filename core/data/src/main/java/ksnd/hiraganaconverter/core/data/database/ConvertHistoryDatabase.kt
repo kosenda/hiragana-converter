@@ -14,8 +14,7 @@ abstract class ConvertHistoryDatabase : RoomDatabase() {
     companion object {
         private var singleton: ConvertHistoryDatabase? = null
 
-        fun getInstance(context: Context): ConvertHistoryDatabase =
-            singleton ?: buildDatabase(context).also { singleton = it }
+        fun getInstance(context: Context): ConvertHistoryDatabase = singleton ?: buildDatabase(context).also { singleton = it }
 
         private fun buildDatabase(context: Context) = Room.databaseBuilder(
             context.applicationContext,
