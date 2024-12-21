@@ -23,14 +23,10 @@ object CoroutineDispatcherModule {
     @IODispatcher
     @Provides
     @Singleton
-    fun provideIOCoroutineDispatcher(): CoroutineDispatcher {
-        return Dispatchers.IO
-    }
+    fun provideIOCoroutineDispatcher(): CoroutineDispatcher = Dispatchers.IO
 
     @DefaultDispatcher
     @Provides
     @Singleton
-    fun provideDefaultCoroutineDispatcher(): CoroutineDispatcher {
-        return Dispatchers.Default
-    }
+    fun provideDefaultCoroutineDispatcher(): CoroutineDispatcher = Dispatchers.Default
 }

@@ -42,6 +42,7 @@
     <string name="title_info">情報</string>
     <string name="title_settings">設定</string>
     <string name="title_history">履歴</string>
+    <string name="title_detail">詳細</string>
 
     <!-- Delete History Dialog -->
     <string name="delete_history_dialog_title">削除確認</string>

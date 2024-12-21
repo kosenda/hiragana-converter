@@ -7,6 +7,4 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.todayIn
 import kotlinx.datetime.until
 
-fun LocalDate.daysHavePassed(today: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())): Int {
-    return 0.minus(today.until(this, DateTimeUnit.DAY))
-}
+fun LocalDate.daysHavePassed(today: LocalDate = Clock.System.todayIn(TimeZone.currentSystemDefault())): Int = 0.minus(today.until(this, DateTimeUnit.DAY))

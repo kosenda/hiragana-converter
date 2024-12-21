@@ -13,7 +13,5 @@ data class ConvertUiState(
     val showRequestReview: Boolean = false,
     val showErrorCard: Boolean = false,
 ) {
-    fun isChangedInputText(): Boolean {
-        return inputText != "" && previousInputText != inputText
-    }
+    fun isChangedInputText(): Boolean = inputText != "" && previousInputText != inputText
 }

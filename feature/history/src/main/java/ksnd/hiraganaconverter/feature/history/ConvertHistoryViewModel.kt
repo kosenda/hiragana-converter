@@ -1,5 +1,6 @@
 package ksnd.hiraganaconverter.feature.history
 
+import androidx.compose.runtime.Immutable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -38,22 +39,9 @@ class ConvertHistoryViewModel @Inject constructor(
             convertHistoryRepository.deleteConvertHistory(historyData.id)
         }
     }
-
-    fun closeConvertHistoryDetailDialog() {
-        _uiState.update {
-            it.copy(
-                isShowDetailDialog = false,
-                usedHistoryDataByDetail = null,
-            )
-        }
-    }
-
-    fun showConvertHistoryDetailDialog(historyData: ConvertHistoryData) {
-        _uiState.update {
-            it.copy(
-                isShowDetailDialog = true,
-                usedHistoryDataByDetail = historyData,
-            )
-        }
-    }
 }
+
+@Immutable
+data class ConvertHistoryUiState(
+    val convertHistories: List<ConvertHistoryData> = emptyList(),
+)
