@@ -63,6 +63,7 @@
     <string name="app_name_title" translatable="false">App Name</string>
     <string name="ok" translatable="false">OK</string>
     <string name="cancel" translatable="false">Cancel</string>
+    <string name="time" translatable="false">Time :</string>
 
     <string name="developer_name_title" translatable="false">Developer</string>
     <string name="developer_name" translatable="false">KSND</string>
