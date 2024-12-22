@@ -31,7 +31,8 @@ class MainActivityViewModel @Inject constructor(
     private val completedRequestReviewUseCase: CompletedRequestReviewUseCase,
     private val cancelReviewUseCase: CancelReviewUseCase,
     observeIsRequestingReviewUseCase: ObserveIsRequestingReviewUseCase,
-) : ViewModel(), InstallStateUpdatedListener {
+) : ViewModel(),
+    InstallStateUpdatedListener {
     private val inAppUpdateState: MutableStateFlow<InAppUpdateState> = MutableStateFlow(InAppUpdateState.Requesting)
     private val isConnectNetwork: MutableStateFlow<Boolean?> = MutableStateFlow(null)
 

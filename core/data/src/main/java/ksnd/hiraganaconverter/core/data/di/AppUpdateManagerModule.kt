@@ -15,7 +15,5 @@ import javax.inject.Singleton
 object AppUpdateManagerModule {
     @Provides
     @Singleton
-    fun provideAppUpdateManager(@ApplicationContext context: Context): AppUpdateManager {
-        return AppUpdateManagerFactory.create(context)
-    }
+    fun provideAppUpdateManager(@ApplicationContext context: Context): AppUpdateManager = AppUpdateManagerFactory.create(context)
 }

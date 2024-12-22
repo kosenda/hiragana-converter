@@ -19,13 +19,11 @@ class DaysHavePassedKtTest(
     companion object {
         @Parameters
         @JvmStatic
-        fun localDate(): Iterable<TestDate> {
-            return listOf(
-                TestDate(inputDate = LocalDate(year = 2023, monthNumber = 11, dayOfMonth = 11), expected = 0),
-                TestDate(inputDate = LocalDate(year = 2023, monthNumber = 11, dayOfMonth = 10), expected = 1),
-                TestDate(inputDate = LocalDate(year = 2023, monthNumber = 11, dayOfMonth = 12), expected = -1),
-            )
-        }
+        fun localDate(): Iterable<TestDate> = listOf(
+            TestDate(inputDate = LocalDate(year = 2023, monthNumber = 11, dayOfMonth = 11), expected = 0),
+            TestDate(inputDate = LocalDate(year = 2023, monthNumber = 11, dayOfMonth = 10), expected = 1),
+            TestDate(inputDate = LocalDate(year = 2023, monthNumber = 11, dayOfMonth = 12), expected = -1),
+        )
         data class TestDate(val inputDate: LocalDate, val expected: Int)
         val TODAY = LocalDate(year = 2023, monthNumber = 11, dayOfMonth = 11)
     }

@@ -47,7 +47,7 @@ class InAppUpdateManagerImpl @Inject constructor(
                 notAvailable()
             }
         }.onFailure {
-            Timber.e("Failed requestUpdate: $it")
+            Timber.e(it, "Failed requestUpdate: $it")
             onFailed()
         }
     }
@@ -56,7 +56,7 @@ class InAppUpdateManagerImpl @Inject constructor(
         runCatching {
             appUpdateManager.completeUpdate()
         }.onFailure {
-            Timber.e("Failed startInstall: $it")
+            Timber.e(it, "Failed startInstall: $it")
         }
     }
 

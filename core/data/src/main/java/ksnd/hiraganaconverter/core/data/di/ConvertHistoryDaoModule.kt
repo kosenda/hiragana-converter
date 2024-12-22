@@ -13,7 +13,5 @@ import javax.inject.Singleton
 object ConvertHistoryDaoModule {
     @Provides
     @Singleton
-    fun provideConvertHistoryDao(database: ConvertHistoryDatabase): ConvertHistoryDao {
-        return database.convertHistoryDao()
-    }
+    fun provideConvertHistoryDao(database: ConvertHistoryDatabase): ConvertHistoryDao = database.convertHistoryDao()
 }

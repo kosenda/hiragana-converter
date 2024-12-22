@@ -20,8 +20,6 @@ abstract class InAppReviewManagerModule {
 
     companion object {
         @Provides
-        fun provideAppReviewManager(@ActivityContext context: Context): ReviewManager {
-            return ReviewManagerFactory.create(context)
-        }
+        fun provideAppReviewManager(@ActivityContext context: Context): ReviewManager = ReviewManagerFactory.create(context)
     }
 }
