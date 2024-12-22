@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -34,18 +33,12 @@ fun SettingFontSection(
         ),
         modifier = Modifier.padding(vertical = 8.dp),
     ) {
-        FontType.entries.forEachIndexed { index, fontType ->
+        FontType.entries.forEach { fontType ->
             CustomRadioButton(
                 isSelected = fontType == selectFontType,
                 buttonText = fontType.fontName,
                 onClick = { onClickFontType(fontType) },
             )
-            if (index != FontType.entries.size - 1) {
-                HorizontalDivider(
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    color = MaterialTheme.colorScheme.surface,
-                )
-            }
         }
     }
 }
