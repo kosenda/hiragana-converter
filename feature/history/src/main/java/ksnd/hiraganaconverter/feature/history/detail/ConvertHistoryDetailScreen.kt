@@ -75,7 +75,6 @@ private fun ConvertHistoryDetailScreenContent(
     history: ConvertHistoryData,
     onBackPressed: () -> Unit,
 ) {
-    val clipboardManager: ClipboardManager = LocalClipboardManager.current
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val scrollState = rememberScrollState()
     var moveTopButtonHeight by remember { mutableIntStateOf(0) }
@@ -118,9 +117,10 @@ private fun ConvertHistoryDetailScreenContent(
             Column(
                 modifier = Modifier
                     .verticalScroll(scrollState)
-                    .padding(innerPadding),
+                    .padding(innerPadding)
+                    .padding(horizontal = 16.dp),
             ) {
-                Row(modifier = Modifier.padding(vertical = 8.dp, horizontal = 20.dp)) {
+                Row(modifier = Modifier.padding(vertical = 8.dp, horizontal = 4.dp)) {
                     Text(
                         text = stringResource(id = R.string.time),
                         modifier = Modifier
@@ -137,17 +137,15 @@ private fun ConvertHistoryDetailScreenContent(
                 BeforeOrAfterText(
                     history = history,
                     isBefore = true,
-                    clipboardManager = clipboardManager,
                 )
                 HorizontalDivider(
-                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 48.dp),
+                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 32.dp),
                     thickness = 1.dp,
                     color = MaterialTheme.colorScheme.primary,
                 )
                 BeforeOrAfterText(
                     history = history,
                     isBefore = false,
-                    clipboardManager = clipboardManager,
                 )
                 Spacer(modifier = Modifier.height(48.dp + (moveTopButtonHeight / LocalDensity.current.density).toInt().dp))
             }
@@ -160,10 +158,13 @@ private fun ConvertHistoryDetailScreenContent(
 private fun BeforeOrAfterText(
     history: ConvertHistoryData,
     isBefore: Boolean,
-    clipboardManager: ClipboardManager,
 ) {
     val context = LocalContext.current
-    Row {
+    val clipboardManager: ClipboardManager = LocalClipboardManager.current
+
+    Row(
+        modifier = Modifier.padding(vertical = 8.dp),
+    ) {
         Text(
             text = if (isBefore) {
                 String.format("〈 %s 〉", stringResource(id = R.string.before_conversion))
@@ -171,15 +172,12 @@ private fun BeforeOrAfterText(
                 String.format("〈 %s 〉", stringResource(id = R.string.after_conversion))
             },
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier
-                .padding(all = 16.dp)
-                .weight(1f),
+            modifier = Modifier.weight(1f),
             color = MaterialTheme.colorScheme.onSurface,
         )
         CustomIconButton(
             painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
             contentDescription = "",
-            modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
             onClick = {
                 clipboardManager.setText(
                     AnnotatedString(
@@ -210,7 +208,7 @@ private fun BeforeOrAfterText(
                 MaterialTheme.colorScheme.tertiary
             },
             modifier = Modifier
-                .padding(all = 16.dp)
+                .padding(vertical = 16.dp)
                 .defaultMinSize(minHeight = 120.dp)
                 .fillMaxWidth()
                 .then(
