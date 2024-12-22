@@ -61,7 +61,7 @@ import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.extension.noRippleClickable
 import ksnd.hiraganaconverter.core.ui.parts.BackTopBar
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
-import ksnd.hiraganaconverter.core.ui.parts.card.ConvertHistoryCard
+import ksnd.hiraganaconverter.core.ui.preview.SharedTransitionAndAnimatedVisibilityProvider
 import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
@@ -163,8 +163,7 @@ private fun ConvertHistoryScreenContent(
                     ) { history ->
                         ConvertHistoryCard(
                             modifier = Modifier.padding(horizontal = 16.dp),
-                            beforeText = history.before,
-                            time = history.time,
+                            history = history,
                             onClick = { navigateHistoryDetail(history) },
                             onDeleteClick = { deleteConvertHistory(history) },
                         )
@@ -239,17 +238,19 @@ fun PreviewConvertHistoryScreeContent(
     @PreviewParameter(PreviewConverterHistoryUiStateProvider::class) state: ConvertHistoryUiState,
 ) {
     HiraganaConverterTheme {
-        Surface(
-            color = MaterialTheme.colorScheme.surface,
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            ConvertHistoryScreenContent(
-                state = state,
-                onBackPressed = {},
-                deleteAllConvertHistory = {},
-                deleteConvertHistory = {},
-                navigateHistoryDetail = {},
-            )
+        SharedTransitionAndAnimatedVisibilityProvider {
+            Surface(
+                color = MaterialTheme.colorScheme.surface,
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                ConvertHistoryScreenContent(
+                    state = state,
+                    onBackPressed = {},
+                    deleteAllConvertHistory = {},
+                    deleteConvertHistory = {},
+                    navigateHistoryDetail = {},
+                )
+            }
         }
     }
 }

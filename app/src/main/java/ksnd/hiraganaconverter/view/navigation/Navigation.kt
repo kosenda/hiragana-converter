@@ -17,6 +17,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.dropUnlessResumed
@@ -30,6 +31,7 @@ import androidx.navigation.toRoute
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ksnd.hiraganaconverter.core.model.ConvertHistoryData
+import ksnd.hiraganaconverter.core.ui.LocalAnimatedVisibilityScope
 import ksnd.hiraganaconverter.core.ui.navigation.Nav
 import ksnd.hiraganaconverter.feature.converter.ConverterScreen
 import ksnd.hiraganaconverter.feature.history.ConvertHistoryScreen
@@ -77,19 +79,27 @@ fun Navigation(
             )
         }
         slideHorizontallyComposable<Nav.History> {
-            ConvertHistoryScreen(
-                viewModel = hiltViewModel(),
-                navigateHistoryDetail = ::navigateHistoryDetail,
-                onBackPressed = dropUnlessResumed(block = navController::navigateUp),
-            )
+            CompositionLocalProvider(
+                LocalAnimatedVisibilityScope provides this,
+            ) {
+                ConvertHistoryScreen(
+                    viewModel = hiltViewModel(),
+                    navigateHistoryDetail = ::navigateHistoryDetail,
+                    onBackPressed = dropUnlessResumed(block = navController::navigateUp),
+                )
+            }
         }
         slideHorizontallyComposable<Nav.HistoryDetail>(
             typeMap = mapOf(typeOf<ConvertHistoryData>() to serializableType<ConvertHistoryData>()),
         ) {
-            ConvertHistoryDetailScreen(
-                historyData = it.toRoute<Nav.HistoryDetail>().historyData,
-                onBackPressed = dropUnlessResumed(block = navController::navigateUp),
-            )
+            CompositionLocalProvider(
+                LocalAnimatedVisibilityScope provides this,
+            ) {
+                ConvertHistoryDetailScreen(
+                    history = it.toRoute<Nav.HistoryDetail>().historyData,
+                    onBackPressed = dropUnlessResumed(block = navController::navigateUp),
+                )
+            }
         }
         slideHorizontallyComposable<Nav.Setting> {
             SettingScreen(

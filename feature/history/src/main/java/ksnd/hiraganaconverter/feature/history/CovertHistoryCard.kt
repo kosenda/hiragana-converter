@@ -1,9 +1,9 @@
-package ksnd.hiraganaconverter.core.ui.parts.card
+package ksnd.hiraganaconverter.feature.history
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -23,20 +23,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import ksnd.hiraganaconverter.core.model.ConvertHistoryData
+import ksnd.hiraganaconverter.core.model.mock.MockConvertHistoryData
+import ksnd.hiraganaconverter.core.ui.ConvertHistorySharedKey
+import ksnd.hiraganaconverter.core.ui.SharedType
+import ksnd.hiraganaconverter.core.ui.extension.easySharedBounds
 import ksnd.hiraganaconverter.core.ui.extension.noRippleClickable
+import ksnd.hiraganaconverter.core.ui.preview.SharedTransitionAndAnimatedVisibilityProvider
 import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.rememberButtonScaleState
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun ConvertHistoryCard(
     modifier: Modifier = Modifier,
-    beforeText: String,
-    time: String,
+    history: ConvertHistoryData,
     onClick: () -> Unit,
     onDeleteClick: () -> Unit,
 ) {
     val buttonScaleState = rememberButtonScaleState()
+
     Card(
         modifier = modifier
             .wrapContentHeight()
@@ -56,9 +63,13 @@ fun ConvertHistoryCard(
                     .padding(all = 8.dp)
                     .weight(1f),
             ) {
-                ConvertHistoryCardTimeText(timeText = time)
+                ConvertHistoryTimeText(
+                    history = history,
+                    modifier = Modifier.padding(bottom = 8.dp),
+                )
                 Text(
-                    text = beforeText,
+                    text = history.before,
+                    modifier = Modifier.easySharedBounds(ConvertHistorySharedKey(id = history.id, type = SharedType.BEFORE_TEXT)),
                     maxLines = 2,
                     minLines = 2,
                     style = MaterialTheme.typography.bodyMedium,
@@ -82,30 +93,16 @@ fun ConvertHistoryCard(
     }
 }
 
-@Composable
-private fun ConvertHistoryCardTimeText(timeText: String) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            modifier = Modifier.padding(end = 8.dp),
-            text = timeText,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.secondary,
-        )
-        Spacer(modifier = Modifier.weight(1f))
-    }
-}
-
 @UiModePreview
 @Composable
 fun PreviewConvertHistoryCard() {
-    HiraganaConverterTheme {
-        ConvertHistoryCard(
-            beforeText = "変換前文章",
-            time = "2022/12/29 18:19",
-            onClick = {},
-            onDeleteClick = {},
-        )
+    SharedTransitionAndAnimatedVisibilityProvider {
+        HiraganaConverterTheme {
+            ConvertHistoryCard(
+                history = MockConvertHistoryData().data[0],
+                onClick = {},
+                onDeleteClick = {},
+            )
+        }
     }
 }

@@ -1,6 +1,7 @@
 package ksnd.hiraganaconverter.feature.history.detail
 
 import android.widget.Toast
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,31 +43,36 @@ import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.model.ConvertHistoryData
 import ksnd.hiraganaconverter.core.model.mock.MockConvertHistoryData
 import ksnd.hiraganaconverter.core.resource.R
+import ksnd.hiraganaconverter.core.ui.ConvertHistorySharedKey
+import ksnd.hiraganaconverter.core.ui.SharedType
+import ksnd.hiraganaconverter.core.ui.extension.easySharedBounds
 import ksnd.hiraganaconverter.core.ui.extension.noRippleClickable
 import ksnd.hiraganaconverter.core.ui.parts.BackTopBar
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.parts.button.MoveTopButton
+import ksnd.hiraganaconverter.core.ui.preview.SharedTransitionAndAnimatedVisibilityProvider
 import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
+import ksnd.hiraganaconverter.feature.history.ConvertHistoryTimeText
 import my.nanihadesuka.compose.ColumnScrollbar
 import my.nanihadesuka.compose.ScrollbarSelectionMode
 import my.nanihadesuka.compose.ScrollbarSettings
 
 @Composable
 fun ConvertHistoryDetailScreen(
-    historyData: ConvertHistoryData,
+    history: ConvertHistoryData,
     onBackPressed: () -> Unit,
 ) {
     ConvertHistoryDetailScreenContent(
-        historyData = historyData,
+        history = history,
         onBackPressed = onBackPressed,
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 private fun ConvertHistoryDetailScreenContent(
-    historyData: ConvertHistoryData,
+    history: ConvertHistoryData,
     onBackPressed: () -> Unit,
 ) {
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
@@ -114,8 +120,22 @@ private fun ConvertHistoryDetailScreenContent(
                     .verticalScroll(scrollState)
                     .padding(innerPadding),
             ) {
+                Row(modifier = Modifier.padding(vertical = 8.dp, horizontal = 20.dp)) {
+                    Text(
+                        text = stringResource(id = R.string.time),
+                        modifier = Modifier
+                            .padding(end = 8.dp)
+                            .alignByBaseline(),
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                    ConvertHistoryTimeText(
+                        history = history,
+                        modifier = Modifier.alignByBaseline(),
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                }
                 BeforeOrAfterText(
-                    historyData = historyData,
+                    history = history,
                     isBefore = true,
                     clipboardManager = clipboardManager,
                 )
@@ -125,7 +145,7 @@ private fun ConvertHistoryDetailScreenContent(
                     color = MaterialTheme.colorScheme.primary,
                 )
                 BeforeOrAfterText(
-                    historyData = historyData,
+                    history = history,
                     isBefore = false,
                     clipboardManager = clipboardManager,
                 )
@@ -135,9 +155,10 @@ private fun ConvertHistoryDetailScreenContent(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun BeforeOrAfterText(
-    historyData: ConvertHistoryData,
+    history: ConvertHistoryData,
     isBefore: Boolean,
     clipboardManager: ClipboardManager,
 ) {
@@ -163,9 +184,9 @@ private fun BeforeOrAfterText(
                 clipboardManager.setText(
                     AnnotatedString(
                         text = if (isBefore) {
-                            historyData.before
+                            history.before
                         } else {
-                            historyData.after
+                            history.after
                         },
                     ),
                 )
@@ -178,9 +199,9 @@ private fun BeforeOrAfterText(
     SelectionContainer {
         Text(
             text = if (isBefore) {
-                historyData.before
+                history.before
             } else {
-                historyData.after
+                history.after
             },
             style = MaterialTheme.typography.titleMedium,
             color = if (isBefore) {
@@ -191,7 +212,14 @@ private fun BeforeOrAfterText(
             modifier = Modifier
                 .padding(all = 16.dp)
                 .defaultMinSize(minHeight = 120.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .then(
+                    if (isBefore) {
+                        Modifier.easySharedBounds(ConvertHistorySharedKey(id = history.id, type = SharedType.BEFORE_TEXT))
+                    } else {
+                        Modifier
+                    },
+                ),
         )
     }
 }
@@ -200,11 +228,13 @@ private fun BeforeOrAfterText(
 @Composable
 fun PreviewConvertHistoryDetailScreenContent() {
     HiraganaConverterTheme {
-        Box(modifier = Modifier.fillMaxSize()) {
-            ConvertHistoryDetailScreenContent(
-                historyData = MockConvertHistoryData().data[0],
-                onBackPressed = {},
-            )
+        SharedTransitionAndAnimatedVisibilityProvider {
+            Box(modifier = Modifier.fillMaxSize()) {
+                ConvertHistoryDetailScreenContent(
+                    history = MockConvertHistoryData().data[0],
+                    onBackPressed = {},
+                )
+            }
         }
     }
 }

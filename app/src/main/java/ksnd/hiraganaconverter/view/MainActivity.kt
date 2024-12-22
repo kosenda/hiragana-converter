@@ -11,6 +11,8 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.SnackbarDuration
@@ -37,6 +39,7 @@ import ksnd.hiraganaconverter.core.domain.inappreview.InAppReviewManager
 import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.LocalIsConnectNetwork
+import ksnd.hiraganaconverter.core.ui.LocalSharedTransitionScope
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.core.ui.theme.LocalIsDarkTheme
 import ksnd.hiraganaconverter.view.navigation.Navigation
@@ -67,6 +70,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    @OptIn(ExperimentalSharedTransitionApi::class)
     @AddTrace(name = "MainActivity#onCreate")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -144,25 +148,28 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            CompositionLocalProvider(
-                LocalAnalytics provides analytics,
-                LocalIsConnectNetwork provides uiState.isConnectNetwork,
-                LocalIsDarkTheme provides isDarkTheme,
-            ) {
-                HiraganaConverterTheme(
-                    isDarkTheme = isDarkTheme,
-                    fontType = uiState.fontType,
+            SharedTransitionLayout {
+                CompositionLocalProvider(
+                    LocalAnalytics provides analytics,
+                    LocalIsConnectNetwork provides uiState.isConnectNetwork,
+                    LocalIsDarkTheme provides isDarkTheme,
+                    LocalSharedTransitionScope provides this@SharedTransitionLayout,
                 ) {
-                    Column {
-                        InAppUpdateDownloadingCard(
-                            text = this@MainActivity.getString(R.string.in_app_update_downloading_snackbar_title, downloadPercentage),
-                            isVisible = uiState.inAppUpdateState is InAppUpdateState.Downloading,
-                        )
-                        Navigation(
-                            modifier = Modifier.weight(1f),
-                            snackbarHostState = snackbarHostState,
-                            receivedText = receivedText,
-                        )
+                    HiraganaConverterTheme(
+                        isDarkTheme = isDarkTheme,
+                        fontType = uiState.fontType,
+                    ) {
+                        Column {
+                            InAppUpdateDownloadingCard(
+                                text = this@MainActivity.getString(R.string.in_app_update_downloading_snackbar_title, downloadPercentage),
+                                isVisible = uiState.inAppUpdateState is InAppUpdateState.Downloading,
+                            )
+                            Navigation(
+                                modifier = Modifier.weight(1f),
+                                snackbarHostState = snackbarHostState,
+                                receivedText = receivedText,
+                            )
+                        }
                     }
                 }
             }
