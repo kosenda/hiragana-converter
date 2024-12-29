@@ -19,12 +19,12 @@ plugins {
     alias(libs.plugins.aboutLibraries) apply false
 }
 
-tasks.create<JacocoReport>("jacocoTestReport") {
+tasks.register<JacocoReport>("jacocoTestReport") {
     reports {
         html.required.set(true)
         xml.required.set(true)
     }
-    gradle.afterProject {
+    gradle.allprojects {
         if (project.rootProject != this.project &&
             (project.plugins.hasPlugin("hiraganaconverter.android.application.jacoco") ||
                 project.plugins.hasPlugin("hiraganaconverter.android.library.jacoco")
@@ -92,7 +92,7 @@ dependencies {
     }
 }
 
-tasks.create<JavaExec>("ktlintCheck") {
+tasks.register<JavaExec>("ktlintCheck") {
     description = "Check Kotlin code style."
     classpath = ktlint
     mainClass.set("com.pinterest.ktlint.Main")
@@ -103,7 +103,7 @@ tasks.create<JavaExec>("ktlintCheck") {
     isIgnoreExitValue = true
 }
 
-tasks.create<JavaExec>("ktlintFormatting") {
+tasks.register<JavaExec>("ktlintFormatting") {
     description = "Fix Kotlin code style deviations."
     classpath = ktlint
     mainClass.set("com.pinterest.ktlint.Main")
