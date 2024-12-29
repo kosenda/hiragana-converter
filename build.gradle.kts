@@ -24,7 +24,7 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         html.required.set(true)
         xml.required.set(true)
     }
-    gradle.afterProject {
+    gradle.allprojects {
         if (project.rootProject != this.project &&
             (project.plugins.hasPlugin("hiraganaconverter.android.application.jacoco") ||
                 project.plugins.hasPlugin("hiraganaconverter.android.library.jacoco")
