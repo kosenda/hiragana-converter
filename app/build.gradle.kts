@@ -12,7 +12,6 @@ plugins {
     id("hiraganaconverter.android.hilt")
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.secrets)
-    alias(libs.plugins.dokka)
     alias(libs.plugins.roborazzi)
     alias(libs.plugins.gms)
     alias(libs.plugins.firebase.crashlytics)
