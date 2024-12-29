@@ -150,7 +150,7 @@ commands:
     steps:
       - run:
           name: Report jacoco
-          command: ./gradlew jacocoTestReport
+          command: ./gradlew jacocoTestReport -i
       - run:
           name: Zip jacoco report
           command: zip -r jacocoTestReport.zip ./build/reports/jacoco/jacocoTestReport/html
