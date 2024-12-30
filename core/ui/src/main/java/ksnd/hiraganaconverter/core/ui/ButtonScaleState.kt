@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.flow.conflate
 
 @Stable
 class ButtonScaleState {
@@ -22,7 +23,7 @@ class ButtonScaleState {
 fun rememberButtonScaleState(): ButtonScaleState {
     val buttonScaleState = remember { ButtonScaleState() }
     LaunchedEffect(buttonScaleState.interactionSource) {
-        buttonScaleState.interactionSource.interactions.collect { interaction ->
+        buttonScaleState.interactionSource.interactions.conflate().collect { interaction ->
             when (interaction) {
                 is PressInteraction.Press -> {
                     buttonScaleState.animationScale.animateTo(
