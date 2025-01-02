@@ -67,9 +67,9 @@ import ksnd.hiraganaconverter.core.ui.extension.noRippleClickable
 import ksnd.hiraganaconverter.core.ui.isTest
 import ksnd.hiraganaconverter.core.ui.parts.BackTopBar
 import ksnd.hiraganaconverter.core.ui.parts.GooCreditImage
+import ksnd.hiraganaconverter.core.ui.parts.TitleWithIcon
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.parts.button.TransitionButton
-import ksnd.hiraganaconverter.core.ui.parts.TitleWithIcon
 import ksnd.hiraganaconverter.core.ui.theme.CustomColor
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.core.ui.theme.LocalIsDarkTheme

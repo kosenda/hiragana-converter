@@ -46,9 +46,9 @@ import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
 import ksnd.hiraganaconverter.core.analytics.Screen
 import ksnd.hiraganaconverter.core.resource.R
+import ksnd.hiraganaconverter.core.ui.parts.TitleWithIcon
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.parts.button.TransitionButton
-import ksnd.hiraganaconverter.core.ui.parts.TitleWithIcon
 import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
@@ -85,7 +85,7 @@ fun PrivacyPolicyContent() {
             onDismissRequest = { isShowWebView = false },
             dragHandle = { DragHandle(navigator = navigator) },
             sheetState = sheetState,
-            modifier = Modifier.statusBarsPadding()
+            modifier = Modifier.statusBarsPadding(),
         ) {
             Box(
                 modifier = Modifier

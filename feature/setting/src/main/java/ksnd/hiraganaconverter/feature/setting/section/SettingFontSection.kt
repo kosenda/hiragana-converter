@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.core.model.ui.FontType
 import ksnd.hiraganaconverter.core.resource.R
-import ksnd.hiraganaconverter.core.ui.parts.button.CustomRadioButton
 import ksnd.hiraganaconverter.core.ui.parts.TitleWithIcon
+import ksnd.hiraganaconverter.core.ui.parts.button.CustomRadioButton
 import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
