@@ -75,10 +75,7 @@ private fun SelectLanguageDialogContent(
             .border(width = 4.dp, color = MaterialTheme.colorScheme.surfaceVariant, shape = RoundedCornerShape(16.dp))
             .clip(RoundedCornerShape(16.dp)),
         topBar = {
-            DialogTopBar(
-                isScrolled = false,
-                onCloseClick = onCloseClick,
-            )
+            DialogTopBar(onCloseClick = onCloseClick)
         },
     ) { innerPadding ->
         Column(

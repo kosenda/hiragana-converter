@@ -35,7 +35,6 @@ import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
@@ -176,7 +175,7 @@ private fun BeforeOrAfterText(
             color = MaterialTheme.colorScheme.onSurface,
         )
         CustomIconButton(
-            painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
+            icon = R.drawable.ic_baseline_content_copy_24,
             contentDescription = "",
             onClick = {
                 clipboardManager.setText(

@@ -67,9 +67,9 @@ import ksnd.hiraganaconverter.core.ui.extension.noRippleClickable
 import ksnd.hiraganaconverter.core.ui.isTest
 import ksnd.hiraganaconverter.core.ui.parts.BackTopBar
 import ksnd.hiraganaconverter.core.ui.parts.GooCreditImage
+import ksnd.hiraganaconverter.core.ui.parts.TitleWithIcon
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.parts.button.TransitionButton
-import ksnd.hiraganaconverter.core.ui.parts.card.TitleCard
 import ksnd.hiraganaconverter.core.ui.theme.CustomColor
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.core.ui.theme.LocalIsDarkTheme
@@ -157,9 +157,10 @@ private fun InfoScreenContent(
 
 @Composable
 private fun AppInfoContent(versionName: String) {
-    TitleCard(
-        text = stringResource(id = R.string.app_info_title),
-        painter = painterResource(id = R.drawable.ic_outline_info_24),
+    TitleWithIcon(
+        title = R.string.app_info_title,
+        icon = R.drawable.ic_outline_info_24,
+        modifier = Modifier.padding(top = 20.dp, bottom = 4.dp),
     )
     Card(
         modifier = Modifier
@@ -246,7 +247,7 @@ private fun DeveloperInfoContent() {
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     CustomIconButton(
-                        painter = painterResource(id = R.drawable.ic_github_logo),
+                        icon = R.drawable.ic_github_logo,
                         contentDescription = "",
                         modifier = Modifier.padding(end = 8.dp),
                         contentColor = Color.Black,
@@ -254,8 +255,9 @@ private fun DeveloperInfoContent() {
                         onClick = { uriHandler.openUri(uri = "https://github.com/kosenda") },
                     )
                     CustomIconButton(
-                        painter = painterResource(id = R.drawable.ic_x_logo),
+                        icon = R.drawable.ic_x_logo,
                         contentDescription = "",
+                        iconModifier = Modifier.size(24.dp),
                         contentColor = Color.White,
                         containerColor = Color.Black,
                         onClick = { uriHandler.openUri(uri = "https://x.com/ksnd_dev") },
@@ -268,9 +270,10 @@ private fun DeveloperInfoContent() {
 
 @Composable
 private fun APIInfoContent() {
-    TitleCard(
-        text = stringResource(id = R.string.api_info_title),
-        painter = painterResource(id = R.drawable.ic_outline_info_24),
+    TitleWithIcon(
+        title = R.string.api_info_title,
+        icon = R.drawable.ic_outline_info_24,
+        modifier = Modifier.padding(top = 28.dp, bottom = 4.dp),
     )
     Card(
         modifier = Modifier
@@ -281,7 +284,7 @@ private fun APIInfoContent() {
         ),
     ) {
         Column(
-            modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp),
+            modifier = Modifier.padding(vertical = 16.dp, horizontal = 24.dp),
         ) {
             DescItem(
                 title = R.string.api_name_title,
@@ -311,9 +314,10 @@ private fun APIInfoContent() {
 private fun LicensesContent(onClickLicense: () -> Unit) {
     val buttonText = stringResource(id = R.string.oss_licenses)
 
-    TitleCard(
-        text = stringResource(id = R.string.licenses_title),
-        painter = painterResource(id = R.drawable.ic_outline_info_24),
+    TitleWithIcon(
+        title = R.string.licenses_title,
+        icon = R.drawable.ic_outline_info_24,
+        modifier = Modifier.padding(top = 28.dp, bottom = 4.dp),
     )
     TransitionButton(
         text = buttonText,
