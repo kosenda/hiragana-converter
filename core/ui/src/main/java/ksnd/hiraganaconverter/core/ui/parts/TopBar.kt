@@ -24,7 +24,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
 import ksnd.hiraganaconverter.core.resource.R
@@ -69,19 +68,19 @@ fun TopBar(
             ),
             actions = {
                 CustomIconButton(
-                    painter = painterResource(id = R.drawable.ic_outline_info_24),
+                    icon = R.drawable.ic_outline_info_24,
                     contentDescription = "",
                     modifier = Modifier.padding(horizontal = 8.dp),
                     onClick = dropUnlessResumed { navigateScreen(Nav.Info) },
                 )
                 CustomIconButton(
-                    painter = painterResource(id = R.drawable.ic_outline_settings_24),
+                    icon = R.drawable.ic_outline_settings_24,
                     contentDescription = "",
                     modifier = Modifier.padding(end = 8.dp),
                     onClick = dropUnlessResumed { navigateScreen(Nav.Setting) },
                 )
                 CustomIconButton(
-                    painter = painterResource(id = R.drawable.ic_baseline_history_24),
+                    icon = R.drawable.ic_baseline_history_24,
                     contentDescription = "",
                     onClick = dropUnlessResumed { navigateScreen(Nav.History) },
                 )

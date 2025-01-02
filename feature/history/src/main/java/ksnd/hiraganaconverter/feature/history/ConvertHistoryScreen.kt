@@ -124,7 +124,7 @@ private fun ConvertHistoryScreenContent(
             ) {
                 if (state.convertHistories.isNotEmpty()) {
                     CustomIconButton(
-                        painter = painterResource(id = R.drawable.ic_baseline_delete_outline_24),
+                        icon = R.drawable.ic_baseline_delete_outline_24,
                         contentDescription = "",
                         modifier = Modifier.padding(end = 16.dp),
                         contentColor = MaterialTheme.colorScheme.error,

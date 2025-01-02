@@ -1,5 +1,6 @@
 package ksnd.hiraganaconverter.core.ui.parts.button
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.IconButton
@@ -11,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -24,9 +24,10 @@ import ksnd.hiraganaconverter.core.ui.theme.secondaryBrush
 
 @Composable
 fun CustomIconButton(
-    painter: Painter,
+    @DrawableRes icon: Int,
     contentDescription: String,
     modifier: Modifier = Modifier,
+    iconModifier: Modifier = Modifier.size(32.dp),
     contentColor: Color? = null,
     containerColor: Color = MaterialTheme.colorScheme.surface,
     onClick: () -> Unit,
@@ -43,19 +44,17 @@ fun CustomIconButton(
         ),
     ) {
         Image(
-            painter = painter,
+            painter = painterResource(icon),
             contentDescription = contentDescription,
             colorFilter = contentColor?.let { ColorFilter.tint(it) },
             contentScale = ContentScale.Fit,
-            modifier = Modifier
-                .size(32.dp)
-                .then(
-                    if (contentColor == null) {
-                        Modifier.contentBrush(brush = secondaryBrush())
-                    } else {
-                        Modifier
-                    },
-                ),
+            modifier = iconModifier.then(
+                if (contentColor == null) {
+                    Modifier.contentBrush(brush = secondaryBrush())
+                } else {
+                    Modifier
+                },
+            ),
         )
     }
 }
@@ -67,7 +66,7 @@ fun PreviewCustomIconButton() {
         Surface(color = MaterialTheme.colorScheme.surface) {
             CustomIconButton(
                 contentDescription = "",
-                painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
+                icon = R.drawable.ic_baseline_content_copy_24,
                 onClick = {},
             )
         }

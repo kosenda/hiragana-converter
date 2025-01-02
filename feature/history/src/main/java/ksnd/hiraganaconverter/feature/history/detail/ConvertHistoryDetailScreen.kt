@@ -176,7 +176,7 @@ private fun BeforeOrAfterText(
             color = MaterialTheme.colorScheme.onSurface,
         )
         CustomIconButton(
-            painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
+            icon = R.drawable.ic_baseline_content_copy_24,
             contentDescription = "",
             onClick = {
                 clipboardManager.setText(
