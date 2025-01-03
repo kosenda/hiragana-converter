@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view
+package ksnd.hiraganaconverter.core.ui.parts.dialog
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
@@ -48,7 +48,7 @@ fun RequestReviewDialog(onLater: () -> Unit, onOk: () -> Unit) {
 
 @UiModePreview
 @Composable
-private fun PreviewRequestReviewDialog() {
+fun PreviewRequestReviewDialog() {
     HiraganaConverterTheme {
         RequestReviewDialog(
             onLater = {},

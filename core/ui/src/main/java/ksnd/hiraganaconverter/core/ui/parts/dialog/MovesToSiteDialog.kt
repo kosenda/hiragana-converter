@@ -42,7 +42,7 @@ fun MoveToBrowserDialog(
 
 @UiModePreview
 @Composable
-private fun PreviewMoveToBrowserDialog() {
+fun PreviewMoveToBrowserDialog() {
     HiraganaConverterTheme {
         MoveToBrowserDialog(
             onDismissRequest = {},

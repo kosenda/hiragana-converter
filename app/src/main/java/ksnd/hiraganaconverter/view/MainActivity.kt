@@ -40,9 +40,10 @@ import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.LocalIsConnectNetwork
 import ksnd.hiraganaconverter.core.ui.LocalSharedTransitionScope
+import ksnd.hiraganaconverter.core.ui.parts.card.InAppUpdateDownloadingCard
+import ksnd.hiraganaconverter.core.ui.parts.dialog.RequestReviewDialog
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.core.ui.theme.LocalIsDarkTheme
-import ksnd.hiraganaconverter.view.navigation.Navigation
 import ksnd.hiraganaconverter.viewmodel.MainActivityViewModel
 import timber.log.Timber
 import javax.inject.Inject
