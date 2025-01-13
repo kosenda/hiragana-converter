@@ -56,7 +56,7 @@ fun SettingInAppUpdateSection(
                 onCheckedChange = { isChecked ->
                     onCheckedChange(isChecked)
                     haptics.performHapticFeedback(if (isChecked) HapticFeedbackType.ToggleOn else HapticFeedbackType.ToggleOff)
-                }
+                },
             )
         }
     }
