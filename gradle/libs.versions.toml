@@ -43,7 +43,7 @@ mockk = "1.13.14"
 roborazzi = "1.38.0"
 aboutLibraries = "11.2.3"
 konsist = "0.17.3"
-composablePreviewScanner = "0.4.0"
+composablePreviewScanner = "0.5.0"
 webpImageIO = "0.3.3"
 
 # ** I'm using it, so no deletions allowed. **
