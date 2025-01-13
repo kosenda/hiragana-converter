@@ -1,6 +1,5 @@
 package ksnd.hiraganaconverter.core.ui.parts.button
 
-import android.view.HapticFeedbackConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -21,8 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -44,7 +44,7 @@ fun ConvertButton(
     onClick: () -> Unit,
 ) {
     val buttonScaleState = rememberButtonScaleState()
-    val localView = LocalView.current
+    val haptics = LocalHapticFeedback.current
     val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.animation_loading))
     val animateCornerRadius = animateDpAsState(targetValue = if (isConverting) 16.dp else (BUTTON_SIZE / 2).dp, label = "")
 
@@ -59,7 +59,7 @@ fun ConvertButton(
                 interactionSource = buttonScaleState.interactionSource,
                 indication = null,
             ) {
-                localView.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
+                haptics.performHapticFeedback(HapticFeedbackType.Confirm)
                 onClick()
             },
         contentAlignment = Alignment.Center,
