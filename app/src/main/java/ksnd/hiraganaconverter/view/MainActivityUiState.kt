@@ -10,4 +10,5 @@ data class MainActivityUiState(
     val inAppUpdateState: InAppUpdateState = InAppUpdateState.Requesting,
     val isRequestingReview: Boolean = false,
     val isConnectNetwork: Boolean? = null,
+    val isShowedEndOfService: Boolean = false,
 )
