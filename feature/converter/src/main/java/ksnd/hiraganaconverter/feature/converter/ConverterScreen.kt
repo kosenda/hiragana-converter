@@ -51,7 +51,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -278,7 +277,7 @@ private fun BeforeAfterTextField(
 
         if (isBefore) {
             CustomIconButton(
-                painter = painterResource(id = R.drawable.ic_baseline_content_paste_24),
+                icon = R.drawable.ic_baseline_content_paste_24,
                 contentDescription = "",
                 modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
                 onClick = {
@@ -287,7 +286,7 @@ private fun BeforeAfterTextField(
             )
         } else {
             CustomIconButton(
-                painter = painterResource(id = R.drawable.baseline_share_24),
+                icon = R.drawable.baseline_share_24,
                 contentDescription = "",
                 modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
                 onClick = {
@@ -303,7 +302,7 @@ private fun BeforeAfterTextField(
             CustomIconButton(
                 modifier = Modifier.padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
                 contentDescription = "",
-                painter = painterResource(id = R.drawable.ic_baseline_content_copy_24),
+                icon = R.drawable.ic_baseline_content_copy_24,
                 onClick = {
                     clipboardManager.setText(AnnotatedString(text))
                     Toast.makeText(context, "COPIED.", Toast.LENGTH_SHORT).show()

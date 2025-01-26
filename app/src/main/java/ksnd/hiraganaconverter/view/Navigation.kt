@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view.navigation
+package ksnd.hiraganaconverter.view
 
 import android.net.Uri
 import android.os.Bundle

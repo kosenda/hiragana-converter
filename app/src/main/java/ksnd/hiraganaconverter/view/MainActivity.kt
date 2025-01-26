@@ -15,9 +15,12 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -26,12 +29,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.res.stringResource
 import androidx.core.app.ShareCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.firebase.perf.metrics.AddTrace
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import ksnd.hiraganaconverter.BuildConfig
 import ksnd.hiraganaconverter.core.analytics.AnalyticsHelper
 import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
 import ksnd.hiraganaconverter.core.data.inappupdate.InAppUpdateState
@@ -40,9 +45,10 @@ import ksnd.hiraganaconverter.core.model.ui.Theme
 import ksnd.hiraganaconverter.core.resource.R
 import ksnd.hiraganaconverter.core.ui.LocalIsConnectNetwork
 import ksnd.hiraganaconverter.core.ui.LocalSharedTransitionScope
+import ksnd.hiraganaconverter.core.ui.parts.card.InAppUpdateDownloadingCard
+import ksnd.hiraganaconverter.core.ui.parts.dialog.RequestReviewDialog
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 import ksnd.hiraganaconverter.core.ui.theme.LocalIsDarkTheme
-import ksnd.hiraganaconverter.view.navigation.Navigation
 import ksnd.hiraganaconverter.viewmodel.MainActivityViewModel
 import timber.log.Timber
 import javax.inject.Inject
@@ -180,6 +186,19 @@ class MainActivity : AppCompatActivity() {
                     onOk = {
                         coroutineScope.launch { inAppReviewManager.requestReview() }
                         mainViewModel.completedRequestReview()
+                    },
+                )
+            }
+
+            if (BuildConfig.DEBUG.not() && uiState.isShowedEndOfService.not()) {
+                AlertDialog(
+                    onDismissRequest = { /* no-op */ },
+                    title = { Text(text = stringResource(id = R.string.end_of_service_title)) },
+                    text = { Text(text = stringResource(id = R.string.end_of_service_body)) },
+                    confirmButton = {
+                        TextButton(onClick = mainViewModel::finishedToShowEndOfService) {
+                            Text(text = stringResource(id = R.string.ok))
+                        }
                     },
                 )
             }

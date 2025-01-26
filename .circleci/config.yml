@@ -9,7 +9,7 @@ orbs:
 executors:
   android:
     docker:
-      - image: cimg/android:2024.11
+      - image: cimg/android:2025.01
 
 commands:
   check_is_skipping_vrt:
@@ -150,7 +150,7 @@ commands:
     steps:
       - run:
           name: Report jacoco
-          command: ./gradlew jacocoTestReport
+          command: ./gradlew jacocoTestReport -i
       - run:
           name: Zip jacoco report
           command: zip -r jacocoTestReport.zip ./build/reports/jacoco/jacocoTestReport/html

@@ -1,12 +1,12 @@
 [versions]
 accompanist = "0.36.0"
-activity = "1.9.3"
-androidGradlePlugin = "8.7.3"
+activity = "1.10.0"
+androidGradlePlugin = "8.8.0"
 androidxAppCompat = "1.7.0"
-androidxCompose = "1.7.6"
+androidxCompose = "1.8.0-alpha08"
 androidxComposeMaterial3 = "1.3.1"
 androidxCoreSplashscreen = "1.0.1"
-androidxDataStore = "1.1.1"
+androidxDataStore = "1.1.2"
 androidxHilt = "1.2.0"
 androidxLifecycle = "2.8.7"
 androidxNavigation = "2.8.5"
@@ -15,16 +15,15 @@ appUpdate = "2.1.0"
 coil = "2.7.0"
 coroutines = "1.10.1"
 coroutineTest = "1.10.1"
-dokka = "2.0.0"
 gmsPlugin = "4.4.2"
-firebaseBom = "33.7.0"
+firebaseBom = "33.8.0"
 firebaseCrashlyticsPlugin = "3.0.2"
 firebasePerfPlugin = "1.4.2"
-firebaseAppdistributionPlugin = "5.0.0"
-hilt = "2.54"
+firebaseAppdistributionPlugin = "5.1.0"
+hilt = "2.55"
 junit4 = "4.13.2"
 kotlin = "2.1.0"
-kotlinxSerializationJson = "1.7.3"
+kotlinxSerializationJson = "1.8.0"
 kotlinxDatetime = "0.6.1"
 ksp = "2.1.0-1.0.29"
 ktlint = "1.5.0"
@@ -40,11 +39,11 @@ secrets = "2.0.1"
 timber = "5.0.1"
 truth = "1.4.4"
 turbine = "1.2.0"
-mockk = "1.13.14"
-roborazzi = "1.37.0"
-aboutLibraries = "11.2.3"
+mockk = "1.13.16"
+roborazzi = "1.40.1"
+aboutLibraries = "11.5.0"
 konsist = "0.17.3"
-composablePreviewScanner = "0.4.0"
+composablePreviewScanner = "0.5.0"
 webpImageIO = "0.3.3"
 
 # ** I'm using it, so no deletions allowed. **
@@ -172,7 +171,6 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 gms = { id = "com.google.gms.google-services", version.ref = "gmsPlugin"}
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin"}

@@ -12,11 +12,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import ksnd.hiraganaconverter.core.resource.R
-import ksnd.hiraganaconverter.core.ui.parts.card.TitleCard
+import ksnd.hiraganaconverter.core.ui.parts.TitleWithIcon
 import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
@@ -25,9 +26,12 @@ fun SettingInAppUpdateSection(
     enableInAppUpdate: Boolean,
     onCheckedChange: (Boolean) -> Unit,
 ) {
-    TitleCard(
-        text = stringResource(id = R.string.in_app_update_setting),
-        painter = painterResource(id = R.drawable.baseline_system_update_24),
+    val haptics = LocalHapticFeedback.current
+
+    TitleWithIcon(
+        title = R.string.in_app_update_setting,
+        icon = R.drawable.baseline_system_update_24,
+        modifier = Modifier.padding(top = 28.dp, bottom = 4.dp),
     )
     Card(
         colors = CardDefaults.cardColors(
@@ -47,7 +51,13 @@ fun SettingInAppUpdateSection(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.primary,
             )
-            Switch(checked = enableInAppUpdate, onCheckedChange = onCheckedChange)
+            Switch(
+                checked = enableInAppUpdate,
+                onCheckedChange = { isChecked ->
+                    onCheckedChange(isChecked)
+                    haptics.performHapticFeedback(if (isChecked) HapticFeedbackType.ToggleOn else HapticFeedbackType.ToggleOff)
+                },
+            )
         }
     }
 }

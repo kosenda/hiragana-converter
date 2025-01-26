@@ -1,5 +1,6 @@
 package ksnd.hiraganaconverter.core.ui.parts.button
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -11,14 +12,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -31,7 +30,7 @@ import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 fun CustomRadioButton(
     isSelected: Boolean,
     buttonText: String,
-    painter: Painter? = null,
+    @DrawableRes icon: Int? = null,
     onClick: () -> Unit,
 ) {
     Row(
@@ -42,10 +41,10 @@ fun CustomRadioButton(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Spacer(modifier = Modifier.width(24.dp))
-        painter?.let {
+        icon?.let {
             Image(
-                painter = it,
-                contentDescription = buttonText,
+                painter = painterResource(it),
+                contentDescription = null,
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.tertiary),
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
@@ -63,7 +62,6 @@ fun CustomRadioButton(
         )
         RadioButton(
             selected = isSelected,
-            colors = RadioButtonDefaults.colors(),
             onClick = onClick,
         )
     }
@@ -75,9 +73,9 @@ fun PreviewCustomThemeRadioButton() {
     HiraganaConverterTheme {
         Surface(color = MaterialTheme.colorScheme.surfaceVariant) {
             CustomRadioButton(
-                buttonText = stringResource(id = R.string.dark_mode),
                 isSelected = true,
-                painter = painterResource(id = R.drawable.ic_baseline_brightness_2_24),
+                buttonText = stringResource(R.string.dark_mode),
+                icon = R.drawable.ic_baseline_brightness_2_24,
                 onClick = {},
             )
         }

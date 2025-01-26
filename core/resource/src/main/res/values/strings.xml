@@ -78,6 +78,8 @@
     <string name="privacy_policy_title" translatable="false">Privacy</string>
     <string name="privacy_policy_button" translatable="false">Privacy Policy</string>
     <string name="privacy_policy_url" translatable="false">https://kosenda.github.io/ksnd.github.io/HiraganaConverter.html</string>
+    <string name="end_of_service_title">Notice of Service Discontinuation</string>
+    <string name="end_of_service_body">With the discontinuation of the API service, the conversion process will not be available after March 3, 2025.</string>
 
     <!-- Locale Name -->
     <string name="locale_en" translatable="false">en</string>

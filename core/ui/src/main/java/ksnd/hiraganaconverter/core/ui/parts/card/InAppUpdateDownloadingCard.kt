@@ -1,4 +1,4 @@
-package ksnd.hiraganaconverter.view
+package ksnd.hiraganaconverter.core.ui.parts.card
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
@@ -28,6 +29,8 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import ksnd.hiraganaconverter.core.resource.R
+import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
+import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
 @Composable
 fun InAppUpdateDownloadingCard(
@@ -45,7 +48,8 @@ fun InAppUpdateDownloadingCard(
         exit = shrinkVertically(shrinkTowards = Alignment.Top, animationSpec = tween(1000)),
     ) {
         Card(
-            modifier = Modifier.statusBarsPadding()
+            modifier = Modifier
+                .statusBarsPadding()
                 .padding(horizontal = 16.dp)
                 .padding(top = 16.dp)
                 .fillMaxWidth(),
@@ -77,5 +81,16 @@ fun InAppUpdateDownloadingCard(
                 Spacer(modifier = Modifier.weight(1f))
             }
         }
+    }
+}
+
+@UiModePreview
+@Composable
+fun PreviewInAppUpdateDownloadingCard() {
+    HiraganaConverterTheme {
+        InAppUpdateDownloadingCard(
+            text = stringResource(R.string.in_app_update_downloading_snackbar_title, 50),
+            isVisible = true,
+        )
     }
 }

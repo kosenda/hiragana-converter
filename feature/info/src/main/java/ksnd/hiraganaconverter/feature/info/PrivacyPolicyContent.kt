@@ -19,6 +19,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,9 +47,9 @@ import kotlinx.coroutines.launch
 import ksnd.hiraganaconverter.core.analytics.LocalAnalytics
 import ksnd.hiraganaconverter.core.analytics.Screen
 import ksnd.hiraganaconverter.core.resource.R
+import ksnd.hiraganaconverter.core.ui.parts.TitleWithIcon
 import ksnd.hiraganaconverter.core.ui.parts.button.CustomIconButton
 import ksnd.hiraganaconverter.core.ui.parts.button.TransitionButton
-import ksnd.hiraganaconverter.core.ui.parts.card.TitleCard
 import ksnd.hiraganaconverter.core.ui.preview.UiModePreview
 import ksnd.hiraganaconverter.core.ui.theme.HiraganaConverterTheme
 
@@ -69,9 +70,10 @@ fun PrivacyPolicyContent() {
         if (isShowWebView) analytics.logScreen(Screen.PRIVACY_POLICY)
     }
 
-    TitleCard(
-        text = stringResource(id = R.string.privacy_policy_title),
-        painter = painterResource(id = R.drawable.ic_outline_info_24),
+    TitleWithIcon(
+        title = R.string.privacy_policy_title,
+        icon = R.drawable.ic_outline_info_24,
+        modifier = Modifier.padding(top = 28.dp, bottom = 4.dp),
     )
 
     TransitionButton(
@@ -84,7 +86,7 @@ fun PrivacyPolicyContent() {
             onDismissRequest = { isShowWebView = false },
             dragHandle = { DragHandle(navigator = navigator) },
             sheetState = sheetState,
-            modifier = Modifier.statusBarsPadding()
+            modifier = Modifier.statusBarsPadding(),
         ) {
             Box(
                 modifier = Modifier
@@ -126,7 +128,7 @@ private fun DragHandle(navigator: WebViewNavigator) {
         BottomSheetDefaults.DragHandle()
         Row {
             CustomIconButton(
-                painter = painterResource(R.drawable.baseline_keyboard_arrow_left_24),
+                icon = R.drawable.baseline_keyboard_arrow_left_24,
                 contentDescription = "",
                 contentColor = if (navigator.canGoBack) {
                     MaterialTheme.colorScheme.primary
@@ -137,7 +139,7 @@ private fun DragHandle(navigator: WebViewNavigator) {
                 onClick = navigator::navigateBack,
             )
             CustomIconButton(
-                painter = painterResource(R.drawable.baseline_keyboard_arrow_right_24),
+                icon = R.drawable.baseline_keyboard_arrow_right_24,
                 contentDescription = "",
                 contentColor = if (navigator.canGoForward) {
                     MaterialTheme.colorScheme.primary

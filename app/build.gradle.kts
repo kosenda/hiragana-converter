@@ -12,7 +12,6 @@ plugins {
     id("hiraganaconverter.android.hilt")
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.secrets)
-    alias(libs.plugins.dokka)
     alias(libs.plugins.roborazzi)
     alias(libs.plugins.gms)
     alias(libs.plugins.firebase.crashlytics)
@@ -28,8 +27,8 @@ android {
         applicationId = "ksnd.hiraganaconverter"
         minSdk = 26
         targetSdk = 35
-        versionCode = 46
-        versionName = "1.35"
+        versionCode = 47
+        versionName = "1.36"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
