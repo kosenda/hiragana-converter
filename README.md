@@ -1,3 +1,8 @@
+> [!NOTE]
+> The API we are using will stop service on 3/3/2025, so this app is not available in the store because its main functions are no longer available.
+> Therefore, the app will not be modified in the future, so this repository has been archived.
+
+
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/kosenda/hiragana-converter/tree/develop.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/kosenda/hiragana-converter/tree/develop)　[![Renovate](https://img.shields.io/badge/renovate-enabled-brightgreen.svg?style=flat)](https://renovatebot.com)　
 
 # Hiragana Converter （ひらがな変換）
